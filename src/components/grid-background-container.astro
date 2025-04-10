@@ -1,0 +1,79 @@
+---
+---
+<div class="grid-background-container">
+    <slot />
+</div>
+
+<style lang="scss">
+
+    @use 'sass:list';
+    $red-lines: ();
+    $green-lines: ();
+    $red-lines-position: ();
+    $green-lines-position: ();
+
+    @for $i from 1 through 40 {
+        // Add red vertical lines every 5%
+
+        // Add green lines every 25% (when i is divisible by 5)
+        @if ($i % 5 == 0) {
+            // Vertical green lines
+            $green-lines: list.append(
+                $green-lines,
+                linear-gradient(to right, rgba(0, 240, 20, 0.7) 1px, transparent 1px),
+                comma
+            );
+            $green-lines-position: list.append(
+                $green-lines-position,
+                ($i * 2.5vw) 0,
+                comma
+            );
+
+            // Horizontal green lines
+            $green-lines: list.append(
+                $green-lines,
+                linear-gradient(to bottom, rgba(0, 240, 20, 0.7) 1px, transparent 1px),
+                comma
+            );
+            $green-lines-position: list.append(
+                $green-lines-position,
+                0 ($i * 2.5vw),
+                comma
+            );
+        } @else {
+            // Vertical red lines
+            $red-lines: list.append(
+                $red-lines,
+                linear-gradient(to right, rgba(184, 5, 5, 0.5) 1px, transparent 1px),
+                comma
+            );
+            $red-lines-position: list.append(
+                $red-lines-position,
+                ($i * 2.5vw) 0,
+                comma
+            );
+
+            // Add red horizontal lines every 5%
+            $red-lines: list.append(
+                $red-lines,
+                linear-gradient(to bottom, rgba(184, 5, 5, 0.5) 1px, transparent 1px),
+                comma
+            );
+            $red-lines-position: list.append(
+                $red-lines-position,
+                0 ($i * 2.5vw),
+                comma
+            );
+        }
+    }
+
+    .gridded-background {
+        width: 100%;
+        height: 100%;
+        background-color: #111222;
+        background-image: $red-lines, $green-lines;
+        background-repeat: no-repeat;
+        background-position: $red-lines-position, $green-lines-position;
+    }
+</style>
+

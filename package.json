@@ -1,0 +1,21 @@
+{
+  "name": "sebastian-heitmann",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "astro": "^5.6.1",
+    "sass": "^1.86.3"
+  }
+}

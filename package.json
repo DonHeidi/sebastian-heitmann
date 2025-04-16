@@ -9,7 +9,8 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "astro-icon": "^1.1.5"
   },
   "peerDependencies": {
     "typescript": "^5"

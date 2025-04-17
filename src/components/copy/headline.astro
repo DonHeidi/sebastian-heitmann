@@ -1,23 +1,23 @@
 ---
 type Props = {
     element?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
-    appearAs?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+    as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
     class?: string;
     shadow?: boolean;
 }
 
-const { element, appearAs, class: className, shadow }: Props = Astro.props;
+const { element, as, class: className, shadow }: Props = Astro.props;
 const elem = element ?? 'h1';
 ---
 
 {elem === 'h1' && (
     <h1 class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />
@@ -26,12 +26,12 @@ const elem = element ?? 'h1';
 
 {elem === 'h2' && (
     <h2 class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />
@@ -40,12 +40,12 @@ const elem = element ?? 'h1';
 
 {elem === 'h3' && (
     <h3 class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />
@@ -54,12 +54,12 @@ const elem = element ?? 'h1';
 
 {elem === 'h4' && (
     <h4 class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />
@@ -68,12 +68,12 @@ const elem = element ?? 'h1';
 
 {elem === 'h5' && (
     <h5 class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />
@@ -82,12 +82,12 @@ const elem = element ?? 'h1';
 
 {elem === 'h6' && (
     <h6 class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />
@@ -96,12 +96,12 @@ const elem = element ?? 'h1';
 
 {elem === 'p' && (
     <p class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />
@@ -110,12 +110,12 @@ const elem = element ?? 'h1';
 
 {elem === 'span' && (
     <span class={`headline${className ? ` ${className}` : ''}`} class:list={[
-        { 'h1': appearAs === 'h1' },
-        { 'h2': appearAs === 'h2' },
-        { 'h3': appearAs === 'h3' },
-        { 'h4': appearAs === 'h4' },
-        { 'h5': appearAs === 'h5' },
-        { 'h6': appearAs === 'h6' },
+        { 'h1': as === 'h1' },
+        { 'h2': as === 'h2' },
+        { 'h3': as === 'h3' },
+        { 'h4': as === 'h4' },
+        { 'h5': as === 'h5' },
+        { 'h6': as === 'h6' },
         { 'shadow': shadow }
     ]}>
         <slot />

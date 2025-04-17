@@ -1,0 +1,31 @@
+---
+type Props = {
+    element?: 'p' | 'span';
+}
+
+const { element }: Props = Astro.props;
+const elem = element ?? 'p';
+---
+
+{elem === 'p' && (
+    <p class="overline">
+        <slot />
+    </p>
+)}
+
+{elem === 'span' && (
+    <span class="overline">
+        <slot />
+    </span>
+)}
+
+<style>
+    .overline {
+        display: block;
+        font-family: 'SpaceGrotesk', sans-serif;
+        font-size: 1.25rem;
+        line-height: 1;
+        letter-spacing: -6%;
+        margin-bottom: 1.5rem;
+    }
+</style>

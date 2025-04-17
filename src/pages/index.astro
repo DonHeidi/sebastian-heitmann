@@ -1,6 +1,33 @@
-<p>This is a test</p>
+---
+import Header from '../components/header.astro';
+---
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sebastian Heitmann - Fractional CTO</title>
+    </head>
+    <body>
+        <Header />
+    </body>
+</html>
 
-<style is:global>
+<style lang="scss" is:global>
+
+    @font-face {
+        font-family: 'Anton';
+        src: url('/fonts/Anton-Regular.ttf') format('truetype');
+    }
+
+    @font-face {
+        font-family: 'AntonSC';
+        src: url('/fonts/AntonSC-Regular.ttf') format('truetype');
+    }
+
+    @font-face {
+        font-family: 'SpaceGrotesk';
+        src: url('/fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
+    }
+
     /* 1. Use a more-intuitive box-sizing model */
     *, *::before, *::after {
         box-sizing: border-box;
@@ -55,5 +82,19 @@
     */
     #root, #__next {
         isolation: isolate;
+    }
+
+    :root {
+        color-scheme: light dark;
+        --fnt-family-accent: 'AntonSC';
+        --fnt-family-primary: 'SpaceGrotesk';
+        --fnt-family-secondary: 'Anton';
+        --clr-font-primary: light-dark(black, #E7E5DB);
+        --clr-white: #fff;
+        --clr-black: #000;
+        --clr-magenta: #FF007B;
+        --clr-blue: #00B7FF;
+        --clr-green: #00E08E;
+        
     }
 </style>

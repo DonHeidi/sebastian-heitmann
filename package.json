@@ -9,6 +9,8 @@
     "preview": "astro preview"
   },
   "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.32",
     "@types/bun": "latest",
     "astro-icon": "^1.1.5"
   },
@@ -17,6 +19,12 @@
   },
   "dependencies": {
     "astro": "^5.6.1",
+    "cz-conventional-changelog": "^3.3.0",
     "sass": "^1.86.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }

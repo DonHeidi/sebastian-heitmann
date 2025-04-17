@@ -1,0 +1,201 @@
+---
+type Props = {
+    element?: 'p' | 'span' | 'strong' | 'em' | 'a' | 'b' | 'i' | 'u' | 's';
+    class?: string;
+    bold?: boolean;
+    shadow?: boolean;
+    size?: 'sm' | 'md' | 'lg' | 'xl';
+};
+
+const { element, class: className, size, bold, shadow }: Props = Astro.props;
+const elem = element ?? 'p';
+---
+
+{elem === 'p' && (
+    <p class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </p>
+)}
+
+{elem === 'span' && (
+    <span class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </span>
+)}
+
+{elem === 'strong' && (
+    <strong class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </strong>
+)}
+
+{elem === 'em' && (
+    <em class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </em>
+)}
+
+{elem === 'a' && (
+    <a class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </a>
+)}
+
+{elem === 'b' && (
+    <b class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+    ]}>
+        <slot />
+    </b>
+)}
+
+{elem === 'i' && (
+    <i class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </i>
+)}
+
+{elem === 'u' && (
+    <u class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </u>
+)}
+
+{elem === 's' && (
+    <s class={`body${className ? ` ${className}` : ''}`} class:list={[
+        {sm: size === 'sm'},
+        {md: size === 'md'},
+        {lg: size === 'lg'},
+        {xl: size === 'xl'},
+        {bold: bold},
+        {'text-shadow': shadow},
+    ]}>
+        <slot />
+    </s>
+)}
+
+<style lang="scss">
+    .body {
+        font-family: 'SpaceGrotesk', sans-serif;
+        letter-spacing: 0;
+        font-size: var(--fnt-size-body);
+        line-height: 1.5;
+        color: var(--fnt-clr-body);
+        font-weight: var(--fnt-wght-regular);
+
+        &.bold {
+            font-weight: var(--fnt-wght-bold);
+        }
+
+        &.text-shadow {
+            text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.78);
+        }
+
+        &.sm {
+            font-size: var(--fnt-size-body-sm);
+        }
+
+        &.md {
+            font-size: var(--fnt-size-body-md);
+        }   
+
+        &.lg {
+            font-size: var(--fnt-size-body-lg);
+        }   
+
+        &.xl {
+            font-size: var(--fnt-size-body-xl);
+        }   
+
+        @media (max-width: 1440px) {
+            font-size: var(--fnt-size-body);
+        }
+
+        @media (max-width: 768px) {
+            font-size: var(--fnt-size-body);
+        }
+
+        @media (max-width: 375px) {
+            font-size: var(--fnt-size-body);
+        }
+    }
+
+    :root {
+        --fnt-size-body-xl: 2rem;
+        --fnt-size-body-lg: 1.25rem;
+        --fnt-size-body-md: 1rem;
+        --fnt-size-body-sm: 0.75rem;
+        --fnt-size-body: var(--fnt-size-body-xl);
+
+        --fnt-wght-bold: 700;
+        --fnt-wght-regular: 400;
+        --fnt-clr-body: var(--clr-font-primary);
+
+        @media (max-width: 1440px) {
+            --fnt-size-body: var(--fnt-size-body-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-body: var(--fnt-size-body-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-body: var(--fnt-size-body-sm);
+        }
+    }
+</style>
+
+
+

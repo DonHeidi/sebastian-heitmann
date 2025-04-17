@@ -1,0 +1,218 @@
+---
+import GridBackgroundContainer from './grid-background-container.astro';
+import CTA from './interactive/call-to-action.astro';
+import { Icon } from 'astro-icon/components';
+import Headline from './copy/headline.astro';
+import Body from './copy/body.astro';
+import Overline from './copy/overline.astro';
+import Highlight from './copy/highlight.astro';
+import Navigation from './navigation.astro';
+import { Image } from 'astro:assets';
+import picture from '../assets/fb.jpg'
+
+
+const paddingInline = '127px';
+const titleFontSize = '8rem'
+---
+<header>
+    <GridBackgroundContainer>
+        <div class="container">
+            <Navigation />
+            <div class="header-content">
+                <Overline element="span">I build <Highlight color="magenta">software</Highlight>. I lead <Highlight color="blue">teams</Highlight>. I solve <Highlight color="green">problems</Highlight>.</Overline>
+                <div class="header-content__main">
+                    <div class="header-content__title-box">
+                        <Headline class="header-content__title" element="h1" shadow>Sebastian Heitmann</Headline>
+                    </div>
+                    <div class="header-content__box">
+                        <div class="header-content__text-box">
+                            <Body>From <Highlight bold>scale-ups</Highlight> to <Highlight bold>B2B SaaS founders</Highlight>, I help teams grow through smart software and strong operations.</Body>
+                            <Body>With <Highlight bold>10+ years of experience</Highlight> across industries and company sizes, I bring structure, speed, and clarity to complex challenges.</Body>
+                        </div>
+                        <div class="header-content__cta-box">
+                            <CTA link="/contact" type="primary">Book a call</CTA>
+                            <CTA link="/contact" type="secondary">more about me</CTA>
+                        </div>
+                    </div>
+                    <aside class="header-aside">
+                        <div class="header-aside__social">
+                            <Image loading="eager" class="header-aside__social-image" src={picture} alt="Sebastian Heitmann" width={276} height={276} fit="cover" />
+                            <div class="header-aside__social-icons">
+                                <a id="linkedin" href="https://www.linkedin.com/in/don-heidmann/" target="_blank"><Icon name="simple-icons:linkedin" color="var(--clr-font-primary)" width={45} height={38} /></a>
+                                <a id="github" href="https://github.com/DonHeidi" target="_blank"><Icon name="simple-icons:github" color="var(--clr-font-primary" width={40} height={40} /></a>
+                                <a id="bluesky" href="https://www.bluesky.com/e2e_developer" target="_blank"><Icon name="simple-icons:bluesky" color="var(--clr-font-primary" width={30} height={30} /></a>
+                            </div>
+                        </div>
+                        <div class="header-aside__sub-title">
+                            <Headline class="header-aside__sub-title-headline" element="span" appearAs="h6" shadow>Fractional CTO</Headline>
+                            <Body class="header-aside__sub-title-body" element="span" size="sm" bold shadow>Software Development</Body>
+                            <Body class="header-aside__sub-title-body" element="span" size="sm" bold shadow>Technical Project Management</Body>
+                            <Body class="header-aside__sub-title-body" element="span" size="sm" bold shadow>Solution Design</Body>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </GridBackgroundContainer>
+</header>
+<style lang="scss" define:vars={{ paddingInline, titleFontSize }}>
+
+    header {
+        display: flex;
+        width: 100%;
+        min-height: 100dvh;
+        position: relative;
+        background-image: radial-gradient(
+            ellipse at bottom right,
+            #111222 0%,
+            #232546 15%,
+            #2d2f58 31%,
+            #2d305a 53%,
+            #20223f 70%,
+            #111222 100%);
+        background-color: #111222;
+        background-size: 100% 100%;
+
+        :global(> *) {
+            width: 100%;
+            padding-left: 144px;
+            padding-right: 284px;
+        }
+
+
+        .container {
+            display: flex;
+
+            flex-direction: column;
+            gap: 6rem;
+        }
+
+        .header-content {
+            position: relative;
+            &__main {
+                display: flex;
+                flex-direction: column;
+                gap: 3.25rem;
+                position: relative;
+            }
+
+            &__box {
+                font-family: 'AntonSC', sans-serif;
+                font-size: var(--fnt-size-h1);
+                max-width: 7.745ch;
+                display: flex;
+                flex-direction: column;
+                gap: 3.25rem;
+            }
+
+            &__text-box {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            &__title-box {
+                z-index: 2;
+            }
+
+            &__cta-box {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: start;
+                gap: 2.75rem;
+            }
+        }
+
+
+
+        .header-aside {
+            position: absolute;
+            font-family: 'AntonSC', sans-serif;
+            font-size: var(--fnt-size-h1);
+            top: calc(var(--fnt-size-h1) - 1rem);
+            left: 8.5ch;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+
+            &__social {
+                display: flex;
+                flex-direction: row;
+                gap: 3rem;
+
+                &-image {
+                    display: block;
+                    flex: 0 0 auto;
+                    border-radius: 2.625rem;
+                    rotate: 5.78deg;
+                    margin-left: 6px;
+                    width: 276px;
+                    height: 276px;
+                    object-fit: cover;
+                }
+
+                &-icons {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 2rem;
+                }
+
+                a {
+                    position: relative;
+                }
+
+                #linkedin {
+                    left: 0.5rem;
+                    rotate: -7deg;
+                }
+
+                #github {
+                    rotate: 10deg;
+                    left: -0.3rem;
+                }
+
+                #bluesky {
+                    rotate: -4deg;
+                    left: 0.7rem;
+                }
+            }
+
+            &__sub-title {
+                display: grid; 
+                text-align: center;
+                padding-block: 1.25rem;
+                padding-inline: 2rem;
+                margin: -0.5rem;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 1rem;
+                max-width: 11ch;
+                font-size: var(--fnt-size-h1);
+                rotate: -0.4deg;
+                border-radius: 10px;
+                color: #fff;
+                backdrop-filter: blur(8.5px);
+                background-color: rgba(255, 0, 123, 0.59);
+                box-shadow: 
+                    -1px -1px 0 0 rgba(255, 0, 123, 0.55),
+                    1px 1px 0 0 rgba(0, 0, 0, 0.25),
+                    -1px -1px 2px 0 rgba(255, 0, 123, 0.55),
+                    2px 2px 4px 0 rgba(0, 0, 0, 0.55);
+                z-index: 1;
+
+                :global(.header-aside__sub-title-headline) {
+                    grid-column: 1 / -1;
+                    justify-self: center;
+                    align-self: center;
+                }
+            }
+        }
+    }
+
+
+
+
+
+</style>

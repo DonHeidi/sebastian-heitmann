@@ -1,0 +1,120 @@
+---
+type Props = {
+    element?: 'span' | 'strong' | 'em' | 'a' | 'b' | 'i' | 'u' | 's';
+    color?: 'magenta' | 'blue' | 'green';
+    bold?: boolean;
+}
+
+const { element, color, bold }: Props = Astro.props;
+const elem = element ?? 'strong';
+---
+
+{elem === 'span' && (
+    <span class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </span>
+)}
+
+{elem === 'strong' && (
+    <strong class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </strong>
+)}
+
+{elem === 'em' && (
+    <em class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </em>
+)}
+
+{elem === 'a' && (
+    <a class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </a>
+)}
+
+{elem === 'b' && (
+    <b class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </b>
+)}
+
+{elem === 'i' && (
+    <i class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </i>
+)}
+
+{elem === 'u' && (
+    <u class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </u>
+)}
+
+{elem === 's' && (
+    <s class="highlight" class:list={[
+        {magenta: color === 'magenta'},
+        {blue: color === 'blue'},
+        {green: color === 'green'},
+        {bold: bold},
+    ]}>
+        <slot />
+    </s>
+)}
+
+<style lang="scss">
+    .highlight {
+        color: var(--color, var(--clr-font-primary));
+        &.bold {
+            font-weight: var(--fnt-wght-bold);
+        }
+        &.magenta {
+            color: var(--clr-magenta);
+        }
+        &.blue {
+            color: var(--clr-blue);
+        }   
+        &.green {
+            color: var(--clr-green);
+        }
+    }
+</style>
+
+
+
+

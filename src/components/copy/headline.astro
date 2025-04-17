@@ -1,0 +1,299 @@
+---
+type Props = {
+    element?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+    appearAs?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+    class?: string;
+    shadow?: boolean;
+}
+
+const { element, appearAs, class: className, shadow }: Props = Astro.props;
+const elem = element ?? 'h1';
+---
+
+{elem === 'h1' && (
+    <h1 class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </h1>
+)}
+
+{elem === 'h2' && (
+    <h2 class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </h2>
+)}
+
+{elem === 'h3' && (
+    <h3 class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </h3>
+)}
+
+{elem === 'h4' && (
+    <h4 class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </h4>
+)}
+
+{elem === 'h5' && (
+    <h5 class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </h5>
+)}
+
+{elem === 'h6' && (
+    <h6 class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </h6>
+)}
+
+{elem === 'p' && (
+    <p class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </p>
+)}
+
+{elem === 'span' && (
+    <span class={`headline${className ? ` ${className}` : ''}`} class:list={[
+        { 'h1': appearAs === 'h1' },
+        { 'h2': appearAs === 'h2' },
+        { 'h3': appearAs === 'h3' },
+        { 'h4': appearAs === 'h4' },
+        { 'h5': appearAs === 'h5' },
+        { 'h6': appearAs === 'h6' },
+        { 'shadow': shadow }
+    ]}>
+        <slot />
+    </span>
+)}
+
+<style lang="scss">
+    :root {
+
+        --fnt-size-h1-xl: 12rem;
+        --fnt-size-h1-lg: 8rem;
+        --fnt-size-h1-md: 4rem;
+        --fnt-size-h1-sm: 2rem;
+        --fnt-size-h1: var(--fnt-size-h1-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h1: var(--fnt-size-h1-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h1: var(--fnt-size-h1-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h1: var(--fnt-size-h1-sm);
+        }
+
+        --fnt-size-h2-xl: 8rem;
+        --fnt-size-h2-lg: 6rem;
+        --fnt-size-h2-md: 3rem;
+        --fnt-size-h2-sm: 1.5rem;
+        --fnt-size-h2: var(--fnt-size-h2-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h2: var(--fnt-size-h2-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h2: var(--fnt-size-h2-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h2: var(--fnt-size-h2-sm);
+        }
+
+        --fnt-size-h3-xl: 6rem;
+        --fnt-size-h3-lg: 4rem;
+        --fnt-size-h3-md: 2rem;
+        --fnt-size-h3-sm: 1.25rem;
+        --fnt-size-h3: var(--fnt-size-h3-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h3: var(--fnt-size-h3-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h3: var(--fnt-size-h3-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h3: var(--fnt-size-h3-sm);
+        }
+
+        --fnt-size-h4-xl: 4rem;
+        --fnt-size-h4-lg: 3rem;
+        --fnt-size-h4-md: 2rem;
+        --fnt-size-h4-sm: 1.25rem;
+        --fnt-size-h4: var(--fnt-size-h4-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h4: var(--fnt-size-h4-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h4: var(--fnt-size-h4-md);
+        }
+
+        @media (max-width: 375px) { 
+            --fnt-size-h4: var(--fnt-size-h4-sm);
+        }
+
+        --fnt-size-h5-xl: 3rem;
+        --fnt-size-h5-lg: 2rem;
+        --fnt-size-h5-md: 1.5rem;
+        --fnt-size-h5-sm: 1rem;
+        --fnt-size-h5: var(--fnt-size-h5-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h5: var(--fnt-size-h5-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h5: var(--fnt-size-h5-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h5: var(--fnt-size-h5-sm);
+        }
+
+        --fnt-size-h6-xl: 2rem;
+        --fnt-size-h6-lg: 1.25rem;
+        --fnt-size-h6-md: 1rem;
+        --fnt-size-h6-sm: 0.75rem;
+        --fnt-size-h6: var(--fnt-size-h6-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h6: var(--fnt-size-h6-lg);
+        }
+        
+    }
+
+    h1, h2, h3, h4, h5, h6, p, span {
+        font-family: 'AntonSC', sans-serif;
+        font-weight: 500;
+        line-height: 1;
+        color: #fff;
+    }
+
+    .headline {
+        &.shadow {
+            text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.78);
+        }
+    }
+
+    h1, .headline.h1 {
+        font-size: var(--fnt-size-h1);
+    }
+
+    h2, .headline.h2 {
+        font-size: var(--fnt-size-h2);
+    }
+
+    h3, .headline.h3 {
+        font-size: var(--fnt-size-h3);
+    }
+
+    h4, .headline.h4 {
+        font-size: var(--fnt-size-h4);
+    }
+
+    h5, .headline.h5 {
+        font-size: var(--fnt-size-h5);
+    }
+
+    h6, .headline.h6 {
+        font-size: var(--fnt-size-h6);
+    }
+
+    
+    p.headline {
+
+        @media (min-width: 1440px) {
+            font-size: var(--fnt-size-h6);
+        }
+
+        @media (max-width: 768px) {
+            font-size: var(--fnt-size-h6-md);
+        }
+
+        @media (max-width: 375px) {
+            font-size: var(--fnt-size-h6-sm);
+        }
+    }
+
+    span.headline {
+        font-size: var(--fnt-size-h6);
+
+        @media (min-width: 1440px) {
+            font-size: var(--fnt-size-h6);
+        }
+
+        @media (max-width: 768px) {
+            font-size: var(--fnt-size-h6-md);
+        }
+
+        @media (max-width: 375px) {
+            font-size: var(--fnt-size-h6-sm);
+        }
+    }
+</style>
+

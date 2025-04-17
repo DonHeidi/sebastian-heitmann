@@ -1,0 +1,50 @@
+---
+import Headline from "./copy/headline.astro";
+import ppLogo from "../assets/pp_logo.png";
+import ppOrcaLogo from "../assets/pp_orca.png";
+import { Image } from 'astro:assets';
+---
+
+<section class="logo-section">
+    <Headline element="h2" as="h5">Trusted by companies like</Headline>
+    <div class="logo-section__logos">
+        <Image src={ppOrcaLogo} alt="Logo" height={100} fit="contain" />
+        <Image src={ppLogo} alt="Logo" height={100} fit="contain" />
+        <Image src={ppOrcaLogo} alt="Logo" height={100} fit="contain" />
+    </div>
+</section>
+
+<style lang="scss">
+    .logo-section {
+        width: 100%;
+        padding-top: 1.25rem;
+        padding-bottom: 4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--clr-bg-primary);
+        background-image: 
+            radial-gradient(ellipse at top center, rgba(255, 255, 255, 1) 0%, rgba(17, 18, 34, 0) 100%),
+            radial-gradient(ellipse at bottom center, rgba(255, 255, 255, 1) 0%, rgba(17, 18, 34, 0) 100%);
+        background-size: 100% 1px, 100% 1px;
+        background-repeat: no-repeat, no-repeat;
+
+        &__logos {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 8rem;
+
+            img {
+                filter: saturate(0);
+            }
+        }
+
+    }
+
+</style>
+
+

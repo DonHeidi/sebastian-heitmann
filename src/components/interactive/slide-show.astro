@@ -1,0 +1,22 @@
+<div class="slide-show">
+    <div class="slide-show-container">
+        <slot />
+    </div>
+</div>
+
+<style>
+    .slide-show {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        height: 100dvh;
+        width: 100dvw;
+    }
+
+    :global(.slide) {
+        display: block;
+        height: 100dvh;
+        width: 100dvw;
+    }
+</style>

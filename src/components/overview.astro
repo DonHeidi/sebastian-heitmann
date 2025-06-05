@@ -1,0 +1,32 @@
+---
+import Typewriter from './copy/typewriter.astro';
+import Headline from './copy/headline.astro';
+---
+<section class="overview">
+    <Typewriter text="Result driven development" as="h2" />
+    <article>
+        <header>
+            <Headline element="h3">
+                Hands on concepting
+            </Headline>
+        </header>
+
+        <p>
+            I'm a software engineer with a passion for building products that help people.
+        </p>
+    </article>
+</section>
+
+
+
+<style lang="scss">
+
+    .overview {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 2rem;
+        background-color: #111222;
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+</style>

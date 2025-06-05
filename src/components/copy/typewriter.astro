@@ -6,264 +6,99 @@ type Props = {
 const { as, text } = Astro.props;
 ---
 
-{as === 'h1' && <div class="typewriter-container"><h1 data-text={text} class="typewriter"></h1><h1 class="typewriter-ghost" aria-hidden="true">{text}</h1></div>}
-{as === 'h2' && <div class="typewriter-container"><h2 data-text={text} class="typewriter"></h2><h2 class="typewriter-ghost" aria-hidden="true">{text}</h2></div>}
-{as === 'h3' && <div class="typewriter-container"><h3 data-text={text} class="typewriter"></h3><h3 class="typewriter-ghost" aria-hidden="true">{text}</h3></div>}
-{as === 'h4' && <div class="typewriter-container"><h4 data-text={text} class="typewriter"></h4><h4 class="typewriter-ghost" aria-hidden="true">{text}</h4></div>}
-{as === 'h5' && <div class="typewriter-container"><h5 data-text={text} class="typewriter"></h5><h5 class="typewriter-ghost" aria-hidden="true">{text}</h5></div>}
-{as === 'h6' && <div class="typewriter-container"><h6 data-text={text} class="typewriter"></h6><h6 class="typewriter-ghost" aria-hidden="true">{text}</h6></div>}
-{as === 'p' && <div class="typewriter-container"><p data-text={text} class="typewriter"></p><p class="typewriter-ghost" aria-hidden="true">{text}</p></div>}
-{as === 'span' && <div class="typewriter-container"><span data-text={text} class="typewriter"></span><span class="typewriter-ghost" aria-hidden="true">{text}</span></div>}
+{as === 'h1' && <div class="typewriter-container"><h1 class="typewriter-ghost">{text}</h1><h1 data-text={text} class="typewriter"></h1></div>}
+{as === 'h2' && <div class="typewriter-container"><h2 class="typewriter-ghost">{text}</h2><h2 data-text={text} class="typewriter"></h2></div>}
+{as === 'h3' && <div class="typewriter-container"><h3 class="typewriter-ghost">{text}</h3><h3 data-text={text} class="typewriter"></h3></div>}
+{as === 'h4' && <div class="typewriter-container"><h4 class="typewriter-ghost">{text}</h4><h4 data-text={text} class="typewriter"></h4></div>}
+{as === 'h5' && <div class="typewriter-container"><h5 class="typewriter-ghost">{text}</h5><h5 data-text={text} class="typewriter"></h5></div>}
+{as === 'h6' && <div class="typewriter-container"><h6 class="typewriter-ghost">{text}</h6><h6 data-text={text} class="typewriter"></h6></div>}
+{as === 'p' && <div class="typewriter-container"><p class="typewriter-ghost">{text}</p><p data-text={text} class="typewriter"></p></div>}
+{as === 'span' && <div class="typewriter-container"><span class="typewriter-ghost">{text}</span><span data-text={text} class="typewriter"></span></div>}
 
 <script>
-    function calculateTextHeight(text: string, element: HTMLElement) {
-        const computedStyle = window.getComputedStyle(element);
-        const container = element.parentElement;
-        if (!container) return 0;
-
-        // Create a canvas context for text measurement
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return 0;
-
-        // Set up the context with the same font properties
-        ctx.font = `${computedStyle.fontWeight} ${computedStyle.fontSize} ${computedStyle.fontFamily}`;
-        
-        // Get container width
-        const containerWidth = container.getBoundingClientRect().width;
-        
-        // Split text into words
-        const words = text.split(' ');
-        let lines: string[] = [];
-        let currentLine = '';
-        
-        // Word wrap the text
-        for (const word of words) {
-            const testLine = currentLine ? `${currentLine} ${word}` : word;
-            const metrics = ctx.measureText(testLine);
-            
-            if (metrics.width > containerWidth && currentLine) {
-                lines.push(currentLine);
-                currentLine = word;
-            } else {
-                currentLine = testLine;
-            }
-        }
-        if (currentLine) lines.push(currentLine);
-        
-        // Calculate total height
-        const lineHeight = computedStyle.lineHeight === 'normal' 
-            ? parseFloat(computedStyle.fontSize) * 1.2 
-            : parseFloat(computedStyle.lineHeight);
-            
-        return lines.length * lineHeight;
-    }
-
     const typewriters = document.querySelectorAll('.typewriter');
+    
     typewriters.forEach((typewriter) => {
-        const text = (typewriter as HTMLElement).dataset.text;
-        const container = typewriter.parentElement;
+        const textData = (typewriter as HTMLElement).dataset.text;
+        if (!textData) return;
         
-        if (container && text) {
-            // Calculate and set the container height
-            const height = calculateTextHeight(text, typewriter as HTMLElement);
-            container.style.height = `${height}px`;
-        }
-
-        const cursor = document.createElement('span');
-        cursor.classList.add('cursor');
-        
-        // Copy font-related styles from typewriter to cursor
-        const computedStyle = window.getComputedStyle(typewriter);
-        cursor.style.fontFamily = computedStyle.fontFamily;
-        cursor.style.fontSize = computedStyle.fontSize;
-        cursor.style.lineHeight = computedStyle.lineHeight;
-        cursor.style.letterSpacing = computedStyle.letterSpacing;
-        cursor.style.padding = computedStyle.padding;
-        cursor.style.margin = computedStyle.margin;
-        cursor.style.baselineShift = computedStyle.baselineShift;
-
-        const textContent = document.createElement('span');
-        textContent.classList.add('typewriter-text');
-
-        typewriter.appendChild(cursor);
-        typewriter.appendChild(textContent);
-
-        const measure = typewriter.cloneNode(false) as HTMLElement;
-        measure.classList.add('typewriter-measure');
-        measure.removeAttribute('data-text');
-        document.body.appendChild(measure);
-
-        type State = 'start' | 'typing' | 'deleting' | 'end';
-        let state: State = 'start';
+        const text = textData; // Create a const copy for type safety
         let index = 0;
+        let isDeleting = false;
+        let isPaused = false;
         
-        function updateTypewriter() {
-            const visibleText = text?.slice(0, index + 1) ?? '';
-            measure.textContent = visibleText;
-            textContent.textContent = visibleText;
-
-            switch (state) {
-                case 'start':
-                    // Ensure text content is empty
-                    textContent.textContent = ' ';
-                    measure.textContent = ' ';
-                    
-                    const range = document.createRange();
-                    if (textContent.firstChild) {
-                        range.setStart(textContent.firstChild, 0);
-                        range.setEnd(textContent.firstChild, 0);
-                    }
-
-                    const rect = range.getBoundingClientRect();
-                    const containerRect = typewriter.getBoundingClientRect();
-                    
-                    cursor.classList.add('blinking');
-                    state = 'typing';
-                    setTimeout(updateTypewriter, 1000);
-                    break;
-
-                case 'typing':
-                    if (textContent.firstChild?.textContent && index <= textContent.firstChild.textContent.length) {
-                        const range = document.createRange();
-                        const safeIndex = Math.min(index + 1, textContent.firstChild.textContent.length);
-                        range.setStart(textContent.firstChild, safeIndex);
-                        range.setEnd(textContent.firstChild, safeIndex);
-
-                        const rect = range.getBoundingClientRect();
-                        const containerRect = typewriter.getBoundingClientRect();
-
-                        cursor.style.left = `${rect.right - containerRect.left}px`;
-                        cursor.style.top = `${rect.top - containerRect.top}px`;
-                        cursor.classList.remove('blinking');
-                        cursor.classList.add('typing');
-
-                        index++;
-                        if (text && index < text.length) {
-                            setTimeout(updateTypewriter, 80);
-                        } else {
-                            state = 'end';
-                            setTimeout(updateTypewriter, 1000);
-                        }
-                    }
-                    break;
-
-                case 'deleting':
-                    if (textContent.firstChild?.textContent && index >= 0) {
-                        const range = document.createRange();
-                        const safeIndex = Math.min(index + 1, textContent.firstChild.textContent.length);
-                        range.setStart(textContent.firstChild, safeIndex);
-                        range.setEnd(textContent.firstChild, safeIndex);
-
-                        const rect = range.getBoundingClientRect();
-                        const containerRect = typewriter.getBoundingClientRect();
-
-                        cursor.style.left = `${rect.right - containerRect.left}px`;
-                        cursor.style.top = `${rect.top - containerRect.top}px`;
-                        cursor.classList.remove('blinking');
-
-                        index--;
-                        setTimeout(updateTypewriter, 40);
-                    } else {
-                        // When deletion is complete, measure the space character's position
-                        textContent.textContent = ' ';
-                        measure.textContent = ' ';
-                        if (textContent.firstChild) {
-                            const range = document.createRange();
-                            range.setStart(textContent.firstChild, 0);
-                            range.setEnd(textContent.firstChild, 0);
-                            const rect = range.getBoundingClientRect();
-                            const containerRect = typewriter.getBoundingClientRect();
-                            cursor.style.left = `${rect.left - containerRect.left}px`;
-                            cursor.style.top = `${rect.top - containerRect.top}px`;
-                        }
-                        
-                        state = 'start';
-                        index = 0;
-                        cursor.classList.add('blinking');
-                        setTimeout(updateTypewriter, 1000);
-                    }
-                    break;
-
-                case 'end':
-                    cursor.classList.add('blinking');
-                    state = 'deleting';
-                    setTimeout(updateTypewriter, 1000);
-                    break;
+        function updateText() {
+            if (isPaused) {
+                setTimeout(updateText, isDeleting ? 1000 : 2000);
+                isPaused = false;
+                return;
             }
+            
+            if (isDeleting) {
+                typewriter.textContent = text.slice(0, index);
+                index--;
+                
+                if (index < 0) {
+                    isDeleting = false;
+                    isPaused = true;
+                }
+            } else {
+                typewriter.textContent = text.slice(0, index + 1);
+                index++;
+                
+                if (index >= text.length) {
+                    isDeleting = true;
+                    isPaused = true;
+                }
+            }
+            
+            const delay = isDeleting ? 50 : 100;
+            setTimeout(updateText, delay);
         }
-
-        updateTypewriter();
-
+        
+        // Start the animation
+        setTimeout(updateText, 1000);
     });
-
 </script>
 
 <style lang="scss">
-    @keyframes blink {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0;
-        }
-    }
-
-    .typewriter {
-        font-size: 5rem;
-        text-wrap: wrap;
-        white-space: pre-wrap;
-        position: relative;
-    }
-
     .typewriter-container {
-        position: relative;
         display: grid;
     }
 
     .typewriter,
     .typewriter-ghost {
         grid-area: 1 / 1;
+        font-size: 5rem;
+        text-wrap: wrap;
+        white-space: pre-wrap;
     }
 
     .typewriter-ghost {
-        visibility: hidden;
-        pointer-events: none;
-        user-select: none;
+        color: var(--background-color, #000000); /* Use CSS custom property or fallback to black */
+        opacity: 0;
+        z-index: 1;
     }
 
-    :global(.typewriter-hidden) {
-        visibility: hidden;
-        pointer-events: none;
-        user-select: none;
+    .typewriter {
+        color: inherit;
+        z-index: 2;
+        position: relative;
     }
 
-    :global(.cursor) {
-        display: inline-block;
-        position: absolute;
+    .typewriter::after {
+        content: '|';
+        font-weight: bold;
+        animation: blink 1s infinite;
         margin-left: 2px;
-        top: 0;
-        left: 0;
-        width: 2px;
-        height: 1em;
-        background-color: white;
-        opacity: 1;
     }
-    
-    :global(.cursor.typing) {
-    }
-    
-    :global(.cursor.blinking) {
-        animation: blink 1s step-end infinite;
-    }
-    
-    :global(.typewriter-measure) {
-        text-wrap: wrap;
-        position: absolute;
-        visibility: hidden;
-        white-space: pre-wrap;
-        pointer-events: none;
-        z-index: -1;
-        display: inline-block;
+
+    @keyframes blink {
+        0%, 50% {
+            opacity: 1;
+        }
+        51%, 100% {
+            opacity: 0;
+        }
     }
 </style>

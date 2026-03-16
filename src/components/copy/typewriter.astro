@@ -3,17 +3,19 @@ type Props = {
     text: string | string[];
     as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
 }
-const { as, text } = Astro.props;
+
+const { as = 'h1', text } = Astro.props;
+const longestText = Array.isArray(text) ? text.reduce((a, b) => a.length > b.length ? a : b) : text;
 ---
 
-{as === 'h1' && <div class="typewriter-container"><h1 data-text={text} class="typewriter"></h1><h1 class="typewriter-ghost" aria-hidden="true">{text}</h1></div>}
-{as === 'h2' && <div class="typewriter-container"><h2 data-text={text} class="typewriter"></h2><h2 class="typewriter-ghost" aria-hidden="true">{text}</h2></div>}
-{as === 'h3' && <div class="typewriter-container"><h3 data-text={text} class="typewriter"></h3><h3 class="typewriter-ghost" aria-hidden="true">{text}</h3></div>}
-{as === 'h4' && <div class="typewriter-container"><h4 data-text={text} class="typewriter"></h4><h4 class="typewriter-ghost" aria-hidden="true">{text}</h4></div>}
-{as === 'h5' && <div class="typewriter-container"><h5 data-text={text} class="typewriter"></h5><h5 class="typewriter-ghost" aria-hidden="true">{text}</h5></div>}
-{as === 'h6' && <div class="typewriter-container"><h6 data-text={text} class="typewriter"></h6><h6 class="typewriter-ghost" aria-hidden="true">{text}</h6></div>}
-{as === 'p' && <div class="typewriter-container"><p data-text={text} class="typewriter"></p><p class="typewriter-ghost" aria-hidden="true">{text}</p></div>}
-{as === 'span' && <div class="typewriter-container"><span data-text={text} class="typewriter"></span><span class="typewriter-ghost" aria-hidden="true">{text}</span></div>}
+{as === 'h1' && <div class="typewriter-container"><h1 data-text={JSON.stringify(text)} class="typewriter headline"></h1><h1 class="typewriter-ghost headline" aria-hidden="true">{longestText}</h1></div>}
+{as === 'h2' && <div class="typewriter-container"><h2 data-text={JSON.stringify(text)} class="typewriter headline"></h2><h2 class="typewriter-ghost headline" aria-hidden="true">{longestText}</h2></div>}
+{as === 'h3' && <div class="typewriter-container"><h3 data-text={JSON.stringify(text)} class="typewriter headline"></h3><h3 class="typewriter-ghost headline" aria-hidden="true">{longestText}</h3></div>}
+{as === 'h4' && <div class="typewriter-container"><h4 data-text={JSON.stringify(text)} class="typewriter headline"></h4><h4 class="typewriter-ghost headline" aria-hidden="true">{longestText}</h4></div>}
+{as === 'h5' && <div class="typewriter-container"><h5 data-text={JSON.stringify(text)} class="typewriter headline"></h5><h5 class="typewriter-ghost headline" aria-hidden="true">{longestText}</h5></div>}
+{as === 'h6' && <div class="typewriter-container"><h6 data-text={JSON.stringify(text)} class="typewriter headline"></h6><h6 class="typewriter-ghost headline" aria-hidden="true">{longestText}</h6></div>}
+{as === 'p' && <div class="typewriter-container"><p data-text={JSON.stringify(text)} class="typewriter headline"></p><p class="typewriter-ghost headline" aria-hidden="true">{longestText}</p></div>}
+{as === 'span' && <div class="typewriter-container"><span data-text={JSON.stringify(text)} class="typewriter headline"></span><span class="typewriter-ghost headline" aria-hidden="true">{longestText}</span></div>}
 
 <script>
     function calculateTextHeight(text: string, element: HTMLElement) {
@@ -61,45 +63,58 @@ const { as, text } = Astro.props;
 
     const typewriters = document.querySelectorAll('.typewriter');
     typewriters.forEach((typewriter) => {
-        const text = (typewriter as HTMLElement).dataset.text;
+        const rawText = (typewriter as HTMLElement).dataset.text;
         const container = typewriter.parentElement;
-        
-        if (container && text) {
-            // Calculate and set the container height
-            const height = calculateTextHeight(text, typewriter as HTMLElement);
+
+        // Parse the text data - it's now JSON encoded
+        let texts: string[] = [];
+        if (rawText) {
+            try {
+                const parsed = JSON.parse(rawText);
+                texts = Array.isArray(parsed) ? parsed : [parsed];
+            } catch {
+                texts = [rawText];
+            }
+        }
+
+        // Find the longest text for container height calculation
+        const longestText = texts.reduce((a, b) => a.length > b.length ? a : b, '');
+
+        if (container && longestText) {
+            // Calculate and set the container height based on longest text
+            const height = calculateTextHeight(longestText, typewriter as HTMLElement);
             container.style.height = `${height}px`;
         }
 
         const cursor = document.createElement('span');
         cursor.classList.add('cursor');
-        
-        // Copy font-related styles from typewriter to cursor
-        const computedStyle = window.getComputedStyle(typewriter);
-        cursor.style.fontFamily = computedStyle.fontFamily;
-        cursor.style.fontSize = computedStyle.fontSize;
-        cursor.style.lineHeight = computedStyle.lineHeight;
-        cursor.style.letterSpacing = computedStyle.letterSpacing;
-        cursor.style.padding = computedStyle.padding;
-        cursor.style.margin = computedStyle.margin;
-        cursor.style.baselineShift = computedStyle.baselineShift;
+        cursor.classList.add('headline');
 
         const textContent = document.createElement('span');
         textContent.classList.add('typewriter-text');
+        textContent.classList.add('headline');
 
         typewriter.appendChild(cursor);
         typewriter.appendChild(textContent);
 
         const measure = typewriter.cloneNode(false) as HTMLElement;
         measure.classList.add('typewriter-measure');
+        measure.classList.add('headline');
         measure.removeAttribute('data-text');
         document.body.appendChild(measure);
 
         type State = 'start' | 'typing' | 'deleting' | 'end';
         let state: State = 'start';
         let index = 0;
-        
+        let textIndex = 0;
+
+        function getCurrentText() {
+            return texts[textIndex] ?? '';
+        }
+
         function updateTypewriter() {
-            const visibleText = text?.slice(0, index + 1) ?? '';
+            const currentText = getCurrentText();
+            const visibleText = currentText.slice(0, index + 1);
             measure.textContent = visibleText;
             textContent.textContent = visibleText;
 
@@ -108,7 +123,7 @@ const { as, text } = Astro.props;
                     // Ensure text content is empty
                     textContent.textContent = ' ';
                     measure.textContent = ' ';
-                    
+
                     const range = document.createRange();
                     if (textContent.firstChild) {
                         range.setStart(textContent.firstChild, 0);
@@ -117,7 +132,7 @@ const { as, text } = Astro.props;
 
                     const rect = range.getBoundingClientRect();
                     const containerRect = typewriter.getBoundingClientRect();
-                    
+
                     cursor.classList.add('blinking');
                     state = 'typing';
                     setTimeout(updateTypewriter, 1000);
@@ -134,12 +149,12 @@ const { as, text } = Astro.props;
                         const containerRect = typewriter.getBoundingClientRect();
 
                         cursor.style.left = `${rect.right - containerRect.left}px`;
-                        cursor.style.top = `${rect.top - containerRect.top}px`;
+                        cursor.style.top = `${rect.top - containerRect.top + (rect.height - cursor.offsetHeight) / 2}px`;
                         cursor.classList.remove('blinking');
                         cursor.classList.add('typing');
 
                         index++;
-                        if (text && index < text.length) {
+                        if (index < currentText.length) {
                             setTimeout(updateTypewriter, 80);
                         } else {
                             state = 'end';
@@ -159,7 +174,7 @@ const { as, text } = Astro.props;
                         const containerRect = typewriter.getBoundingClientRect();
 
                         cursor.style.left = `${rect.right - containerRect.left}px`;
-                        cursor.style.top = `${rect.top - containerRect.top}px`;
+                        cursor.style.top = `${rect.top - containerRect.top + (rect.height - cursor.offsetHeight) / 2}px`;
                         cursor.classList.remove('blinking');
 
                         index--;
@@ -175,9 +190,11 @@ const { as, text } = Astro.props;
                             const rect = range.getBoundingClientRect();
                             const containerRect = typewriter.getBoundingClientRect();
                             cursor.style.left = `${rect.left - containerRect.left}px`;
-                            cursor.style.top = `${rect.top - containerRect.top}px`;
+                            cursor.style.top = `${rect.top - containerRect.top + (rect.height - cursor.offsetHeight) / 2}px`;
                         }
-                        
+
+                        // Move to the next text in the array
+                        textIndex = (textIndex + 1) % texts.length;
                         state = 'start';
                         index = 0;
                         cursor.classList.add('blinking');
@@ -209,8 +226,154 @@ const { as, text } = Astro.props;
         }
     }
 
+    :root {
+        --fnt-size-h1-xl: 12rem;
+        --fnt-size-h1-lg: 8rem;
+        --fnt-size-h1-md: 4rem;
+        --fnt-size-h1-sm: 2rem;
+        --fnt-size-h1: var(--fnt-size-h1-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h1: var(--fnt-size-h1-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h1: var(--fnt-size-h1-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h1: var(--fnt-size-h1-sm);
+        }
+
+        --fnt-size-h2-xl: 8rem;
+        --fnt-size-h2-lg: 6rem;
+        --fnt-size-h2-md: 3rem;
+        --fnt-size-h2-sm: 1.5rem;
+        --fnt-size-h2: var(--fnt-size-h2-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h2: var(--fnt-size-h2-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h2: var(--fnt-size-h2-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h2: var(--fnt-size-h2-sm);
+        }
+
+        --fnt-size-h3-xl: 6rem;
+        --fnt-size-h3-lg: 4rem;
+        --fnt-size-h3-md: 2rem;
+        --fnt-size-h3-sm: 1.25rem;
+        --fnt-size-h3: var(--fnt-size-h3-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h3: var(--fnt-size-h3-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h3: var(--fnt-size-h3-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h3: var(--fnt-size-h3-sm);
+        }
+
+        --fnt-size-h4-xl: 4rem;
+        --fnt-size-h4-lg: 3rem;
+        --fnt-size-h4-md: 2rem;
+        --fnt-size-h4-sm: 1.25rem;
+        --fnt-size-h4: var(--fnt-size-h4-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h4: var(--fnt-size-h4-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h4: var(--fnt-size-h4-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h4: var(--fnt-size-h4-sm);
+        }
+
+        --fnt-size-h5-xl: 3rem;
+        --fnt-size-h5-lg: 2rem;
+        --fnt-size-h5-md: 1.5rem;
+        --fnt-size-h5-sm: 1rem;
+        --fnt-size-h5: var(--fnt-size-h5-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h5: var(--fnt-size-h5-lg);
+        }
+
+        @media (max-width: 768px) {
+            --fnt-size-h5: var(--fnt-size-h5-md);
+        }
+
+        @media (max-width: 375px) {
+            --fnt-size-h5: var(--fnt-size-h5-sm);
+        }
+
+        --fnt-size-h6-xl: 2rem;
+        --fnt-size-h6-lg: 1.25rem;
+        --fnt-size-h6-md: 1rem;
+        --fnt-size-h6-sm: 0.75rem;
+        --fnt-size-h6: var(--fnt-size-h6-xl);
+
+        @media (max-width: 1440px) {
+            --fnt-size-h6: var(--fnt-size-h6-lg);
+        }
+    }
+
+    .headline {
+        font-family: 'AntonSC', sans-serif;
+        font-weight: 500;
+        line-height: 1;
+        color: #fff;
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0;
+    }
+
+    h1.headline {
+        font-size: var(--fnt-size-h1);
+    }
+
+    h2.headline {
+        font-size: var(--fnt-size-h2);
+    }
+
+    h3.headline {
+        font-size: var(--fnt-size-h3);
+    }
+
+    h4.headline {
+        font-size: var(--fnt-size-h4);
+    }
+
+    h5.headline {
+        font-size: var(--fnt-size-h5);
+    }
+
+    h6.headline {
+        font-size: var(--fnt-size-h6);
+    }
+
+    p.headline, span.headline {
+        font-size: var(--fnt-size-h6);
+
+        @media (max-width: 768px) {
+            font-size: var(--fnt-size-h6-md);
+        }
+
+        @media (max-width: 375px) {
+            font-size: var(--fnt-size-h6-sm);
+        }
+    }
+
     .typewriter {
-        font-size: 5rem;
         text-wrap: wrap;
         white-space: pre-wrap;
         position: relative;
@@ -241,22 +404,22 @@ const { as, text } = Astro.props;
     :global(.cursor) {
         display: inline-block;
         position: absolute;
-        margin-left: 2px;
         top: 0;
         left: 0;
         width: 2px;
         height: 1em;
+        font-size: inherit;
         background-color: white;
         opacity: 1;
     }
-    
+
     :global(.cursor.typing) {
     }
-    
+
     :global(.cursor.blinking) {
         animation: blink 1s step-end infinite;
     }
-    
+
     :global(.typewriter-measure) {
         text-wrap: wrap;
         position: absolute;

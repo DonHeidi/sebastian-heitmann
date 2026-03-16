@@ -4,9 +4,10 @@ type Props = {
     as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
     class?: string;
     shadow?: boolean;
+    variant?: 'highlight'
 }
 
-const { element, as, class: className, shadow }: Props = Astro.props;
+const { element, as, class: className, shadow, variant }: Props = Astro.props;
 const elem = element ?? 'h1';
 ---
 
@@ -39,14 +40,14 @@ const elem = element ?? 'h1';
 )}
 
 {elem === 'h3' && (
-    <h3 class={`headline${className ? ` ${className}` : ''}`} class:list={[
+    <h3 class={`headline${className ? ` ${className}` : ''}${variant ? ` ${variant}` : ''}`} class:list={[
         { 'h1': as === 'h1' },
         { 'h2': as === 'h2' },
         { 'h3': as === 'h3' },
         { 'h4': as === 'h4' },
         { 'h5': as === 'h5' },
         { 'h6': as === 'h6' },
-        { 'shadow': shadow }
+        { 'shadow': shadow },
     ]}>
         <slot />
     </h3>
@@ -250,6 +251,17 @@ const elem = element ?? 'h1';
 
     h3, .headline.h3 {
         font-size: var(--fnt-size-h3);
+    }
+
+    .headline.h3.highlight {
+
+        @media (min-width: 768px) {
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 375px) {
+            font-size: calc(var(--fnt-size-h3) - 3rem);
+        }
     }
 
     h4, .headline.h4 {

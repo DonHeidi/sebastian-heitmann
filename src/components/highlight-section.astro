@@ -1,0 +1,95 @@
+---
+import Typewriter from './copy/typewriter.astro';
+import Highlight from './highlight.astro';
+import Overline from './copy/overline.astro';
+import CopyHighlight from './copy/highlight.astro';
+---
+
+<section id="highlight-section">
+  <div class="highlight-section__header">
+    <Overline element="span">What <CopyHighlight color="magenta">sets me apart</CopyHighlight></Overline>
+    <Typewriter
+      as="h2"
+      text={
+        [
+          'Making Complexity Work ',
+          'Turning Uncertainty into Systems ',
+          'Built for Use, Not for Show '
+        ]
+      }
+    />
+  </div>
+  <div class="highlight-section__columns">
+    <Highlight
+      variant="magenta"
+      number="01"
+      title="Business Engineering Mindset"
+      body="Applying engineering principles, structure, systems thinking, and feedback loops to business and digitalisation challenges."
+    />
+    <Highlight
+      variant="blue"
+      number="02"
+      title="Product-Minded Thinking"
+      body="Treating digital solutions as long-term products, not short-lived projects — with roadmaps, ownership, and iteration."
+    />
+    <Highlight
+      variant="green"
+      number="03"
+      title="Business-Technology Bridge"
+      body="Translating business intent into feasible, executable digital solutions that teams can actually build and ship."
+    />
+  </div>
+</section>
+
+<style lang="scss">
+  #highlight-section {
+    position: relative;
+    padding-inline: 144px;
+    padding-block: 6rem;
+    background-image: radial-gradient(
+      ellipse at top left,
+      rgba(45, 48, 90, 0.35) 0%,
+      rgba(17, 18, 34, 0) 60%
+    );
+  }
+
+  .highlight-section {
+    &__header {
+      margin-bottom: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    &__columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    #highlight-section {
+      padding-inline: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    #highlight-section {
+      padding-inline: 2rem;
+      padding-block: 4rem;
+    }
+
+    .highlight-section__columns {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    #highlight-section {
+      padding-inline: 1.25rem;
+      padding-block: 3rem;
+    }
+  }
+</style>

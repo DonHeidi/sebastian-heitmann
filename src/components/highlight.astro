@@ -1,0 +1,130 @@
+---
+import Headline from './copy/headline.astro';
+import Body from './copy/body.astro';
+
+type Props = {
+    title: string;
+    body: string;
+    variant?: 'magenta' | 'blue' | 'green';
+    number?: string;
+}
+
+const { title, body, variant = 'magenta', number }: Props = Astro.props;
+
+const colorMap = {
+    magenta: 'var(--clr-magenta)',
+    blue: 'var(--clr-blue)',
+    green: 'var(--clr-green)',
+};
+
+const accentColor = colorMap[variant];
+---
+<article class:list={['highlight-card', variant]}>
+    <div class="highlight-card__accent"></div>
+    <div class="highlight-card__content">
+        {number && <span class="highlight-card__number" aria-hidden="true">{number}</span>}
+        <Headline element="h3" as="h5">
+            {title}
+        </Headline>
+        <Body element="p" size="sm">
+            {body}
+        </Body>
+    </div>
+</article>
+
+<style lang="scss" define:vars={{ accentColor }}>
+    .highlight-card {
+        --_accent: var(--accentColor);
+        position: relative;
+        overflow: hidden;
+        border-radius: 6px;
+        background: rgba(22, 24, 48, 0.7);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        box-shadow:
+            inset 1px 1px 1px 0 rgba(101, 108, 161, 0.15),
+            -1px -1px 2px 0 rgba(101, 108, 161, 0.08),
+            inset -1px -1px 0 0 rgba(0, 0, 0, 0.3),
+            2px 2px 8px 0 rgba(0, 0, 0, 0.4);
+        transition:
+            transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 0.35s ease;
+
+        &:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow:
+                inset 1px 1px 1px 0 rgba(101, 108, 161, 0.2),
+                -1px -1px 2px 0 rgba(101, 108, 161, 0.12),
+                inset -1px -1px 0 0 rgba(0, 0, 0, 0.3),
+                4px 8px 20px 0 rgba(0, 0, 0, 0.5);
+
+            .highlight-card__accent::after {
+                opacity: 0.2;
+            }
+        }
+
+        &__accent {
+            height: 3px;
+            background: linear-gradient(
+                to right,
+                var(--_accent) 0%,
+                var(--_accent) 40%,
+                transparent 100%
+            );
+
+            /* Radial glow behind the accent edge */
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 60%;
+                height: 50%;
+                background: radial-gradient(
+                    ellipse at top left,
+                    var(--_accent),
+                    transparent 70%
+                );
+                opacity: 0.08;
+                pointer-events: none;
+                transition: opacity 0.35s ease;
+            }
+        }
+
+        &__content {
+            position: relative;
+            padding: 2.25rem 2rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        &__number {
+            position: absolute;
+            top: -0.25rem;
+            right: 0.75rem;
+            font-family: 'AntonSC', sans-serif;
+            font-size: 7rem;
+            line-height: 1;
+            color: var(--_accent);
+            opacity: 0.06;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Variant border-bottom accent as subtle brand reinforcement */
+        &.magenta {
+            border-bottom: 1px solid rgba(255, 0, 123, 0.12);
+        }
+
+        &.blue {
+            border-bottom: 1px solid rgba(0, 183, 255, 0.12);
+        }
+
+        &.green {
+            border-bottom: 1px solid rgba(0, 224, 142, 0.12);
+        }
+    }
+</style>

@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import SuccessStoryCard from './success-story-card.astro';
+import CTA from './interactive/call-to-action.astro';
+
+const stories = (await getCollection('cases')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+<section id="cases" class="success-stories">
+  <div class="success-stories__layout">
+    <div class="success-stories__vertical-text" aria-hidden="true">
+      <span>Success Story</span>
+    </div>
+    <div class="success-stories__grid">
+      <div class="success-stories__column success-stories__column--left">
+        {stories.filter((_, i) => i % 2 === 0).map((story) => (
+          <SuccessStoryCard
+            title={story.data.title}
+            subtitle={story.data.subtitle}
+            excerpt={story.data.excerpt}
+            image={story.data.image}
+            slug={story.id}
+          />
+        ))}
+      </div>
+      <div class="success-stories__column success-stories__column--right">
+        {stories.filter((_, i) => i % 2 === 1).map((story) => (
+          <SuccessStoryCard
+            title={story.data.title}
+            subtitle={story.data.subtitle}
+            excerpt={story.data.excerpt}
+            image={story.data.image}
+            slug={story.id}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+  <div class="success-stories__cta">
+    <CTA link="/contact" type="primary">Book a Call</CTA>
+  </div>
+</section>
+
+<style lang="scss">
+  .success-stories {
+    position: relative;
+    padding-inline: 144px;
+    padding-block: 6rem;
+    background-color: var(--clr-bg-primary);
+
+    &__layout {
+      display: grid;
+      grid-template-columns: 6rem 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    &__vertical-text {
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      font-family: 'AntonSC', sans-serif;
+      font-size: 8rem;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.08);
+      user-select: none;
+      white-space: nowrap;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    &__column {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      &--right {
+        margin-top: 6rem;
+      }
+    }
+
+    &__cta {
+      display: flex;
+      justify-content: center;
+      margin-top: 4rem;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    .success-stories {
+      padding-inline: 80px;
+
+      &__vertical-text {
+        font-size: 6rem;
+      }
+
+      &__layout {
+        grid-template-columns: 4.5rem 1fr;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .success-stories {
+      padding-inline: 2rem;
+      padding-block: 4rem;
+
+      &__layout {
+        grid-template-columns: 3rem 1fr;
+        gap: 1rem;
+      }
+
+      &__vertical-text {
+        font-size: 4rem;
+      }
+
+      &__grid {
+        grid-template-columns: 1fr;
+      }
+
+      &__column--right {
+        margin-top: 0;
+      }
+    }
+  }
+
+  @media (max-width: 375px) {
+    .success-stories {
+      padding-inline: 1.25rem;
+      padding-block: 3rem;
+
+      &__layout {
+        grid-template-columns: 2rem 1fr;
+      }
+
+      &__vertical-text {
+        font-size: 2rem;
+      }
+    }
+  }
+</style>

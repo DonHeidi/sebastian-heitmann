@@ -1,0 +1,94 @@
+---
+type Props = {
+  title: string;
+  price: string;
+  features: string[];
+  variant: 'magenta' | 'blue' | 'green';
+  featured?: boolean;
+};
+
+const { title, price, features, variant, featured = false }: Props = Astro.props;
+
+const colorMap = {
+  magenta: 'var(--clr-magenta)',
+  blue: 'var(--clr-blue)',
+  green: 'var(--clr-green)',
+};
+
+const bgColor = colorMap[variant];
+---
+<div class:list={['plan-card', variant, { featured }]}>
+  {featured && <span class="plan-card__badge">Popular</span>}
+  <h3 class="plan-card__title">{title}</h3>
+  <p class="plan-card__price">{price}</p>
+  <ul class="plan-card__features">
+    {features.map((feature) => (
+      <li class="plan-card__feature">{feature}</li>
+    ))}
+  </ul>
+</div>
+
+<style lang="scss" define:vars={{ bgColor }}>
+  .plan-card {
+    position: relative;
+    background-color: var(--bgColor);
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.featured {
+      transform: translateY(-1.5rem);
+    }
+
+    &__badge {
+      position: absolute;
+      top: -0.75rem;
+      left: 50%;
+      transform: translateX(-50%) rotate(-8deg);
+      background-color: var(--clr-green);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      font-family: 'AntonSC', sans-serif;
+      font-size: 0.875rem;
+      line-height: 1;
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    &__title {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 1;
+      color: #fff;
+    }
+
+    &__price {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 500;
+      line-height: 1;
+      color: #fff;
+    }
+
+    &__features {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    &__feature {
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+</style>

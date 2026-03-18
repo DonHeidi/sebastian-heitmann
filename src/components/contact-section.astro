@@ -1,0 +1,215 @@
+---
+import Headline from './copy/headline.astro';
+import Body from './copy/body.astro';
+---
+<section id="contact" class="contact">
+  <div class="contact__header">
+    <Headline element="h2" as="h3">Get in Touch</Headline>
+    <Body>
+      Ready to take your digital strategy to the next level?
+      Let's talk about how I can help.
+    </Body>
+  </div>
+  <form class="contact__form" data-contact-form>
+    <div class="contact__row">
+      <div class="contact__field">
+        <label class="contact__label" for="name">Name</label>
+        <input class="contact__input" type="text" id="name" name="name" placeholder="Your name" required />
+      </div>
+      <div class="contact__field">
+        <label class="contact__label" for="email">Email</label>
+        <input class="contact__input" type="email" id="email" name="email" placeholder="your@email.com" required />
+      </div>
+    </div>
+    <div class="contact__row">
+      <div class="contact__field">
+        <label class="contact__label" for="company">Company</label>
+        <input class="contact__input" type="text" id="company" name="company" placeholder="Your company" />
+      </div>
+      <div class="contact__field">
+        <label class="contact__label" for="plan">Plan</label>
+        <select class="contact__input contact__select" id="plan" name="plan">
+          <option value="" disabled selected>Select a plan</option>
+          <option value="starter">Starter — $2,500/mo</option>
+          <option value="growth">Growth — $5,000/mo</option>
+          <option value="enterprise">Enterprise — $9,000/mo</option>
+        </select>
+      </div>
+    </div>
+    <div class="contact__field">
+      <label class="contact__label" for="message">Message</label>
+      <textarea class="contact__input contact__textarea" id="message" name="message" placeholder="Tell me about your project..." rows="5" required></textarea>
+    </div>
+    <button type="submit" class="contact__submit">Send Message</button>
+    <p class="contact__success" data-contact-success>Thanks for reaching out! I'll get back to you soon.</p>
+  </form>
+</section>
+
+<script>
+  const form = document.querySelector('[data-contact-form]') as HTMLFormElement;
+  const success = document.querySelector('[data-contact-success]') as HTMLElement;
+  if (form && success) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      success.style.display = 'block';
+      form.reset();
+      setTimeout(() => {
+        success.style.display = 'none';
+      }, 4000);
+    });
+  }
+</script>
+
+<style lang="scss">
+  .contact {
+    padding-inline: 144px;
+    padding-block: 6rem;
+    background-color: var(--clr-bg-primary);
+
+    &__header {
+      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 50ch;
+    }
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 700px;
+    }
+
+    &__row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    &__field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__label {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    &__input {
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--clr-font-primary);
+      background: rgba(22, 24, 48, 0.7);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      &:focus {
+        border-color: var(--clr-blue);
+      }
+    }
+
+    &__select {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23fff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+
+      option {
+        background: #1a1c35;
+        color: #E7E5DB;
+      }
+    }
+
+    &__textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    &__submit {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 1.25rem;
+      line-height: 1;
+      color: #fff;
+      background: transparent;
+      border: none;
+      border-radius: 100vh;
+      padding: 1rem 3rem;
+      cursor: pointer;
+      width: fit-content;
+      backdrop-filter: blur(10px);
+      box-shadow:
+        inset 1px 1px 2px 0 rgba(101, 108, 161, 0.5),
+        -1px -1px 2px 0 rgba(101, 108, 161, 0.5),
+        -1px -1px 0 0 rgba(101, 108, 161, 0.5),
+        inset -1px -1px 0 0 rgba(0, 0, 0, 0.5),
+        1px 1px 0 0 rgba(0, 0, 0, 0.5),
+        1px 1px 3px 0 rgba(0, 0, 0, 0.5);
+      transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        transform: translate(-5px, -5px);
+        box-shadow:
+          inset 1px 1px 2px 0 rgba(101, 108, 161, 0.5),
+          -1px -1px 2px 0 rgba(101, 108, 161, 0.5),
+          -1px -1px 0 0 rgba(101, 108, 161, 0.5),
+          inset -1px -1px 0 0 rgba(0, 0, 0, 0.5),
+          1px 1px 0 0 rgba(0, 0, 0, 0.5),
+          6px 6px 3px 0 rgba(0, 0, 0, 0.5);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--clr-blue);
+        outline-offset: 2px;
+      }
+    }
+
+    &__success {
+      display: none;
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.875rem;
+      color: var(--clr-green);
+    }
+  }
+
+  @media (max-width: 1440px) {
+    .contact {
+      padding-inline: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contact {
+      padding-inline: 2rem;
+      padding-block: 4rem;
+
+      &__row {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  @media (max-width: 375px) {
+    .contact {
+      padding-inline: 1.25rem;
+      padding-block: 3rem;
+    }
+  }
+</style>

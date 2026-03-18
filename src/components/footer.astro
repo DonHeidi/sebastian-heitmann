@@ -1,0 +1,85 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<footer class="footer">
+  <div class="footer__content">
+    <a class="footer__logo" href="/">sebastian-heitmann.dev</a>
+    <div class="footer__social">
+      <a href="https://www.linkedin.com/in/don-heidmann/" target="_blank" aria-label="LinkedIn">
+        <Icon name="simple-icons:linkedin" color="var(--clr-font-primary)" width={24} height={24} />
+      </a>
+      <a href="https://github.com/DonHeidi" target="_blank" aria-label="GitHub">
+        <Icon name="simple-icons:github" color="var(--clr-font-primary)" width={24} height={24} />
+      </a>
+      <a href="https://www.bluesky.com/e2e_developer" target="_blank" aria-label="Bluesky">
+        <Icon name="simple-icons:bluesky" color="var(--clr-font-primary)" width={20} height={20} />
+      </a>
+    </div>
+    <p class="footer__copy">&copy; 2026 Sebastian Heitmann. All rights reserved.</p>
+  </div>
+</footer>
+
+<style lang="scss">
+  .footer {
+    padding-inline: 144px;
+    padding-block: 3rem;
+    background-color: var(--clr-bg-primary);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    &__logo {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    &__social {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+
+      a {
+        display: flex;
+        align-items: center;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+
+    &__copy {
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  @media (max-width: 1440px) {
+    .footer {
+      padding-inline: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .footer {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .footer {
+      padding-inline: 1.25rem;
+    }
+  }
+</style>

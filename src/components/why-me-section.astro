@@ -1,0 +1,77 @@
+---
+import GridBackgroundContainer from './grid-background-container.astro';
+import Headline from './copy/headline.astro';
+import Body from './copy/body.astro';
+import CopyHighlight from './copy/highlight.astro';
+---
+<section id="why-me">
+  <GridBackgroundContainer>
+    <div class="why-me">
+      <div class="why-me__header">
+        <Headline element="h2" as="h2">
+          <CopyHighlight element="span" color="magenta">Why Me</CopyHighlight>
+        </Headline>
+        <div class="why-me__underline"></div>
+      </div>
+      <div class="why-me__body">
+        <Body>
+          We build intelligent software solutions from modern landing pages,
+          mobile applications, so SaaS applications with a strategic approach
+          driven by incremental growth.
+        </Body>
+      </div>
+    </div>
+  </GridBackgroundContainer>
+</section>
+
+<style lang="scss">
+  #why-me {
+    background-color: var(--clr-bg-primary);
+  }
+
+  .why-me {
+    padding-inline: 144px;
+    padding-block: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    &__underline {
+      width: 200px;
+      height: 4px;
+      background-color: var(--clr-blue);
+      border-radius: 2px;
+    }
+
+    &__body {
+      max-width: 50ch;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    .why-me {
+      padding-inline: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .why-me {
+      padding-inline: 2rem;
+      padding-block: 4rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .why-me {
+      padding-inline: 1.25rem;
+      padding-block: 3rem;
+    }
+  }
+</style>

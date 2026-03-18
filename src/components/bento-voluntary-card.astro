@@ -1,0 +1,161 @@
+---
+import BentoCard from './bento-card.astro';
+
+const positions = [
+  {
+    org: 'GMLS Consulting e.V.',
+    role: 'Member of the Advisory Board',
+    period: 'since May 2020',
+    points: [
+      'Sparring partner for development of the club',
+      'Mediation in internal conflicts within the association',
+    ],
+  },
+  {
+    org: 'JDNetwork e.V.',
+    role: 'Fellow Software Development',
+    period: 'Oct 2018 to Mar 2020',
+    points: [
+      'Development of a decentralized membership management system',
+    ],
+  },
+  {
+    org: 'GMLS Consulting e.V.',
+    role: 'Head of Quality & Innovation Management',
+    period: 'Dec 2018 to Apr 2019',
+    points: [
+      'IT Operations (e.g. MS 365 Administration)',
+      'Developing a strategy for the department',
+    ],
+  },
+  {
+    org: 'GMLS Consulting e.V.',
+    role: 'Chairman of the Board',
+    period: 'Sep 2017 to Nov 2018',
+    points: [
+      'Maintain partner network',
+      'Acquisition of projects, work shops, and trainings',
+      'Development of a vision and strategy for the club',
+      'Heading internal projects',
+    ],
+  },
+  {
+    org: 'GMLS Consulting e.V.',
+    role: 'Head of Acquisition & Project Management',
+    period: 'Dec 2016 to Sep 2018',
+    points: [
+      'Acquisition of consulting projects',
+      'Project Controlling',
+    ],
+  },
+  {
+    org: 'Municipality of Ritterhude',
+    role: 'Voluntary Social Year',
+    period: 'Aug 2013 to Jul 2014',
+    points: [
+      'Day care in the Werschenrege kindergarten',
+      'Afternoon care in the Ritterbude primary school',
+    ],
+  },
+];
+---
+<BentoCard gridArea="voluntary">
+  <div class="voluntary">
+    <h3 class="voluntary__heading">Voluntary</h3>
+    <div class="voluntary__list">
+      {positions.map((pos) => (
+        <div class="voluntary__item">
+          <span class="voluntary__org">{pos.org}</span>
+          <h4 class="voluntary__role">{pos.role}</h4>
+          <span class="voluntary__period">{pos.period}</span>
+          <ul class="voluntary__points">
+            {pos.points.map((point) => (
+              <li class="voluntary__point">{point}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</BentoCard>
+
+<style lang="scss">
+  .voluntary {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    max-height: 100%;
+
+    &__heading {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--clr-magenta);
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    &__org {
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.625rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    &__role {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--clr-green);
+    }
+
+    &__period {
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.625rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    &__points {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    &__point {
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: var(--clr-font-primary);
+      padding-left: 1rem;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.35em;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: var(--clr-magenta);
+      }
+    }
+  }
+</style>

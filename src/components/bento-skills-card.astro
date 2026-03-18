@@ -1,0 +1,83 @@
+---
+import BentoCard from './bento-card.astro';
+
+const categories = [
+  {
+    name: 'Technical Project Management',
+    tags: ['Requirements Engineering', 'Workshop Facilitating', 'Scrum', 'Kanban', 'Design Sprint', 'Jira', 'Confluence', 'MS 365', 'Google Workspace', 'iWork'],
+  },
+  {
+    name: 'Software Development',
+    tags: ['Kotlin', 'Java', 'TypeScript', 'JavaScript', 'Next.js', 'React', 'Vert.x', 'WSL 2', 'HTML/CSS', 'Gradle', 'esbuild', 'Design Patterns', 'Maven', 'Contentful', 'Unit Testing', 'AWS'],
+  },
+  {
+    name: 'Solution Design',
+    tags: ['Plant UML', 'MVP/MVC', 'API Design', 'openAPI', 'UML', 'SOA', 'Headless', 'Feasibility Analysis', 'graphQL', 'serverless', 'Adobe XD', 'Figma'],
+  },
+];
+---
+<BentoCard gridArea="skills">
+  <div class="skills">
+    <h3 class="skills__heading">Skills</h3>
+    <div class="skills__categories">
+      {categories.map((cat) => (
+        <div class="skills__category">
+          <h4 class="skills__category-name">{cat.name}</h4>
+          <div class="skills__tags">
+            {cat.tags.map((tag) => (
+              <span class="skills__tag">{tag}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</BentoCard>
+
+<style lang="scss">
+  .skills {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    &__heading {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--clr-magenta);
+    }
+
+    &__categories {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    &__category-name {
+      font-family: 'AntonSC', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--clr-green);
+      margin-bottom: 0.5rem;
+    }
+
+    &__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    &__tag {
+      font-family: 'SpaceGrotesk', sans-serif;
+      font-size: 0.75rem;
+      line-height: 1;
+      color: var(--clr-font-primary);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.375rem 0.75rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+  }
+</style>

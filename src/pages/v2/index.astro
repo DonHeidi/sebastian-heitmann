@@ -19,17 +19,19 @@ import Footer from '../../components/v2/footer.astro';
         <title>Sebastian Heitmann - Fractional CTO | V2</title>
     </head>
     <body>
-        <Navigation />
-        <Hero />
-        <LogoSection />
-        <HighlightsSection />
-        <SuccessStoriesSection />
-        <ServicesSection />
-        <PlansSection />
-        <WhyMeSection />
-        <BentoSection />
-        <ContactSection />
-        <Footer />
+        <div class="site-container">
+            <Navigation />
+            <Hero />
+            <LogoSection />
+            <HighlightsSection />
+            <SuccessStoriesSection />
+            <ServicesSection />
+            <PlansSection />
+            <WhyMeSection />
+            <BentoSection />
+            <ContactSection />
+            <Footer />
+        </div>
         <VersionSwitcher current="v2" />
     </body>
 </html>
@@ -100,5 +102,10 @@ import Footer from '../../components/v2/footer.astro';
             radial-gradient(ellipse at 50% 80%, #131527 0%, transparent 25%);
         min-height: 100vh;
         color: var(--clr-text-primary);
+    }
+
+    .site-container {
+        max-width: 1440px;
+        margin: 0 auto;
     }
 </style>

@@ -1,0 +1,219 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<footer class="footer">
+    <div class="footer__top">
+        <div class="footer__brand">
+            <p class="footer__logo">sebastian-heitmann.dev</p>
+            <p class="footer__tagline">// Fractional CTO & Product Engineer</p>
+        </div>
+
+        <div class="footer__links">
+            <a class="footer__link" href="#services">Services</a>
+            <a class="footer__link" href="#process">Process</a>
+            <a class="footer__link" href="#work">Results</a>
+            <a class="footer__link" href="#contact">Contact</a>
+        </div>
+
+        <div class="footer__socials">
+            <a
+                class="footer__social-link"
+                href="https://linkedin.com/in/sebastian-heitmann"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+            >
+                <Icon name="simple-icons:linkedin" width={20} height={20} />
+            </a>
+            <a
+                class="footer__social-link"
+                href="https://github.com/sebastian-heitmann"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+            >
+                <Icon name="simple-icons:github" width={20} height={20} />
+            </a>
+            <a
+                class="footer__social-link"
+                href="https://bsky.app/profile/sebastian-heitmann.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Bluesky"
+            >
+                <Icon name="simple-icons:bluesky" width={18} height={18} />
+            </a>
+        </div>
+    </div>
+
+    <hr class="footer__divider" />
+
+    <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 Sebastian Heitmann. All rights reserved.</p>
+        <div class="footer__legal">
+            <a class="footer__legal-link" href="/privacy">Privacy Policy</a>
+            <a class="footer__legal-link" href="/imprint">Imprint</a>
+        </div>
+        <p class="footer__classification">[UNCLASSIFIED]</p>
+    </div>
+</footer>
+
+<style lang="scss">
+    .footer {
+        padding: 48px 144px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        border-top: 1px solid rgba(59, 130, 246, 0.12);
+        background: rgba(10, 14, 23, 0.8);
+
+        &__top {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        &__brand {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        &__logo {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--clr-text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        &__tagline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6875rem;
+            color: var(--clr-text-muted);
+        }
+
+        &__links {
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+        }
+
+        &__link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(200, 214, 229, 0.5);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: var(--clr-accent);
+            }
+        }
+
+        &__socials {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 16px;
+        }
+
+        &__social-link {
+            color: rgba(200, 214, 229, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: var(--clr-accent);
+            }
+        }
+
+        &__divider {
+            border: none;
+            border-top: 1px solid rgba(59, 130, 246, 0.08);
+            margin: 0;
+        }
+
+        &__bottom {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        &__copyright {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6875rem;
+            color: rgba(200, 214, 229, 0.3);
+        }
+
+        &__legal {
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+        }
+
+        &__legal-link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6875rem;
+            color: rgba(200, 214, 229, 0.3);
+            text-decoration: none;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: rgba(200, 214, 229, 0.6);
+            }
+        }
+
+        &__classification {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.625rem;
+            font-weight: 700;
+            color: rgba(59, 130, 246, 0.2);
+            letter-spacing: 0.1em;
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .footer {
+            padding: 48px 80px 32px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .footer {
+            padding: 40px 2rem 28px;
+
+            &__top {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            &__bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .footer {
+            padding: 32px 1.25rem 24px;
+
+            &__links {
+                flex-wrap: wrap;
+                gap: 1rem 1.5rem;
+            }
+        }
+    }
+</style>

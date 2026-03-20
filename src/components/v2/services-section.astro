@@ -1,0 +1,492 @@
+---
+---
+
+<section class="services reveal" id="services">
+    <div class="services__header">
+        <div class="services__section-label">02 // SERVICES</div>
+        <p class="services__overline">
+            <span class="services__overline-plain">What I </span><span class="services__overline-accent">offer</span>
+        </p>
+        <h2 class="services__headline">How I Help</h2>
+        <p class="services__description">From early-stage product discovery to scaling engineering organisations — I provide hands-on technical leadership tailored to where your business is today and where it needs to go.</p>
+    </div>
+
+    <div class="services__pane stagger stagger-1">
+        <div class="services__section">
+            <div class="services__section-header">
+                <span class="services__section-number">01</span>
+                <h3 class="services__section-title">Strategy & Advisory</h3>
+            </div>
+            <p class="services__section-description">For founders and leadership teams who need technical clarity before committing to a direction.</p>
+            <ul class="services__section-bullets">
+                <li>Technical due diligence</li>
+                <li>Architecture assessment</li>
+                <li>Build vs. buy analysis</li>
+                <li>Product roadmap review</li>
+            </ul>
+            <p class="services__section-ideal">// Ideal for: Pre-investment, pivot decisions, scaling planning</p>
+        </div>
+
+        <hr class="services__divider" />
+
+        <div class="services__section">
+            <div class="services__section-header">
+                <span class="services__section-number">02</span>
+                <h3 class="services__section-title">Product & Engineering</h3>
+            </div>
+            <p class="services__section-description">For teams that need hands-on product leadership and engineering execution.</p>
+            <ul class="services__section-bullets">
+                <li>Full-stack development</li>
+                <li>Team setup & mentoring</li>
+                <li>Sprint planning & delivery</li>
+                <li>CI/CD & DevOps</li>
+            </ul>
+            <p class="services__section-ideal">// Ideal for: MVPs, rebuilds, team augmentation</p>
+        </div>
+
+        <hr class="services__divider" />
+
+        <div class="services__section">
+            <div class="services__section-header">
+                <span class="services__section-number">03</span>
+                <h3 class="services__section-title">Operations & Scale</h3>
+            </div>
+            <p class="services__section-description">For growing companies that need structure, process, and technical operations at scale.</p>
+            <ul class="services__section-bullets">
+                <li>Engineering process design</li>
+                <li>Hiring & onboarding</li>
+                <li>Performance monitoring</li>
+                <li>Incident management</li>
+            </ul>
+            <p class="services__section-ideal">// Ideal for: Series A+, scaling teams, post-launch</p>
+        </div>
+    </div>
+
+    <div class="services__plans-header stagger stagger-1">
+        <h3 class="services__plans-headline">Engagement Models</h3>
+    </div>
+
+    <div class="services__plans">
+        <div class="services__plan stagger stagger-1">
+            <div class="services__plan-left">
+                <h4 class="services__plan-title">Hourly Based Consulting</h4>
+                <p class="services__plan-desc">Strategy sessions, architecture reviews, team mentoring, and code review oversight.</p>
+            </div>
+            <div class="services__plan-price-row">
+                <span class="services__plan-price">$130</span>
+                <span class="services__plan-price-unit">/hour</span>
+            </div>
+        </div>
+
+        <div class="services__plan services__plan--highlighted stagger stagger-2">
+            <div class="services__plan-left">
+                <h4 class="services__plan-title">Fixed Prototype Iterations</h4>
+                <p class="services__plan-desc">Hands-on product development, sprint planning & delivery, async support, and performance tracking.</p>
+            </div>
+            <div class="services__plan-price-row">
+                <span class="services__plan-price">$4,999</span>
+                <span class="services__plan-price-unit">/iteration</span>
+            </div>
+        </div>
+
+        <div class="services__plan stagger stagger-3">
+            <div class="services__plan-left">
+                <h4 class="services__plan-title">Monthly CTO Retainer</h4>
+                <p class="services__plan-desc">Dedicated CTO, board & stakeholder reporting, security & compliance oversight, custom integrations.</p>
+            </div>
+            <div class="services__plan-price-row">
+                <span class="services__plan-price">$2,499</span>
+                <span class="services__plan-price-unit">/month</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="services__deco">
+        <p class="services__deco-line services__deco-line--1">
+            <span class="services__deco-plain">THE&nbsp;</span><span class="services__deco-accent">RIGHT PLAN</span><span class="services__deco-plain">&nbsp;FOR</span>
+        </p>
+        <p class="services__deco-line services__deco-line--2">
+            <span class="services__deco-plain">YOUR BUSINESS</span>
+        </p>
+    </div>
+
+    <div class="services__cta">
+        <p class="services__cta-text">Not sure which fits? Let's talk.</p>
+        <a class="services__cta-button" href="#contact">Book a Discovery Call</a>
+    </div>
+</section>
+
+<style lang="scss">
+    .services {
+        display: flex;
+        flex-direction: column;
+        padding: 80px 144px 64px;
+
+        &__section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            color: var(--clr-accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        &__header {
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+        }
+
+        &__overline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.125rem;
+            font-weight: 400;
+            color: var(--clr-text-primary);
+        }
+
+        &__overline-plain {
+            color: var(--clr-text-primary);
+        }
+
+        &__overline-accent {
+            font-weight: 700;
+            color: var(--clr-accent);
+        }
+
+        &__headline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--clr-text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        &__description {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            color: rgba(200, 214, 229, 0.6);
+            line-height: 1.7;
+            max-width: 500px;
+        }
+
+        &__pane {
+            background: var(--clr-bg-surface);
+            border: 1px solid rgba(59, 130, 246, 0.12);
+            padding: 0;
+            position: relative;
+
+            /* Corner markers */
+            &::before, &::after {
+                content: '';
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                border-color: var(--clr-accent);
+                border-style: solid;
+            }
+            &::before {
+                top: -1px;
+                left: -1px;
+                border-width: 2px 0 0 2px;
+            }
+            &::after {
+                bottom: -1px;
+                right: -1px;
+                border-width: 0 2px 2px 0;
+            }
+        }
+
+        &__section {
+            padding: 32px 36px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            column-gap: 2.5rem;
+            row-gap: 0.5rem;
+        }
+
+        &__section-header {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        &__section-number {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--clr-accent);
+        }
+
+        &__section-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--clr-text-primary);
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        &__section-description {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            color: rgba(200, 214, 229, 0.6);
+            line-height: 1.7;
+            grid-column: 1;
+        }
+
+        &__section-bullets {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            grid-column: 2;
+            grid-row: 2 / 4;
+            align-self: center;
+
+            li {
+                font-family: 'IBM Plex Mono', monospace;
+                font-size: 0.9375rem;
+                color: rgba(200, 214, 229, 0.55);
+                padding-left: 1.25rem;
+                position: relative;
+
+                &::before {
+                    content: '>';
+                    position: absolute;
+                    left: 0;
+                    color: var(--clr-accent);
+                    font-weight: 700;
+                }
+            }
+        }
+
+        &__section-ideal {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8125rem;
+            color: rgba(200, 214, 229, 0.35);
+            grid-column: 1;
+        }
+
+        &__divider {
+            border: none;
+            border-top: 1px solid rgba(59, 130, 246, 0.08);
+            margin: 0 36px;
+        }
+
+        &__plans-header {
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        &__plans-headline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--clr-text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        &__plans {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        &__plan {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            background: var(--clr-bg-surface);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 24px 32px;
+            transition: border-color 0.3s ease;
+
+            &:hover {
+                border-color: rgba(59, 130, 246, 0.25);
+            }
+
+            &--highlighted {
+                border-left: 3px solid var(--clr-accent);
+                padding-left: 29px;
+            }
+        }
+
+        &__plan-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        &__plan-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--clr-text-primary);
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        &__plan-desc {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            color: rgba(200, 214, 229, 0.45);
+            line-height: 1.6;
+        }
+
+        &__plan-price-row {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        &__plan-price {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--clr-text-primary);
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        &__plan-price-unit {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            color: rgba(200, 214, 229, 0.4);
+        }
+
+        &__deco {
+            margin-top: 32px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            user-select: none;
+        }
+
+        &__deco-line {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        &__deco-line--1 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+        }
+
+        &__deco-line--2 {
+            font-size: clamp(1.75rem, 3.5vw, 3rem);
+        }
+
+        &__deco-plain {
+            color: rgba(200, 214, 229, 0.08);
+        }
+
+        &__deco-accent {
+            color: rgba(59, 130, 246, 0.2);
+        }
+
+        &__cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 16px;
+        }
+
+        &__cta-text {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--clr-text-muted);
+        }
+
+        &__cta-button {
+            text-decoration: none;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--clr-text-primary);
+            background-color: transparent;
+            border: 1px solid var(--clr-accent);
+            padding: 1rem 2rem;
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease;
+
+            &:hover {
+                background-color: var(--clr-accent);
+                color: var(--clr-bg-primary);
+            }
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .services {
+            padding: 80px 80px 64px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .services {
+            padding: 64px 2rem 48px;
+
+            &__header {
+                max-width: 100%;
+            }
+
+            &__headline {
+                font-size: 2.5rem;
+            }
+
+            &__section {
+                grid-template-columns: 1fr;
+            }
+
+            &__section-bullets {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            &__plans-headline {
+                font-size: 2rem;
+            }
+
+            &__plan {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .services {
+            padding: 64px 1.25rem 48px;
+        }
+    }
+</style>

@@ -1,3 +1,149 @@
 ---
 ---
-<section><!-- v5 placeholder --></section>
+
+<section class="contact reveal" id="contact">
+    <p class="contact__label">CONTACT</p>
+    <h2 class="contact__headline stagger stagger-1">LET'S WORK TOGETHER</h2>
+
+    <form class="contact__form stagger stagger-2" action="#" method="POST">
+        <div class="contact__field">
+            <label class="contact__field-label" for="v5-name">NAME</label>
+            <input class="contact__input" type="text" id="v5-name" name="name" required />
+        </div>
+
+        <div class="contact__field">
+            <label class="contact__field-label" for="v5-email">EMAIL</label>
+            <input class="contact__input" type="email" id="v5-email" name="email" required />
+        </div>
+
+        <div class="contact__field">
+            <label class="contact__field-label" for="v5-message">MESSAGE</label>
+            <textarea class="contact__textarea" id="v5-message" name="message" required></textarea>
+        </div>
+
+        <button type="submit" class="contact__submit">SEND</button>
+    </form>
+</section>
+
+<style lang="scss">
+    .contact {
+        padding: 80px 40px 80px 120px;
+        border-bottom: 4px solid var(--clr-border);
+
+        &__label {
+            font-family: 'Space Mono', monospace;
+            font-weight: 400;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--clr-muted);
+            margin-bottom: 24px;
+        }
+
+        &__headline {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 48px;
+            text-transform: uppercase;
+            color: var(--clr-text);
+            margin-bottom: 48px;
+        }
+
+        &__form {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            max-width: 640px;
+        }
+
+        &__field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        &__field-label {
+            font-family: 'Space Mono', monospace;
+            font-weight: 400;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--clr-text);
+        }
+
+        &__input {
+            border: 2px solid var(--clr-border);
+            border-radius: 0;
+            padding: 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 16px;
+            color: var(--clr-text);
+            background: var(--clr-bg);
+            outline: none;
+
+            &:focus {
+                border-width: 4px;
+                padding: 14px;
+            }
+        }
+
+        &__textarea {
+            border: 2px solid var(--clr-border);
+            border-radius: 0;
+            padding: 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 16px;
+            color: var(--clr-text);
+            background: var(--clr-bg);
+            outline: none;
+            height: 160px;
+            resize: vertical;
+
+            &:focus {
+                border-width: 4px;
+                padding: 14px;
+            }
+        }
+
+        &__submit {
+            width: fit-content;
+            padding: 16px 48px;
+            border: 2px solid var(--clr-border);
+            border-radius: 0;
+            background: var(--clr-text);
+            color: var(--clr-bg);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+
+            &:hover {
+                background: var(--clr-bg);
+                color: var(--clr-text);
+                transition: none;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact {
+            padding: 60px 2rem;
+
+            &__headline {
+                font-size: 36px;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .contact {
+            padding: 48px 1.25rem;
+
+            &__headline {
+                font-size: 32px;
+            }
+        }
+    }
+</style>

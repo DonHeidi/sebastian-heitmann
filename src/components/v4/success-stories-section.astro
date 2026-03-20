@@ -1,0 +1,206 @@
+---
+---
+
+<section class="success-stories reveal" id="work">
+    <p class="success-stories__vertical-text">SUCCESS STORY</p>
+
+    <div class="success-stories__content">
+        <div class="success-stories__cards">
+            <div class="success-stories__card stagger stagger-1">
+                <div class="success-stories__card-image"></div>
+                <span class="success-stories__card-metric">40% cost reduction</span>
+                <h3 class="success-stories__card-title">SAAS PLATFORM REBUILD</h3>
+                <p class="success-stories__card-desc">Architecture overhaul of a multi-tenant SaaS platform serving 200+ enterprise clients. Migrated from monolithic PHP to distributed Node.js, tripling throughput.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag">Architecture</span>
+                </div>
+            </div>
+
+            <div class="success-stories__card stagger stagger-2">
+                <span class="success-stories__card-metric">12-person team</span>
+                <h3 class="success-stories__card-title">SCALE-UP TEAM BUILDING</h3>
+                <p class="success-stories__card-desc">Built an engineering team from scratch. Established hiring pipelines, onboarding, and code review culture that cut deploy time from weeks to hours.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag">Leadership</span>
+                </div>
+            </div>
+
+            <div class="success-stories__card stagger stagger-3">
+                <div class="success-stories__card-image"></div>
+                <span class="success-stories__card-metric">99.99% uptime</span>
+                <h3 class="success-stories__card-title">CLOUD MIGRATION</h3>
+                <p class="success-stories__card-desc">Migrated a legacy monolith to cloud-native microservices on AWS — zero downtime, 5M records preserved, 60% infrastructure cost reduction.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag">Infrastructure</span>
+                </div>
+            </div>
+
+            <div class="success-stories__card stagger stagger-4">
+                <span class="success-stories__card-metric">3x conversions</span>
+                <h3 class="success-stories__card-title">E-COMMERCE RELAUNCH</h3>
+                <p class="success-stories__card-desc">Rebuilt a failing e-commerce platform end-to-end, delivering 3x conversion rate improvement and 60% faster page loads.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag">Product Dev</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-stories__cta-row">
+            <a class="success-stories__cta" href="#contact">BOOK A CALL</a>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .success-stories {
+        position: relative;
+        padding: 80px 144px 48px;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0;
+
+        &__vertical-text {
+            position: absolute;
+            left: 10px;
+            top: 48px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 8rem;
+            color: rgba(26, 26, 24, 0.06);
+            letter-spacing: 6px;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            line-height: 1;
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            max-height: calc(100% - 96px);
+        }
+
+        &__content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+            min-width: 0;
+        }
+
+        &__cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        &__card {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-radius: 0;
+            background: #FFFFFF;
+            border: 1px solid rgba(26, 26, 24, 0.12);
+            padding: 28px 24px;
+        }
+
+        &__card-image {
+            width: 100%;
+            height: 140px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(200, 16, 46, 0.06), #FAFAF7 70%);
+        }
+
+        &__card-metric {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            line-height: 1;
+            color: var(--clr-accent);
+        }
+
+        &__card-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            color: var(--clr-text-primary);
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        &__card-desc {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 16px;
+            color: var(--clr-text-muted);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        &__card-footer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        &__card-tag {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--clr-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background-color: var(--clr-accent);
+                flex-shrink: 0;
+            }
+        }
+
+        &__cta-row {
+            display: flex;
+            justify-content: center;
+        }
+
+        &__cta {
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.125rem;
+            letter-spacing: 0.08em;
+            line-height: 1;
+            color: var(--clr-white);
+            background: var(--clr-accent);
+            border-radius: 0;
+            padding: 1rem 2.5rem;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.88;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .success-stories {
+            padding: 64px 2rem;
+
+            &__vertical-text {
+                display: none;
+            }
+
+            &__cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .success-stories {
+            padding: 64px 1.25rem;
+        }
+    }
+</style>

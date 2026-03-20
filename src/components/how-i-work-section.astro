@@ -1,0 +1,181 @@
+---
+import Typewriter from './copy/typewriter.astro';
+
+const steps = [
+    {
+        number: '01',
+        title: 'Discovery',
+        description: 'We start with your business context — goals, constraints, team, and timeline. No templates. I need to understand the real problem before proposing a solution.',
+        accent: 'terracotta',
+    },
+    {
+        number: '02',
+        title: 'Strategy',
+        description: 'I map out the technical approach, identify risks early, and align the plan with your business objectives. You get a clear roadmap, not a vague proposal.',
+        accent: 'teal',
+    },
+    {
+        number: '03',
+        title: 'Delivery',
+        description: 'Hands-on execution — building, shipping, and iterating. I work with your team or independently, in sprints, with full transparency and regular check-ins.',
+        accent: 'sage',
+    },
+    {
+        number: '04',
+        title: 'Handoff',
+        description: 'Every engagement ends with documentation, knowledge transfer, and systems your team can own. I build to leave, not to create dependency.',
+        accent: 'amber',
+    },
+];
+---
+
+<section class="how-i-work reveal" id="process">
+    <div class="how-i-work__header">
+        <p class="how-i-work__overline">
+            <span class="how-i-work__overline-plain">How I </span><span class="how-i-work__overline-accent">work</span>
+        </p>
+        <Typewriter
+            as="h3"
+            text={[
+                'From First Call to Lasting Impact ',
+                'Clarity at Every Step ',
+                'Built to Leave, Not to Stay ',
+            ]}
+        />
+        <p class="how-i-work__description">I embed with your team, understand your challenges from the inside, and build systems that last long after the engagement ends.</p>
+    </div>
+
+    <div class="how-i-work__cards">
+        {steps.map((step, i) => (
+            <div class={`how-i-work__card how-i-work__card--${step.accent} stagger stagger-${i + 1}`}>
+                <div class={`how-i-work__card-accent how-i-work__card-accent--${step.accent}`}></div>
+                <span class={`how-i-work__card-number how-i-work__card-number--${step.accent}`}>{step.number}</span>
+                <h3 class="how-i-work__card-title">{step.title}</h3>
+                <p class="how-i-work__card-desc">{step.description}</p>
+            </div>
+        ))}
+    </div>
+</section>
+
+<style lang="scss">
+    .how-i-work {
+        padding: 64px 144px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+
+        &__header {
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        &__overline {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--clr-text-primary);
+        }
+
+        &__overline-plain {
+            color: var(--clr-text-primary);
+        }
+
+        &__overline-accent {
+            font-weight: 700;
+            color: var(--clr-sage);
+        }
+
+        &__description {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1875rem;
+            color: rgba(232, 226, 214, 0.7);
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        &__cards {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+        }
+
+        &__card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-radius: 12px;
+            background: var(--clr-bg-surface);
+            border: 1px solid var(--clr-border-dark);
+            padding: 32px 28px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+
+            &:hover {
+                border-color: rgba(232, 226, 214, 0.12);
+            }
+        }
+
+        &__card-accent {
+            width: 40px;
+            height: 3px;
+            border-radius: 2px;
+
+            &--terracotta { background-color: var(--clr-terracotta); }
+            &--teal { background-color: var(--clr-teal); }
+            &--sage { background-color: var(--clr-sage); }
+            &--amber { background-color: var(--clr-amber); }
+        }
+
+        &__card-number {
+            font-family: 'Anton', sans-serif;
+            font-size: 64px;
+            line-height: 1;
+
+            &--terracotta { color: rgba(196, 93, 62, 0.07); }
+            &--teal { color: rgba(74, 127, 139, 0.07); }
+            &--sage { color: rgba(107, 158, 120, 0.07); }
+            &--amber { color: rgba(196, 152, 60, 0.07); }
+        }
+
+        &__card-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.75rem;
+            color: var(--clr-white);
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        &__card-desc {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.0625rem;
+            color: rgba(232, 226, 214, 0.65);
+            line-height: 1.65;
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .how-i-work {
+            padding: 64px 80px 80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .how-i-work {
+            padding: 48px 2rem 64px;
+
+            &__cards {
+                flex-direction: column;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .how-i-work {
+            padding: 48px 1.25rem 64px;
+        }
+    }
+</style>

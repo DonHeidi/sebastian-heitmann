@@ -1,12 +1,12 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import picture from '../../assets/fb.jpg';
+import picture from '../assets/fb.jpg';
 ---
 
-<section class="hero">
+<section class="hero reveal">
     <p class="hero-overline">
-        <span class="overline-plain">I build </span><span class="overline-magenta">products</span><span class="overline-plain">. I lead </span><span class="overline-blue">teams</span><span class="overline-plain">. I solve </span><span class="overline-green">problems</span><span class="overline-plain">.</span>
+        <span class="overline-plain">I turn </span><span class="overline-magenta">outgrown processes</span><span class="overline-plain"> into </span><span class="overline-blue">systems that scale</span><span class="overline-plain">.</span>
     </p>
 
     <div class="hero-main">
@@ -17,9 +17,30 @@ import picture from '../../assets/fb.jpg';
             </div>
 
             <div class="hero-body">
-                <p class="hero-body-text">From scale-ups to B2B SaaS founders, I help teams grow through smart software and strong operations.</p>
-                <p class="hero-body-text">With 10+ years of experience across industries and company sizes, I bring structure, speed, and clarity to complex challenges.</p>
+                <p class="hero-body-text">I help founders and product teams turn ambiguity into working software and scalable operations — without the overhead of a full-time CTO.</p>
             </div>
+            <div class="hero-stats">
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number hero-stats__number--magenta">10+</span>
+                    <span class="hero-stats__label">Years in Tech</span>
+                </div>
+                <div class="hero-stats__divider"></div>
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number hero-stats__number--blue">50+</span>
+                    <span class="hero-stats__label">Projects Delivered</span>
+                </div>
+                <div class="hero-stats__divider"></div>
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number hero-stats__number--green">8</span>
+                    <span class="hero-stats__label">Industries</span>
+                </div>
+                <div class="hero-stats__divider"></div>
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number hero-stats__number--gold">3</span>
+                    <span class="hero-stats__label">Countries</span>
+                </div>
+            </div>
+
             <div class="hero-cta-row">
                 <a class="hero-cta-primary" href="#contact">Book a Discovery Call</a>
                 <a class="hero-cta-secondary" href="#services">See how I work →</a>
@@ -54,8 +75,7 @@ import picture from '../../assets/fb.jpg';
 
 <style lang="scss">
     .hero {
-        min-height: 56.25rem;
-        padding: 3.75rem 144px 5rem 144px;
+        padding: 3.75rem 144px 4rem 144px;
         display: flex;
         flex-direction: column;
         gap: 2.5rem;
@@ -66,7 +86,7 @@ import picture from '../../assets/fb.jpg';
             flex-wrap: wrap;
             align-items: baseline;
             gap: 0 4px;
-            font-family: 'SpaceGrotesk', sans-serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 1.5rem;
             line-height: 1.5;
 
@@ -94,8 +114,8 @@ import picture from '../../assets/fb.jpg';
             flex: 1;
             display: flex;
             flex-direction: row;
-            align-items: flex-start;
-            gap: 4rem;
+            align-items: center;
+            gap: 7rem;
         }
 
         &-headline-group {
@@ -106,7 +126,7 @@ import picture from '../../assets/fb.jpg';
 
         &-headline {
             font-family: 'Anton', sans-serif;
-            font-size: clamp(3rem, 5vw, 5rem);
+            font-size: clamp(3rem, 5.5vw, 5.5rem);
             font-weight: 700;
             color: var(--clr-text-primary);
             letter-spacing: -2px;
@@ -115,18 +135,18 @@ import picture from '../../assets/fb.jpg';
         }
 
         &-positioning {
-            font-family: 'SpaceGrotesk', sans-serif;
+            font-family: 'Outfit', sans-serif;
             font-size: clamp(1.5rem, 2.5vw, 3rem);
-            font-weight: 300;
-            color: var(--clr-text-primary);
+            font-weight: 500;
+            color: rgba(232, 226, 214, 0.92);
             line-height: 1.2;
         }
 
         &-left {
-            flex: 0 1 520px;
+            flex: 0 1 auto;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         &-body {
@@ -136,10 +156,11 @@ import picture from '../../assets/fb.jpg';
         }
 
         &-body-text {
-            font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 1.125rem;
-            color: rgba(231, 229, 219, 0.75);
-            line-height: 1.65;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.375rem;
+            color: rgba(232, 226, 214, 0.92);
+            line-height: 1.55;
+            max-width: 520px;
         }
 
         &-cta-row {
@@ -166,20 +187,60 @@ import picture from '../../assets/fb.jpg';
 
             &:hover {
                 background-color: var(--clr-text-primary);
-                color: #111222;
+                color: #151310;
             }
         }
 
         &-cta-secondary {
             text-decoration: none;
-            font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 0.875rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
             font-weight: 500;
             color: var(--clr-text-primary);
             transition: opacity 0.2s ease;
 
             &:hover {
                 opacity: 0.7;
+            }
+        }
+
+        &-stats {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+
+            &__item {
+                display: flex;
+                flex-direction: column;
+                gap: 0.125rem;
+            }
+
+            &__number {
+                font-family: 'Anton', sans-serif;
+                font-size: 2rem;
+                line-height: 1;
+                letter-spacing: -1px;
+
+                &--magenta { color: var(--clr-magenta); }
+                &--blue { color: var(--clr-blue); }
+                &--green { color: var(--clr-green); }
+                &--gold { color: var(--clr-gold); }
+            }
+
+            &__label {
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.75rem;
+                color: var(--clr-text-muted);
+                letter-spacing: 0.02em;
+            }
+
+            &__divider {
+                width: 1px;
+                height: 32px;
+                background: var(--clr-border-light);
+                flex-shrink: 0;
             }
         }
 
@@ -201,8 +262,8 @@ import picture from '../../assets/fb.jpg';
             &__photo {
                 display: block;
                 flex: 0 0 auto;
-                width: 260px;
-                height: 320px;
+                width: 220px;
+                height: 270px;
                 border-radius: 24px;
                 object-fit: cover;
                 transform: rotate(-7deg);
@@ -280,6 +341,14 @@ import picture from '../../assets/fb.jpg';
                 width: 100%;
             }
 
+            &-stats {
+                gap: 1.25rem;
+
+                &__number {
+                    font-size: 1.75rem;
+                }
+            }
+
             &-aside {
                 margin-top: 2rem;
 
@@ -317,6 +386,20 @@ import picture from '../../assets/fb.jpg';
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
+            }
+
+            &-stats {
+                display: grid;
+                grid-template-columns: 1fr auto 1fr;
+                gap: 1rem;
+
+                &__item:nth-child(n+5) {
+                    grid-column: 1;
+                }
+
+                &__divider:nth-of-type(2) {
+                    display: none;
+                }
             }
 
             &-aside {

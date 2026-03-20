@@ -1,50 +1,125 @@
 ---
-import Headline from "./copy/headline.astro";
-import ppLogo from "../assets/pp_logo.png";
-import ppOrcaLogo from "../assets/pp_orca.png";
-import { Image } from 'astro:assets';
 ---
 
-<section class="logo-section">
-    <Headline element="h2" as="h5">Trusted by companies like</Headline>
-    <div class="logo-section__logos">
-        <Image src={ppOrcaLogo} alt="Logo" height={100} fit="contain" />
-        <Image src={ppLogo} alt="Logo" height={100} fit="contain" />
-        <Image src={ppOrcaLogo} alt="Logo" height={100} fit="contain" />
+<section class="logobar">
+    <div class="logobar__group">
+        <p class="logobar__label">Previously at</p>
+        <div class="logobar__names">
+            <span class="logobar__name">Jung von Matt</span>
+            <span class="logobar__name">Synergy</span>
+            <span class="logobar__name">Granny & Smith</span>
+            <span class="logobar__name">OFFIS</span>
+        </div>
+    </div>
+
+    <span class="logobar__divider"></span>
+
+    <div class="logobar__group">
+        <p class="logobar__label">Currently working with</p>
+        <div class="logobar__names">
+            <span class="logobar__name">Pool Position GmbH</span>
+            <span class="logobar__name">mobilespace GmbH</span>
+        </div>
     </div>
 </section>
 
 <style lang="scss">
-    .logo-section {
-        width: 100%;
-        padding-top: 1.25rem;
-        padding-bottom: 4rem;
+    .logobar {
+        border-top: 1px solid var(--clr-border-dark);
+        border-bottom: 1px solid var(--clr-border-dark);
+        background: linear-gradient(
+            180deg,
+            rgba(30, 27, 22, 0.5) 0%,
+            rgba(22, 20, 16, 0.8) 100%
+        );
+        padding: 28px 144px;
         display: flex;
-        flex-direction: column;
-        gap: 2rem;
+        flex-direction: row;
         align-items: center;
         justify-content: center;
-        background-color: var(--clr-bg-primary);
-        background-image: 
-            radial-gradient(ellipse at top center, rgba(255, 255, 255, 1) 0%, rgba(17, 18, 34, 0) 100%),
-            radial-gradient(ellipse at bottom center, rgba(255, 255, 255, 1) 0%, rgba(17, 18, 34, 0) 100%);
-        background-size: 100% 1px, 100% 1px;
-        background-repeat: no-repeat, no-repeat;
+        gap: 4rem;
 
-        &__logos {
+        &__group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        &__label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--clr-text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        &__names {
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: center;
-            gap: 8rem;
+            gap: 2.5rem;
+        }
 
-            img {
-                filter: saturate(0);
+        &__name {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.125rem;
+            color: var(--clr-text-primary);
+            opacity: 0.5;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            transition: opacity 0.3s ease;
+
+            &:hover {
+                opacity: 0.7;
             }
         }
 
+        &__divider {
+            width: 1px;
+            height: 48px;
+            background: var(--clr-border-light);
+            flex-shrink: 0;
+        }
     }
 
+    @media (max-width: 1440px) {
+        .logobar {
+            padding: 28px 80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .logobar {
+            padding: 28px 2rem;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            &__divider {
+                width: 60px;
+                height: 1px;
+            }
+
+            &__names {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.25rem 2rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .logobar {
+            padding: 24px 1.25rem;
+
+            &__names {
+                gap: 1rem 1.5rem;
+            }
+
+            &__name {
+                font-size: 1rem;
+            }
+        }
+    }
 </style>
-
-

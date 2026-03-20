@@ -1,7 +1,13 @@
 ---
-import VersionSwitcher from '../../components/version-switcher.astro';
 import Navigation from '../../components/v4/navigation.astro';
 import Hero from '../../components/v4/hero.astro';
+import LogoSection from '../../components/v4/logo-section.astro';
+import ServicesSection from '../../components/v4/services-section.astro';
+import HowIWorkSection from '../../components/v4/how-i-work-section.astro';
+import SuccessStoriesSection from '../../components/v4/success-stories-section.astro';
+import ContactSection from '../../components/v4/contact-section.astro';
+import Footer from '../../components/v4/footer.astro';
+import VersionSwitcher from '../../components/version-switcher.astro';
 ---
 <html lang="en">
     <head>
@@ -14,6 +20,12 @@ import Hero from '../../components/v4/hero.astro';
         <div class="site-container">
             <Navigation />
             <Hero />
+            <LogoSection />
+            <ServicesSection />
+            <HowIWorkSection />
+            <SuccessStoriesSection />
+            <ContactSection />
+            <Footer />
         </div>
         <VersionSwitcher currentVersion="v4" />
     </body>

@@ -79,15 +79,25 @@ import Footer from '../../components/v2/footer.astro';
 <style lang="scss">
     body {
         background:
-            radial-gradient(ellipse at 85% 5%, #1e2145 0%, transparent 35%),
-            radial-gradient(ellipse at 50% 8%, #141630 0%, transparent 30%),
-            radial-gradient(ellipse at 10% 20%, #1a1d3a 0%, transparent 30%),
-            radial-gradient(ellipse at 50% 25%, #141630 0%, transparent 25%),
-            radial-gradient(ellipse at 90% 45%, #1a1d3a 0%, transparent 30%),
-            radial-gradient(ellipse at 10% 60%, #1a1d3a 0%, transparent 28%),
-            radial-gradient(ellipse at 50% 65%, #131527 0%, transparent 25%),
-            radial-gradient(ellipse at 10% 78%, #1a1d3a 0%, transparent 28%),
+            /* Pink/magenta glow — hero top-right */
+            radial-gradient(ellipse at 75% 4%, rgba(80, 20, 60, 0.45) 0%, transparent 35%),
+            /* Blue glow — hero top-right overlap */
+            radial-gradient(ellipse at 90% 8%, rgba(30, 33, 80, 0.6) 0%, transparent 30%),
+            /* Warm pink cast — upper left */
+            radial-gradient(ellipse at 15% 12%, rgba(60, 18, 50, 0.3) 0%, transparent 30%),
+            /* Navy base tones */
+            radial-gradient(ellipse at 50% 20%, #141630 0%, transparent 28%),
+            radial-gradient(ellipse at 10% 30%, #1a1d3a 0%, transparent 28%),
+            /* Blue/purple glow — mid page (plans area) */
+            radial-gradient(ellipse at 60% 48%, rgba(35, 30, 75, 0.5) 0%, transparent 30%),
+            radial-gradient(ellipse at 30% 55%, rgba(45, 25, 65, 0.35) 0%, transparent 28%),
+            /* Navy base mid-page */
+            radial-gradient(ellipse at 90% 50%, #1a1d3a 0%, transparent 28%),
+            /* Subtle pink — lower section */
+            radial-gradient(ellipse at 20% 72%, rgba(55, 15, 50, 0.3) 0%, transparent 25%),
+            /* Navy base bottom */
             radial-gradient(ellipse at 50% 80%, #131527 0%, transparent 25%),
+            radial-gradient(ellipse at 80% 90%, #1a1d3a 0%, transparent 25%),
             #111222;
         min-height: 100vh;
         color: var(--clr-text-primary);

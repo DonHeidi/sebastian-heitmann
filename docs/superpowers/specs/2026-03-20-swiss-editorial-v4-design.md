@@ -225,6 +225,7 @@ const versions = [
     color: rgba(26, 26, 24, 0.6);
     font-family: 'Libre Baskerville', serif;
     backdrop-filter: none;
+    border-radius: 0;
 
     .version-switcher__dot { background: #C8102E; }
 }

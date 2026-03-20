@@ -1,6 +1,6 @@
 ---
 type Props = {
-    currentVersion: 'v1' | 'v2' | 'v3' | 'v4';
+    currentVersion: 'v1' | 'v2' | 'v3' | 'v4' | 'v5';
 }
 
 const { currentVersion } = Astro.props;
@@ -10,6 +10,7 @@ const versions = [
     { id: 'v2', href: '/v2/', label: 'Manual' },
     { id: 'v3', href: '/v3/', label: 'Cyberpunk' },
     { id: 'v4', href: '/v4/', label: 'Editorial' },
+    { id: 'v5', href: '/v5/', label: 'Brutalist' },
 ];
 
 const otherVersions = versions.filter(v => v.id !== currentVersion);
@@ -103,6 +104,17 @@ const otherVersions = versions.filter(v => v.id !== currentVersion);
             border-radius: 0;
 
             .version-switcher__dot { background: #C8102E; }
+        }
+
+        &__link--v5 {
+            background: #FFFFFF;
+            border: 1px solid #000000;
+            color: #000000;
+            font-family: 'Space Mono', monospace;
+            backdrop-filter: none;
+            border-radius: 0;
+
+            .version-switcher__dot { background: #FF6200; }
         }
     }
 </style>

@@ -78,6 +78,7 @@ import Footer from '../../components/v2/footer.astro';
 
 <style lang="scss">
     body {
+        position: relative;
         background:
             /* Colored highlight spots — small, circular, local */
             radial-gradient(circle at 80% 6%, rgba(255, 0, 123, 0.12) 0%, transparent 12%),
@@ -98,5 +99,19 @@ import Footer from '../../components/v2/footer.astro';
             #111222;
         min-height: 100vh;
         color: var(--clr-text-primary);
+
+        &::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url('/blueprint-grid.svg') repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        > * {
+            position: relative;
+            z-index: 1;
+        }
     }
 </style>

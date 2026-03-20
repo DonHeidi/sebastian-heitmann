@@ -78,8 +78,10 @@ import Footer from '../../components/v2/footer.astro';
 
 <style lang="scss">
     body {
-        position: relative;
-        background:
+        background-color: #111222;
+        background-image:
+            /* Blueprint grid pattern */
+            url('/blueprint-grid.svg'),
             /* Colored highlight spots — small, circular, local */
             radial-gradient(circle at 80% 6%, rgba(255, 0, 123, 0.12) 0%, transparent 12%),
             radial-gradient(circle at 15% 35%, rgba(0, 183, 255, 0.10) 0%, transparent 10%),
@@ -95,23 +97,8 @@ import Footer from '../../components/v2/footer.astro';
             radial-gradient(ellipse at 10% 60%, #1a1d3a 0%, transparent 28%),
             radial-gradient(ellipse at 50% 65%, #131527 0%, transparent 25%),
             radial-gradient(ellipse at 10% 78%, #1a1d3a 0%, transparent 28%),
-            radial-gradient(ellipse at 50% 80%, #131527 0%, transparent 25%),
-            #111222;
+            radial-gradient(ellipse at 50% 80%, #131527 0%, transparent 25%);
         min-height: 100vh;
         color: var(--clr-text-primary);
-
-        &::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('/blueprint-grid.svg') repeat;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        > * {
-            position: relative;
-            z-index: 1;
-        }
     }
 </style>

@@ -1,0 +1,71 @@
+---
+---
+
+<section class="logo-section">
+    <p class="logo-section__label">TRUSTED BY COMPANIES LIKE</p>
+    <div class="logo-section__logos">
+        <span class="logo-section__logo">ACME Corp</span>
+        <span class="logo-section__logo">TechFlow</span>
+        <span class="logo-section__logo">Nextera</span>
+    </div>
+</section>
+
+<style lang="scss">
+    .logo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        padding: 48px 144px;
+
+        &__label {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--clr-text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        &__logos {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 5rem;
+        }
+
+        &__logo {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.25rem;
+            color: rgba(231, 229, 219, 0.25);
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .logo-section {
+            padding: 48px 80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .logo-section {
+            padding: 48px 2rem;
+
+            &__logos {
+                gap: 40px;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .logo-section {
+            padding: 48px 1.25rem;
+
+            &__logos {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+    }
+</style>

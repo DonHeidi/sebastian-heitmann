@@ -1,0 +1,180 @@
+---
+import Typewriter from '../copy/typewriter.astro';
+---
+
+<section class="highlights">
+    <div class="highlights__header">
+        <p class="highlights__overline">
+            <span class="highlights__overline-plain">What sets me </span><span class="highlights__overline-accent">apart</span>
+        </p>
+        <Typewriter
+            as="h2"
+            text={[
+                'Making Complexity Work ',
+                'Turning Uncertainty into Systems ',
+                'Built for Use, Not for Show '
+            ]}
+        />
+    </div>
+
+    <div class="highlights__cards">
+        <div class="highlights__card">
+            <div class="highlights__card-accent highlights__card-accent--magenta"></div>
+            <p class="highlights__card-number highlights__card-number--magenta">01</p>
+            <h3 class="highlights__card-title">Business Engineering Mindset</h3>
+            <p class="highlights__card-body">I don't just write code — I engineer solutions that drive business outcomes. Every technical decision is rooted in strategy.</p>
+        </div>
+
+        <div class="highlights__card">
+            <div class="highlights__card-accent highlights__card-accent--blue"></div>
+            <p class="highlights__card-number highlights__card-number--blue">02</p>
+            <h3 class="highlights__card-title">Product-Minded Thinking</h3>
+            <p class="highlights__card-body">Features are meaningless without user impact. I think in outcomes, not outputs — shipping what matters, not what's easiest.</p>
+        </div>
+
+        <div class="highlights__card">
+            <div class="highlights__card-accent highlights__card-accent--green"></div>
+            <p class="highlights__card-number highlights__card-number--green">03</p>
+            <h3 class="highlights__card-title">Business-Technology Bridge</h3>
+            <p class="highlights__card-body">I translate between business needs and technical reality. No jargon walls, no lost-in-translation moments — just aligned teams.</p>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .highlights {
+        padding: 96px 144px;
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+
+        &__header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        &__overline {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 20px;
+            color: var(--clr-text-primary);
+        }
+
+        &__overline-plain {
+            color: var(--clr-text-primary);
+        }
+
+        &__overline-accent {
+            font-weight: 700;
+            color: var(--clr-magenta);
+        }
+
+        &__headline {
+            font-family: 'Anton', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: var(--clr-white);
+            letter-spacing: -1.5px;
+            line-height: 0.95;
+        }
+
+        &__cards {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+        }
+
+        &__card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-radius: 12px;
+            background: var(--clr-bg-surface);
+            border: 1px solid var(--clr-border-dark);
+            backdrop-filter: blur(14px);
+            padding: 32px 28px;
+        }
+
+        &__card-accent {
+            width: 40px;
+            height: 3px;
+            border-radius: 2px;
+
+            &--magenta {
+                background-color: var(--clr-magenta);
+            }
+
+            &--blue {
+                background-color: var(--clr-blue);
+            }
+
+            &--green {
+                background-color: var(--clr-green);
+            }
+        }
+
+        &__card-number {
+            font-family: 'Anton', sans-serif;
+            font-size: 48px;
+            line-height: 1;
+
+            &--magenta {
+                color: rgba(255, 0, 123, 0.06);
+            }
+
+            &--blue {
+                color: rgba(0, 183, 255, 0.06);
+            }
+
+            &--green {
+                color: rgba(0, 224, 142, 0.06);
+            }
+        }
+
+        &__card-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--clr-white);
+            line-height: 1.1;
+        }
+
+        &__card-body {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 14px;
+            color: var(--clr-text-muted);
+            line-height: 1.6;
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .highlights {
+            padding: 96px 80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .highlights {
+            padding: 96px 2rem;
+
+            &__headline {
+                font-size: 3rem;
+            }
+
+            &__cards {
+                flex-direction: column;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .highlights {
+            padding: 96px 1.25rem;
+
+            &__headline {
+                font-size: 2rem;
+            }
+        }
+    }
+</style>

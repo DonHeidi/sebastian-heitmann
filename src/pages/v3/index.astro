@@ -1,0 +1,111 @@
+---
+import VersionSwitcher from '../../components/version-switcher.astro';
+import Navigation from '../../components/v3/navigation.astro';
+import Hero from '../../components/v3/hero.astro';
+import LogoSection from '../../components/v3/logo-section.astro';
+import HighlightsSection from '../../components/v3/highlights-section.astro';
+import SuccessStoriesSection from '../../components/v3/success-stories-section.astro';
+import ServicesSection from '../../components/v3/services-section.astro';
+import PlansSection from '../../components/v3/plans-section.astro';
+import WhyMeSection from '../../components/v3/why-me-section.astro';
+import BentoSection from '../../components/v3/bento-section.astro';
+import ContactSection from '../../components/v3/contact-section.astro';
+import Footer from '../../components/v3/footer.astro';
+---
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sebastian Heitmann - Fractional CTO | V3</title>
+    </head>
+    <body>
+        <div class="site-container">
+            <Navigation />
+            <Hero />
+            <LogoSection />
+            <HighlightsSection />
+            <SuccessStoriesSection />
+            <ServicesSection />
+            <PlansSection />
+            <WhyMeSection />
+            <BentoSection />
+            <ContactSection />
+            <Footer />
+        </div>
+        <VersionSwitcher current="v3" />
+    </body>
+</html>
+
+<style lang="scss" is:global>
+    @font-face { font-family: 'Anton'; src: url('/fonts/Anton-Regular.ttf') format('truetype'); }
+    @font-face { font-family: 'AntonSC'; src: url('/fonts/AntonSC-Regular.ttf') format('truetype'); }
+    @font-face { font-family: 'SpaceGrotesk'; src: url('/fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype'); }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; }
+
+    @media (prefers-reduced-motion: no-preference) {
+        html { interpolate-size: allow-keywords; }
+    }
+
+    body {
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+    }
+    img, picture, video, canvas, svg { display: block; max-width: 100%; }
+    input, button, textarea, select { font: inherit; }
+    p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+    #root, #__next { isolation: isolate; }
+
+    :root {
+        --clr-bg-primary: #111222;
+        --clr-bg-surface: rgba(22, 24, 48, 0.7);
+        --clr-text-primary: #E7E5DB;
+        --clr-text-muted: rgba(231, 229, 219, 0.5);
+        --clr-white: #fff;
+        --clr-black: #000;
+        --clr-magenta: #FF007B;
+        --clr-blue: #00B7FF;
+        --clr-green: #00E08E;
+        --clr-border-light: rgba(255, 255, 255, 0.08);
+        --clr-border-dark: rgba(255, 255, 255, 0.06);
+
+        --fnt-family-accent: 'AntonSC';
+        --fnt-family-primary: 'SpaceGrotesk';
+        --fnt-family-secondary: 'Anton';
+    }
+</style>
+
+<style lang="scss">
+    body {
+        background-color: #111222;
+        background-image:
+            /* Blueprint grid pattern */
+            url('/blueprint-grid.svg'),
+            /* Colored highlight spots — small, circular, local */
+            radial-gradient(circle at 80% 6%, rgba(255, 0, 123, 0.12) 0%, transparent 12%),
+            radial-gradient(circle at 15% 35%, rgba(0, 183, 255, 0.10) 0%, transparent 10%),
+            radial-gradient(circle at 70% 52%, rgba(255, 0, 123, 0.08) 0%, transparent 10%),
+            radial-gradient(circle at 25% 75%, rgba(0, 183, 255, 0.10) 0%, transparent 12%),
+            radial-gradient(circle at 85% 88%, rgba(255, 0, 123, 0.07) 0%, transparent 10%),
+            /* Navy base tones from Pencil mesh gradient */
+            radial-gradient(ellipse at 85% 5%, #1e2145 0%, transparent 35%),
+            radial-gradient(ellipse at 50% 8%, #141630 0%, transparent 30%),
+            radial-gradient(ellipse at 10% 20%, #1a1d3a 0%, transparent 30%),
+            radial-gradient(ellipse at 50% 25%, #141630 0%, transparent 25%),
+            radial-gradient(ellipse at 90% 45%, #1a1d3a 0%, transparent 30%),
+            radial-gradient(ellipse at 10% 60%, #1a1d3a 0%, transparent 28%),
+            radial-gradient(ellipse at 50% 65%, #131527 0%, transparent 25%),
+            radial-gradient(ellipse at 10% 78%, #1a1d3a 0%, transparent 28%),
+            radial-gradient(ellipse at 50% 80%, #131527 0%, transparent 25%);
+        min-height: 100vh;
+        color: var(--clr-text-primary);
+    }
+
+    .site-container {
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+</style>

@@ -1,12 +1,13 @@
 ---
 type Props = {
-    current?: 'v1' | 'v2';
+    current?: 'v1' | 'v2' | 'v3';
 }
 const { current = 'v1' } = Astro.props;
 ---
 <nav class="version-switcher" aria-label="Version switcher">
     <a href="/" class:list={['version-switcher__link', { active: current === 'v1' }]}>V1</a>
     <a href="/v2" class:list={['version-switcher__link', { active: current === 'v2' }]}>V2</a>
+    <a href="/v3" class:list={['version-switcher__link', { active: current === 'v3' }]}>V3</a>
 </nav>
 
 <style lang="scss">

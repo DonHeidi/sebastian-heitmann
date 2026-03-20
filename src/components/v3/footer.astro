@@ -1,0 +1,106 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<footer class="footer">
+    <p class="footer__logo">sebastian-heitmann.dev</p>
+
+    <div class="footer__socials">
+        <a
+            class="footer__social-link"
+            href="https://linkedin.com/in/sebastian-heitmann"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+        >
+            <Icon name="simple-icons:linkedin" width={24} height={24} />
+        </a>
+        <a
+            class="footer__social-link"
+            href="https://github.com/sebastian-heitmann"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+        >
+            <Icon name="simple-icons:github" width={24} height={24} />
+        </a>
+        <a
+            class="footer__social-link"
+            href="https://bsky.app/profile/sebastian-heitmann.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Bluesky"
+        >
+            <Icon name="simple-icons:bluesky" width={22} height={22} />
+        </a>
+    </div>
+
+    <p class="footer__copyright">&copy; 2026 Sebastian Heitmann. All rights reserved.</p>
+</footer>
+
+<style lang="scss">
+    .footer {
+        padding: 40px 144px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        border-top: 1px solid var(--clr-border-light);
+
+        &__logo {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--clr-text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        &__socials {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 24px;
+        }
+
+        &__social-link {
+            color: var(--clr-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+
+        &__copyright {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.75rem;
+            color: rgba(231, 229, 219, 0.4);
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .footer {
+            padding: 40px 80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .footer {
+            padding: 40px 2rem;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .footer {
+            padding: 40px 1.25rem;
+            gap: 20px;
+
+            &__logo {
+                font-size: 1.125rem;
+            }
+        }
+    }
+</style>

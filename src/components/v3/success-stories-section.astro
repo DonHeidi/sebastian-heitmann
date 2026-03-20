@@ -1,0 +1,277 @@
+---
+---
+
+<section class="success-stories" id="work">
+    <p class="success-stories__vertical-text">SUCCESS STORY</p>
+
+    <div class="success-stories__content">
+        <div class="success-stories__cards">
+            <div class="success-stories__card" style="flex: 0 0 400px;">
+                <div class="success-stories__card-image"></div>
+                <h3 class="success-stories__card-title">SAAS PLATFORM REBUILD</h3>
+                <p class="success-stories__card-desc">Led a full architecture overhaul of a multi-tenant SaaS platform serving 200+ enterprise clients. Migrated from a monolithic PHP codebase to a distributed Node.js architecture, reducing infrastructure costs by 40% while tripling throughput. Introduced event-driven patterns and CQRS that enabled the team to ship features independently across six product verticals.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag success-stories__card-tag--magenta">Architecture</span>
+                    <a class="success-stories__card-link" href="#">read more...</a>
+                </div>
+            </div>
+
+            <div class="success-stories__card" style="flex: 0 0 340px;">
+                <div class="success-stories__card-image"></div>
+                <h3 class="success-stories__card-title">SCALE-UP TEAM BUILDING</h3>
+                <p class="success-stories__card-desc">Built a 12-person engineering team from scratch. Established hiring pipelines, onboarding processes, and a culture of code review that cut time-to-deploy from weeks to hours.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag success-stories__card-tag--blue">Leadership</span>
+                    <a class="success-stories__card-link" href="#">read more...</a>
+                </div>
+            </div>
+
+            <div class="success-stories__card" style="flex: 0 0 380px;">
+                <div class="success-stories__card-image success-stories__card-image--tall"></div>
+                <h3 class="success-stories__card-title">CLOUD MIGRATION</h3>
+                <p class="success-stories__card-desc">Migrated a legacy on-premise monolith to a cloud-native microservices architecture on AWS with zero downtime and full data integrity across 5M records. Designed the rollback strategy and led a phased cutover that kept the business running throughout the 4-month transition. Infrastructure costs dropped 60% while availability went from 99.5% to 99.99%.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag success-stories__card-tag--green">Infrastructure</span>
+                    <a class="success-stories__card-link" href="#">read more...</a>
+                </div>
+            </div>
+
+            <div class="success-stories__card" style="flex: 0 0 320px;">
+                <h3 class="success-stories__card-title">E-COMMERCE RELAUNCH</h3>
+                <p class="success-stories__card-desc">Rebuilt a failing e-commerce platform, delivering 3x conversion rate improvement and 60% faster page loads.</p>
+                <div class="success-stories__card-footer">
+                    <span class="success-stories__card-tag success-stories__card-tag--magenta">Product Dev</span>
+                    <a class="success-stories__card-link" href="#">read more...</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-stories__cta-row">
+            <a class="success-stories__cta" href="#contact">BOOK A CALL</a>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .success-stories {
+        position: relative;
+        padding: 96px 0 96px 144px;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0;
+        overflow: visible;
+
+        &__vertical-text {
+            position: absolute;
+            left: 10px;
+            top: 48px;
+            font-family: 'Anton', sans-serif;
+            font-size: 8rem;
+            color: #F5F0E8;
+            opacity: 0.12;
+            letter-spacing: 6px;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            line-height: 1;
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            max-height: calc(100% - 96px);
+        }
+
+        &__content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+            min-width: 0;
+        }
+
+        &__cards {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: flex-end;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            padding-right: 48px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+
+            /* Subtle scrollbar */
+            &::-webkit-scrollbar {
+                height: 4px;
+            }
+            &::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.04);
+                border-radius: 2px;
+            }
+            &::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.12);
+                border-radius: 2px;
+            }
+        }
+
+        &__card {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-radius: 12px;
+            background: rgba(30, 33, 65, 0.95);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 28px 24px;
+        }
+
+        &__card-image {
+            width: 100%;
+            height: 160px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(20, 22, 48, 1), rgba(30, 33, 69, 0.8));
+            flex-shrink: 0;
+
+            &--tall {
+                height: 200px;
+            }
+        }
+
+        &__card-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--clr-white);
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        &__card-desc {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        &__card-footer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        &__card-tag {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 100vh;
+
+            &--magenta {
+                background: rgba(255, 0, 123, 0.12);
+                color: var(--clr-magenta);
+            }
+
+            &--blue {
+                background: rgba(0, 183, 255, 0.12);
+                color: var(--clr-blue);
+            }
+
+            &--green {
+                background: rgba(0, 224, 142, 0.12);
+                color: var(--clr-green);
+            }
+        }
+
+        &__card-link {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 12px;
+            color: var(--clr-blue);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+            flex-shrink: 0;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+
+        &__cta-row {
+            display: flex;
+            justify-content: center;
+            padding-right: 144px;
+        }
+
+        &__cta {
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Anton', sans-serif;
+            font-size: 1.125rem;
+            color: var(--clr-white);
+            background: #1a1d3a;
+            border: 1px solid rgba(255, 255, 255, 0.19);
+            border-radius: 100vh;
+            padding: 16px 48px;
+            transition:
+                background-color 0.2s ease,
+                border-color 0.2s ease;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .success-stories {
+            padding: 96px 0 96px 80px;
+
+            &__cta-row {
+                padding-right: 80px;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .success-stories {
+            padding: 64px 2rem;
+
+            &__vertical-text {
+                display: none;
+            }
+
+            &__cards {
+                flex-direction: column;
+                align-items: stretch;
+                overflow-x: visible;
+                padding-right: 0;
+            }
+
+            &__card {
+                flex: none !important;
+                width: 100%;
+            }
+
+            &__card-image--tall {
+                height: 160px;
+            }
+
+            &__cta-row {
+                padding-right: 0;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .success-stories {
+            padding: 64px 1.25rem;
+
+            &__cta-row {
+                padding-right: 0;
+            }
+        }
+    }
+</style>

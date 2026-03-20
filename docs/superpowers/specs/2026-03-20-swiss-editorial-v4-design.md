@@ -32,6 +32,15 @@ Same section structure and content as v1-v3. Different visual language.
 
 Self-hosted as WOFF2 in `public/fonts/`. Subset to latin + latin-ext.
 
+**Required font files** (download and commit before implementation):
+
+```
+public/fonts/BebasNeue-Regular.woff2
+public/fonts/LibreBaskerville-Regular.woff2
+public/fonts/LibreBaskerville-Bold.woff2
+public/fonts/LibreBaskerville-Italic.woff2
+```
+
 ### Spacing
 
 - Section gaps: 120px
@@ -43,7 +52,7 @@ Self-hosted as WOFF2 in `public/fonts/`. Subset to latin + latin-ext.
 
 - **Thin rules, not cards.** 1px solid black rules separate sections. No glassmorphism, no gradients, no blur.
 - **Square corners everywhere.** 0px border-radius on all elements (cards, buttons, inputs, photo).
-- **Red used in exactly 3 places:** section numbers (01/02/03), primary CTA button, one 40px horizontal accent rule in the hero.
+- **Red used sparingly and deliberately.** Permitted locations: service section numbers (01/02/03), primary CTA buttons, hero accent rule, featured plan left border, first stat number, success story metrics, and tag dots. No other elements should use the accent color.
 - **No decorative backgrounds.** White space does the work.
 - **No colored stats.** All stats in black except the first number (red).
 
@@ -57,11 +66,22 @@ Self-hosted as WOFF2 in `public/fonts/`. Subset to latin + latin-ext.
 - Contact CTA: underlined text only, no pill/button shape
 - Background: transparent (page background shows through)
 
+**Mobile (≤768px):** Logo stacks above links. Links wrap inline (no hamburger menu). Contact CTA stays as underlined text in the flow. Thin rule below remains. Padding drops to 2rem.
+
+**Small mobile (≤375px):** Same wrapping behavior, padding drops to 1.25rem. Link font-size drops to 12px.
+
 ### Hero
 
-Two-column asymmetric layout on a conceptual 12-column grid.
+Two-column asymmetric layout using CSS grid:
 
-**Left column (7 cols):**
+```scss
+display: grid;
+grid-template-columns: 1fr 340px;
+column-gap: 80px;
+align-items: center;
+```
+
+**Left column:**
 - Name: Bebas Neue 96px, `line-height: 0.95`, `letter-spacing: -1px`
 - Role: Libre Baskerville italic 24px, `color: var(--clr-text-muted)`
 - Red accent rule: 40px wide, 3px thick, separating headline group from body
@@ -69,8 +89,8 @@ Two-column asymmetric layout on a conceptual 12-column grid.
 - Stats row: numbers in Bebas Neue 48px (all black, first number red), labels in Bebas Neue 11px with 0.15em tracking, separated by 1px vertical dividers (32px tall)
 - CTAs: primary = solid `#C8102E` background, white Bebas Neue text, square corners, `padding: 16px 40px`. Secondary = plain Libre Baskerville text with `→` arrow
 
-**Right column (4 cols, 1 col gutter):**
-- Photo: 280×340px, square crop (no border-radius), no rotation, `filter: saturate(0.85) contrast(1.05)`
+**Right column (340px fixed):**
+- Photo: `width: 100%; max-width: 280px`, aspect-ratio preserved, square crop (no border-radius), no rotation, `filter: saturate(0.85) contrast(1.05)`
 - Subtle `box-shadow: 0 2px 20px rgba(0,0,0,0.08)`
 - Social icons below: horizontal row, black, 20px, no rotation, `opacity: 0.5`, hover to 1
 
@@ -175,13 +195,9 @@ Two-column asymmetric layout on a conceptual 12-column grid.
 
 ## Version Switcher
 
-Add v4 entry to the versions array:
+All changes are in `src/components/version-switcher.astro`:
 
-```js
-{ id: 'v4', href: '/v4/', label: 'Editorial' }
-```
-
-Update `type Props` to include `'v4'`:
+**1. Update Props type:**
 
 ```ts
 type Props = {
@@ -189,7 +205,18 @@ type Props = {
 }
 ```
 
-New link style for `--v4`:
+**2. Add v4 to the versions array:**
+
+```js
+const versions = [
+    { id: 'v1', href: '/', label: 'Original' },
+    { id: 'v2', href: '/v2/', label: 'Manual' },
+    { id: 'v3', href: '/v3/', label: 'Cyberpunk' },
+    { id: 'v4', href: '/v4/', label: 'Editorial' },
+];
+```
+
+**3. Add v4 link style** (note `backdrop-filter: none` to override the shared base rule):
 
 ```scss
 &__link--v4 {
@@ -197,12 +224,15 @@ New link style for `--v4`:
     border: 1px solid rgba(26, 26, 24, 0.15);
     color: rgba(26, 26, 24, 0.6);
     font-family: 'Libre Baskerville', serif;
+    backdrop-filter: none;
 
     .version-switcher__dot { background: #C8102E; }
 }
 ```
 
-All other version pages (v1, v2, v3) need their VersionSwitcher to show v4 links.
+**4. v4 page template** must include `<VersionSwitcher currentVersion="v4" />`.
+
+All other version pages (v1, v2, v3) automatically show the v4 link via the shared `versions` array.
 
 ## Scroll Animations
 
@@ -218,6 +248,18 @@ Same IntersectionObserver pattern as v1-v3, but subtler:
 ```
 
 Stagger children use `translateY(10px)`.
+
+**Reduced motion** (required for accessibility, same as v1-v3):
+
+```scss
+@media (prefers-reduced-motion: reduce) {
+    .reveal, .stagger {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+```
 
 ## File Structure
 

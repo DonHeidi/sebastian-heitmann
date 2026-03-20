@@ -1,3 +1,89 @@
 ---
+const companies = [
+    'Jung von Matt',
+    'Synergy',
+    'Granny & Smith',
+    'OFFIS',
+    'Pool Position',
+    'mobilespace',
+];
 ---
-<section><!-- v5 placeholder --></section>
+
+<section class="clients reveal">
+    <p class="clients__label">CLIENTS</p>
+    <div class="clients__names">
+        {companies.map((name, i) => (
+            <>
+                <span class="clients__name">{name}</span>
+                {i < companies.length - 1 && <span class="clients__dot">·</span>}
+            </>
+        ))}
+    </div>
+</section>
+
+<style lang="scss">
+    .clients {
+        padding: 60px 40px 60px 120px;
+        border-bottom: 4px solid var(--clr-border);
+
+        &__label {
+            font-family: 'Space Mono', monospace;
+            font-weight: 400;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--clr-muted);
+            margin-bottom: 24px;
+        }
+
+        &__names {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 32px;
+        }
+
+        &__name {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--clr-text);
+        }
+
+        &__dot {
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            color: var(--clr-muted);
+            user-select: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .clients {
+            padding: 48px 2rem;
+
+            &__names {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            &__dot {
+                display: none;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .clients {
+            padding: 40px 1.25rem;
+
+            &__name {
+                font-size: 14px;
+            }
+        }
+    }
+</style>

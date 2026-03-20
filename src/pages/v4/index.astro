@@ -1,5 +1,7 @@
 ---
 import VersionSwitcher from '../../components/version-switcher.astro';
+import Navigation from '../../components/v4/navigation.astro';
+import Hero from '../../components/v4/hero.astro';
 ---
 <html lang="en">
     <head>
@@ -10,7 +12,8 @@ import VersionSwitcher from '../../components/version-switcher.astro';
     </head>
     <body>
         <div class="site-container">
-            <p style="padding: 144px; font-family: 'Bebas Neue', sans-serif; font-size: 96px; line-height: 0.95; color: #1A1A18;">V4 Editorial — Building...</p>
+            <Navigation />
+            <Hero />
         </div>
         <VersionSwitcher currentVersion="v4" />
     </body>

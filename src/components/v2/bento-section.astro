@@ -1,4 +1,41 @@
 ---
+const companies = [
+  { id: 'i22', name: 'i22', role: 'Sr. Agile Project Manager', details: null },
+  { id: 'jung-von-matt', name: 'Jung von Matt', role: 'Technical Consultant', details: {
+      positions: ['Technical Consultant (Feb 2020 to Mar 2021)', 'Jr. Technical Project Manager (Sep 2019 to Jan 2020)'],
+      sections: [{ heading: 'Projects, Tasks, and Tools', items: [
+        'Technical support for the development and international rollout of a sales platform in the content management sector',
+        'Conception and partial implementation of the migration of the intranet platform as a Product Owner',
+        'Gap analysis for the implementation of IT projects',
+        'Implementing measures to increase IT satisfaction',
+        'General tasks such as documentation, training, and creating presentations',
+        'Methods and tools: Scrum, Confluence, Jira, Next.js, Contentful, Keynote',
+      ]}],
+    }},
+  { id: 'datadrivers', name: 'Datadrivers', role: 'Sr. Consultant Project Operations', details: null },
+  { id: 'granny-smith', name: 'Granny & Smith', role: 'Technical Consultant', details: null },
+  { id: 'offis', name: 'Offis', role: 'Research Assistant', details: null },
+  { id: 'pool-position', name: 'Pool Position', role: 'Software Developer', details: null },
+  { id: 'syneriax', name: 'SyneriaX', role: 'Project Lead .Net', details: null },
+  { id: 'goldkalb', name: 'Goldkalb', role: 'Software Developer', details: null },
+];
+
+const voluntaryPositions = [
+  { org: 'GMLS Consulting e.V.', role: 'Member of the Advisory Board', period: 'since May 2020', points: ['Sparring partner for development of the club', 'Mediation in internal conflicts within the association'] },
+  { org: 'JDNetwork e.V.', role: 'Fellow Software Development', period: 'Oct 2018 to Mar 2020', points: ['Development of a decentralized membership management system'] },
+  { org: 'GMLS Consulting e.V.', role: 'Head of Quality & Innovation Management', period: 'Dec 2018 to Apr 2019', points: ['IT Operations (e.g. MS 365 Administration)', 'Developing a strategy for the department'] },
+  { org: 'GMLS Consulting e.V.', role: 'Chairman of the Board', period: 'Sep 2017 to Nov 2018', points: ['Maintain partner network', 'Acquisition of projects, work shops, and trainings', 'Development of a vision and strategy for the club', 'Heading internal projects'] },
+  { org: 'GMLS Consulting e.V.', role: 'Head of Acquisition & Project Management', period: 'Dec 2016 to Sep 2018', points: ['Acquisition of consulting projects', 'Project Controlling'] },
+  { org: 'Municipality of Ritterhude', role: 'Voluntary Social Year', period: 'Aug 2013 to Jul 2014', points: ['Day care in the Werschenrege kindergarten', 'Afternoon care in the Ritterbude primary school'] },
+];
+
+const skillCategories = [
+  { name: 'Technical Project Management', tags: ['Requirements Engineering', 'Workshop Facilitating', 'Scrum', 'Kanban', 'Design Sprint', 'Jira', 'Confluence', 'MS 365', 'Google Workspace', 'iWork'] },
+  { name: 'Software Development', tags: ['Kotlin', 'Java', 'TypeScript', 'JavaScript', 'Next.js', 'React', 'Vert.x', 'WSL 2', 'HTML/CSS', 'Gradle', 'esbuild', 'Design Patterns', 'Maven', 'Contentful', 'Unit Testing', 'AWS'] },
+  { name: 'Solution Design', tags: ['Plant UML', 'MVP/MVC', 'API Design', 'openAPI', 'UML', 'SOA', 'Headless', 'Feasibility Analysis', 'graphQL', 'serverless', 'Adobe XD', 'Figma'] },
+];
+
+const tagColors = ['magenta', 'blue', 'green'];
 ---
 
 <section class="bento" id="career">
@@ -27,62 +64,62 @@
         <div class="bento__row2">
             <!-- Left column -->
             <div class="bento__col-left">
-                <!-- Former Career Card -->
+                <!-- Former Career Card with interactive tabs -->
                 <div class="bento__card bento__card--career">
-                    <h3 class="bento__card-title">FORMER CAREER</h3>
-                    <div class="bento__career-entry">
-                        <p class="bento__career-meta">10 years with Accenture</p>
-                        <p class="bento__career-role">TECHNICAL CONSULTANT</p>
-                        <p class="bento__career-desc">
-                            Delivered large-scale enterprise transformations, system integrations, and digital strategy across global clients in finance, telco, and manufacturing.
-                        </p>
-                    </div>
-                    <p class="bento__subheading">Projects, Tasks, and Tools</p>
-                    <div class="bento__tags">
-                        <span class="bento__tag bento__tag--magenta">Enterprise</span>
-                        <span class="bento__tag bento__tag--blue">Integration</span>
-                        <span class="bento__tag bento__tag--green">Java</span>
-                        <span class="bento__tag bento__tag--magenta">SAP</span>
-                        <span class="bento__tag bento__tag--blue">Architecture</span>
-                        <span class="bento__tag bento__tag--green">Strategy</span>
+                    <h3 class="bento__card-title">Former Career</h3>
+                    <div class="bento__career-layout">
+                        <div class="bento__career-tabs">
+                            {companies.map((company, i) => (
+                                <button class:list={['bento__career-tab', { 'bento__career-tab--active': i === 0 }]} data-target={company.id}>
+                                    <span class="bento__career-tab-name">{company.name}</span>
+                                    <span class="bento__career-tab-role">{company.role}</span>
+                                </button>
+                            ))}
+                        </div>
+                        <div class="bento__career-panels">
+                            {companies.map((company, i) => (
+                                <div class:list={['bento__career-panel', { 'bento__career-panel--active': i === 0 }]} data-panel={company.id}>
+                                    <h4 class="bento__career-panel-name">{company.name}</h4>
+                                    <p class="bento__career-panel-role">{company.role}</p>
+                                    {company.details ? (
+                                        <div class="bento__career-detail">
+                                            {company.details.positions.map((pos) => (
+                                                <p class="bento__career-position">{pos}</p>
+                                            ))}
+                                            {company.details.sections.map((section) => (
+                                                <div class="bento__career-section">
+                                                    <h5 class="bento__career-section-heading">{section.heading}</h5>
+                                                    <ul class="bento__career-section-list">
+                                                        {section.items.map((item) => (
+                                                            <li class="bento__career-section-item">{item}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p class="bento__career-placeholder">Details coming soon.</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                <!-- Skills Card -->
+                <!-- Skills Card with categories -->
                 <div class="bento__card bento__card--skills">
                     <h3 class="bento__card-title">Skills</h3>
-                    <div class="bento__skills-grid">
-                        <div class="bento__tags">
-                            <span class="bento__tag bento__tag--magenta">TypeScript</span>
-                            <span class="bento__tag bento__tag--blue">React/Next.js</span>
-                            <span class="bento__tag bento__tag--green">Frontend/Design</span>
-                            <span class="bento__tag bento__tag--magenta">Python</span>
-                        </div>
-                        <div class="bento__tags">
-                            <span class="bento__tag bento__tag--blue">Tailwind</span>
-                            <span class="bento__tag bento__tag--green">Node.js</span>
-                            <span class="bento__tag bento__tag--magenta">AWS</span>
-                            <span class="bento__tag bento__tag--blue">AI/LLMs</span>
-                        </div>
-                        <div class="bento__tags">
-                            <span class="bento__tag bento__tag--green">Google Cloud</span>
-                            <span class="bento__tag bento__tag--magenta">Docker/K8s</span>
-                            <span class="bento__tag bento__tag--blue">Terraform</span>
-                        </div>
-                        <div class="bento__tags">
-                            <span class="bento__tag bento__tag--filled-magenta">UI/UX</span>
-                            <span class="bento__tag bento__tag--filled-blue">Product</span>
-                            <span class="bento__tag bento__tag--filled-green">Agile</span>
-                            <span class="bento__tag bento__tag--filled-magenta">DevOps</span>
-                            <span class="bento__tag bento__tag--filled-blue">CI/CD</span>
-                        </div>
-                        <div class="bento__tags">
-                            <span class="bento__tag bento__tag--green">REST</span>
-                            <span class="bento__tag bento__tag--magenta">GraphQL</span>
-                            <span class="bento__tag bento__tag--blue">SQL</span>
-                            <span class="bento__tag bento__tag--green">NoSQL</span>
-                            <span class="bento__tag bento__tag--magenta">Redis</span>
-                        </div>
+                    <div class="bento__skills-categories">
+                        {skillCategories.map((cat, ci) => (
+                            <div class="bento__skills-category">
+                                <h4 class={`bento__skills-cat-name bento__skills-cat-name--${tagColors[ci % 3]}`}>{cat.name}</h4>
+                                <div class="bento__tags">
+                                    {cat.tags.map((tag, ti) => (
+                                        <span class={`bento__tag bento__tag--${tagColors[(ci + ti) % 3]}`}>{tag}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -91,42 +128,41 @@
             <div class="bento__card bento__card--voluntary">
                 <h3 class="bento__voluntary-title">Voluntary</h3>
                 <div class="bento__voluntary-entries">
-                    <div class="bento__voluntary-entry">
-                        <p class="bento__voluntary-meta">2021 - present</p>
-                        <p class="bento__voluntary-role">MEMBER OF THE ADVISORY BOARD</p>
-                        <p class="bento__voluntary-desc">Advising on strategic product and technology decisions for an early-stage startup in the climate-tech space.</p>
-                    </div>
-                    <div class="bento__voluntary-entry">
-                        <p class="bento__voluntary-meta">2020 - present</p>
-                        <p class="bento__voluntary-role">FELLOW SOFTWARE DEVELOPMENT</p>
-                        <p class="bento__voluntary-desc">Mentoring and teaching aspiring software developers through structured program curriculum.</p>
-                    </div>
-                    <div class="bento__voluntary-entry">
-                        <p class="bento__voluntary-meta">2018 - 2021</p>
-                        <p class="bento__voluntary-role">HEAD OF QUALITY &amp; INNOVATION MANAGEMENT</p>
-                        <p class="bento__voluntary-desc">Led quality processes and innovation initiatives across the organization.</p>
-                    </div>
-                    <div class="bento__voluntary-entry">
-                        <p class="bento__voluntary-meta">2016 - 2018</p>
-                        <p class="bento__voluntary-role">CHAIRMAN OF THE BOARD</p>
-                        <p class="bento__voluntary-desc">Chaired the board, driving governance and long-term strategic direction.</p>
-                    </div>
-                    <hr class="bento__voluntary-separator" />
-                    <div class="bento__voluntary-entry">
-                        <p class="bento__voluntary-meta">2014 - 2016</p>
-                        <p class="bento__voluntary-role">HEAD OF ACQUISITION &amp; PROJECT MANAGEMENT</p>
-                        <p class="bento__voluntary-desc">Led business development efforts and managed incoming project pipeline.</p>
-                    </div>
-                    <div class="bento__voluntary-entry">
-                        <p class="bento__voluntary-meta">2012 - 2013</p>
-                        <p class="bento__voluntary-role">VOLUNTARY SOCIAL YEAR</p>
-                        <p class="bento__voluntary-desc">Completed a voluntary social year contributing to community development programs.</p>
-                    </div>
+                    {voluntaryPositions.map((pos, i) => (
+                        <>
+                            {i === 4 && <hr class="bento__voluntary-separator" />}
+                            <div class="bento__voluntary-entry">
+                                <span class="bento__voluntary-org">{pos.org}</span>
+                                <p class="bento__voluntary-role">{pos.role}</p>
+                                <span class="bento__voluntary-period">{pos.period}</span>
+                                <ul class="bento__voluntary-points">
+                                    {pos.points.map((point) => (
+                                        <li class="bento__voluntary-point">{point}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </>
+                    ))}
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+  const tabs = document.querySelectorAll('.bento__career-tab');
+  const panels = document.querySelectorAll('.bento__career-panel');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = (tab as HTMLElement).dataset.target;
+      tabs.forEach((t) => t.classList.remove('bento__career-tab--active'));
+      panels.forEach((p) => p.classList.remove('bento__career-panel--active'));
+      tab.classList.add('bento__career-tab--active');
+      document.querySelector(`[data-panel="${target}"]`)?.classList.add('bento__career-panel--active');
+    });
+  });
+</script>
 
 <style lang="scss">
     .bento {
@@ -222,49 +258,145 @@
             padding: 32px 28px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
         }
 
         &__card-title {
             font-family: 'Anton', sans-serif;
             font-size: 28px;
             font-weight: 700;
-            color: var(--clr-white);
+            color: var(--clr-magenta);
             line-height: 1.1;
         }
 
-        &__career-entry {
+        &__career-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 1.5rem;
+            flex: 1;
+            min-height: 0;
+        }
+
+        &__career-tabs {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 0.25rem;
+            overflow-y: auto;
         }
 
-        &__career-meta {
+        &__career-tab {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 0.5rem 0.75rem;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+            border-radius: 0 4px 4px 0;
+
+            &:hover { background-color: rgba(255, 255, 255, 0.04); }
+            &--active {
+                border-left-color: var(--clr-magenta);
+                background-color: rgba(255, 255, 255, 0.06);
+            }
+        }
+
+        &__career-tab-name {
+            font-family: 'AntonSC', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1;
+            color: var(--clr-green);
+        }
+
+        &__career-tab-role {
             font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        &__career-role {
-            font-family: 'Anton', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--clr-white);
-            line-height: 1.2;
-        }
-
-        &__career-desc {
-            font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 13px;
+            font-size: 0.625rem;
+            line-height: 1.3;
             color: rgba(255, 255, 255, 0.5);
-            line-height: 1.5;
         }
 
-        &__subheading {
+        &__career-panels { overflow-y: auto; }
+
+        &__career-panel {
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+            &--active { display: flex; }
+        }
+
+        &__career-panel-name {
+            font-family: 'AntonSC', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1;
+            color: var(--clr-green);
+        }
+
+        &__career-panel-role {
             font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--clr-white);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        &__career-position {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: var(--clr-text-primary);
+            padding-left: 1rem;
+            position: relative;
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0.35em;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background-color: var(--clr-magenta);
+            }
+        }
+
+        &__career-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        &__career-section-heading {
+            font-family: 'AntonSC', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        &__career-section-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+        }
+
+        &__career-section-item {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: var(--clr-text-primary);
+        }
+
+        &__career-placeholder {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
         }
 
         // Skills
@@ -272,13 +404,24 @@
             padding: 32px 28px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
-        &__skills-grid {
+        &__skills-categories {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 1.25rem;
+        }
+
+        &__skills-cat-name {
+            font-family: 'AntonSC', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            &--magenta { color: var(--clr-magenta); }
+            &--blue { color: var(--clr-blue); }
+            &--green { color: var(--clr-green); }
         }
 
         // Right column: Voluntary
@@ -312,26 +455,54 @@
             gap: 2px;
         }
 
-        &__voluntary-meta {
+        &__voluntary-org {
             font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.625rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         &__voluntary-role {
-            font-family: 'Anton', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--clr-white);
+            font-family: 'AntonSC', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--clr-green);
             line-height: 1.2;
-            text-transform: uppercase;
         }
 
-        &__voluntary-desc {
+        &__voluntary-period {
             font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 12px;
+            font-size: 0.625rem;
             color: rgba(255, 255, 255, 0.4);
+        }
+
+        &__voluntary-points {
+            list-style: none;
+            padding: 0;
+            margin-top: 0.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        &__voluntary-point {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.75rem;
             line-height: 1.4;
+            color: var(--clr-text-primary);
+            padding-left: 1rem;
+            position: relative;
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0.35em;
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background-color: var(--clr-magenta);
+            }
         }
 
         &__voluntary-separator {
@@ -433,6 +604,24 @@
 
             &__card--voluntary {
                 width: 100%;
+            }
+
+            &__career-layout {
+                grid-template-columns: 1fr;
+            }
+
+            &__career-tabs {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            &__career-tab {
+                border-left: none;
+                border-bottom: 2px solid transparent;
+                border-radius: 4px;
+                padding: 0.375rem 0.625rem;
+                &--active { border-bottom-color: var(--clr-magenta); }
             }
         }
     }

@@ -70,7 +70,7 @@ Same reveal system as other versions:
 - **Left:** `SEBASTIAN HEITMANN` — Space Mono Bold, `14px`, uppercase, `letter-spacing: 0.1em`. Black.
 - **Right:** Horizontal links — `WORK`, `SERVICES`, `CONTACT`. Same styling as name. No separators.
 - **Hover:** White text on black background, hard cut, no transition. Padding creates rectangular hit area that fills with black.
-- **Mobile:** Name left, hamburger right (three horizontal `2px` black lines, no animation). Menu drops as full-width black block with white text links stacked vertically.
+- **Mobile:** Name left, hamburger right (three horizontal `2px` black lines, no animation on icon). Tap toggles menu via JS. Menu drops as full-width black block with white text links stacked vertically.
 
 ---
 
@@ -179,6 +179,7 @@ A brutalist form. Functional, exposed.
   - **Focus state:** Border thickens to `4px`. No outline glow, no color change.
   - **Fields:** `NAME`, `EMAIL`, `MESSAGE` (textarea, `160px` height)
 - **No placeholder text** — labels are sufficient.
+- **Form handling:** Static/decorative — same as other alternate versions. No backend submission.
 - **Submit button:** `SEND`
   - Space Mono Bold, `14px`, uppercase, `letter-spacing: 0.1em`
   - Black background, white text. `16px 48px` padding.
@@ -204,10 +205,14 @@ Minimal. Almost an afterthought.
 
 ## Version Switcher Updates
 
+- Update Props type: `'v1' | 'v2' | 'v3' | 'v4' | 'v5'`
 - Add v5 entry: `{ id: 'v5', href: '/v5/', label: 'Brutalist' }`
 - Style `.version-switcher__link--v5`:
   - `border-radius: 0`
   - `backdrop-filter: none`
+  - `background: #FFFFFF`
+  - `border: 1px solid #000000`
+  - `color: #000000`
   - Space Mono font
   - Dot color: `#FF6200` (construction orange)
 

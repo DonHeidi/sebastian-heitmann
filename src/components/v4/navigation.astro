@@ -1,0 +1,100 @@
+---
+---
+
+<nav class="nav" role="navigation" aria-label="Main Navigation">
+    <a class="nav-logo" href="/">sebastian-heitmann.dev</a>
+    <div class="nav-links">
+        <a class="nav-link" href="#services">SERVICES</a>
+        <a class="nav-link" href="#process">PROCESS</a>
+        <a class="nav-link" href="#work">RESULTS</a>
+        <a class="nav-cta" href="#contact">Contact</a>
+    </div>
+</nav>
+
+<style lang="scss">
+    .nav {
+        margin-top: 3.75rem;
+        padding-inline: 144px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        border-bottom: 1px solid var(--clr-border);
+        padding-bottom: 1.25rem;
+
+        &-logo {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            line-height: 1;
+            color: var(--clr-text-primary);
+            text-transform: uppercase;
+        }
+
+        &-links {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2.25rem;
+        }
+
+        &-link {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            letter-spacing: 0.15em;
+            line-height: 1;
+            color: var(--clr-text-primary);
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.6;
+            }
+        }
+
+        &-cta {
+            flex-shrink: 0;
+            text-decoration: underline;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1;
+            color: var(--clr-text-primary);
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.6;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .nav {
+            padding: 2rem;
+            padding-bottom: 1.25rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+
+            &-links {
+                flex-wrap: wrap;
+                gap: 1rem 1.5rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .nav {
+            padding: 1.25rem;
+            padding-bottom: 1rem;
+
+            &-link {
+                font-size: 12px;
+            }
+        }
+    }
+</style>

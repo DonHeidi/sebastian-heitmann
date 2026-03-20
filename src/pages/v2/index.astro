@@ -1,0 +1,68 @@
+---
+import VersionSwitcher from '../../components/version-switcher.astro';
+---
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sebastian Heitmann - Fractional CTO | V2</title>
+    </head>
+    <body>
+        <!-- Sections will be added in subsequent tasks -->
+        <VersionSwitcher current="v2" />
+    </body>
+</html>
+
+<style lang="scss" is:global>
+    @font-face { font-family: 'Anton'; src: url('/fonts/Anton-Regular.ttf') format('truetype'); }
+    @font-face { font-family: 'AntonSC'; src: url('/fonts/AntonSC-Regular.ttf') format('truetype'); }
+    @font-face { font-family: 'SpaceGrotesk'; src: url('/fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype'); }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; }
+
+    @media (prefers-reduced-motion: no-preference) {
+        html { interpolate-size: allow-keywords; }
+    }
+
+    body {
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+    }
+    img, picture, video, canvas, svg { display: block; max-width: 100%; }
+    input, button, textarea, select { font: inherit; }
+    p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+    #root, #__next { isolation: isolate; }
+
+    :root {
+        --clr-bg-primary: #F5F0E8;
+        --clr-bg-surface: rgba(22, 24, 48, 0.7);
+        --clr-text-primary: #2A2A3C;
+        --clr-text-muted: rgba(42, 42, 60, 0.5);
+        --clr-white: #fff;
+        --clr-black: #000;
+        --clr-magenta: #FF007B;
+        --clr-blue: #00B7FF;
+        --clr-green: #00E08E;
+        --clr-border-light: rgba(42, 42, 60, 0.1);
+        --clr-border-dark: rgba(255, 255, 255, 0.06);
+
+        --fnt-family-accent: 'AntonSC';
+        --fnt-family-primary: 'SpaceGrotesk';
+        --fnt-family-secondary: 'Anton';
+    }
+</style>
+
+<style lang="scss">
+    body {
+        background:
+            radial-gradient(ellipse at 20% 10%, #F5F0E8 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, #E8E4F0 0%, transparent 40%),
+            radial-gradient(ellipse at 50% 50%, #F0ECE4 0%, transparent 60%),
+            radial-gradient(ellipse at 30% 80%, #EDE8F2 0%, transparent 50%),
+            #F5F0E8;
+        min-height: 100vh;
+    }
+</style>

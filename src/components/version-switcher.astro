@@ -1,0 +1,46 @@
+---
+type Props = {
+    current?: 'v1' | 'v2';
+}
+const { current = 'v1' } = Astro.props;
+---
+<nav class="version-switcher" aria-label="Version switcher">
+    <a href="/" class:list={['version-switcher__link', { active: current === 'v1' }]}>V1</a>
+    <a href="/v2" class:list={['version-switcher__link', { active: current === 'v2' }]}>V2</a>
+</nav>
+
+<style lang="scss">
+    .version-switcher {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1000;
+        display: flex;
+        gap: 0;
+        border-radius: 100vh;
+        overflow: hidden;
+        backdrop-filter: blur(12px);
+        background: rgba(17, 18, 34, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+        &__link {
+            padding: 0.625rem 1.5rem;
+            font-family: 'Anton', sans-serif;
+            font-size: 0.875rem;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.25s ease;
+            letter-spacing: 0.05em;
+
+            &.active {
+                background: var(--clr-magenta, #FF007B);
+                color: #fff;
+            }
+
+            &:hover:not(.active) {
+                color: #fff;
+            }
+        }
+    }
+</style>

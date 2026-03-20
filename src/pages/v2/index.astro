@@ -58,16 +58,16 @@ import Footer from '../../components/v2/footer.astro';
     #root, #__next { isolation: isolate; }
 
     :root {
-        --clr-bg-primary: #F5F0E8;
+        --clr-bg-primary: #111222;
         --clr-bg-surface: rgba(22, 24, 48, 0.7);
-        --clr-text-primary: #2A2A3C;
-        --clr-text-muted: rgba(42, 42, 60, 0.5);
+        --clr-text-primary: #E7E5DB;
+        --clr-text-muted: rgba(231, 229, 219, 0.5);
         --clr-white: #fff;
         --clr-black: #000;
         --clr-magenta: #FF007B;
         --clr-blue: #00B7FF;
         --clr-green: #00E08E;
-        --clr-border-light: rgba(42, 42, 60, 0.1);
+        --clr-border-light: rgba(255, 255, 255, 0.08);
         --clr-border-dark: rgba(255, 255, 255, 0.06);
 
         --fnt-family-accent: 'AntonSC';
@@ -79,11 +79,11 @@ import Footer from '../../components/v2/footer.astro';
 <style lang="scss">
     body {
         background:
-            radial-gradient(ellipse at 20% 10%, #F5F0E8 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, #E8E4F0 0%, transparent 40%),
-            radial-gradient(ellipse at 50% 50%, #F0ECE4 0%, transparent 60%),
-            radial-gradient(ellipse at 30% 80%, #EDE8F2 0%, transparent 50%),
-            #F5F0E8;
+            radial-gradient(ellipse at 80% 15%, rgba(45, 48, 90, 0.6) 0%, transparent 45%),
+            radial-gradient(ellipse at 20% 50%, rgba(35, 37, 70, 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, rgba(45, 47, 88, 0.4) 0%, transparent 45%),
+            #111222;
         min-height: 100vh;
+        color: var(--clr-text-primary);
     }
 </style>

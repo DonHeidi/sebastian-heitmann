@@ -2,79 +2,114 @@
 ---
 
 <section class="plans">
-    <div class="plans__cards">
-        <!-- Card 1: Hourly Based Consulting -->
-        <div class="plans__card plans__card--hourly">
-            <h3 class="plans__card-title">Hourly Based Consulting</h3>
-            <div class="plans__price-row">
-                <span class="plans__price">$130</span>
-                <span class="plans__price-unit">/per hour</span>
-            </div>
-            <ul class="plans__features">
-                <li class="plans__feature">Weekly strategy sessions</li>
-                <li class="plans__feature">Technical architecture reviews</li>
-                <li class="plans__feature">Team mentoring</li>
-                <li class="plans__feature">Code review oversight</li>
-            </ul>
-        </div>
+    <div class="plans__header">
+        <p class="plans__overline">How we can work together</p>
+        <h2 class="plans__headline">Engagement Models</h2>
+    </div>
 
-        <!-- Card 2: Fixed Prototype Iterations (FEATURED) -->
-        <div class="plans__card plans__card--featured">
-            <div class="plans__badge">POPULAR</div>
-            <h3 class="plans__card-title">Fixed Prototype Iterations</h3>
+    <div class="plans__cards">
+        <!-- Card 1: Advisory Retainer -->
+        <div class="plans__card">
+            <div class="plans__card-top">
+                <h3 class="plans__card-title">Advisory Retainer</h3>
+                <p class="plans__card-subtitle">Ongoing strategic guidance</p>
+            </div>
             <div class="plans__price-row">
-                <span class="plans__price">$4,999</span>
-                <span class="plans__price-unit">/per iteration</span>
+                <span class="plans__price">Starting at €2,500</span>
+                <span class="plans__price-period">/month</span>
             </div>
             <hr class="plans__divider" />
+            <p class="plans__best-for-label">Best for:</p>
+            <p class="plans__best-for-desc">Founders and leadership teams who need a technical sparring partner on an ongoing basis.</p>
             <ul class="plans__features">
-                <li class="plans__feature">Everything in Practice</li>
-                <li class="plans__feature">Hands-on product development</li>
-                <li class="plans__feature">Sprint planning &amp; delivery</li>
-                <li class="plans__feature">Remote &amp; Async support</li>
-                <li class="plans__feature">Performance tracking support</li>
+                <li class="plans__feature">Weekly strategy sessions</li>
+                <li class="plans__feature">Architecture &amp; code reviews</li>
+                <li class="plans__feature">Team mentoring</li>
+                <li class="plans__feature">Async availability</li>
             </ul>
         </div>
 
-        <!-- Card 3: Monthly CTO Retainer -->
-        <div class="plans__card plans__card--retainer">
-            <h3 class="plans__card-title">Monthly CTO Retainer</h3>
-            <div class="plans__price-row">
-                <span class="plans__price">$2,499</span>
-                <span class="plans__price-unit">/month</span>
+        <!-- Card 2: Project Engagement (featured) -->
+        <div class="plans__card plans__card--featured">
+            <div class="plans__card-top">
+                <h3 class="plans__card-title">Project Engagement</h3>
+                <p class="plans__card-subtitle">Hands-on delivery with clear scope</p>
             </div>
+            <div class="plans__price-row">
+                <span class="plans__price">Scoped per project</span>
+            </div>
+            <hr class="plans__divider" />
+            <p class="plans__best-for-label">Best for:</p>
+            <p class="plans__best-for-desc">Teams that need execution — an MVP, a rebuild, a migration, or a critical feature shipped.</p>
             <ul class="plans__features">
-                <li class="plans__feature">Everything in Growth</li>
-                <li class="plans__feature">Dedicated CTO</li>
+                <li class="plans__feature">Full-stack development</li>
+                <li class="plans__feature">Sprint-based delivery</li>
+                <li class="plans__feature">Technical documentation</li>
+                <li class="plans__feature">Handoff &amp; knowledge transfer</li>
+            </ul>
+        </div>
+
+        <!-- Card 3: Embedded CTO -->
+        <div class="plans__card">
+            <div class="plans__card-top">
+                <h3 class="plans__card-title">Embedded CTO</h3>
+                <p class="plans__card-subtitle">Deep integration with your team</p>
+            </div>
+            <div class="plans__price-row">
+                <span class="plans__price">Starting at €7,500</span>
+                <span class="plans__price-period">/month</span>
+            </div>
+            <hr class="plans__divider" />
+            <p class="plans__best-for-label">Best for:</p>
+            <p class="plans__best-for-desc">Growth-stage companies that need senior technical leadership without a full-time hire.</p>
+            <ul class="plans__features">
+                <li class="plans__feature">Dedicated 3–4 days/week</li>
                 <li class="plans__feature">Board &amp; stakeholder reporting</li>
-                <li class="plans__feature">Security &amp; compliance oversight</li>
-                <li class="plans__feature">Custom integrations</li>
+                <li class="plans__feature">Hiring &amp; team building</li>
+                <li class="plans__feature">Process &amp; culture design</li>
             </ul>
         </div>
     </div>
 
-    <div class="plans__decorative">
-        <p class="plans__decorative-line plans__decorative-line--1">
-            <span class="plans__deco-plain">THE&nbsp;</span><span class="plans__deco-accent">RIGHT PLAN</span><span class="plans__deco-plain">&nbsp;FOR</span>
-        </p>
-        <p class="plans__decorative-line plans__decorative-line--2">
-            <span class="plans__deco-plain">YOUR BUSINESS</span>
-        </p>
+    <div class="plans__cta">
+        <p class="plans__cta-text">Not sure which fits? Let's talk.</p>
+        <a class="plans__cta-button" href="#contact">Book a Discovery Call</a>
     </div>
 </section>
 
 <style lang="scss">
     .plans {
-        padding: 96px 144px 64px 144px;
+        padding: 96px 144px;
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 48px;
+
+        &__header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        &__overline {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 1.25rem;
+            color: var(--clr-text-muted);
+        }
+
+        &__headline {
+            font-family: 'Anton', sans-serif;
+            font-size: 4.5rem;
+            color: var(--clr-white);
+            line-height: 1;
+        }
 
         &__cards {
             display: flex;
             flex-direction: row;
             gap: 24px;
-            align-items: flex-end;
+            align-items: stretch;
             width: 100%;
         }
 
@@ -82,68 +117,56 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            flex: 1;
             background: var(--clr-bg-surface);
             border: 1px solid var(--clr-border-dark);
             backdrop-filter: blur(24px);
-            flex: 1;
-        }
-
-        &__card--hourly {
-            border-radius: 20px;
-            padding: 40px;
-        }
-
-        &__card--featured {
             border-radius: 16px;
             padding: 32px 28px;
-            border: 1.5px solid var(--clr-blue);
-            backdrop-filter: blur(40px);
+
+            &--featured {
+                border: 1.5px solid var(--clr-blue);
+            }
         }
 
-        &__card--retainer {
-            border-radius: 16px;
-            padding: 32px;
-        }
-
-        &__badge {
-            display: inline-block;
-            align-self: flex-start;
-            padding: 4px 12px;
-            border-radius: 100vh;
-            background: rgba(255, 0, 123, 0.2);
-            font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--clr-magenta);
-            letter-spacing: 1.5px;
+        &__card-top {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         &__card-title {
             font-family: 'Anton', sans-serif;
-            font-size: 28px;
+            font-size: 1.5rem;
             color: var(--clr-white);
             line-height: 1.1;
+        }
+
+        &__card-subtitle {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.9375rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.4;
         }
 
         &__price-row {
             display: flex;
             flex-direction: row;
             align-items: baseline;
-            gap: 6px;
+            gap: 4px;
         }
 
         &__price {
             font-family: 'Anton', sans-serif;
-            font-size: 4rem;
-            font-weight: 700;
+            font-size: 2rem;
             color: var(--clr-white);
             line-height: 1;
         }
 
-        &__price-unit {
+        &__price-period {
             font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.4);
         }
 
         &__divider {
@@ -152,79 +175,92 @@
             margin: 0;
         }
 
+        &__best-for-label {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--clr-text-primary);
+        }
+
+        &__best-for-desc {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.5;
+        }
+
         &__features {
             list-style: none;
             padding: 0;
             margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-        }
-
-        &__card--featured &__features {
-            gap: 14px;
-        }
-
-        &__card--retainer &__features {
-            gap: 14px;
+            gap: 12px;
+            margin-top: auto;
         }
 
         &__feature {
             font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.55);
             line-height: 1.4;
         }
 
-        &__decorative {
-            padding-top: 32px;
-            text-align: center;
+        &__cta {
             display: flex;
             flex-direction: column;
-            gap: 0;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        &__decorative-line {
+        &__cta-text {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 1rem;
+            color: var(--clr-text-muted);
+        }
+
+        &__cta-button {
+            text-decoration: none;
             font-family: 'Anton', sans-serif;
-            font-size: 5.25rem;
-            letter-spacing: 6px;
+            font-size: 1.125rem;
             line-height: 1;
-            text-align: center;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: baseline;
-        }
+            color: var(--clr-white);
+            background-color: var(--clr-bg-surface);
+            border: 1.5px solid var(--clr-text-primary);
+            border-radius: 100vh;
+            padding: 1rem 2.5rem;
+            backdrop-filter: blur(10px);
+            transition:
+                background-color 0.2s ease,
+                border-color 0.2s ease;
 
-        &__deco-plain {
-            color: rgba(231, 229, 219, 0.3);
-        }
-
-        &__deco-accent {
-            color: var(--clr-magenta);
+            &:hover {
+                background-color: var(--clr-text-primary);
+                color: #111222;
+            }
         }
     }
 
     @media (max-width: 1440px) {
         .plans {
-            padding: 96px 80px 64px 80px;
+            padding: 96px 80px;
 
-            &__decorative-line {
-                font-size: 3.75rem;
+            &__headline {
+                font-size: 3.5rem;
             }
         }
     }
 
     @media (max-width: 768px) {
         .plans {
-            padding: 96px 2rem 64px 2rem;
+            padding: 96px 2rem;
 
             &__cards {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            &__decorative-line {
+            &__headline {
                 font-size: 3rem;
             }
         }
@@ -232,11 +268,10 @@
 
     @media (max-width: 375px) {
         .plans {
-            padding: 96px 1.25rem 64px 1.25rem;
+            padding: 96px 1.25rem;
 
-            &__decorative-line {
-                font-size: 2rem;
-                letter-spacing: 3px;
+            &__headline {
+                font-size: 2.5rem;
             }
         }
     }

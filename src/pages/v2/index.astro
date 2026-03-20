@@ -2,6 +2,9 @@
 import VersionSwitcher from '../../components/version-switcher.astro';
 import Navigation from '../../components/v2/navigation.astro';
 import Hero from '../../components/v2/hero.astro';
+import LogoSection from '../../components/v2/logo-section.astro';
+import HighlightsSection from '../../components/v2/highlights-section.astro';
+import SuccessStoriesSection from '../../components/v2/success-stories-section.astro';
 ---
 <html>
     <head>
@@ -12,6 +15,9 @@ import Hero from '../../components/v2/hero.astro';
     <body>
         <Navigation />
         <Hero />
+        <LogoSection />
+        <HighlightsSection />
+        <SuccessStoriesSection />
         <!-- Sections will be added in subsequent tasks -->
         <VersionSwitcher current="v2" />
     </body>

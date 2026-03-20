@@ -1,11 +1,41 @@
 ---
-import { Icon } from 'astro-icon/components';
-
 const services = [
-    { name: 'UX & UI', bg: '#0C0E1E' },
-    { name: 'Solution Design', bg: '#141630' },
-    { name: 'Product Development', bg: '#1C1F42' },
-    { name: 'Operations & Evolution', bg: '#252854' },
+    {
+        title: 'Strategy & Advisory',
+        accent: 'var(--clr-magenta)',
+        description: 'For founders and leadership teams who need technical clarity before committing to a direction.',
+        bullets: [
+            'Technical due diligence',
+            'Architecture assessment',
+            'Build vs. buy analysis',
+            'Product roadmap review',
+        ],
+        idealFor: 'Ideal for: Pre-investment, pivot decisions, scaling planning',
+    },
+    {
+        title: 'Product & Engineering',
+        accent: 'var(--clr-blue)',
+        description: 'For teams that need hands-on product leadership and engineering execution.',
+        bullets: [
+            'Full-stack development',
+            'Team setup & mentoring',
+            'Sprint planning & delivery',
+            'CI/CD & DevOps',
+        ],
+        idealFor: 'Ideal for: MVPs, rebuilds, team augmentation',
+    },
+    {
+        title: 'Operations & Scale',
+        accent: 'var(--clr-green)',
+        description: 'For growing companies that need structure, process, and technical operations at scale.',
+        bullets: [
+            'Engineering process design',
+            'Hiring & onboarding',
+            'Performance monitoring',
+            'Incident management',
+        ],
+        idealFor: 'Ideal for: Series A+, scaling teams, post-launch',
+    },
 ];
 ---
 
@@ -18,11 +48,20 @@ const services = [
         <p class="services__description">From early-stage product discovery to scaling engineering organisations — I provide hands-on technical leadership tailored to where your business is today and where it needs to go.</p>
     </div>
 
-    <div class="services__rows">
+    <div class="services__cards">
         {services.map((service) => (
-            <div class="services__row" style={`background: ${service.bg};`}>
-                <span class="services__row-name">{service.name}</span>
-                <Icon name="mdi:chevron-up" width={16} height={16} class="services__row-icon" />
+            <div class="services__card">
+                <div class="services__card-accent" style={`background: ${service.accent};`}></div>
+                <h3 class="services__card-title">{service.title}</h3>
+                <p class="services__card-description">{service.description}</p>
+                <ul class="services__card-bullets">
+                    {service.bullets.map((bullet) => (
+                        <li class="services__card-bullet" style={`--accent: ${service.accent};`}>
+                            {bullet}
+                        </li>
+                    ))}
+                </ul>
+                <p class="services__card-ideal">{service.idealFor}</p>
             </div>
         ))}
     </div>
@@ -32,13 +71,14 @@ const services = [
     .services {
         display: flex;
         flex-direction: column;
+        padding: 96px 144px;
 
         &__header {
-            padding: 96px 144px 48px 144px;
-            max-width: calc(560px + 144px);
+            max-width: 560px;
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            margin-bottom: 3rem;
         }
 
         &__overline {
@@ -72,51 +112,95 @@ const services = [
             max-width: 500px;
         }
 
-        &__rows {
-            width: 100%;
-        }
-
-        &__row {
-            width: 100vw;
-            margin-left: calc(-1 * (100vw - 100%) / 2);
+        &__cards {
             display: flex;
             flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 12px;
-            padding: 28px 144px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            gap: 24px;
         }
 
-        &__row-name {
+        &__card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--clr-bg-surface);
+            border: 1px solid var(--clr-border-dark);
+            backdrop-filter: blur(14px);
+            border-radius: 12px;
+            padding: 32px 28px;
+        }
+
+        &__card-accent {
+            width: 40px;
+            height: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        &__card-title {
             font-family: 'Anton', sans-serif;
-            font-size: 24px;
+            font-size: 1.5rem;
             color: var(--clr-white);
             letter-spacing: -0.5px;
+            line-height: 1.1;
         }
 
-        &__row-icon {
-            color: var(--clr-text-muted);
-            flex-shrink: 0;
+        &__card-description {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.9375rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        &__card-bullets {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        &__card-bullet {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            padding-left: 1rem;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--accent);
+            }
+        }
+
+        &__card-ideal {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.8125rem;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: auto;
+            padding-top: 0.5rem;
         }
     }
 
     @media (max-width: 1440px) {
         .services {
-            &__header {
-                padding: 96px 80px 48px 80px;
-            }
-
-            &__row {
-                padding: 28px 80px;
-            }
+            padding: 96px 80px;
         }
     }
 
     @media (max-width: 768px) {
         .services {
+            padding: 96px 2rem 48px 2rem;
+
             &__header {
-                padding: 96px 2rem 48px 2rem;
                 max-width: 100%;
             }
 
@@ -124,25 +208,15 @@ const services = [
                 font-size: 3rem;
             }
 
-            &__row {
-                padding: 28px 2rem;
-            }
-
-            &__row-name {
-                font-size: 1.125rem;
+            &__cards {
+                flex-direction: column;
             }
         }
     }
 
     @media (max-width: 375px) {
         .services {
-            &__header {
-                padding: 96px 1.25rem 48px 1.25rem;
-            }
-
-            &__row {
-                padding: 28px 1.25rem;
-            }
+            padding: 96px 1.25rem 48px 1.25rem;
         }
     }
 </style>

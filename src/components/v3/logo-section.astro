@@ -1,70 +1,84 @@
 ---
+const stats = [
+    { number: '10+', label: 'Years of Experience' },
+    { number: '50+', label: 'Projects Delivered' },
+    { number: '8', label: 'Industries Served' },
+    { number: '100%', label: 'Remote-Ready' },
+];
 ---
 
-<section class="logo-section">
-    <p class="logo-section__label">TRUSTED BY COMPANIES LIKE</p>
-    <div class="logo-section__logos">
-        <span class="logo-section__logo">ACME Corp</span>
-        <span class="logo-section__logo">TechFlow</span>
-        <span class="logo-section__logo">Nextera</span>
+<section class="credibility-strip">
+    <div class="credibility-strip__stats">
+        {stats.map((stat) => (
+            <div class="credibility-strip__block">
+                <span class="credibility-strip__number">{stat.number}</span>
+                <span class="credibility-strip__label">{stat.label}</span>
+            </div>
+        ))}
     </div>
 </section>
 
 <style lang="scss">
-    .logo-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-        padding: 48px 144px;
+    .credibility-strip {
+        padding: 40px 144px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
-        &__label {
-            font-family: 'SpaceGrotesk', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--clr-text-muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        &__logos {
+        &__stats {
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: center;
-            gap: 5rem;
+            gap: 4rem;
         }
 
-        &__logo {
+        &__block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        &__number {
             font-family: 'Anton', sans-serif;
-            font-size: 1.25rem;
-            color: rgba(231, 229, 219, 0.25);
+            font-size: 2.5rem;
+            color: var(--clr-white);
+            line-height: 1;
+        }
+
+        &__label {
+            font-family: 'SpaceGrotesk', sans-serif;
+            font-size: 0.8125rem;
+            color: var(--clr-text-muted);
+            letter-spacing: 0.03em;
+            text-align: center;
         }
     }
 
     @media (max-width: 1440px) {
-        .logo-section {
-            padding: 48px 80px;
+        .credibility-strip {
+            padding: 40px 80px;
         }
     }
 
     @media (max-width: 768px) {
-        .logo-section {
-            padding: 48px 2rem;
+        .credibility-strip {
+            padding: 40px 2rem;
 
-            &__logos {
-                gap: 40px;
+            &__stats {
+                gap: 3rem;
             }
         }
     }
 
     @media (max-width: 375px) {
-        .logo-section {
-            padding: 48px 1.25rem;
+        .credibility-strip {
+            padding: 40px 1.25rem;
 
-            &__logos {
-                flex-direction: column;
-                gap: 1.5rem;
+            &__stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem 3rem;
             }
         }
     }

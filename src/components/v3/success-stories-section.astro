@@ -1,0 +1,189 @@
+---
+---
+
+<section class="success-stories reveal" id="work">
+    <div class="success-stories__content">
+        <div class="success-stories__cards">
+            <div class="success-stories__card stagger stagger-1" style="flex: 0 0 400px;">
+                <div class="success-stories__card-header">
+                    <span class="success-stories__card-tag">Architecture</span>
+                    <span class="success-stories__card-status">COMPLETED</span>
+                </div>
+                <span class="success-stories__card-metric">40% cost reduction</span>
+                <h3 class="success-stories__card-title">SAAS PLATFORM REBUILD</h3>
+                <p class="success-stories__card-desc">Architecture overhaul of a multi-tenant SaaS platform serving 200+ enterprise clients. Migrated from monolithic PHP to distributed Node.js, tripling throughput.</p>
+            </div>
+
+            <div class="success-stories__card stagger stagger-2" style="flex: 0 0 340px;">
+                <div class="success-stories__card-header">
+                    <span class="success-stories__card-tag">Leadership</span>
+                    <span class="success-stories__card-status">COMPLETED</span>
+                </div>
+                <span class="success-stories__card-metric">12-person team</span>
+                <h3 class="success-stories__card-title">SCALE-UP TEAM BUILDING</h3>
+                <p class="success-stories__card-desc">Built an engineering team from scratch. Established hiring pipelines, onboarding, and code review culture that cut deploy time from weeks to hours.</p>
+            </div>
+
+            <div class="success-stories__card stagger stagger-3" style="flex: 0 0 380px;">
+                <div class="success-stories__card-header">
+                    <span class="success-stories__card-tag">Infrastructure</span>
+                    <span class="success-stories__card-status">COMPLETED</span>
+                </div>
+                <span class="success-stories__card-metric">99.99% uptime</span>
+                <h3 class="success-stories__card-title">CLOUD MIGRATION</h3>
+                <p class="success-stories__card-desc">Migrated a legacy monolith to cloud-native microservices on AWS — zero downtime, 5M records preserved, 60% infrastructure cost reduction.</p>
+            </div>
+
+            <div class="success-stories__card stagger stagger-4" style="flex: 0 0 320px;">
+                <div class="success-stories__card-header">
+                    <span class="success-stories__card-tag">Product Dev</span>
+                    <span class="success-stories__card-status">COMPLETED</span>
+                </div>
+                <span class="success-stories__card-metric">3x conversions</span>
+                <h3 class="success-stories__card-title">E-COMMERCE RELAUNCH</h3>
+                <p class="success-stories__card-desc">Rebuilt a failing e-commerce platform end-to-end, delivering 3x conversion rate improvement and 60% faster page loads.</p>
+            </div>
+        </div>
+
+        <div class="success-stories__cta-row">
+            <a class="success-stories__cta" href="#contact">BOOK A CALL</a>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .success-stories {
+        padding: 80px 0 48px 144px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+            min-width: 0;
+        }
+
+        &__cards {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            align-items: flex-start;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            padding-right: 48px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+
+            &::-webkit-scrollbar { height: 4px; }
+            &::-webkit-scrollbar-track { background: rgba(252, 227, 0, 0.04); }
+            &::-webkit-scrollbar-thumb { background: rgba(252, 227, 0, 0.15); }
+        }
+
+        &__card {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(252, 227, 0, 0.1);
+            padding: 24px 20px;
+            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+            transition: border-color 0.2s ease;
+
+            &:hover {
+                border-color: rgba(252, 227, 0, 0.3);
+            }
+        }
+
+        &__card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &__card-tag {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            background: rgba(252, 227, 0, 0.1);
+            color: var(--clr-yellow);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        &__card-status {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.625rem;
+            font-weight: 700;
+            color: var(--clr-cyan);
+            letter-spacing: 0.12em;
+        }
+
+        &__card-metric {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--clr-yellow);
+        }
+
+        &__card-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+        }
+
+        &__card-desc {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.7;
+        }
+
+        &__cta-row {
+            display: flex;
+            justify-content: center;
+            padding-right: 144px;
+        }
+
+        &__cta {
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: var(--clr-bg-primary);
+            background: var(--clr-yellow);
+            padding: 12px 40px;
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+            transition: background-color 0.15s ease;
+
+            &:hover { background: var(--clr-cyan); }
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .success-stories { padding: 64px 0 40px 80px; &__cta-row { padding-right: 80px; } }
+    }
+
+    @media (max-width: 768px) {
+        .success-stories {
+            padding: 64px 2rem;
+            &__cards { flex-direction: column; overflow-x: visible; padding-right: 0; }
+            &__card { flex: none !important; width: 100%; }
+            &__cta-row { padding-right: 0; }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .success-stories { padding: 64px 1.25rem; &__cta-row { padding-right: 0; } }
+    }
+</style>

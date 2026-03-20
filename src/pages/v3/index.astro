@@ -1,0 +1,147 @@
+---
+import Navigation from '../../components/v3/navigation.astro';
+import Hero from '../../components/v3/hero.astro';
+import LogoSection from '../../components/v3/logo-section.astro';
+import ServicesSection from '../../components/v3/services-section.astro';
+import HowIWorkSection from '../../components/v3/how-i-work-section.astro';
+import SuccessStoriesSection from '../../components/v3/success-stories-section.astro';
+import ContactSection from '../../components/v3/contact-section.astro';
+import Footer from '../../components/v3/footer.astro';
+import VersionSwitcher from '../../components/version-switcher.astro';
+---
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sebastian Heitmann — Fractional CTO</title>
+        <link rel="canonical" href="/">
+    </head>
+    <body>
+        <div class="site-container">
+            <Navigation />
+            <Hero />
+            <LogoSection />
+            <ServicesSection />
+            <HowIWorkSection />
+            <SuccessStoriesSection />
+            <ContactSection />
+            <Footer />
+        </div>
+        <VersionSwitcher currentVersion="v3" />
+    </body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+</script>
+
+<style lang="scss" is:global>
+    @font-face {
+        font-family: 'Rajdhani';
+        font-style: normal;
+        font-weight: 400;
+        src: url('/fonts/Rajdhani-Regular.woff2') format('woff2');
+    }
+    @font-face {
+        font-family: 'Rajdhani';
+        font-style: normal;
+        font-weight: 700;
+        src: url('/fonts/Rajdhani-Bold.woff2') format('woff2');
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; }
+
+    @media (prefers-reduced-motion: no-preference) {
+        html { interpolate-size: allow-keywords; }
+    }
+
+    body {
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+    }
+    img, picture, video, canvas, svg { display: block; max-width: 100%; }
+    input, button, textarea, select { font: inherit; }
+    p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+    #root, #__next { isolation: isolate; }
+
+    :root {
+        --clr-bg-primary: #0a0a0a;
+        --clr-bg-surface: rgba(20, 20, 20, 0.8);
+
+        --clr-yellow: #FCE300;
+        --clr-cyan: #00f0ff;
+        --clr-magenta: #ff2a6d;
+    }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    .stagger {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .revealed .stagger { opacity: 1; transform: translateY(0); }
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+
+    @media (prefers-reduced-motion: reduce) {
+        .reveal, .stagger { opacity: 1; transform: none; transition: none; }
+    }
+</style>
+
+<style lang="scss">
+    body {
+        background-color: #0a0a0a;
+        background-image:
+            /* Faint grid */
+            repeating-linear-gradient(
+                0deg,
+                rgba(252, 227, 0, 0.015) 0px,
+                rgba(252, 227, 0, 0.015) 1px,
+                transparent 1px,
+                transparent 80px
+            ),
+            repeating-linear-gradient(
+                90deg,
+                rgba(252, 227, 0, 0.015) 0px,
+                rgba(252, 227, 0, 0.015) 1px,
+                transparent 1px,
+                transparent 80px
+            ),
+            /* Neon glow spots */
+            radial-gradient(circle at 75% 5%, rgba(252, 227, 0, 0.06) 0%, transparent 15%),
+            radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.03) 0%, transparent 12%),
+            radial-gradient(circle at 80% 55%, rgba(255, 42, 109, 0.03) 0%, transparent 12%),
+            radial-gradient(circle at 15% 80%, rgba(252, 227, 0, 0.04) 0%, transparent 15%);
+        min-height: 100vh;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .site-container {
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+</style>

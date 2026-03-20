@@ -1,0 +1,161 @@
+---
+const steps = [
+    {
+        number: '01',
+        title: 'Discovery',
+        description: 'We start with your business context — goals, constraints, team, and timeline. No templates. I need to understand the real problem before proposing a solution.',
+    },
+    {
+        number: '02',
+        title: 'Strategy',
+        description: 'I map out the technical approach, identify risks early, and align the plan with your business objectives. You get a clear roadmap, not a vague proposal.',
+    },
+    {
+        number: '03',
+        title: 'Delivery',
+        description: 'Hands-on execution — building, shipping, and iterating. I work with your team or independently, in sprints, with full transparency and regular check-ins.',
+    },
+    {
+        number: '04',
+        title: 'Handoff',
+        description: 'Every engagement ends with documentation, knowledge transfer, and systems your team can own. I build to leave, not to create dependency.',
+    },
+];
+---
+
+<section class="how-i-work reveal" id="process">
+    <div class="how-i-work__header">
+        <p class="how-i-work__overline">
+            <span class="how-i-work__overline-plain">How I </span><span class="how-i-work__overline-accent">work</span>
+        </p>
+        <h2 class="how-i-work__headline">Process</h2>
+        <p class="how-i-work__description">I embed with your team, understand your challenges from the inside, and build systems that last long after the engagement ends.</p>
+    </div>
+
+    <div class="how-i-work__cards">
+        {steps.map((step, i) => (
+            <div class={`how-i-work__card stagger stagger-${i + 1}`}>
+                <span class="how-i-work__card-number">{step.number}</span>
+                <h3 class="how-i-work__card-title">{step.title}</h3>
+                <p class="how-i-work__card-desc">{step.description}</p>
+            </div>
+        ))}
+    </div>
+</section>
+
+<style lang="scss">
+    .how-i-work {
+        padding: 64px 144px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+
+        &__header {
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        &__overline {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        &__overline-accent { font-weight: 700; color: var(--clr-cyan); }
+
+        &__headline {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--clr-yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            line-height: 0.95;
+        }
+
+        &__description {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.0625rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.7;
+            max-width: 500px;
+        }
+
+        &__cards {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+        }
+
+        &__card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(252, 227, 0, 0.1);
+            padding: 28px 24px;
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+            transition: border-color 0.2s ease;
+
+            &:hover {
+                border-color: rgba(252, 227, 0, 0.3);
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 3px;
+                background: linear-gradient(90deg, var(--clr-yellow), var(--clr-cyan));
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            &:hover::before {
+                opacity: 1;
+            }
+        }
+
+        &__card-number {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: rgba(252, 227, 0, 0.08);
+        }
+
+        &__card-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        &__card-desc {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9375rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.7;
+        }
+    }
+
+    @media (max-width: 1440px) { .how-i-work { padding: 64px 80px 80px; } }
+
+    @media (max-width: 768px) {
+        .how-i-work {
+            padding: 48px 2rem 64px;
+            &__cards { flex-direction: column; }
+            &__headline { font-size: 3rem; }
+        }
+    }
+
+    @media (max-width: 375px) { .how-i-work { padding: 48px 1.25rem 64px; } }
+</style>

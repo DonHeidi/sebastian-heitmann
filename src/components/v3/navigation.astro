@@ -1,0 +1,117 @@
+---
+---
+
+<nav class="nav" role="navigation" aria-label="Main Navigation">
+    <a class="nav-logo" href="/v3/">
+        <span class="nav-logo__glitch" data-text="sebastian-heitmann.dev">sebastian-heitmann.dev</span>
+    </a>
+    <div class="nav-links">
+        <a class="nav-link" href="#services">SERVICES</a>
+        <a class="nav-link" href="#process">PROCESS</a>
+        <a class="nav-link" href="#work">RESULTS</a>
+        <a class="nav-cta" href="#contact">
+            <span class="nav-cta__slash">//</span> Contact
+        </a>
+    </div>
+</nav>
+
+<style lang="scss">
+    .nav {
+        margin-top: 2rem;
+        padding-inline: 144px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        border-bottom: 2px solid var(--clr-yellow);
+        padding-bottom: 1rem;
+
+        &-logo {
+            flex-shrink: 0;
+            text-decoration: none;
+
+            &__glitch {
+                font-family: 'Rajdhani', sans-serif;
+                font-size: 1.5rem;
+                font-weight: 700;
+                line-height: 1;
+                color: var(--clr-yellow);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                position: relative;
+            }
+        }
+
+        &-links {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        &-link {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.15em;
+            transition: color 0.15s ease;
+
+            &:hover {
+                color: var(--clr-cyan);
+            }
+        }
+
+        &-cta {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--clr-bg-primary);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.7rem 1.75rem;
+            background: var(--clr-yellow);
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+            transition: background-color 0.15s ease;
+
+            &__slash {
+                color: var(--clr-bg-primary);
+                opacity: 0.4;
+            }
+
+            &:hover {
+                background: var(--clr-cyan);
+            }
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .nav { padding-inline: 80px; }
+    }
+
+    @media (max-width: 768px) {
+        .nav {
+            padding: 1.5rem 2rem;
+            padding-bottom: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+
+            &-links {
+                flex-wrap: wrap;
+                gap: 1rem 1.5rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .nav { padding: 1.25rem; padding-bottom: 1rem; }
+    }
+</style>

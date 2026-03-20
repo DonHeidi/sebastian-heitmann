@@ -1,0 +1,416 @@
+---
+---
+
+<section class="services reveal" id="services">
+    <div class="services__header">
+        <p class="services__overline">WHAT I OFFER</p>
+        <h2 class="services__headline">How I Help</h2>
+        <p class="services__description">From early-stage product discovery to scaling engineering organisations — I provide hands-on technical leadership tailored to where your business is today and where it needs to go.</p>
+    </div>
+
+    <!-- Single pane, three sections divided by lines -->
+    <div class="services__pane stagger stagger-1">
+        <div class="services__section">
+            <div class="services__section-header">
+                <span class="services__section-number">01</span>
+                <h3 class="services__section-title">Strategy &amp; Advisory</h3>
+            </div>
+            <p class="services__section-description">For founders and leadership teams who need technical clarity before committing to a direction.</p>
+            <ul class="services__section-bullets">
+                <li>Technical due diligence</li>
+                <li>Architecture assessment</li>
+                <li>Build vs. buy analysis</li>
+                <li>Product roadmap review</li>
+            </ul>
+            <p class="services__section-ideal">Ideal for: Pre-investment, pivot decisions, scaling planning</p>
+        </div>
+
+        <hr class="services__divider" />
+
+        <div class="services__section">
+            <div class="services__section-header">
+                <span class="services__section-number">02</span>
+                <h3 class="services__section-title">Product &amp; Engineering</h3>
+            </div>
+            <p class="services__section-description">For teams that need hands-on product leadership and engineering execution.</p>
+            <ul class="services__section-bullets">
+                <li>Full-stack development</li>
+                <li>Team setup &amp; mentoring</li>
+                <li>Sprint planning &amp; delivery</li>
+                <li>CI/CD &amp; DevOps</li>
+            </ul>
+            <p class="services__section-ideal">Ideal for: MVPs, rebuilds, team augmentation</p>
+        </div>
+
+        <hr class="services__divider" />
+
+        <div class="services__section">
+            <div class="services__section-header">
+                <span class="services__section-number">03</span>
+                <h3 class="services__section-title">Operations &amp; Scale</h3>
+            </div>
+            <p class="services__section-description">For growing companies that need structure, process, and technical operations at scale.</p>
+            <ul class="services__section-bullets">
+                <li>Engineering process design</li>
+                <li>Hiring &amp; onboarding</li>
+                <li>Performance monitoring</li>
+                <li>Incident management</li>
+            </ul>
+            <p class="services__section-ideal">Ideal for: Series A+, scaling teams, post-launch</p>
+        </div>
+    </div>
+
+    <!-- Engagement Models — horizontal strips -->
+    <div class="services__plans-header stagger stagger-1">
+        <h3 class="services__plans-headline">Engagement Models</h3>
+    </div>
+
+    <div class="services__plans">
+        <div class="services__plan stagger stagger-1">
+            <div class="services__plan-left">
+                <h4 class="services__plan-title">Hourly Based Consulting</h4>
+                <p class="services__plan-desc">Strategy sessions, architecture reviews, team mentoring, and code review oversight.</p>
+            </div>
+            <div class="services__plan-price-row">
+                <span class="services__plan-price">$130</span>
+                <span class="services__plan-price-unit">/hour</span>
+            </div>
+        </div>
+
+        <div class="services__plan services__plan--highlighted stagger stagger-2">
+            <div class="services__plan-left">
+                <h4 class="services__plan-title">Fixed Prototype Iterations</h4>
+                <p class="services__plan-desc">Hands-on product development, sprint planning &amp; delivery, async support, and performance tracking.</p>
+            </div>
+            <div class="services__plan-price-row">
+                <span class="services__plan-price">$4,999</span>
+                <span class="services__plan-price-unit">/iteration</span>
+            </div>
+        </div>
+
+        <div class="services__plan stagger stagger-3">
+            <div class="services__plan-left">
+                <h4 class="services__plan-title">Monthly CTO Retainer</h4>
+                <p class="services__plan-desc">Dedicated CTO, board &amp; stakeholder reporting, security &amp; compliance oversight, custom integrations.</p>
+            </div>
+            <div class="services__plan-price-row">
+                <span class="services__plan-price">$2,499</span>
+                <span class="services__plan-price-unit">/month</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="services__deco" aria-hidden="true">
+        <p class="services__deco-text">THE RIGHT PLAN FOR YOUR BUSINESS</p>
+    </div>
+
+    <div class="services__cta">
+        <p class="services__cta-text">Not sure which fits? Let's talk.</p>
+        <a class="services__cta-button" href="#contact">Book a Discovery Call</a>
+    </div>
+</section>
+
+<style lang="scss">
+    .services {
+        display: flex;
+        flex-direction: column;
+        padding: 80px 144px 64px;
+
+        &__header {
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        &__overline {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--clr-text-muted);
+        }
+
+        &__headline {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 72px;
+            color: var(--clr-text-primary);
+            letter-spacing: -2px;
+            line-height: 0.95;
+        }
+
+        &__description {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 20px;
+            color: var(--clr-text-muted);
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        /* Single pane with three sections — no background, no border-radius */
+        &__pane {
+            border-top: 1px solid var(--clr-border-light);
+            border-bottom: 1px solid var(--clr-border-light);
+            padding: 0;
+        }
+
+        &__section {
+            padding: 36px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            column-gap: 2.5rem;
+            row-gap: 0.5rem;
+        }
+
+        &__section-header {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        &__section-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            line-height: 1;
+            color: var(--clr-accent);
+        }
+
+        &__section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: var(--clr-text-primary);
+            line-height: 1.1;
+        }
+
+        &__section-description {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 20px;
+            color: var(--clr-text-muted);
+            line-height: 1.6;
+            grid-column: 1;
+        }
+
+        &__section-bullets {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            grid-column: 2;
+            grid-row: 2 / 4;
+            align-self: center;
+
+            li {
+                font-family: 'Libre Baskerville', serif;
+                font-size: 18px;
+                color: var(--clr-text-muted);
+                padding-left: 1.5rem;
+                position: relative;
+
+                &::before {
+                    content: '—';
+                    position: absolute;
+                    left: 0;
+                    color: var(--clr-text-muted);
+                }
+            }
+        }
+
+        &__section-ideal {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 16px;
+            font-style: italic;
+            color: var(--clr-text-muted);
+            grid-column: 1;
+        }
+
+        &__divider {
+            border: none;
+            border-top: 1px solid var(--clr-border-light);
+            margin: 0;
+        }
+
+        /* Engagement Models — horizontal strips, no card backgrounds */
+        &__plans-header {
+            margin-top: 80px;
+            text-align: left;
+        }
+
+        &__plans-headline {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            color: var(--clr-text-primary);
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        &__plans {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-top: 40px;
+            border-top: 1px solid var(--clr-border-light);
+        }
+
+        &__plan {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            padding: 28px 0;
+            border-bottom: 1px solid var(--clr-border-light);
+
+            &--highlighted {
+                border-left: 3px solid var(--clr-accent);
+                padding-left: 33px;
+                margin-left: -36px;
+            }
+        }
+
+        &__plan-left {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        &__plan-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: var(--clr-text-primary);
+            line-height: 1.1;
+        }
+
+        &__plan-desc {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 18px;
+            color: var(--clr-text-muted);
+            line-height: 1.5;
+        }
+
+        &__plan-price-row {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        &__plan-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 40px;
+            color: var(--clr-text-primary);
+            line-height: 1;
+        }
+
+        &__plan-price-unit {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 18px;
+            color: var(--clr-text-muted);
+        }
+
+        /* Decorative text block */
+        &__deco {
+            margin-top: 48px;
+            text-align: center;
+            user-select: none;
+        }
+
+        &__deco-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            line-height: 1;
+            letter-spacing: 3px;
+            color: rgba(26, 26, 24, 0.06);
+        }
+
+        /* CTA */
+        &__cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 24px;
+        }
+
+        &__cta-text {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            color: var(--clr-text-muted);
+        }
+
+        &__cta-button {
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.125rem;
+            letter-spacing: 0.08em;
+            line-height: 1;
+            color: var(--clr-white);
+            background: var(--clr-accent);
+            border-radius: 0;
+            padding: 1rem 2.5rem;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.88;
+            }
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .services {
+            padding: 80px 80px 64px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .services {
+            padding: 64px 2rem 48px;
+
+            &__header {
+                max-width: 100%;
+            }
+
+            &__headline {
+                font-size: 52px;
+            }
+
+            &__section {
+                grid-template-columns: 1fr;
+                padding: 28px 0;
+            }
+
+            &__section-bullets {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            &__plans-headline {
+                font-size: 36px;
+            }
+
+            &__plan {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+
+                &--highlighted {
+                    margin-left: -2rem;
+                    padding-left: calc(33px + (2rem - 36px));
+                }
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .services {
+            padding: 64px 1.25rem 48px;
+        }
+    }
+</style>

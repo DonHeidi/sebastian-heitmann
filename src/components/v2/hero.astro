@@ -240,12 +240,13 @@ import picture from '../../assets/fb.jpg';
         &-badge {
             position: absolute;
             left: 16px;
+            right: unset;
             top: 320px;
             background-color: rgba(255, 0, 123, 0.59);
             backdrop-filter: blur(8.5px);
             border-radius: 6px;
             padding: 0.375rem 0.75rem;
-            width: fit-content;
+            display: inline-flex;
             color: var(--clr-white);
 
             &__title {
@@ -286,9 +287,6 @@ import picture from '../../assets/fb.jpg';
                 top: 10px;
             }
 
-            &-badge {
-                width: 380px;
-            }
         }
     }
 
@@ -331,7 +329,7 @@ import picture from '../../assets/fb.jpg';
             &-badge {
                 position: static;
                 margin-top: 1rem;
-                width: 100%;
+                width: auto;
             }
         }
     }

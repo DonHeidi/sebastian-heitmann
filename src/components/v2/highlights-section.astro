@@ -1,4 +1,5 @@
 ---
+import Typewriter from '../copy/typewriter.astro';
 ---
 
 <section class="highlights">
@@ -6,7 +7,14 @@
         <p class="highlights__overline">
             <span class="highlights__overline-plain">What sets me </span><span class="highlights__overline-accent">apart</span>
         </p>
-        <h2 class="highlights__headline">Making Complexity Work</h2>
+        <Typewriter
+            as="h2"
+            text={[
+                'Making Complexity Work ',
+                'Turning Uncertainty into Systems ',
+                'Built for Use, Not for Show '
+            ]}
+        />
     </div>
 
     <div class="highlights__cards">

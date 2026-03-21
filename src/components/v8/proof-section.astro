@@ -1,0 +1,372 @@
+---
+const cases = [
+    {
+        metric: 'Gap Closed',
+        metricLabel: '54% project risk identified and addressed',
+        description: 'Identified a 54% projected failure risk in the original delivery setup, then reset the project baseline and changed the execution conditions to create a more viable foundation for the initiatives that followed.',
+        tag: 'Execution Risk',
+    },
+    {
+        metric: 'AWS',
+        metricLabel: 'migration from SAP BW',
+        description: 'Moved a legacy analytics environment from SAP BW toward an AWS-based setup, replacing brittle internal tooling with a more workable foundation for reporting and ongoing delivery.',
+        tag: 'Cloud Migration',
+    },
+    {
+        metric: '7',
+        metricLabel: 'countries rolled out',
+        description: 'Stabilized the platform and content pipeline ahead of launch, enabling a reliable rollout across seven countries from day one.',
+        tag: 'Technical Delivery',
+    },
+    {
+        metric: 'Stalled \u2192 Stable',
+        metricLabel: 'intranet relaunch',
+        description: 'Aligned concept, planning, budget approval, and cross-team execution for the relaunch of an internal platform \u2014 turning a stalled initiative into a stable delivery.',
+        tag: 'Product Leadership',
+    },
+    {
+        metric: '+2',
+        metricLabel: 'points in satisfaction',
+        description: 'Introduced a decentralized IT support model to improve internal service quality, contributing to a measurable two-point increase in satisfaction across the organization.',
+        tag: 'Operational Improvement',
+    },
+];
+
+const testimonials = [
+    {
+        quote: 'Sebastian joined when we were stuck between two architecture paths and a board deadline. Within weeks, the team had a clear direction and was shipping again.',
+        attribution: 'CTO, Series A Fintech',
+    },
+    {
+        quote: 'We needed someone who could talk to engineers and investors in the same week. He did both without losing credibility with either side.',
+        attribution: 'Head of Engineering, Mid-Market SaaS',
+    },
+    {
+        quote: 'Calm under pressure, no ego, and every recommendation came with a realistic plan to execute it. Exactly the kind of technical partner we were looking for.',
+        attribution: 'CEO, B2B Marketplace',
+    },
+];
+
+const engagements = [
+    {
+        model: 'Advise',
+        price: '\u20AC130',
+        unit: '/hour',
+        description: 'Architecture reviews, hiring decisions, vendor evaluations, and second opinions before a high-impact commitment.',
+    },
+    {
+        model: 'Deliver',
+        price: '\u20AC4.999',
+        unit: '/cycle',
+        cycleNote: 'Typically 4\u20136 weeks',
+        description: 'A focused engagement around a defined outcome — an MVP, a migration, a rebuild, or a delivery reset.',
+        featured: true,
+    },
+    {
+        model: 'Partner',
+        price: '\u20AC2.499',
+        unit: '/month',
+        description: 'Ongoing technical partnership for companies that need senior oversight across architecture, delivery, and execution continuity.',
+    },
+];
+---
+
+<section class="proof" id="proof">
+    <div class="proof-inner">
+        <div class="proof-header reveal">
+            <span class="proof-label">Results</span>
+            <div class="proof-rule"></div>
+        </div>
+
+        <div class="proof-cases">
+            {cases.map((c, i) => (
+                <article class="case reveal" style={`transition-delay: ${i * 0.08}s`}>
+                    <div class="case-metric">
+                        <span class="case-metric__number">{c.metric}</span>
+                        <span class="case-metric__label">{c.metricLabel}</span>
+                    </div>
+                    <p class="case-description">{c.description}</p>
+                    <span class="case-tag">{c.tag}</span>
+                </article>
+            ))}
+        </div>
+
+        <div class="proof-testimonials reveal">
+            <span class="proof-label">What others say</span>
+            <div class="proof-rule"></div>
+        </div>
+        <div class="testimonials-list">
+            {testimonials.map((t, i) => (
+                <blockquote class="testimonial reveal" style={`transition-delay: ${i * 0.08}s`}>
+                    <p class="testimonial-quote">{t.quote}</p>
+                    <cite class="testimonial-cite">{t.attribution}</cite>
+                </blockquote>
+            ))}
+        </div>
+
+        <div class="proof-engagements reveal">
+            <span class="proof-label">Engagement</span>
+            <div class="engagements-grid">
+                {engagements.map((e) => (
+                    <div class:list={['engagement', { 'engagement--featured': e.featured }]}>
+                        <span class="engagement-model">{e.model}</span>
+                        <div class="engagement-price">
+                            <span class="engagement-price__amount">{e.price}</span>
+                            <span class="engagement-price__unit">{e.unit}</span>
+                        </div>
+                        {e.cycleNote && <span class="engagement-cycle-note">{e.cycleNote}</span>}
+                        <p class="engagement-desc">{e.description}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .proof {
+        padding: 120px 80px;
+        max-width: 1440px;
+        margin: 0 auto;
+        border-top: 1px solid var(--v8-border);
+
+        &-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+        }
+
+        &-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        &-label {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            flex-shrink: 0;
+        }
+
+        &-rule {
+            flex: 1;
+            height: 1px;
+            background: var(--v8-border);
+        }
+
+        &-cases {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &-engagements {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-top: 64px;
+            border-top: 1px solid var(--v8-border);
+        }
+    }
+
+    .case {
+        display: grid;
+        grid-template-columns: 280px 1fr auto;
+        gap: 48px;
+        align-items: baseline;
+        padding: 32px 0;
+        border-bottom: 1px solid var(--v8-border);
+
+        &:first-child {
+            border-top: 1px solid var(--v8-border);
+        }
+
+        &-metric {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            &__number {
+                font-family: var(--v8-font-display);
+                font-size: 56px;
+                line-height: 1;
+                color: var(--v8-metric-color);
+                letter-spacing: -0.02em;
+            }
+
+            &__label {
+                font-family: var(--v8-font-body);
+                font-size: 14px;
+                font-weight: 300;
+                color: var(--v8-metric-label-color);
+            }
+        }
+
+        &-description {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--v8-text-tertiary);
+            max-width: 520px;
+        }
+
+        &-tag {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            justify-self: end;
+        }
+    }
+
+    .proof-testimonials {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding-top: 64px;
+        border-top: 1px solid var(--v8-border);
+    }
+
+    .testimonials-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--v8-border);
+    }
+
+    .testimonial {
+        background: var(--v8-bg);
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin: 0;
+
+        &-quote {
+            font-family: var(--v8-font-body);
+            font-size: 14px;
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--v8-text-tertiary);
+        }
+
+        &-cite {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            font-style: normal;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+        }
+    }
+
+    .engagements-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--v8-border);
+    }
+
+    .engagement {
+        background: var(--v8-bg);
+        padding: 40px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &--featured {
+            background: var(--v8-bg-surface);
+
+            .engagement-price__amount {
+                color: var(--v8-accent);
+            }
+        }
+
+        &-model {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+        }
+
+        &-price {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+
+            &__amount {
+                font-family: var(--v8-font-display);
+                font-size: 40px;
+                line-height: 1;
+                color: var(--v8-text);
+            }
+
+            &__unit {
+                font-family: var(--v8-font-mono);
+                font-size: 12px;
+                color: var(--v8-text-muted);
+            }
+        }
+
+        &-cycle-note {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            color: var(--v8-text-muted);
+            margin-top: -8px;
+        }
+
+        &-desc {
+            font-family: var(--v8-font-body);
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-dim);
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .proof {
+            padding: 80px 48px;
+        }
+
+        .case {
+            grid-template-columns: 200px 1fr auto;
+            gap: 32px;
+
+            &-metric__number {
+                font-size: 44px;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .proof {
+            padding: 60px 24px;
+        }
+
+        .case {
+            grid-template-columns: 1fr;
+            gap: 12px;
+            padding: 24px 0;
+
+            &-tag {
+                justify-self: start;
+            }
+        }
+
+        .testimonials-list {
+            grid-template-columns: 1fr;
+        }
+
+        .engagements-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

@@ -1,0 +1,118 @@
+---
+const situations = [
+    'Delivery has slowed, and the team sees a different cause in every direction',
+    'The architecture got you here, but it will not carry the next stage',
+    'A technical decision now will shape cost, speed, or team structure for years',
+    'A migration, rebuild, or reorg needs someone who has already done it',
+];
+---
+
+<section class="situations reveal">
+    <div class="situations-inner">
+        <div class="situations-header">
+            <span class="situations-label">When to reach out</span>
+            <div class="situations-rule"></div>
+        </div>
+        <ul class="situations-list">
+            {situations.map((s, i) => (
+                <li class="situations-item" style={`transition-delay: ${i * 0.06}s`}>{s}</li>
+            ))}
+        </ul>
+    </div>
+</section>
+
+<style lang="scss">
+    .situations {
+        padding: 80px 80px 0;
+        max-width: 1440px;
+        margin: 0 auto;
+
+        &-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border-top: 1px solid var(--v8-border);
+            padding-top: 80px;
+        }
+
+        &-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        &-label {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            flex-shrink: 0;
+        }
+
+        &-rule {
+            flex: 1;
+            height: 1px;
+            background: var(--v8-border);
+        }
+
+        &-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        &-item {
+            font-family: var(--v8-font-body);
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--v8-text-tertiary);
+            padding: 16px 0;
+            border-bottom: 1px solid var(--v8-border);
+            padding-left: 24px;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 6px;
+                height: 1px;
+                background: var(--v8-accent);
+            }
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .situations {
+            padding: 60px 48px 0;
+
+            &-inner {
+                padding-top: 60px;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .situations {
+            padding: 40px 24px 0;
+
+            &-inner {
+                padding-top: 40px;
+            }
+
+            &-item {
+                font-size: 15px;
+            }
+        }
+    }
+</style>

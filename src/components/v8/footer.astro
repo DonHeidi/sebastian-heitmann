@@ -1,0 +1,95 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<footer class="footer">
+    <div class="footer-inner">
+        <span class="footer-copy">&copy; 2026 Sebastian Heitmann</span>
+        <div class="footer-links">
+            <a href="/privacy" class="footer-link">Privacy</a>
+            <a href="/imprint" class="footer-link">Imprint</a>
+        </div>
+        <div class="footer-socials">
+            <a href="https://www.linkedin.com/in/don-heidmann/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <Icon name="simple-icons:linkedin" width={14} height={14} />
+            </a>
+            <a href="https://github.com/DonHeidi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <Icon name="simple-icons:github" width={14} height={14} />
+            </a>
+            <a href="https://www.bluesky.com/e2e_developer" target="_blank" rel="noopener noreferrer" aria-label="Bluesky">
+                <Icon name="simple-icons:bluesky" width={14} height={14} />
+            </a>
+        </div>
+    </div>
+</footer>
+
+<style lang="scss">
+    .footer {
+        padding: 32px 80px;
+        max-width: 1440px;
+        margin: 0 auto;
+        border-top: 1px solid var(--v8-border);
+
+        &-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &-copy {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-muted);
+        }
+
+        &-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        &-link {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: var(--v8-text);
+            }
+        }
+
+        &-socials {
+            display: flex;
+            gap: 16px;
+
+            a {
+                color: var(--v8-text-muted);
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: var(--v8-text);
+                }
+
+                :global(svg) {
+                    fill: currentColor;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .footer {
+            padding: 24px;
+
+            &-inner {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+        }
+    }
+</style>

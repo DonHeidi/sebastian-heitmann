@@ -1,0 +1,295 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import picture from '../../assets/fb.jpg';
+---
+
+<section class="hero">
+    <div class="hero-grid">
+        <aside class="hero-meta">
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Role</span>
+                <span class="hero-meta__value">Fractional CTO &amp; Technical Partner</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Focus</span>
+                <span class="hero-meta__value">Architecture, Delivery, Teams</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Experience</span>
+                <span class="hero-meta__value">15 years</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Projects</span>
+                <span class="hero-meta__value">50+ delivered</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Status</span>
+                <span class="hero-meta__value hero-meta__value--active">Available</span>
+            </div>
+
+            <div class="hero-meta__photo-wrap">
+                <Image
+                    loading="eager"
+                    class="hero-meta__photo"
+                    src={picture}
+                    alt="Sebastian Heitmann"
+                    width={160}
+                    height={160}
+                />
+            </div>
+
+            <div class="hero-meta__socials">
+                <a href="https://www.linkedin.com/in/don-heidmann/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <Icon name="simple-icons:linkedin" width={16} height={16} />
+                </a>
+                <a href="https://github.com/DonHeidi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <Icon name="simple-icons:github" width={16} height={16} />
+                </a>
+                <a href="https://www.bluesky.com/e2e_developer" target="_blank" rel="noopener noreferrer" aria-label="Bluesky">
+                    <Icon name="simple-icons:bluesky" width={16} height={16} />
+                </a>
+            </div>
+        </aside>
+
+        <div class="hero-main">
+            <h1 class="hero-name">
+                <span class="hero-name__line">Sebastian</span>
+                <span class="hero-name__line">Heitmann</span>
+            </h1>
+
+            <div class="hero-rule"></div>
+
+            <p class="hero-pitch">
+                When architecture, delivery, or team structure becomes the constraint, I help leadership teams make the next technical decisions with clarity.
+            </p>
+
+            <div class="hero-cta-group">
+                <a class="hero-cta" href="#contact">
+                    <span class="hero-cta__text">Book an Introduction Call</span>
+                    <span class="hero-cta__arrow">&rarr;</span>
+                </a>
+                <span class="hero-cta-note">30 minutes. No slides. No pitch.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .hero {
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        padding: 80px 80px 120px;
+        max-width: 1440px;
+        margin: 0 auto;
+
+        &-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 80px;
+            align-items: start;
+            width: 100%;
+        }
+
+        &-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-top: 24px;
+            border-top: 1px solid var(--v8-border);
+
+            &__group {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            &__label {
+                font-family: var(--v8-font-mono);
+                font-size: 10px;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--v8-text-muted);
+                line-height: 1;
+            }
+
+            &__value {
+                font-family: var(--v8-font-mono);
+                font-size: 13px;
+                color: var(--v8-text);
+                line-height: 1.4;
+
+                &--active {
+                    color: var(--v8-accent-status);
+                }
+            }
+
+            &__photo-wrap {
+                margin-top: 12px;
+            }
+
+            &__photo {
+                width: 140px;
+                height: 140px;
+                object-fit: cover;
+                filter: var(--v8-photo-filter);
+                transition: filter 0.4s ease;
+
+                &:hover {
+                    filter: var(--v8-photo-filter-hover);
+                }
+            }
+
+            &__socials {
+                display: flex;
+                gap: 16px;
+
+                a {
+                    color: var(--v8-text-muted);
+                    text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    transition: color 0.2s ease;
+
+                    &:hover {
+                        color: var(--v8-text);
+                    }
+
+                    :global(svg) {
+                        color: inherit;
+                        fill: currentColor;
+                    }
+                }
+            }
+        }
+
+        &-main {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        &-name {
+            display: flex;
+            flex-direction: column;
+
+            &__line {
+                font-family: var(--v8-font-display);
+                font-size: clamp(72px, 12vw, 160px);
+                font-weight: 400;
+                line-height: 0.88;
+                letter-spacing: -0.02em;
+                color: var(--v8-text);
+            }
+        }
+
+        &-rule {
+            width: 48px;
+            height: 2px;
+            background: var(--v8-accent);
+        }
+
+        &-pitch {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 520px;
+        }
+
+        &-cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        &-cta-note {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-muted);
+            letter-spacing: 0.01em;
+        }
+
+        &-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--v8-accent);
+            align-self: flex-start;
+            transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+            &:hover {
+                gap: 20px;
+            }
+
+            &__text {
+                font-family: var(--v8-font-mono);
+                font-size: 12px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--v8-text);
+            }
+
+            &__arrow {
+                font-size: 16px;
+                color: var(--v8-accent);
+                transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            &:hover &__arrow {
+                transform: translateX(4px);
+            }
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .hero {
+            padding: 60px 48px 80px;
+
+            &-grid {
+                grid-template-columns: 180px 1fr;
+                gap: 48px;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            padding: 40px 24px 60px;
+            min-height: auto;
+
+            &-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            &-meta {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 24px;
+                order: 1;
+
+                &__photo-wrap {
+                    display: none;
+                }
+
+                &__socials {
+                    width: 100%;
+                }
+            }
+
+            &-main {
+                order: 0;
+                gap: 32px;
+            }
+
+            &-name__line {
+                font-size: clamp(48px, 14vw, 80px);
+            }
+        }
+    }
+</style>

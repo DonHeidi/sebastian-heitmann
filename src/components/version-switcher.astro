@@ -1,27 +1,35 @@
 ---
 type Props = {
-    currentVersion: 'v1' | 'v2' | 'v4';
+    currentVersion: 'v1' | 'v2' | 'v4' | 'v6' | 'v7' | 'v8' | 'v9';
 }
 
 const { currentVersion } = Astro.props;
+
+const showSwitcher = Astro.url.searchParams.has('versions');
 
 const versions = [
     { id: 'v1', href: '/', label: 'Original' },
     { id: 'v2', href: '/v2/', label: 'Manual' },
     { id: 'v4', href: '/v4/', label: 'Editorial' },
+    { id: 'v6', href: '/v6/', label: 'Ops Manual' },
+    { id: 'v7', href: '/v7/', label: 'Tech Editorial' },
+    { id: 'v8', href: '/v8/', label: 'Precision Swiss' },
+    { id: 'v9', href: '/v9/', label: 'Precision Swiss Light' },
 ];
 
 const otherVersions = versions.filter(v => v.id !== currentVersion);
 ---
 
-<div class:list={['version-switcher', `version-switcher--${currentVersion}`]}>
-    {otherVersions.map(v => (
-        <a class:list={['version-switcher__link', `version-switcher__link--${v.id}`]} href={v.href}>
-            <span class="version-switcher__dot"></span>
-            <span class="version-switcher__label">{v.label}</span>
-        </a>
-    ))}
-</div>
+{showSwitcher && (
+    <div class:list={['version-switcher', `version-switcher--${currentVersion}`]}>
+        {otherVersions.map(v => (
+            <a class:list={['version-switcher__link', `version-switcher__link--${v.id}`]} href={`${v.href}?versions`}>
+                <span class="version-switcher__dot"></span>
+                <span class="version-switcher__label">{v.label}</span>
+            </a>
+        ))}
+    </div>
+)}
 
 <style lang="scss">
     .version-switcher {
@@ -93,6 +101,47 @@ const otherVersions = versions.filter(v => v.id !== currentVersion);
             border-radius: 0;
 
             .version-switcher__dot { background: #C8102E; }
+        }
+
+        &__link--v6 {
+            background: rgba(11, 13, 18, 0.92);
+            border: 1px solid rgba(0, 229, 160, 0.2);
+            color: rgba(208, 212, 222, 0.7);
+            font-family: 'Space Mono', 'IBM Plex Mono', monospace;
+
+            .version-switcher__dot { background: #00E5A0; }
+        }
+
+        &__link--v7 {
+            background: rgba(245, 245, 240, 0.95);
+            border: 1px solid rgba(0, 135, 95, 0.2);
+            color: rgba(26, 26, 24, 0.6);
+            font-family: 'Libre Baskerville', serif;
+            backdrop-filter: none;
+            border-radius: 0;
+
+            .version-switcher__dot { background: #00875F; }
+        }
+
+        &__link--v8 {
+            background: rgba(12, 12, 12, 0.95);
+            border: 1px solid rgba(242, 240, 235, 0.08);
+            color: rgba(242, 240, 235, 0.5);
+            font-family: 'IBM Plex Mono', monospace;
+            border-radius: 0;
+
+            .version-switcher__dot { background: #FF3B00; }
+        }
+
+        &__link--v9 {
+            background: rgba(247, 246, 242, 0.95);
+            border: 1px solid rgba(20, 20, 19, 0.15);
+            color: rgba(20, 20, 19, 0.5);
+            font-family: 'IBM Plex Mono', monospace;
+            backdrop-filter: none;
+            border-radius: 0;
+
+            .version-switcher__dot { background: #B82A00; }
         }
 
     }

@@ -1,5 +1,7 @@
 ---
 import type { Strings } from '../i18n/types';
+import { locales, localeConfig, type Locale } from '../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 type Props = {
     nav?: Strings['nav'];
@@ -8,11 +10,37 @@ type Props = {
 
 const { nav: navProp, languagePicker } = Astro.props;
 const nav = navProp ?? { logo: 'sebastian-heitmann', logoDot: '.dev', cta: 'Book a Call' };
+const currentLocale = (Astro.currentLocale ?? 'en-us') as Locale;
+const currentConfig = localeConfig[currentLocale];
+const shortLabel = currentLocale.toUpperCase();
 ---
 
 <nav class="nav">
     <a class="nav-logo" href="/">{nav.logo}<span class="nav-logo__dot">.</span>dev</a>
     <div class="nav-actions">
+        <div class="nav-lang" aria-label={languagePicker?.label ?? 'Language'}>
+            <button class="nav-lang__trigger" type="button" aria-expanded="false" aria-haspopup="true">
+                <span class="nav-lang__flag">{currentConfig.flag}</span>
+                <span class="nav-lang__label">{shortLabel}</span>
+                <svg class="nav-lang__chevron" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="nav-lang__dropdown">
+                {locales.map((loc) => (
+                    <a
+                        class="nav-lang__option"
+                        href={getRelativeLocaleUrl(loc, '/')}
+                        data-locale={loc}
+                        data-current={loc === currentLocale ? 'true' : undefined}
+                        aria-current={loc === currentLocale ? 'true' : undefined}
+                    >
+                        <span class="nav-lang__option-flag">{localeConfig[loc].flag}</span>
+                        <span class="nav-lang__option-label">{localeConfig[loc].label}</span>
+                    </a>
+                ))}
+            </div>
+        </div>
         <div class="nav-theme-toggle" role="radiogroup" aria-label="Theme">
             <button class="nav-theme-toggle__btn" type="button" data-theme="system" aria-label="System theme">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -87,6 +115,46 @@ const nav = navProp ?? { logo: 'sebastian-heitmann', logoDot: '.dev', cta: 'Book
     });
 </script>
 
+<script>
+    const trigger = document.querySelector('.nav-lang__trigger') as HTMLButtonElement;
+    const dropdown = document.querySelector('.nav-lang__dropdown') as HTMLElement;
+
+    function toggleDropdown(open?: boolean) {
+        const isOpen = open ?? !dropdown.classList.contains('nav-lang__dropdown--open');
+        dropdown.classList.toggle('nav-lang__dropdown--open', isOpen);
+        trigger.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown();
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!(e.target as Element).closest('.nav-lang')) {
+            toggleDropdown(false);
+        }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            toggleDropdown(false);
+        }
+    });
+
+    // Store locale on option click
+    document.querySelectorAll('.nav-lang__option').forEach(option => {
+        option.addEventListener('click', () => {
+            const locale = (option as HTMLElement).dataset.locale;
+            if (locale) {
+                localStorage.setItem('locale', locale);
+            }
+        });
+    });
+</script>
+
 <style lang="scss">
     .nav {
         display: flex;
@@ -117,6 +185,100 @@ const nav = navProp ?? { logo: 'sebastian-heitmann', logoDot: '.dev', cta: 'Book
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        &-lang {
+            position: relative;
+
+            &__trigger {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                background: none;
+                border: 1px solid var(--v8-border);
+                color: var(--v8-text-muted);
+                cursor: pointer;
+                padding: 6px 10px;
+                font-family: var(--v8-font-mono);
+                font-size: 11px;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                transition: color 0.2s ease, border-color 0.2s ease;
+
+                &:hover {
+                    color: var(--v8-accent);
+                    border-color: var(--v8-accent);
+                }
+            }
+
+            &__flag {
+                font-size: 14px;
+                line-height: 1;
+            }
+
+            &__label {
+                line-height: 1;
+            }
+
+            &__chevron {
+                transition: transform 0.2s ease;
+            }
+
+            &__dropdown {
+                position: absolute;
+                top: calc(100% + 6px);
+                right: 0;
+                min-width: 160px;
+                background: var(--v8-bg-surface);
+                border: 1px solid var(--v8-border);
+                display: none;
+                flex-direction: column;
+                z-index: 100;
+
+                &--open {
+                    display: flex;
+                }
+            }
+
+            &__option {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 12px;
+                font-family: var(--v8-font-mono);
+                font-size: 11px;
+                letter-spacing: 0.04em;
+                color: var(--v8-text-muted);
+                text-decoration: none;
+                transition: color 0.2s ease, background-color 0.2s ease;
+
+                &:not(:last-child) {
+                    border-bottom: 1px solid var(--v8-border);
+                }
+
+                &:hover {
+                    color: var(--v8-accent);
+                    background: rgba(255, 255, 255, 0.03);
+                }
+
+                &[data-current] {
+                    color: var(--v8-accent);
+                }
+
+                &-flag {
+                    font-size: 14px;
+                    line-height: 1;
+                }
+
+                &-label {
+                    line-height: 1;
+                }
+            }
+
+            // Rotate chevron when open
+            &:has(&__dropdown--open) &__chevron {
+                transform: rotate(180deg);
+            }
         }
 
         &-theme-toggle {

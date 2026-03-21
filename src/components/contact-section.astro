@@ -46,17 +46,17 @@ import { Icon } from 'astro-icon/components';
                 />
             </div>
             <div class="contact__field">
-                <label class="contact__label" for="contact-plan">Plan</label>
+                <label class="contact__label" for="contact-plan">Engagement</label>
                 <div class="contact__select-wrapper">
                     <select
                         class="contact__select"
                         id="contact-plan"
                         name="plan"
                     >
-                        <option value="" disabled selected>Select a plan</option>
-                        <option value="hourly">Hourly Based Consulting</option>
-                        <option value="prototype">Fixed Prototype Iterations</option>
-                        <option value="retainer">Monthly CTO Retainer</option>
+                        <option value="" disabled selected>Select an engagement</option>
+                        <option value="hourly">On-Demand Advisory & Engineering</option>
+                        <option value="cycle">Fixed 2-Week Cycle</option>
+                        <option value="retainer">Fractional CTO Retainer</option>
                         <option value="unsure">Not sure yet</option>
                     </select>
                     <Icon name="mdi:chevron-down" class="contact__select-icon" width={20} height={20} />
@@ -237,26 +237,20 @@ import { Icon } from 'astro-icon/components';
         &__submit {
             width: fit-content;
             align-self: center;
-            padding: 16px 48px;
+            padding: 1rem 2.5rem;
             border-radius: 100vh;
-            background: var(--clr-terracotta);
-            border: none;
+            background: var(--clr-bg-surface);
+            border: 1.5px solid var(--clr-text-primary);
             font-family: 'Anton', sans-serif;
-            font-size: 20px;
+            font-size: 1.125rem;
+            line-height: 1;
             color: var(--clr-white);
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(196, 93, 62, 0.25);
-            transition: opacity 0.2s, transform 0.2s;
-            letter-spacing: 0.5px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
 
             &:hover {
-                opacity: 0.9;
-                transform: translateY(-1px);
-            }
-
-            &:active {
-                opacity: 1;
-                transform: translateY(0);
+                background-color: var(--clr-text-primary);
+                color: #151310;
             }
         }
     }

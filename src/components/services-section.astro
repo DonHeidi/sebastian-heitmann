@@ -5,27 +5,71 @@ import Typewriter from './copy/typewriter.astro';
 <section class="services reveal" id="services">
     <div class="services__header">
         <p class="services__overline">
-            <span class="services__overline-plain">What I </span><span class="services__overline-accent">offer</span>
+            <span class="services__overline-plain">How I create </span><span class="services__overline-accent">leverage</span>
         </p>
-        <h2 class="services__headline">How I Help</h2>
-        <p class="services__description">From early-stage product discovery to scaling engineering organisations — I provide hands-on technical leadership tailored to where your business is today and where it needs to go.</p>
+        <h2 class="services__headline">How I Create Leverage</h2>
+        <p class="services__description">I step in where product, technology, and execution start to pull apart — helping companies regain clarity, structure, and forward momentum.</p>
     </div>
 
-    <!-- Single pane, three sections divided by lines -->
-    <div class="services__pane stagger stagger-1">
+    <div class="services__flow">
+
+    <!-- Step 1 -->
+    <div class="services__step stagger stagger-1">
+        <div class="services__step-marker">
+            <span class="services__step-number">01</span>
+            <span class="services__step-line"></span>
+        </div>
+        <div class="services__step-content">
+            <p class="services__step-label">Recognize</p>
+            <h3 class="services__when-title">When I step in</h3>
+            <p class="services__when-intro">I work with companies when product, technology, and execution need stronger direction, better structure, and clearer ownership.</p>
+
+            <div class="services__accordion">
+            <details class="services__accordion-item">
+                <summary class="services__accordion-summary">You need technical leadership before a full-time CTO makes sense</summary>
+                <p class="services__accordion-body">When product development is moving, but technical decisions still depend too heavily on founders, managers, or individual developers. I step in to create direction, establish ownership, and turn technical uncertainty into structured execution.</p>
+            </details>
+            <details class="services__accordion-item">
+                <summary class="services__accordion-summary">Product, engineering, and business priorities are no longer aligned</summary>
+                <p class="services__accordion-body">When teams are working hard, but progress slows down because priorities conflict, decisions drift, and execution creates rework. I help reconnect business goals, technical decisions, and delivery focus so momentum becomes measurable again.</p>
+            </details>
+            <details class="services__accordion-item">
+                <summary class="services__accordion-summary">Your team delivers, but the current setup will not scale</summary>
+                <p class="services__accordion-body">When delivery depends on improvisation, key people carry too much context, and growth starts creating friction instead of leverage. I help build the structures, workflows, and decision paths that allow teams to move faster without creating more chaos.</p>
+            </details>
+            <details class="services__accordion-item">
+                <summary class="services__accordion-summary">You need clarity before committing to the next phase</summary>
+                <p class="services__accordion-body">When the pressure is real, the next step matters, and nobody has yet turned the situation into a workable plan. I help define priorities, surface trade-offs, and create an execution path that is realistic, actionable, and aligned with the business.</p>
+            </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="services__step stagger stagger-1">
+        <div class="services__step-marker">
+            <span class="services__step-number">02</span>
+            <span class="services__step-line"></span>
+        </div>
+        <div class="services__step-content">
+            <p class="services__step-label">Solve</p>
+            <h3 class="services__step-title">What I deliver</h3>
+            <p class="services__step-intro">Structured support across three areas — from strategic clarity to hands-on execution to scalable operations.</p>
+
+    <div class="services__pane">
         <div class="services__section">
             <div class="services__section-header">
                 <span class="services__section-number services__section-number--terracotta">01</span>
-                <h3 class="services__section-title">Strategy & Advisory</h3>
+                <h3 class="services__section-title">Direction & Decisions</h3>
             </div>
             <p class="services__section-description">For founders and leadership teams who need technical clarity before committing to a direction.</p>
             <ul class="services__section-bullets">
                 <li style="--accent: var(--clr-terracotta);">Technical due diligence</li>
                 <li style="--accent: var(--clr-terracotta);">Architecture assessment</li>
-                <li style="--accent: var(--clr-terracotta);">Build vs. buy analysis</li>
-                <li style="--accent: var(--clr-terracotta);">Product roadmap review</li>
+                <li style="--accent: var(--clr-terracotta);">Build vs. buy evaluation</li>
+                <li style="--accent: var(--clr-terracotta);">Roadmap review</li>
             </ul>
-            <p class="services__section-ideal">Ideal for: Pre-investment, pivot decisions, scaling planning</p>
+            <p class="services__section-ideal">Ideal for: pre-investment, pivot decisions, scaling plans</p>
         </div>
 
         <hr class="services__divider" />
@@ -33,16 +77,16 @@ import Typewriter from './copy/typewriter.astro';
         <div class="services__section">
             <div class="services__section-header">
                 <span class="services__section-number services__section-number--teal">02</span>
-                <h3 class="services__section-title">Product & Engineering</h3>
+                <h3 class="services__section-title">Delivery & Engineering</h3>
             </div>
-            <p class="services__section-description">For teams that need hands-on product leadership and engineering execution.</p>
+            <p class="services__section-description">For teams that need hands-on leadership to move product work forward with more focus, speed, and execution discipline.</p>
             <ul class="services__section-bullets">
-                <li style="--accent: var(--clr-teal);">Full-stack development</li>
-                <li style="--accent: var(--clr-teal);">Team setup & mentoring</li>
-                <li style="--accent: var(--clr-teal);">Sprint planning & delivery</li>
-                <li style="--accent: var(--clr-teal);">CI/CD & DevOps</li>
+                <li style="--accent: var(--clr-teal);">Product and engineering leadership</li>
+                <li style="--accent: var(--clr-teal);">Sprint planning and delivery</li>
+                <li style="--accent: var(--clr-teal);">Team setup and mentoring</li>
+                <li style="--accent: var(--clr-teal);">Full-stack implementation support</li>
             </ul>
-            <p class="services__section-ideal">Ideal for: MVPs, rebuilds, team augmentation</p>
+            <p class="services__section-ideal">Ideal for: MVPs, rebuilds, delivery bottlenecks</p>
         </div>
 
         <hr class="services__divider" />
@@ -50,72 +94,80 @@ import Typewriter from './copy/typewriter.astro';
         <div class="services__section">
             <div class="services__section-header">
                 <span class="services__section-number services__section-number--sage">03</span>
-                <h3 class="services__section-title">Operations & Scale</h3>
+                <h3 class="services__section-title">Systems & Operations</h3>
             </div>
-            <p class="services__section-description">For growing companies that need structure, process, and technical operations at scale.</p>
+            <p class="services__section-description">For growing companies that need stronger structures, clearer processes, and technical operations that can support scale.</p>
             <ul class="services__section-bullets">
                 <li style="--accent: var(--clr-sage);">Engineering process design</li>
-                <li style="--accent: var(--clr-sage);">Hiring & onboarding</li>
+                <li style="--accent: var(--clr-sage);">Hiring and onboarding</li>
                 <li style="--accent: var(--clr-sage);">Performance monitoring</li>
                 <li style="--accent: var(--clr-sage);">Incident management</li>
             </ul>
-            <p class="services__section-ideal">Ideal for: Series A+, scaling teams, post-launch</p>
+            <p class="services__section-ideal">Ideal for: scaling teams, post-launch growth, operational complexity</p>
+        </div>
+    </div>
         </div>
     </div>
 
-    <!-- Engagement Models — 3 tiers, horizontal strips instead of equal cards -->
-    <div class="services__plans-header stagger stagger-1">
-        <h3 class="services__plans-headline">Engagement Models</h3>
-    </div>
+    <!-- Step 3 -->
+    <div class="services__step stagger stagger-1">
+        <div class="services__step-marker">
+            <span class="services__step-number">03</span>
+        </div>
+        <div class="services__step-content">
+            <p class="services__step-label">Engage</p>
+            <h3 class="services__step-title">How we work together</h3>
+            <p class="services__step-intro">Choose the engagement model that fits your situation — from focused advisory to ongoing technical leadership.</p>
 
-    <div class="services__plans">
-        <div class="services__plan stagger stagger-1">
-            <div class="services__plan-left">
-                <h4 class="services__plan-title">Hourly Based Consulting</h4>
-                <p class="services__plan-desc">Strategy sessions, architecture reviews, team mentoring, and code review oversight.</p>
+            <div class="services__plans">
+                <div class="services__plan">
+                    <div class="services__plan-left">
+                        <h4 class="services__plan-title">On-Demand Advisory & Engineering</h4>
+                        <p class="services__plan-desc">Flexible senior support for strategy, architecture, technical reviews, and focused execution — when you need experienced input without committing to a larger engagement.</p>
+                    </div>
+                    <div class="services__plan-price-row">
+                        <span class="services__plan-price-from">from</span>
+                        <span class="services__plan-price">$130</span>
+                        <span class="services__plan-price-unit">/ hour</span>
+                    </div>
+                </div>
+
+                <div class="services__plan services__plan--highlighted">
+                    <div class="services__plan-left">
+                        <h4 class="services__plan-title">Focused 2-Week Cycle</h4>
+                        <p class="services__plan-desc">A structured two-week engagement for hands-on product work, delivery support, and clearly scoped progress across a focused initiative.</p>
+                    </div>
+                    <div class="services__plan-price-row">
+                        <span class="services__plan-price-from">from</span>
+                        <span class="services__plan-price">$4,999</span>
+                        <span class="services__plan-price-unit">/ cycle</span>
+                    </div>
+                </div>
+
+                <div class="services__plan">
+                    <div class="services__plan-left">
+                        <h4 class="services__plan-title">Technical Leadership Retainer</h4>
+                        <p class="services__plan-desc">Ongoing technical leadership, architectural guidance, and senior continuity for teams that need experienced support across product and engineering.</p>
+                    </div>
+                    <div class="services__plan-right">
+                        <div class="services__plan-price-row">
+                            <span class="services__plan-price-from">from</span>
+                            <span class="services__plan-price">$2,499</span>
+                            <span class="services__plan-price-unit">/ month</span>
+                        </div>
+                        <p class="services__plan-note">Minimum engagement: 6 months.</p>
+                    </div>
+                </div>
             </div>
-            <div class="services__plan-price-row">
-                <span class="services__plan-price">$130</span>
-                <span class="services__plan-price-unit">/hour</span>
+
+            <div class="services__cta">
+                <p class="services__cta-text">Not sure which fits? Let's talk.</p>
+                <a class="services__cta-button" href="#contact">Book a Discovery Call</a>
             </div>
         </div>
-
-        <div class="services__plan services__plan--highlighted stagger stagger-2">
-            <div class="services__plan-left">
-                <h4 class="services__plan-title">Fixed Prototype Iterations</h4>
-                <p class="services__plan-desc">Hands-on product development, sprint planning & delivery, async support, and performance tracking.</p>
-            </div>
-            <div class="services__plan-price-row">
-                <span class="services__plan-price">$4,999</span>
-                <span class="services__plan-price-unit">/iteration</span>
-            </div>
-        </div>
-
-        <div class="services__plan stagger stagger-3">
-            <div class="services__plan-left">
-                <h4 class="services__plan-title">Monthly CTO Retainer</h4>
-                <p class="services__plan-desc">Dedicated CTO, board & stakeholder reporting, security & compliance oversight, custom integrations.</p>
-            </div>
-            <div class="services__plan-price-row">
-                <span class="services__plan-price">$2,499</span>
-                <span class="services__plan-price-unit">/month</span>
-            </div>
-        </div>
     </div>
 
-    <div class="services__deco">
-        <p class="services__deco-line services__deco-line--1">
-            <span class="services__deco-plain">THE&nbsp;</span><span class="services__deco-accent">RIGHT PLAN</span><span class="services__deco-plain">&nbsp;FOR</span>
-        </p>
-        <p class="services__deco-line services__deco-line--2">
-            <span class="services__deco-plain">YOUR BUSINESS</span>
-        </p>
-    </div>
-
-    <div class="services__cta">
-        <p class="services__cta-text">Not sure which fits? Let's talk.</p>
-        <a class="services__cta-button" href="#contact">Book a Discovery Call</a>
-    </div>
+    </div><!-- /.services__flow -->
 </section>
 
 <style lang="scss">
@@ -162,6 +214,148 @@ import Typewriter from './copy/typewriter.astro';
             color: rgba(232, 226, 214, 0.7);
             line-height: 1.6;
             max-width: 500px;
+        }
+
+        /* Narrative flow */
+        &__flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        &__step {
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+        }
+
+        &__step-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            width: 40px;
+        }
+
+        &__step-number {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.125rem;
+            color: var(--clr-terracotta);
+            line-height: 1;
+        }
+
+        &__step-line {
+            flex: 1;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--clr-terracotta), transparent);
+            margin-top: 12px;
+            min-height: 40px;
+        }
+
+        &__step-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--clr-terracotta);
+            margin-bottom: 0.25rem;
+        }
+
+        &__step-content {
+            flex: 1;
+            padding-bottom: 3rem;
+        }
+
+        &__step-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            color: var(--clr-white);
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+
+        &__step-intro {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1875rem;
+            color: rgba(232, 226, 214, 0.65);
+            line-height: 1.6;
+            max-width: 560px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* When I step in */
+        &__when-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            color: var(--clr-white);
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+
+        &__when-intro {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1875rem;
+            color: rgba(232, 226, 214, 0.65);
+            line-height: 1.6;
+            max-width: 560px;
+            margin-bottom: 1.5rem;
+        }
+
+        &__accordion {
+            display: flex;
+            flex-direction: column;
+            align-self: stretch;
+        }
+
+        &__accordion-item {
+            border-top: 1px solid var(--clr-border-dark);
+
+            &:last-child {
+                border-bottom: 1px solid var(--clr-border-dark);
+            }
+        }
+
+        &__accordion-summary {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--clr-text-primary);
+            padding: 1.25rem 0;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::after {
+                content: '+';
+                font-family: 'Anton', sans-serif;
+                font-size: 1.5rem;
+                color: var(--clr-text-muted);
+                flex-shrink: 0;
+                transition: transform 0.2s ease;
+            }
+        }
+
+        &__accordion-item[open] > &__accordion-summary::after {
+            content: '−';
+        }
+
+        &__accordion-body {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.0625rem;
+            color: rgba(232, 226, 214, 0.65);
+            line-height: 1.65;
+            padding: 0 0 1.25rem;
+            max-width: 640px;
         }
 
         /* Single pane with three sections */
@@ -261,26 +455,11 @@ import Typewriter from './copy/typewriter.astro';
             margin: 0 40px;
         }
 
-        /* Engagement Models — horizontal strips */
-        &__plans-header {
-            margin-top: 80px;
-            text-align: center;
-        }
-
-        &__plans-headline {
-            font-family: 'Anton', sans-serif;
-            font-size: 4rem;
-            color: var(--clr-white);
-            letter-spacing: -1.5px;
-            line-height: 1;
-        }
-
         &__plans {
             display: flex;
             flex-direction: column;
             gap: 12px;
             width: 100%;
-            margin-top: 40px;
         }
 
         &__plan {
@@ -290,6 +469,7 @@ import Typewriter from './copy/typewriter.astro';
             justify-content: space-between;
             gap: 2rem;
             background: var(--clr-bg-surface);
+            backdrop-filter: blur(4px);
             border: 1px solid var(--clr-border-dark);
             border-radius: 12px;
             padding: 28px 36px;
@@ -334,6 +514,28 @@ import Typewriter from './copy/typewriter.astro';
             flex-shrink: 0;
         }
 
+        &__plan-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        &__plan-note {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8125rem;
+            color: rgba(232, 226, 214, 0.4);
+            font-style: italic;
+        }
+
+        &__plan-price-from {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            color: rgba(232, 226, 214, 0.45);
+            margin-right: 4px;
+        }
+
         &__plan-price {
             font-family: 'Anton', sans-serif;
             font-size: 2.75rem;
@@ -345,37 +547,6 @@ import Typewriter from './copy/typewriter.astro';
             font-family: 'Outfit', sans-serif;
             font-size: 1.25rem;
             color: rgba(232, 226, 214, 0.45);
-        }
-
-        &__deco {
-            margin-top: 32px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            user-select: none;
-        }
-
-        &__deco-line {
-            font-family: 'AntonSC', sans-serif;
-            line-height: 1;
-            letter-spacing: 3px;
-        }
-
-        &__deco-line--1 {
-            font-size: clamp(3rem, 6vw, 5.5rem);
-        }
-
-        &__deco-line--2 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-        }
-
-        &__deco-plain {
-            color: rgba(232, 226, 214, 0.15);
-        }
-
-        &__deco-accent {
-            color: rgba(196, 93, 62, 0.35);
         }
 
         &__cta {
@@ -416,12 +587,27 @@ import Typewriter from './copy/typewriter.astro';
     @media (max-width: 1440px) {
         .services {
             padding: 80px 80px 64px;
+
+
         }
     }
 
     @media (max-width: 768px) {
         .services {
             padding: 64px 2rem 48px;
+
+
+            &__step {
+                gap: 1.25rem;
+            }
+
+            &__step-marker {
+                width: 28px;
+            }
+
+            &__step-title, &__when-title {
+                font-size: 2rem;
+            }
 
             &__header {
                 max-width: 100%;
@@ -455,6 +641,7 @@ import Typewriter from './copy/typewriter.astro';
     @media (max-width: 375px) {
         .services {
             padding: 64px 1.25rem 48px;
+
         }
     }
 </style>

@@ -2,7 +2,7 @@
 title: "Analytics Engine"
 subtitle: "LOREM IPSUM"
 excerpt: "We build intelligent software solutions from modern landing pages, mobile applications, so SaaS applications with a strategic approach driven by incremental growth."
-image: "../../assets/fb.jpg"
+image: "../../../assets/fb.jpg"
 order: 4
 ---
 

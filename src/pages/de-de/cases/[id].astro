@@ -1,16 +1,16 @@
 ---
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
-import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/navigation.astro';
-import { getStrings } from '../../i18n/utils';
-import type { Locale } from '../../i18n/utils';
+import Layout from '../../../layouts/Layout.astro';
+import Navigation from '../../../components/navigation.astro';
+import { getStrings } from '../../../i18n/utils';
+import type { Locale } from '../../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
 export async function getStaticPaths() {
-  const cases = await getCollection('cases', ({ id }) => id.startsWith('en-us/'));
+  const cases = await getCollection('cases', ({ id }) => id.startsWith('de-de/'));
   return cases.map((entry) => ({
-    params: { id: entry.id.replace('en-us/', '') },
+    params: { id: entry.id.replace('de-de/', '') },
     props: { entry },
   }));
 }
@@ -18,14 +18,13 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const locale = (Astro.currentLocale ?? 'en-us') as Locale;
+const locale = (Astro.currentLocale ?? 'de-de') as Locale;
 const s = getStrings(locale);
 ---
 <Layout
   locale={locale}
   title={`${entry.data.title} — Sebastian Heitmann`}
   description={entry.data.subtitle ?? s.meta.description}
-  includeRedirectScript={true}
 >
   <Navigation nav={s.nav} languagePicker={s.languagePicker} />
   <div class="detail-page">

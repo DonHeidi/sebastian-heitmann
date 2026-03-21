@@ -5,4 +5,11 @@ export default defineConfig({
     integrations: [
         icon(),
     ],
+    i18n: {
+        locales: ['en-us', 'en-gb', 'de-de'],
+        defaultLocale: 'en-us',
+        routing: {
+            prefixDefaultLocale: false,
+        },
+    },
 });

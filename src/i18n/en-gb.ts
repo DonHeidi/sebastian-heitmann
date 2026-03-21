@@ -20,7 +20,7 @@ export const enGb: Strings = {
     role: { label: 'Role', value: 'Fractional CTO & Technical Partner' },
     focus: { label: 'Focus', value: 'Architecture, Delivery, Teams' },
     experience: { label: 'Experience', value: '15 years' },
-    projects: { label: 'Projects', value: '50+ delivered' },
+    projects: { label: 'Projects', value: '20+ delivered' },
     status: { label: 'Status', value: 'Available' },
   },
   logos: {

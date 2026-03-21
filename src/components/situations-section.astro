@@ -1,21 +1,22 @@
 ---
-const situations = [
-    'Delivery has slowed, and the team sees a different cause in every direction',
-    'The architecture got you here, but it will not carry the next stage',
-    'A technical decision now will shape cost, speed, or team structure for years',
-    'A migration, rebuild, or reorg needs someone who has already done it',
-];
+import type { Strings } from '../i18n/types';
+
+type Props = {
+    situations: Strings['situations'];
+};
+
+const { situations } = Astro.props;
 ---
 
 <section class="situations reveal">
     <div class="situations-inner">
         <div class="situations-header">
-            <span class="situations-label">When to reach out</span>
+            <span class="situations-label">{situations.label}</span>
             <div class="situations-rule"></div>
         </div>
         <ul class="situations-list">
-            {situations.map((s, i) => (
-                <li class="situations-item" style={`transition-delay: ${i * 0.06}s`}>{s}</li>
+            {situations.items.map((item, i) => (
+                <li class="situations-item" style={`transition-delay: ${i * 0.06}s`}>{item}</li>
             ))}
         </ul>
     </div>

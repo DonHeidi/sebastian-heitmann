@@ -1,35 +1,45 @@
+---
+import type { Strings } from '../i18n/types';
+
+type Props = {
+    contact: Strings['contact'];
+};
+
+const { contact } = Astro.props;
+---
+
 <section class="contact" id="contact">
     <div class="contact-inner">
         <div class="contact-left">
-            <h2 class="contact-headline">Start a<br/>Conversation</h2>
-            <p class="contact-intro">Tell me what you are working through. I will get back to you within one business day with a candid view on whether and how I can help.</p>
+            <h2 class="contact-headline" set:html={contact.headline.replace(/\n/g, '<br/>')} />
+            <p class="contact-intro">{contact.intro}</p>
         </div>
 
         <div class="contact-right">
             <form class="contact-form" action="#" method="POST">
                 <div class="form-row">
                     <div class="form-field">
-                        <label class="form-label" for="name">Name</label>
+                        <label class="form-label" for="name">{contact.nameLabel}</label>
                         <input class="form-input" type="text" id="name" name="name" required autocomplete="name" />
                     </div>
                     <div class="form-field">
-                        <label class="form-label" for="email">Email</label>
+                        <label class="form-label" for="email">{contact.emailLabel}</label>
                         <input class="form-input" type="email" id="email" name="email" required autocomplete="email" />
                     </div>
                 </div>
 
                 <div class="form-field">
-                    <label class="form-label" for="context">What is changing, stuck, or at risk right now?</label>
-                    <input class="form-input" type="text" id="context" name="context" placeholder="e.g. a migration, a team restructure, an architecture decision" />
+                    <label class="form-label" for="context">{contact.contextLabel}</label>
+                    <input class="form-input" type="text" id="context" name="context" placeholder={contact.contextPlaceholder} />
                 </div>
 
                 <div class="form-field">
-                    <label class="form-label" for="message">What would you like me to help you clarify, assess, or move forward?</label>
+                    <label class="form-label" for="message">{contact.messageLabel}</label>
                     <textarea class="form-input form-input--textarea" id="message" name="message" rows="4" required></textarea>
                 </div>
 
                 <button class="form-submit" type="submit">
-                    <span class="form-submit__text">Send</span>
+                    <span class="form-submit__text">{contact.submitLabel}</span>
                     <span class="form-submit__arrow">&rarr;</span>
                 </button>
             </form>

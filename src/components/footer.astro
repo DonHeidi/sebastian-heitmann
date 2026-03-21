@@ -1,13 +1,22 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Strings } from '../i18n/types';
+
+type Props = {
+    footer: Strings['footer'];
+};
+
+const { footer } = Astro.props;
+const locale = Astro.currentLocale ?? 'en-us';
 ---
 
 <footer class="footer">
     <div class="footer-inner">
-        <span class="footer-copy">&copy; 2026 Sebastian Heitmann</span>
+        <span class="footer-copy">{footer.copyright}</span>
         <div class="footer-links">
-            <a href="/privacy" class="footer-link">Privacy</a>
-            <a href="/imprint" class="footer-link">Imprint</a>
+            <a href={getRelativeLocaleUrl(locale, 'privacy')} class="footer-link">{footer.privacyLabel}</a>
+            <a href={getRelativeLocaleUrl(locale, 'imprint')} class="footer-link">{footer.imprintLabel}</a>
         </div>
         <div class="footer-socials">
             <a href="https://www.linkedin.com/in/don-heidmann/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">

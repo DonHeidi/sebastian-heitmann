@@ -1,85 +1,22 @@
 ---
-const cases = [
-    {
-        metric: 'Gap Closed',
-        metricLabel: '54% project risk identified and addressed',
-        description: 'Identified a 54% projected failure risk in the original delivery setup, then reset the project baseline and changed the execution conditions to create a more viable foundation for the initiatives that followed.',
-        tag: 'Execution Risk',
-    },
-    {
-        metric: 'AWS',
-        metricLabel: 'migration from SAP BW',
-        description: 'Moved a legacy analytics environment from SAP BW toward an AWS-based setup, replacing brittle internal tooling with a more workable foundation for reporting and ongoing delivery.',
-        tag: 'Cloud Migration',
-    },
-    {
-        metric: '7',
-        metricLabel: 'countries rolled out',
-        description: 'Stabilized the platform and content pipeline ahead of launch, enabling a reliable rollout across seven countries from day one.',
-        tag: 'Technical Delivery',
-    },
-    {
-        metric: 'Stalled \u2192 Stable',
-        metricLabel: 'intranet relaunch',
-        description: 'Aligned concept, planning, budget approval, and cross-team execution for the relaunch of an internal platform \u2014 turning a stalled initiative into a stable delivery.',
-        tag: 'Product Leadership',
-    },
-    {
-        metric: '+2',
-        metricLabel: 'points in satisfaction',
-        description: 'Introduced a decentralized IT support model to improve internal service quality, contributing to a measurable two-point increase in satisfaction across the organization.',
-        tag: 'Operational Improvement',
-    },
-];
+import type { Strings } from '../i18n/types';
 
-const testimonials = [
-    {
-        quote: 'Sebastian joined when we were stuck between two architecture paths and a board deadline. Within weeks, the team had a clear direction and was shipping again.',
-        attribution: 'CTO, Series A Fintech',
-    },
-    {
-        quote: 'We needed someone who could talk to engineers and investors in the same week. He did both without losing credibility with either side.',
-        attribution: 'Head of Engineering, Mid-Market SaaS',
-    },
-    {
-        quote: 'Calm under pressure, no ego, and every recommendation came with a realistic plan to execute it. Exactly the kind of technical partner we were looking for.',
-        attribution: 'CEO, B2B Marketplace',
-    },
-];
+type Props = {
+    proof: Strings['proof'];
+};
 
-const engagements = [
-    {
-        model: 'Advise',
-        price: '\u20AC130',
-        unit: '/hour',
-        description: 'Architecture reviews, hiring decisions, vendor evaluations, and second opinions before a high-impact commitment.',
-    },
-    {
-        model: 'Deliver',
-        price: '\u20AC4.999',
-        unit: '/cycle',
-        cycleNote: 'Typically 4\u20136 weeks',
-        description: 'A focused engagement around a defined outcome — an MVP, a migration, a rebuild, or a delivery reset.',
-        featured: true,
-    },
-    {
-        model: 'Partner',
-        price: '\u20AC2.499',
-        unit: '/month',
-        description: 'Ongoing technical partnership for companies that need senior oversight across architecture, delivery, and execution continuity.',
-    },
-];
+const { proof } = Astro.props;
 ---
 
 <section class="proof" id="proof">
     <div class="proof-inner">
         <div class="proof-header reveal">
-            <span class="proof-label">Results</span>
+            <span class="proof-label">{proof.resultsLabel}</span>
             <div class="proof-rule"></div>
         </div>
 
         <div class="proof-cases">
-            {cases.map((c, i) => (
+            {proof.cases.map((c, i) => (
                 <article class="case reveal" style={`transition-delay: ${i * 0.08}s`}>
                     <div class="case-metric">
                         <span class="case-metric__number">{c.metric}</span>
@@ -92,11 +29,11 @@ const engagements = [
         </div>
 
         <div class="proof-testimonials reveal">
-            <span class="proof-label">What others say</span>
+            <span class="proof-label">{proof.testimonialsLabel}</span>
             <div class="proof-rule"></div>
         </div>
         <div class="testimonials-list">
-            {testimonials.map((t, i) => (
+            {proof.testimonials.map((t, i) => (
                 <blockquote class="testimonial reveal" style={`transition-delay: ${i * 0.08}s`}>
                     <p class="testimonial-quote">{t.quote}</p>
                     <cite class="testimonial-cite">{t.attribution}</cite>
@@ -105,9 +42,9 @@ const engagements = [
         </div>
 
         <div class="proof-engagements reveal">
-            <span class="proof-label">Engagement</span>
+            <span class="proof-label">{proof.engagementLabel}</span>
             <div class="engagements-grid">
-                {engagements.map((e) => (
+                {proof.engagements.map((e) => (
                     <div class:list={['engagement', { 'engagement--featured': e.featured }]}>
                         <span class="engagement-model">{e.model}</span>
                         <div class="engagement-price">

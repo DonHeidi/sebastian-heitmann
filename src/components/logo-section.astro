@@ -1,23 +1,28 @@
 ---
-const previouslyAt = ['Jung von Matt', 'Synergy', 'Granny & Smith', 'OFFIS'];
-const workingWith = ['Pool Position GmbH', 'mobilespace GmbH'];
+import type { Strings } from '../i18n/types';
+
+type Props = {
+    logos: Strings['logos'];
+};
+
+const { logos } = Astro.props;
 ---
 
 <section class="logos">
     <div class="logos-inner">
         <div class="logos-group">
-            <span class="logos-label">Working with</span>
+            <span class="logos-label">{logos.workingWithLabel}</span>
             <div class="logos-names">
-                {workingWith.map(name => (
+                {logos.workingWith.map(name => (
                     <span class="logos-name">{name}</span>
                 ))}
             </div>
         </div>
         <div class="logos-divider"></div>
         <div class="logos-group">
-            <span class="logos-label">Previously at</span>
+            <span class="logos-label">{logos.previouslyAtLabel}</span>
             <div class="logos-names">
-                {previouslyAt.map(name => (
+                {logos.previouslyAt.map(name => (
                     <span class="logos-name">{name}</span>
                 ))}
             </div>

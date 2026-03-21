@@ -1,412 +1,294 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import picture from '../assets/fb.jpg';
+import picture from '../../assets/fb.jpg';
 ---
 
-<section class="hero reveal">
-    <p class="hero-overline">
-        <span class="overline-plain">Fractional CTO who turns </span><span class="overline-magenta">outgrown processes</span><span class="overline-plain"> into </span><span class="overline-blue">systems that scale</span><span class="overline-plain">.</span>
-    </p>
-
-    <div class="hero-main">
-        <div class="hero-left">
-            <div class="hero-headline-group">
-                <h1 class="hero-headline">Sebastian Heitmann</h1>
+<section class="hero">
+    <div class="hero-grid">
+        <aside class="hero-meta">
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Role</span>
+                <span class="hero-meta__value">Fractional CTO &amp; Technical Partner</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Focus</span>
+                <span class="hero-meta__value">Architecture, Delivery, Teams</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Experience</span>
+                <span class="hero-meta__value">15 years</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Projects</span>
+                <span class="hero-meta__value">50+ delivered</span>
+            </div>
+            <div class="hero-meta__group">
+                <span class="hero-meta__label">Status</span>
+                <span class="hero-meta__value hero-meta__value--active">Available</span>
             </div>
 
-            <div class="hero-body">
-                <p class="hero-body-text">I help growing companies align product, technology, and operations — bringing structure to complexity, clarity to decisions, and momentum to execution.</p>
-            </div>
-            <div class="hero-stats">
-                <div class="hero-stats__item">
-                    <span class="hero-stats__number hero-stats__number--magenta">10+</span>
-                    <span class="hero-stats__label">Years in Tech</span>
-                </div>
-                <div class="hero-stats__divider"></div>
-                <div class="hero-stats__item">
-                    <span class="hero-stats__number hero-stats__number--blue">50+</span>
-                    <span class="hero-stats__label">Projects Delivered</span>
-                </div>
-                <div class="hero-stats__divider"></div>
-                <div class="hero-stats__item">
-                    <span class="hero-stats__number hero-stats__number--green">8</span>
-                    <span class="hero-stats__label">Industries</span>
-                </div>
-                <div class="hero-stats__divider"></div>
-                <div class="hero-stats__item">
-                    <span class="hero-stats__number hero-stats__number--gold">3</span>
-                    <span class="hero-stats__label">Countries</span>
-                </div>
-            </div>
-
-            <div class="hero-cta-row">
-                <a class="hero-cta-primary" href="#contact">Book a Discovery Call</a>
-                <a class="hero-cta-secondary" href="#services">See how I work →</a>
-            </div>
-        </div>
-
-        <aside class="hero-aside">
-            <div class="hero-aside__social">
+            <div class="hero-meta__photo-wrap">
                 <Image
                     loading="eager"
-                    class="hero-aside__photo"
+                    class="hero-meta__photo"
                     src={picture}
                     alt="Sebastian Heitmann"
-                    width={260}
-                    height={320}
+                    width={160}
+                    height={160}
                 />
-                <div class="hero-aside__icons">
-                    <a id="linkedin" href="https://www.linkedin.com/in/don-heidmann/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                        <Icon name="simple-icons:linkedin" width={32} height={32} />
-                    </a>
-                    <a id="github" href="https://github.com/DonHeidi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                        <Icon name="simple-icons:github" width={32} height={32} />
-                    </a>
-                    <a id="bluesky" href="https://www.bluesky.com/e2e_developer" target="_blank" rel="noopener noreferrer" aria-label="Bluesky">
-                        <Icon name="simple-icons:bluesky" width={28} height={28} />
-                    </a>
-                </div>
+            </div>
+
+            <div class="hero-meta__socials">
+                <a href="https://www.linkedin.com/in/don-heidmann/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <Icon name="simple-icons:linkedin" width={16} height={16} />
+                </a>
+                <a href="https://github.com/DonHeidi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <Icon name="simple-icons:github" width={16} height={16} />
+                </a>
+                <a href="https://www.bluesky.com/e2e_developer" target="_blank" rel="noopener noreferrer" aria-label="Bluesky">
+                    <Icon name="simple-icons:bluesky" width={16} height={16} />
+                </a>
             </div>
         </aside>
+
+        <div class="hero-main">
+            <h1 class="hero-name">
+                <span class="hero-name__line">Sebastian</span>
+                <span class="hero-name__line">Heitmann</span>
+            </h1>
+
+            <div class="hero-rule"></div>
+
+            <p class="hero-pitch">
+                When architecture, delivery, or team structure becomes the constraint, I help leadership teams make the next technical decisions with clarity.
+            </p>
+
+            <div class="hero-cta-group">
+                <a class="hero-cta" href="#contact">
+                    <span class="hero-cta__text">Book an Introduction Call</span>
+                    <span class="hero-cta__arrow">&rarr;</span>
+                </a>
+                <span class="hero-cta-note">30 minutes. No slides. No pitch.</span>
+            </div>
+        </div>
     </div>
 </section>
 
 <style lang="scss">
     .hero {
-        padding: 3.75rem 144px 4rem 144px;
+        min-height: calc(100vh - 80px);
         display: flex;
-        flex-direction: column;
-        gap: 2.5rem;
+        align-items: center;
+        padding: 80px 80px 120px;
+        max-width: 1440px;
+        margin: 0 auto;
 
-        &-overline {
+        &-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 80px;
+            align-items: start;
+            width: 100%;
+        }
+
+        &-meta {
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: baseline;
-            gap: 0 4px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            line-height: 1.5;
+            flex-direction: column;
+            gap: 20px;
+            padding-top: 24px;
+            border-top: 1px solid var(--v8-border);
 
-            .overline-plain {
-                color: var(--clr-text-primary);
+            &__group {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
             }
 
-            .overline-magenta {
-                color: var(--clr-magenta);
-                font-weight: 700;
+            &__label {
+                font-family: var(--v8-font-mono);
+                font-size: 10px;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--v8-text-muted);
+                line-height: 1;
             }
 
-            .overline-blue {
-                color: var(--clr-blue);
-                font-weight: 700;
+            &__value {
+                font-family: var(--v8-font-mono);
+                font-size: 13px;
+                color: var(--v8-text);
+                line-height: 1.4;
+
+                &--active {
+                    color: var(--v8-accent-status);
+                }
             }
 
-            .overline-green {
-                color: var(--clr-green);
-                font-weight: 700;
+            &__photo-wrap {
+                margin-top: 12px;
+            }
+
+            &__photo {
+                width: 140px;
+                height: 140px;
+                object-fit: cover;
+                filter: var(--v8-photo-filter);
+                transition: filter 0.4s ease;
+
+                &:hover {
+                    filter: var(--v8-photo-filter-hover);
+                }
+            }
+
+            &__socials {
+                display: flex;
+                gap: 16px;
+
+                a {
+                    color: var(--v8-text-muted);
+                    text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    transition: color 0.2s ease;
+
+                    &:hover {
+                        color: var(--v8-text);
+                    }
+
+                    :global(svg) {
+                        color: inherit;
+                        fill: currentColor;
+                    }
+                }
             }
         }
 
         &-main {
-            flex: 1;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 7rem;
-        }
-
-        &-headline-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 40px;
         }
 
-        &-headline {
-            font-family: 'Anton', sans-serif;
-            font-size: clamp(3rem, 5.5vw, 5.5rem);
-            font-weight: 700;
-            color: var(--clr-text-primary);
-            letter-spacing: -2px;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
-        &-positioning {
-            font-family: 'Outfit', sans-serif;
-            font-size: clamp(1.5rem, 2.5vw, 3rem);
-            font-weight: 500;
-            color: rgba(232, 226, 214, 0.92);
-            line-height: 1.2;
-        }
-
-        &-left {
-            flex: 0 1 auto;
+        &-name {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+
+            &__line {
+                font-family: var(--v8-font-display);
+                font-size: clamp(72px, 12vw, 160px);
+                font-weight: 400;
+                line-height: 0.88;
+                letter-spacing: -0.02em;
+                color: var(--v8-text);
+            }
         }
 
-        &-body {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
+        &-rule {
+            width: 48px;
+            height: 2px;
+            background: var(--v8-accent);
         }
 
-        &-body-text {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.375rem;
-            color: rgba(232, 226, 214, 0.92);
-            line-height: 1.55;
+        &-pitch {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
             max-width: 520px;
         }
 
-        &-cta-row {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 2.75rem;
-        }
-
-        &-cta-primary {
-            text-decoration: none;
-            font-family: 'Anton', sans-serif;
-            font-size: 1.125rem;
-            line-height: 1;
-            color: var(--clr-white);
-            background-color: var(--clr-bg-surface);
-            border: 1.5px solid var(--clr-text-primary);
-            border-radius: 100vh;
-            padding: 1rem 2.5rem;
-            backdrop-filter: blur(10px);
-            transition:
-                background-color 0.2s ease,
-                border-color 0.2s ease;
-
-            &:hover {
-                background-color: var(--clr-text-primary);
-                color: #151310;
-            }
-        }
-
-        &-cta-secondary {
-            text-decoration: none;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--clr-text-primary);
-            transition: opacity 0.2s ease;
-
-            &:hover {
-                opacity: 0.7;
-            }
-        }
-
-        &-stats {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 1.5rem;
-            margin-top: 0.5rem;
-
-            &__item {
-                display: flex;
-                flex-direction: column;
-                gap: 0.125rem;
-            }
-
-            &__number {
-                font-family: 'Anton', sans-serif;
-                font-size: 2rem;
-                line-height: 1;
-                letter-spacing: -1px;
-
-                &--magenta { color: var(--clr-magenta); }
-                &--blue { color: var(--clr-blue); }
-                &--green { color: var(--clr-green); }
-                &--gold { color: var(--clr-gold); }
-            }
-
-            &__label {
-                font-family: 'Outfit', sans-serif;
-                font-size: 0.75rem;
-                color: var(--clr-text-muted);
-                letter-spacing: 0.02em;
-            }
-
-            &__divider {
-                width: 1px;
-                height: 32px;
-                background: var(--clr-border-light);
-                flex-shrink: 0;
-            }
-        }
-
-        &-aside {
-            flex-shrink: 0;
+        &-cta-group {
             display: flex;
             flex-direction: column;
-            gap: 0;
-            position: relative;
-            top: -32px;
+            gap: 10px;
+        }
 
-            &__social {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 2rem;
+        &-cta-note {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-muted);
+            letter-spacing: 0.01em;
+        }
+
+        &-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--v8-accent);
+            align-self: flex-start;
+            transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+            &:hover {
+                gap: 20px;
             }
 
-            &__photo {
-                display: block;
-                flex: 0 0 auto;
-                width: 220px;
-                height: 270px;
-                border-radius: 24px;
-                object-fit: cover;
-                transform: rotate(-7deg);
-                box-shadow:
-                    0 8px 32px rgba(0, 0, 0, 0.3),
-                    0 0 0 1px rgba(255, 255, 255, 0.06);
+            &__text {
+                font-family: var(--v8-font-mono);
+                font-size: 12px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--v8-text);
             }
 
-            &__icons {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 1rem;
+            &__arrow {
+                font-size: 16px;
+                color: var(--v8-accent);
+                transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
 
-                a {
-                    color: var(--clr-text-primary);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    text-decoration: none;
-                    transition: opacity 0.2s ease;
-
-                    &:hover {
-                        opacity: 0.7;
-                    }
-
-                    :global(svg) {
-                        color: var(--clr-text-primary);
-                        fill: var(--clr-text-primary);
-                    }
-                }
-
-                #linkedin {
-                    rotate: -7deg;
-                }
-
-                #github {
-                    rotate: 10deg;
-                }
-
-                #bluesky {
-                    rotate: -4deg;
-                }
+            &:hover &__arrow {
+                transform: translateX(4px);
             }
         }
     }
 
-    @media (max-width: 1440px) {
+    @media (max-width: 1024px) {
         .hero {
-            padding: 3.75rem 80px 5rem 80px;
+            padding: 60px 48px 80px;
+
+            &-grid {
+                grid-template-columns: 180px 1fr;
+                gap: 48px;
+            }
         }
     }
 
     @media (max-width: 768px) {
         .hero {
-            padding: 2rem;
+            padding: 40px 24px 60px;
             min-height: auto;
 
-            &-headline {
-                font-size: 3rem;
-                letter-spacing: -1px;
-                white-space: normal;
+            &-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
             }
 
-            &-positioning {
-                font-size: 1.5rem;
+            &-meta {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 24px;
+                order: 1;
+
+                &__photo-wrap {
+                    display: none;
+                }
+
+                &__socials {
+                    width: 100%;
+                }
             }
 
             &-main {
-                flex-direction: column;
+                order: 0;
+                gap: 32px;
             }
 
-            &-left {
-                width: 100%;
-            }
-
-            &-stats {
-                gap: 1.25rem;
-
-                &__number {
-                    font-size: 1.75rem;
-                }
-            }
-
-            &-aside {
-                margin-top: 2rem;
-
-                &__social {
-                    justify-content: flex-start;
-                }
-
-                &__photo {
-                    width: 180px;
-                    height: 220px;
-                    border-radius: 16px;
-                }
-            }
-        }
-    }
-
-    @media (max-width: 375px) {
-        .hero {
-            padding: 1.25rem;
-
-            &-headline {
-                font-size: 2.5rem;
-                letter-spacing: -0.5px;
-            }
-
-            &-positioning {
-                font-size: 1.25rem;
-            }
-
-            &-overline {
-                font-size: 1rem;
-            }
-
-            &-cta-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            &-stats {
-                display: grid;
-                grid-template-columns: 1fr auto 1fr;
-                gap: 1rem;
-
-                &__item:nth-child(n+5) {
-                    grid-column: 1;
-                }
-
-                &__divider:nth-of-type(2) {
-                    display: none;
-                }
-            }
-
-            &-aside {
-                &__photo {
-                    width: 140px;
-                    height: 170px;
-                    border-radius: 12px;
-                }
+            &-name__line {
+                font-size: clamp(48px, 14vw, 80px);
             }
         }
     }

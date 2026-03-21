@@ -1,0 +1,107 @@
+---
+---
+
+<nav class="nav" role="navigation" aria-label="Main Navigation">
+    <a class="nav-logo" href="/">sebastian-heitmann.dev</a>
+    <div class="nav-links">
+        <a class="nav-link" href="#services"><span class="nav-link__idx">01</span> SERVICES</a>
+        <a class="nav-link" href="#process"><span class="nav-link__idx">02</span> PROCESS</a>
+        <a class="nav-link" href="#work"><span class="nav-link__idx">03</span> RESULTS</a>
+        <a class="nav-cta" href="#contact">Contact</a>
+    </div>
+</nav>
+
+<style lang="scss">
+    .nav {
+        margin-top: 3.75rem;
+        padding-inline: 144px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        border-bottom: 1px solid var(--clr-border);
+        padding-bottom: 1.25rem;
+
+        &-logo {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            line-height: 1;
+            color: var(--clr-text-primary);
+            text-transform: uppercase;
+        }
+
+        &-links {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2.25rem;
+        }
+
+        &-link {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            line-height: 1;
+            color: var(--clr-text-muted);
+            transition: color 0.2s ease;
+
+            &__idx {
+                color: var(--clr-accent);
+                font-size: 9px;
+                margin-right: 4px;
+                opacity: 0.6;
+            }
+
+            &:hover {
+                color: var(--clr-text-primary);
+            }
+        }
+
+        &-cta {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1;
+            color: var(--clr-accent);
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .nav {
+            padding: 2rem;
+            padding-bottom: 1.25rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+
+            &-links {
+                flex-wrap: wrap;
+                gap: 1rem 1.5rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .nav {
+            padding: 1.25rem;
+            padding-bottom: 1rem;
+
+            &-link {
+                font-size: 10px;
+            }
+        }
+    }
+</style>

@@ -1,0 +1,235 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<footer class="footer">
+    <div class="footer__top">
+        <div class="footer__brand">
+            <div class="footer__brand-row">
+                <span class="footer__status"></span>
+                <p class="footer__logo">SH.DEV</p>
+            </div>
+            <p class="footer__tagline">Fractional CTO who turns outgrown processes into systems that scale</p>
+        </div>
+
+        <div class="footer__links">
+            <a class="footer__link" href="#services">Services</a>
+            <a class="footer__link" href="#process">Process</a>
+            <a class="footer__link" href="#work">Results</a>
+            <a class="footer__link" href="#contact">Contact</a>
+        </div>
+
+        <div class="footer__socials">
+            <a
+                class="footer__social-link"
+                href="https://linkedin.com/in/sebastian-heitmann"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+            >
+                <Icon name="simple-icons:linkedin" width={18} height={18} />
+            </a>
+            <a
+                class="footer__social-link"
+                href="https://github.com/sebastian-heitmann"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+            >
+                <Icon name="simple-icons:github" width={18} height={18} />
+            </a>
+            <a
+                class="footer__social-link"
+                href="https://bsky.app/profile/sebastian-heitmann.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Bluesky"
+            >
+                <Icon name="simple-icons:bluesky" width={16} height={16} />
+            </a>
+        </div>
+    </div>
+
+    <hr class="footer__divider" />
+
+    <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 Sebastian Heitmann. All rights reserved.</p>
+        <div class="footer__legal">
+            <a class="footer__legal-link" href="/privacy">Privacy Policy</a>
+            <a class="footer__legal-link" href="/imprint">Imprint</a>
+        </div>
+        <p class="footer__sys-info">SYS.BUILD // v6.0.0</p>
+    </div>
+</footer>
+
+<style lang="scss">
+    .footer {
+        padding: 40px 144px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        border-top: 1px solid var(--clr-border);
+        background: var(--clr-bg-surface);
+
+        &__top {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        &__brand {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        &__brand-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+        }
+
+        &__status {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--clr-accent);
+            box-shadow: 0 0 6px rgba(0, 229, 160, 0.4);
+            flex-shrink: 0;
+        }
+
+        &__logo {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--clr-text-primary);
+            letter-spacing: 0.08em;
+        }
+
+        &__tagline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6875rem;
+            color: var(--clr-text-muted);
+        }
+
+        &__links {
+            display: flex;
+            flex-direction: row;
+            gap: 1.75rem;
+        }
+
+        &__link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--clr-text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: var(--clr-accent);
+            }
+        }
+
+        &__socials {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+        }
+
+        &__social-link {
+            color: var(--clr-text-primary);
+            opacity: 0.3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s ease, color 0.2s ease;
+
+            &:hover {
+                opacity: 0.8;
+                color: var(--clr-accent);
+            }
+        }
+
+        &__divider {
+            border: none;
+            border-top: 1px solid var(--clr-border-light);
+            margin: 0;
+        }
+
+        &__bottom {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        &__copyright {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6875rem;
+            color: var(--clr-text-muted);
+        }
+
+        &__legal {
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+        }
+
+        &__legal-link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6875rem;
+            color: var(--clr-text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: var(--clr-accent);
+            }
+        }
+
+        &__sys-info {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.5625rem;
+            color: var(--clr-text-muted);
+            opacity: 0.4;
+            letter-spacing: 0.15em;
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .footer { padding: 40px 80px 28px; }
+    }
+
+    @media (max-width: 768px) {
+        .footer {
+            padding: 32px 2rem 24px;
+
+            &__top {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            &__bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .footer {
+            padding: 28px 1.25rem 20px;
+
+            &__links {
+                flex-wrap: wrap;
+                gap: 1rem 1.5rem;
+            }
+        }
+    }
+</style>

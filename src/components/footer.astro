@@ -3,216 +3,92 @@ import { Icon } from 'astro-icon/components';
 ---
 
 <footer class="footer">
-    <div class="footer__top">
-        <div class="footer__brand">
-            <p class="footer__logo">sebastian-heitmann.dev</p>
-            <p class="footer__tagline">Fractional CTO who turns outgrown processes into systems that scale</p>
+    <div class="footer-inner">
+        <span class="footer-copy">&copy; 2026 Sebastian Heitmann</span>
+        <div class="footer-links">
+            <a href="/privacy" class="footer-link">Privacy</a>
+            <a href="/imprint" class="footer-link">Imprint</a>
         </div>
-
-        <div class="footer__links">
-            <a class="footer__link" href="#services">Services</a>
-            <a class="footer__link" href="#process">Process</a>
-            <a class="footer__link" href="#work">Results</a>
-            <a class="footer__link" href="#contact">Contact</a>
-        </div>
-
-        <div class="footer__socials">
-            <a
-                class="footer__social-link"
-                href="https://linkedin.com/in/sebastian-heitmann"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-            >
-                <Icon name="simple-icons:linkedin" width={20} height={20} />
+        <div class="footer-socials">
+            <a href="https://www.linkedin.com/in/don-heidmann/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <Icon name="simple-icons:linkedin" width={14} height={14} />
             </a>
-            <a
-                class="footer__social-link"
-                href="https://github.com/sebastian-heitmann"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-            >
-                <Icon name="simple-icons:github" width={20} height={20} />
+            <a href="https://github.com/DonHeidi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <Icon name="simple-icons:github" width={14} height={14} />
             </a>
-            <a
-                class="footer__social-link"
-                href="https://bsky.app/profile/sebastian-heitmann.dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Bluesky"
-            >
-                <Icon name="simple-icons:bluesky" width={18} height={18} />
+            <a href="https://www.bluesky.com/e2e_developer" target="_blank" rel="noopener noreferrer" aria-label="Bluesky">
+                <Icon name="simple-icons:bluesky" width={14} height={14} />
             </a>
         </div>
-    </div>
-
-    <hr class="footer__divider" />
-
-    <div class="footer__bottom">
-        <p class="footer__copyright">&copy; 2026 Sebastian Heitmann. All rights reserved.</p>
-        <div class="footer__legal">
-            <a class="footer__legal-link" href="/privacy">Privacy Policy</a>
-            <a class="footer__legal-link" href="/imprint">Imprint</a>
-        </div>
-        <p class="footer__built-with">Built with ❤️ and 🤖.</p>
     </div>
 </footer>
 
 <style lang="scss">
     .footer {
-        padding: 48px 144px 32px;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-        border-top: 1px solid var(--clr-border-light);
-        background: #1a1611;
+        padding: 32px 80px;
+        max-width: 1440px;
+        margin: 0 auto;
+        border-top: 1px solid var(--v8-border);
 
-        &__top {
+        &-inner {
             display: flex;
-            flex-direction: row;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
-            gap: 2rem;
         }
 
-        &__brand {
+        &-copy {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-muted);
+        }
+
+        &-links {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            gap: 24px;
         }
 
-        &__logo {
-            font-family: 'Anton', sans-serif;
-            font-size: 1.375rem;
-            font-weight: 700;
-            color: var(--clr-text-primary);
-            letter-spacing: -0.5px;
-        }
-
-        &__tagline {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.8125rem;
-            color: var(--clr-text-muted);
-        }
-
-        &__links {
-            display: flex;
-            flex-direction: row;
-            gap: 2rem;
-        }
-
-        &__link {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: rgba(232, 226, 214, 0.6);
+        &-link {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-muted);
             text-decoration: none;
             transition: color 0.2s ease;
 
             &:hover {
-                color: var(--clr-text-primary);
+                color: var(--v8-text);
             }
         }
 
-        &__socials {
+        &-socials {
             display: flex;
-            flex-direction: row;
-            align-items: center;
             gap: 16px;
-        }
 
-        &__social-link {
-            color: rgba(232, 226, 214, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s ease;
+            a {
+                color: var(--v8-text-muted);
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                transition: color 0.2s ease;
 
-            &:hover {
-                color: var(--clr-text-primary);
+                &:hover {
+                    color: var(--v8-text);
+                }
+
+                :global(svg) {
+                    fill: currentColor;
+                }
             }
-        }
-
-        &__divider {
-            border: none;
-            border-top: 1px solid var(--clr-border-dark);
-            margin: 0;
-        }
-
-        &__bottom {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-        }
-
-        &__copyright {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
-            color: rgba(232, 226, 214, 0.35);
-        }
-
-        &__legal {
-            display: flex;
-            flex-direction: row;
-            gap: 1.5rem;
-        }
-
-        &__legal-link {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
-            color: rgba(232, 226, 214, 0.35);
-            text-decoration: none;
-            transition: color 0.2s ease;
-
-            &:hover {
-                color: rgba(232, 226, 214, 0.7);
-            }
-        }
-
-        &__built-with {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.6875rem;
-            color: rgba(232, 226, 214, 0.2);
-        }
-    }
-
-    @media (max-width: 1440px) {
-        .footer {
-            padding: 48px 80px 32px;
         }
     }
 
     @media (max-width: 768px) {
         .footer {
-            padding: 40px 2rem 28px;
+            padding: 24px;
 
-            &__top {
+            &-inner {
                 flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            &__bottom {
-                flex-direction: column;
+                gap: 16px;
                 align-items: flex-start;
-                gap: 0.75rem;
-            }
-        }
-    }
-
-    @media (max-width: 375px) {
-        .footer {
-            padding: 32px 1.25rem 24px;
-
-            &__links {
-                flex-wrap: wrap;
-                gap: 1rem 1.5rem;
-            }
-
-            &__logo {
-                font-size: 1.125rem;
             }
         }
     }

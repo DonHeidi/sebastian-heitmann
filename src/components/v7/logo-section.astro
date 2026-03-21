@@ -1,0 +1,120 @@
+---
+---
+
+<section class="logobar">
+    <div class="logobar__group">
+        <p class="logobar__label">Previously at</p>
+        <div class="logobar__names">
+            <span class="logobar__name">Jung von Matt</span>
+            <span class="logobar__name">Synergy</span>
+            <span class="logobar__name">Granny &amp; Smith</span>
+            <span class="logobar__name">OFFIS</span>
+        </div>
+    </div>
+
+    <span class="logobar__divider"></span>
+
+    <div class="logobar__group">
+        <p class="logobar__label">Currently working with</p>
+        <div class="logobar__names">
+            <span class="logobar__name">Pool Position GmbH</span>
+            <span class="logobar__name">mobilespace GmbH</span>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .logobar {
+        border-top: 1px solid var(--clr-border);
+        border-bottom: 1px solid var(--clr-border);
+        background: var(--clr-bg-surface);
+        padding: 28px 144px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 4rem;
+
+        &__group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        &__label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--clr-text-muted);
+        }
+
+        &__names {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        &__name {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 16px;
+            color: var(--clr-text-primary);
+            opacity: 0.4;
+            white-space: nowrap;
+            transition: opacity 0.3s ease;
+
+            &:hover {
+                opacity: 0.7;
+                color: var(--clr-accent);
+            }
+        }
+
+        &__divider {
+            width: 1px;
+            height: 48px;
+            background: var(--clr-border-light);
+            flex-shrink: 0;
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .logobar {
+            padding: 28px 80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .logobar {
+            padding: 28px 2rem;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            &__divider {
+                width: 60px;
+                height: 1px;
+            }
+
+            &__names {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.25rem 2rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .logobar {
+            padding: 24px 1.25rem;
+
+            &__names {
+                gap: 1rem 1.5rem;
+            }
+
+            &__name {
+                font-size: 14px;
+            }
+        }
+    }
+</style>

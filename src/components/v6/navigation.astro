@@ -1,0 +1,140 @@
+---
+---
+
+<nav class="nav" role="navigation" aria-label="Main Navigation">
+    <div class="nav-brand">
+        <span class="nav-status"></span>
+        <a class="nav-logo" href="/">SH.DEV</a>
+        <span class="nav-ver">v6.0</span>
+    </div>
+    <div class="nav-links">
+        <a class="nav-link" href="#services"><span class="nav-link__ref">01</span>SERVICES</a>
+        <a class="nav-link" href="#process"><span class="nav-link__ref">02</span>PROCESS</a>
+        <a class="nav-link" href="#work"><span class="nav-link__ref">03</span>RESULTS</a>
+        <a class="nav-cta" href="#contact">INITIATE CONTACT</a>
+    </div>
+</nav>
+
+<style lang="scss">
+    .nav {
+        margin-top: 0;
+        padding: 1.25rem 144px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        border-bottom: 1px solid var(--clr-border);
+
+        &-brand {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+
+        &-status {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--clr-accent);
+            box-shadow: 0 0 8px rgba(0, 229, 160, 0.5);
+            flex-shrink: 0;
+        }
+
+        &-logo {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: var(--clr-text-primary);
+            letter-spacing: 0.08em;
+        }
+
+        &-ver {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.625rem;
+            color: var(--clr-text-muted);
+            line-height: 1;
+            padding: 2px 6px;
+            border: 1px solid var(--clr-border);
+            border-radius: 2px;
+        }
+
+        &-links {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        &-link {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            line-height: 1;
+            color: var(--clr-text-muted);
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            &__ref {
+                color: var(--clr-accent);
+                font-size: 9px;
+                opacity: 0.6;
+            }
+
+            &:hover {
+                color: var(--clr-text-primary);
+            }
+        }
+
+        &-cta {
+            flex-shrink: 0;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            line-height: 1;
+            color: var(--clr-bg-primary);
+            background: var(--clr-accent);
+            padding: 8px 20px;
+            border-radius: 2px;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.85;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .nav {
+            padding: 1rem 2rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+
+            &-links {
+                flex-wrap: wrap;
+                gap: 0.75rem 1.25rem;
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .nav {
+            padding: 1rem 1.25rem;
+
+            &-link {
+                font-size: 10px;
+            }
+        }
+    }
+</style>

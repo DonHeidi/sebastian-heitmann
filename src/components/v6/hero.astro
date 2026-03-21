@@ -1,0 +1,422 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import picture from '../../assets/fb.jpg';
+---
+
+<section class="hero reveal">
+    <div class="hero-content">
+        <div class="hero-left">
+            <div class="hero-ref">
+                <span class="hero-ref__code">REF—000</span>
+                <span class="hero-ref__status">ACTIVE</span>
+            </div>
+
+            <p class="hero-overline">
+                I turn <span class="hero-overline__accent">outgrown processes</span> into <span class="hero-overline__accent">systems that scale</span>.
+            </p>
+
+            <div class="hero-headline-group">
+                <h1 class="hero-headline">Sebastian<br/>Heitmann</h1>
+                <div class="hero-designation">
+                    <span class="hero-designation__line"></span>
+                    <p class="hero-designation__text">Fractional CTO & Product Engineer</p>
+                </div>
+            </div>
+
+            <div class="hero-body">
+                <p class="hero-body-text">I help founders and product teams turn ambiguity into working software and scalable operations — without the overhead of a full-time CTO.</p>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number">10+</span>
+                    <span class="hero-stats__label">YRS.ACTIVE</span>
+                </div>
+                <div class="hero-stats__sep">/</div>
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number">50+</span>
+                    <span class="hero-stats__label">PROJECTS</span>
+                </div>
+                <div class="hero-stats__sep">/</div>
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number">8</span>
+                    <span class="hero-stats__label">INDUSTRIES</span>
+                </div>
+                <div class="hero-stats__sep">/</div>
+                <div class="hero-stats__item">
+                    <span class="hero-stats__number">3</span>
+                    <span class="hero-stats__label">COUNTRIES</span>
+                </div>
+            </div>
+
+            <div class="hero-cta-row">
+                <a class="hero-cta-primary" href="#contact">Book a Discovery Call</a>
+                <a class="hero-cta-secondary" href="#services">See how I work <span class="hero-cta-secondary__arrow">&#8594;</span></a>
+            </div>
+        </div>
+
+        <aside class="hero-aside">
+            <div class="hero-aside__frame">
+                <span class="hero-aside__corner hero-aside__corner--tl"></span>
+                <span class="hero-aside__corner hero-aside__corner--tr"></span>
+                <span class="hero-aside__corner hero-aside__corner--bl"></span>
+                <span class="hero-aside__corner hero-aside__corner--br"></span>
+                <Image
+                    loading="eager"
+                    class="hero-aside__photo"
+                    src={picture}
+                    alt="Sebastian Heitmann"
+                    width={280}
+                    height={340}
+                />
+                <span class="hero-aside__caption">OPERATOR // S.HEITMANN</span>
+            </div>
+            <div class="hero-aside__icons">
+                <a href="https://www.linkedin.com/in/don-heidmann/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <Icon name="simple-icons:linkedin" width={20} height={20} />
+                </a>
+                <a href="https://github.com/DonHeidi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <Icon name="simple-icons:github" width={20} height={20} />
+                </a>
+                <a href="https://www.bluesky.com/e2e_developer" target="_blank" rel="noopener noreferrer" aria-label="Bluesky">
+                    <Icon name="simple-icons:bluesky" width={18} height={18} />
+                </a>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<style lang="scss">
+    .hero {
+        padding: 4rem 144px 4.5rem;
+
+        &-content {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            column-gap: 80px;
+            align-items: center;
+        }
+
+        &-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        &-ref {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+
+            &__code {
+                font-family: 'Space Mono', monospace;
+                font-size: 10px;
+                letter-spacing: 0.15em;
+                color: var(--clr-text-muted);
+            }
+
+            &__status {
+                font-family: 'Space Mono', monospace;
+                font-size: 9px;
+                letter-spacing: 0.2em;
+                color: var(--clr-accent);
+                padding: 2px 8px;
+                border: 1px solid var(--clr-accent-dim);
+                border-radius: 2px;
+            }
+        }
+
+        &-overline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--clr-text-muted);
+
+            &__accent {
+                color: var(--clr-accent);
+                font-weight: 700;
+            }
+        }
+
+        &-headline-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        &-headline {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 88px;
+            line-height: 0.9;
+            letter-spacing: -2px;
+            color: var(--clr-text-primary);
+            text-transform: uppercase;
+        }
+
+        &-designation {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+
+            &__line {
+                width: 32px;
+                height: 2px;
+                background: var(--clr-accent);
+                flex-shrink: 0;
+            }
+
+            &__text {
+                font-family: 'IBM Plex Mono', monospace;
+                font-size: 14px;
+                color: var(--clr-text-muted);
+                letter-spacing: 0.04em;
+            }
+        }
+
+        &-body-text {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--clr-text-primary);
+            max-width: 480px;
+            opacity: 0.75;
+        }
+
+        &-stats {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            padding: 16px 0;
+            border-top: 1px solid var(--clr-border);
+            border-bottom: 1px solid var(--clr-border);
+
+            &__item {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            &__number {
+                font-family: 'Rajdhani', sans-serif;
+                font-weight: 700;
+                font-size: 40px;
+                line-height: 1;
+                color: var(--clr-text-primary);
+            }
+
+            &__label {
+                font-family: 'Space Mono', monospace;
+                font-size: 9px;
+                letter-spacing: 0.18em;
+                color: var(--clr-text-muted);
+            }
+
+            &__sep {
+                font-family: 'Space Mono', monospace;
+                font-size: 18px;
+                color: var(--clr-border);
+                align-self: flex-start;
+                margin-top: 8px;
+            }
+        }
+
+        &-cta-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        &-cta-primary {
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            line-height: 1;
+            color: var(--clr-bg-primary);
+            background: var(--clr-accent);
+            padding: 14px 36px;
+            border-radius: 2px;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.85;
+            }
+        }
+
+        &-cta-secondary {
+            text-decoration: none;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--clr-text-muted);
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            &__arrow {
+                color: var(--clr-accent);
+                transition: transform 0.2s ease;
+            }
+
+            &:hover {
+                color: var(--clr-text-primary);
+
+                .hero-cta-secondary__arrow {
+                    transform: translateX(3px);
+                }
+            }
+        }
+
+        &-aside {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+
+            &__frame {
+                position: relative;
+                padding: 8px;
+            }
+
+            &__corner {
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                pointer-events: none;
+
+                &--tl {
+                    top: 0; left: 0;
+                    border-top: 1px solid var(--clr-accent);
+                    border-left: 1px solid var(--clr-accent);
+                }
+                &--tr {
+                    top: 0; right: 0;
+                    border-top: 1px solid var(--clr-accent);
+                    border-right: 1px solid var(--clr-accent);
+                }
+                &--bl {
+                    bottom: 0; left: 0;
+                    border-bottom: 1px solid var(--clr-accent);
+                    border-left: 1px solid var(--clr-accent);
+                }
+                &--br {
+                    bottom: 0; right: 0;
+                    border-bottom: 1px solid var(--clr-accent);
+                    border-right: 1px solid var(--clr-accent);
+                }
+            }
+
+            &__photo {
+                width: 100%;
+                max-width: 280px;
+                height: auto;
+                object-fit: cover;
+                filter: saturate(0.3) contrast(1.1) brightness(0.95);
+                mix-blend-mode: luminosity;
+            }
+
+            &__caption {
+                position: absolute;
+                bottom: 16px;
+                left: 16px;
+                font-family: 'Space Mono', monospace;
+                font-size: 8px;
+                letter-spacing: 0.2em;
+                color: var(--clr-accent);
+                opacity: 0.6;
+                text-transform: uppercase;
+            }
+
+            &__icons {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+
+                a {
+                    color: var(--clr-text-primary);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-decoration: none;
+                    opacity: 0.3;
+                    transition: opacity 0.2s ease, color 0.2s ease;
+
+                    &:hover {
+                        opacity: 0.8;
+                        color: var(--clr-accent);
+                    }
+
+                    :global(svg) {
+                        color: currentColor;
+                        fill: currentColor;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .hero {
+            padding: 3.5rem 80px 4rem;
+
+            &-headline {
+                font-size: clamp(3rem, 6vw, 88px);
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            padding: 2rem;
+
+            &-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            &-headline {
+                font-size: 48px;
+            }
+
+            &-aside {
+                order: -1;
+                align-items: flex-start;
+
+                &__photo {
+                    max-width: 200px;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 375px) {
+        .hero {
+            padding: 1.25rem;
+
+            &-headline {
+                font-size: 40px;
+            }
+
+            &-cta-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            &-stats {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+        }
+    }
+</style>

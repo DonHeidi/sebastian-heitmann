@@ -4,35 +4,77 @@
 <nav class="nav">
     <a class="nav-logo" href="/">sebastian-heitmann<span class="nav-logo__dot">.</span>dev</a>
     <div class="nav-actions">
-        <button class="nav-theme-toggle" type="button" aria-label="Toggle theme">
-            <svg class="nav-theme-toggle__icon nav-theme-toggle__icon--sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-            <svg class="nav-theme-toggle__icon nav-theme-toggle__icon--moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-        </button>
+        <div class="nav-theme-toggle" role="radiogroup" aria-label="Theme">
+            <button class="nav-theme-toggle__btn" type="button" data-theme="system" aria-label="System theme">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+            </button>
+            <button class="nav-theme-toggle__btn" type="button" data-theme="light" aria-label="Light theme">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+            <button class="nav-theme-toggle__btn" type="button" data-theme="dark" aria-label="Dark theme">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
         <a class="nav-cta" href="#contact">Book a Call</a>
     </div>
 </nav>
 
 <script>
-    const toggle = document.querySelector('.nav-theme-toggle');
-    toggle?.addEventListener('click', () => {
+    function applyTheme(preference: string) {
         const html = document.documentElement;
-        const isDark = html.classList.contains('dark');
         html.classList.remove('dark', 'light');
-        const next = isDark ? 'light' : 'dark';
-        html.classList.add(next);
-        localStorage.setItem('theme', next);
+        if (preference === 'dark' || preference === 'light') {
+            html.classList.add(preference);
+        } else {
+            // system
+            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            html.classList.add(systemDark ? 'dark' : 'light');
+        }
+    }
+
+    function updateActiveBtn(preference: string) {
+        document.querySelectorAll('.nav-theme-toggle__btn').forEach(btn => {
+            const isActive = (btn as HTMLElement).dataset.theme === preference;
+            btn.classList.toggle('nav-theme-toggle__btn--active', isActive);
+        });
+    }
+
+    // Set initial active state
+    const stored = localStorage.getItem('theme') || 'system';
+    updateActiveBtn(stored);
+
+    // Handle clicks
+    document.querySelectorAll('.nav-theme-toggle__btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const preference = (btn as HTMLElement).dataset.theme!;
+            localStorage.setItem('theme', preference);
+            applyTheme(preference);
+            updateActiveBtn(preference);
+        });
+    });
+
+    // Listen for OS theme changes when in system mode
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        const current = localStorage.getItem('theme') || 'system';
+        if (current === 'system') {
+            applyTheme('system');
+        }
     });
 </script>
 
@@ -69,26 +111,31 @@
         }
 
         &-theme-toggle {
-            background: none;
-            border: 1px solid var(--v8-border);
-            color: var(--v8-text-muted);
-            cursor: pointer;
-            padding: 8px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: border-color 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--v8-border);
 
-            &:hover {
-                border-color: var(--v8-accent);
-                color: var(--v8-accent);
-            }
+            &__btn {
+                background: none;
+                border: none;
+                color: var(--v8-text-muted);
+                cursor: pointer;
+                padding: 6px 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: color 0.2s ease, background-color 0.2s ease;
 
-            &__icon {
-                display: block;
+                &:not(:last-child) {
+                    border-right: 1px solid var(--v8-border);
+                }
 
-                &--sun {
-                    display: none;
+                &:hover {
+                    color: var(--v8-accent);
+                }
+
+                &--active {
+                    color: var(--v8-accent);
+                    background: var(--v8-bg-surface);
                 }
             }
         }
@@ -109,11 +156,6 @@
                 color: var(--v8-accent);
             }
         }
-    }
-
-    :global(html.dark) .nav-theme-toggle {
-        .nav-theme-toggle__icon--sun { display: block; }
-        .nav-theme-toggle__icon--moon { display: none; }
     }
 
     @media (max-width: 768px) {

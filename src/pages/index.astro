@@ -2,36 +2,46 @@
 import Navigation from '../components/navigation.astro';
 import Hero from '../components/hero.astro';
 import LogoSection from '../components/logo-section.astro';
-import ServicesSection from '../components/services-section.astro';
-import HowIWorkSection from '../components/how-i-work-section.astro';
-import SuccessStoriesSection from '../components/success-stories-section.astro';
+import SituationsSection from '../components/situations-section.astro';
+import ProofSection from '../components/proof-section.astro';
 import ContactSection from '../components/contact-section.astro';
 import Footer from '../components/footer.astro';
-import VersionSwitcher from '../components/version-switcher.astro';
 ---
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sebastian Heitmann - Fractional CTO</title>
+        <title>Sebastian Heitmann — Fractional CTO</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+        <script is:inline>
+            (function() {
+                const stored = localStorage.getItem('theme');
+                if (stored) {
+                    document.documentElement.classList.add(stored);
+                } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    document.documentElement.classList.add('light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
     </head>
     <body>
-        <div class="site-container">
-            <Navigation />
+        <Navigation />
+        <main>
             <Hero />
             <LogoSection />
-            <ServicesSection />
-            <HowIWorkSection />
-            <SuccessStoriesSection />
+            <SituationsSection />
+            <ProofSection />
             <ContactSection />
-            <Footer />
-        </div>
-        <VersionSwitcher currentVersion="v1" />
+        </main>
+        <Footer />
     </body>
 </html>
 
 <script>
-    // Scroll-triggered reveal animations — wait for DOM ready
     document.addEventListener('DOMContentLoaded', () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -47,21 +57,17 @@ import VersionSwitcher from '../components/version-switcher.astro';
 </script>
 
 <style lang="scss" is:global>
-    @font-face { font-family: 'Anton'; src: url('/fonts/Anton-Regular.ttf') format('truetype'); }
-    @font-face { font-family: 'AntonSC'; src: url('/fonts/AntonSC-Regular.ttf') format('truetype'); }
     @font-face {
-        font-family: 'Outfit';
+        font-family: 'IBM Plex Mono';
         font-style: normal;
-        font-weight: 100 900;
-        src: url('/fonts/Outfit-latin.woff2') format('woff2');
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        font-weight: 400;
+        src: url('/fonts/IBMPlexMono-Regular.woff2') format('woff2');
     }
     @font-face {
-        font-family: 'Outfit';
+        font-family: 'IBM Plex Mono';
         font-style: normal;
-        font-weight: 100 900;
-        src: url('/fonts/Outfit-latin-ext.woff2') format('woff2');
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        font-weight: 700;
+        src: url('/fonts/IBMPlexMono-Bold.woff2') format('woff2');
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -80,108 +86,69 @@ import VersionSwitcher from '../components/version-switcher.astro';
     p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
     p { text-wrap: pretty; }
     h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
-    #root, #__next { isolation: isolate; }
+
+    html.dark {
+        --v8-bg: #0C0C0C;
+        --v8-bg-surface: #141414;
+        --v8-text: #F2F0EB;
+        --v8-text-muted: rgba(242, 240, 235, 0.4);
+        --v8-text-secondary: rgba(242, 240, 235, 0.7);
+        --v8-text-tertiary: rgba(242, 240, 235, 0.6);
+        --v8-text-dim: rgba(242, 240, 235, 0.5);
+        --v8-text-faint: rgba(242, 240, 235, 0.2);
+        --v8-accent: #FF3B00;
+        --v8-accent-status: #00DC82;
+        --v8-border: rgba(242, 240, 235, 0.08);
+        --v8-border-accent: rgba(255, 59, 0, 0.3);
+        --v8-metric-color: var(--v8-text);
+        --v8-metric-label-color: var(--v8-text-muted);
+        --v8-photo-filter: saturate(0) contrast(1.1) brightness(0.9);
+        --v8-photo-filter-hover: saturate(0.8) contrast(1.05);
+    }
+
+    html.light {
+        --v8-bg: #F7F6F2;
+        --v8-bg-surface: #ECEAE4;
+        --v8-text: #141413;
+        --v8-text-muted: rgba(20, 20, 19, 0.5);
+        --v8-text-secondary: rgba(20, 20, 19, 0.75);
+        --v8-text-tertiary: rgba(20, 20, 19, 0.65);
+        --v8-text-dim: rgba(20, 20, 19, 0.55);
+        --v8-text-faint: rgba(20, 20, 19, 0.25);
+        --v8-accent: #B82A00;
+        --v8-accent-status: #1A7A52;
+        --v8-metric-color: #B82A00;
+        --v8-metric-label-color: rgba(20, 20, 19, 0.6);
+        --v8-border: rgba(20, 20, 19, 0.16);
+        --v8-border-accent: rgba(184, 42, 0, 0.35);
+        --v8-photo-filter: saturate(0.85) contrast(1.08);
+        --v8-photo-filter-hover: saturate(1) contrast(1);
+    }
 
     :root {
-        /* Warm palette */
-        --clr-bg-primary: #28231d;
-        --clr-bg-surface: rgba(55, 48, 40, 0.7);
-        --clr-text-primary: #E8E2D6;
-        --clr-text-muted: rgba(232, 226, 214, 0.5);
-        --clr-white: #fff;
-        --clr-black: #000;
-
-        /* Desaturated, timeless accents */
-        --clr-terracotta: #C45D3E;
-        --clr-teal: #4A7F8B;
-        --clr-sage: #6B9E78;
-        --clr-amber: #C4983C;
-
-        /* Legacy aliases for components still referencing old names */
-        --clr-magenta: var(--clr-terracotta);
-        --clr-blue: var(--clr-teal);
-        --clr-green: var(--clr-sage);
-        --clr-gold: var(--clr-amber);
-
-        --clr-border-light: rgba(232, 226, 214, 0.08);
-        --clr-border-dark: rgba(232, 226, 214, 0.06);
-
-        --fnt-family-accent: 'AntonSC';
-        --fnt-family-primary: 'Outfit';
-        --fnt-family-secondary: 'Anton';
+        --v8-font-display: 'Instrument Serif', Georgia, serif;
+        --v8-font-body: 'DM Sans', system-ui, sans-serif;
+        --v8-font-mono: 'IBM Plex Mono', monospace;
     }
 
-    /* Scroll-reveal: sections observed by IntersectionObserver */
     .reveal {
         opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .reveal.revealed {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* Stagger: children animate when parent section gets .revealed */
-    .stagger {
-        opacity: 0;
         transform: translateY(16px);
-        transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-                    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .revealed .stagger {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    .stagger-1 { transition-delay: 0.1s; }
-    .stagger-2 { transition-delay: 0.2s; }
-    .stagger-3 { transition-delay: 0.3s; }
-    .stagger-4 { transition-delay: 0.4s; }
-
-    /* Fix typewriter measure element leaking into document flow */
-    .typewriter-measure {
-        position: fixed !important;
-        top: -9999px;
-        left: -9999px;
-    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
 
     @media (prefers-reduced-motion: reduce) {
-        .reveal, .stagger {
-            opacity: 1;
-            transform: none;
-            transition: none;
-        }
+        .reveal { opacity: 1; transform: none; transition: none; }
     }
 </style>
 
 <style lang="scss">
     body {
-        background-color: #28231d;
-        background-image:
-            url('/blueprint-grid.svg'),
-            /* Warm accent spots */
-            radial-gradient(circle at 80% 6%, rgba(196, 93, 62, 0.09) 0%, transparent 12%),
-            radial-gradient(circle at 15% 35%, rgba(74, 127, 139, 0.07) 0%, transparent 10%),
-            radial-gradient(circle at 70% 52%, rgba(196, 93, 62, 0.05) 0%, transparent 10%),
-            radial-gradient(circle at 25% 75%, rgba(74, 127, 139, 0.07) 0%, transparent 12%),
-            radial-gradient(circle at 85% 88%, rgba(196, 93, 62, 0.04) 0%, transparent 10%),
-            /* Warm base tones */
-            radial-gradient(ellipse at 85% 5%, #38312a 0%, transparent 35%),
-            radial-gradient(ellipse at 50% 8%, #322b24 0%, transparent 30%),
-            radial-gradient(ellipse at 10% 20%, #362f2a 0%, transparent 30%),
-            radial-gradient(ellipse at 50% 25%, #322b24 0%, transparent 25%),
-            radial-gradient(ellipse at 90% 45%, #362f2a 0%, transparent 30%),
-            radial-gradient(ellipse at 10% 60%, #362f2a 0%, transparent 28%),
-            radial-gradient(ellipse at 50% 65%, #302a23 0%, transparent 25%),
-            radial-gradient(ellipse at 10% 78%, #362f2a 0%, transparent 28%),
-            radial-gradient(ellipse at 50% 80%, #302a23 0%, transparent 25%);
+        background-color: var(--v8-bg);
+        color: var(--v8-text);
         min-height: 100vh;
-        color: var(--clr-text-primary);
-    }
-
-    .site-container {
-        max-width: 1440px;
-        margin: 0 auto;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 </style>

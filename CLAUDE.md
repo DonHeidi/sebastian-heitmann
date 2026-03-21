@@ -2,15 +2,14 @@
 
 ## Project Overview
 
-Astro-based personal portfolio/fractional CTO landing page for Sebastian Heitmann.
+Astro-based personal portfolio/fractional CTO landing page for Sebastian Heitmann. Precision Swiss design with light/dark mode support.
 
 ## Tech Stack
 
 - **Framework:** Astro 6
 - **Runtime/Package Manager:** Bun (managed via mise)
 - **Styling:** Scoped SCSS in components, CSS custom properties for theming
-- **Icons:** astro-icon with @iconify-json/mdi and @iconify-json/simple-icons
-- **Fonts:** Anton, AntonSC (display), SpaceGrotesk (body) — self-hosted in public/fonts/
+- **Fonts:** Instrument Serif (display), DM Sans (body) via Google Fonts; IBM Plex Mono (mono) self-hosted in public/fonts/
 
 ## Commands
 
@@ -25,25 +24,20 @@ bun install       # Install dependencies
 
 ```
 src/
-├── pages/index.astro              # Main landing page + global styles
+├── pages/
+│   ├── index.astro              # Main landing page + global styles + theme variables
+│   └── cases/[id].astro         # Case study detail pages
 ├── components/
-│   ├── header.astro               # Hero section
-│   ├── navigation.astro           # Top nav bar
-│   ├── logo-section.astro         # Trust/company logos
-│   ├── highlight-section.astro    # Feature highlights grid
-│   ├── highlight.astro            # Individual highlight card
-│   ├── use-cases.astro            # Use cases section
-│   ├── grid-background-container.astro  # Reusable grid background
-│   ├── copy/                      # Typography components
-│   │   ├── headline.astro         # H1-H6, supports `element` and `as` props
-│   │   ├── body.astro             # Body text
-│   │   ├── overline.astro         # Labels/overlines
-│   │   ├── highlight.astro        # Inline color highlights (magenta/blue/green)
-│   │   └── typewriter.astro       # Animated typing effect
-│   └── interactive/
-│       └── call-to-action.astro   # CTA button (primary/secondary variants)
-├── assets/                        # Images (profile photo, logos)
-public/fonts/                      # Self-hosted font files
+│   ├── navigation.astro         # Top nav bar with theme toggle
+│   ├── hero.astro               # Hero section with sidebar metadata
+│   ├── logo-section.astro       # Trust/company logos
+│   ├── situations-section.astro # "When to reach out" section
+│   ├── proof-section.astro      # Results, testimonials, engagement pricing
+│   ├── contact-section.astro    # Contact form
+│   └── footer.astro             # Footer with social links
+├── assets/                      # Images (profile photo, logos)
+├── content/cases/               # Case study markdown files
+public/fonts/                    # Self-hosted IBM Plex Mono font files
 ```
 
 ## Conventions
@@ -58,15 +52,14 @@ Uses conventional commits via commitizen (cz-conventional-changelog):
 
 ### Component Patterns
 
-- Typography components (Headline, Body, Overline) accept `element` prop for HTML tag and `as` prop for visual styling
-- Color highlights use three brand colors: magenta (#FF007B), blue (#00B7FF), green (#00E08E)
-- Dark theme with primary background #111222
+- All components use `--v8-*` CSS custom properties that adapt to light/dark mode
 - Responsive breakpoints: 1440px, 768px, 375px
 - Scoped SCSS `<style>` blocks per component — no global CSS files beyond index.astro
 
 ### Design System
 
-- CSS custom properties for colors (`--clr-magenta`, `--clr-blue`, `--clr-green`, `--clr-bg-primary`, `--clr-white`)
-- Glassmorphism effects via backdrop-filter
-- Grid-based decorative backgrounds
+- **Light/dark mode:** Controlled by `html.dark` / `html.light` class. Inline script in `<head>` reads localStorage, falls back to `prefers-color-scheme`. Toggle button in navigation.
+- **CSS custom properties:** `--v8-bg`, `--v8-text`, `--v8-accent`, `--v8-border`, `--v8-font-display`, `--v8-font-body`, `--v8-font-mono`
+- **Dark accent:** #FF3B00 (orange-red), **Light accent:** #B82A00 (deep red)
+- **Status color:** Dark: #00DC82, Light: #1A7A52
 - Responsive font sizing with per-breakpoint scales

@@ -182,14 +182,25 @@ const { contact } = Astro.props;
         }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .contact {
-            padding: 60px 24px;
+            padding: 80px 48px;
+            border-top: none;
 
             &-inner {
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
+
+            &-headline {
+                font-size: clamp(48px, 8vw, 80px);
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact {
+            padding: 60px 24px;
         }
 
         .form-row {

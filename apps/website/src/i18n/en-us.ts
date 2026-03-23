@@ -72,21 +72,6 @@ export const enUs: Strings = {
         tag: 'Operational Improvement',
       },
     ],
-    testimonialsLabel: 'What others say',
-    testimonials: [
-      {
-        quote: 'Sebastian joined when we were stuck between two architecture paths and a board deadline. Within weeks, the team had a clear direction and was shipping again.',
-        attribution: 'CTO, Series A Fintech',
-      },
-      {
-        quote: 'We needed someone who could talk to engineers and investors in the same week. He did both without losing credibility with either side.',
-        attribution: 'Head of Engineering, Mid-Market SaaS',
-      },
-      {
-        quote: 'Calm under pressure, no ego, and every recommendation came with a realistic plan to execute it. Exactly the kind of technical partner we were looking for.',
-        attribution: 'CEO, B2B Marketplace',
-      },
-    ],
     engagementLabel: 'Engagement',
     engagements: [
       {

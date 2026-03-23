@@ -72,21 +72,6 @@ export const deDe: Strings = {
         tag: 'Operative Verbesserung',
       },
     ],
-    testimonialsLabel: 'Was andere sagen',
-    testimonials: [
-      {
-        quote: 'Sebastian kam dazu, als wir zwischen zwei Architekturpfaden und einer Board-Deadline feststeckten. Innerhalb von Wochen hatte das Team eine klare Richtung und lieferte wieder.',
-        attribution: 'CTO, Series-A-Fintech',
-      },
-      {
-        quote: 'Wir brauchten jemanden, der in derselben Woche mit Engineers und Investoren sprechen kann. Er hat beides geschafft, ohne bei einer Seite an Glaubw\u00FCrdigkeit zu verlieren.',
-        attribution: 'Head of Engineering, Mid-Market SaaS',
-      },
-      {
-        quote: 'Ruhig unter Druck, kein Ego, und jede Empfehlung kam mit einem realistischen Plan zur Umsetzung. Genau die Art von technischem Partner, die wir gesucht haben.',
-        attribution: 'CEO, B2B-Marktplatz',
-      },
-    ],
     engagementLabel: 'Zusammenarbeit',
     engagements: [
       {

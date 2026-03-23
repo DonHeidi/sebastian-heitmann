@@ -39,11 +39,6 @@ export interface Strings {
       description: string;
       tag: string;
     }>;
-    testimonialsLabel: string;
-    testimonials: Array<{
-      quote: string;
-      attribution: string;
-    }>;
     engagementLabel: string;
     engagements: Array<{
       model: string;

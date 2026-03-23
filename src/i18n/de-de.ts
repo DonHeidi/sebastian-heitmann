@@ -44,7 +44,7 @@ export const deDe: Strings = {
       {
         metric: 'Risiko minimiert',
         metricLabel: '54 % Projektrisiko erkannt und adressiert',
-        description: 'Im ursprünglichen Delivery-Setup ein projiziertes Ausfallrisiko von 54 % identifiziert, die Ausgangslage neu aufgesetzt und die Rahmenbedingungen so verändert, dass die folgenden Initiativen auf einer tragfähigen Basis umgesetzt werden konnten.',
+        description: 'Im Rahmen eines Assessments ein projiziertes Ausfallrisiko von 54 % identifiziert, daraufhin das Projektmanagement neu aufgesetzt und die Rahmenbedingungen so verändert, dass die folgenden Initiativen auf einer tragfähigen Basis umgesetzt werden konnten.',
         tag: 'Ausführungsrisiko',
       },
       {
@@ -91,21 +91,21 @@ export const deDe: Strings = {
     engagements: [
       {
         model: 'Beraten',
-        price: '\u20AC130',
+        price: '130\u00A0€',
         unit: '/Stunde',
-        description: 'Architektur-Reviews, Einstellungsentscheidungen, Anbieterbewertungen und Zweitmeinungen vor wichtigen technischen Festlegungen.',
+        description: 'Architektur-Reviews, Einstellungskriterien, Anbieterbewertungen und Zweitmeinungen vor wichtigen technischen Entscheidungen.',
       },
       {
         model: 'Umsetzen',
-        price: '\u20AC4.999',
+        price: '4.999\u00A0€',
         unit: '/Zyklus',
-        cycleNote: 'Typischerweise 4\u20136 Wochen',
+        cycleNote: 'Typischerweise 2 Wochen',
         description: 'Ein fokussiertes Engagement mit klarem Ziel – etwa ein MVP, eine Migration, ein Rebuild oder ein Delivery-Reset.',
         featured: true,
       },
       {
         model: 'Begleiten',
-        price: '\u20AC2.499',
+        price: '2.499\u00A0€',
         unit: '/Monat',
         description: 'Laufende technische Partnerschaft für Unternehmen, die erfahrene Führung in Architektur, Delivery und technischer Umsetzung brauchen.',
       },

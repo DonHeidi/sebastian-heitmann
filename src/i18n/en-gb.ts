@@ -44,7 +44,7 @@ export const enGb: Strings = {
       {
         metric: 'Gap Closed',
         metricLabel: '54% project risk identified and addressed',
-        description: 'Identified a 54% projected failure risk in the original delivery setup, then reset the project baseline and changed the execution conditions to create a more viable foundation for the initiatives that followed.',
+        description: 'Identified a 54% projected failure risk through an initial assessment, then restructured the project management and changed the execution conditions to create a more viable foundation for the initiatives that followed.',
         tag: 'Execution Risk',
       },
       {
@@ -99,7 +99,7 @@ export const enGb: Strings = {
         model: 'Deliver',
         price: '\u00A34,299',
         unit: '/cycle',
-        cycleNote: 'Typically 4\u20136 weeks',
+        cycleNote: 'Typically 2 weeks',
         description: 'A focused engagement around a defined outcome \u2014 an MVP, a migration, a rebuild, or a delivery reset.',
         featured: true,
       },

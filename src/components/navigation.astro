@@ -18,28 +18,17 @@ const shortLabel = currentLocale.toUpperCase();
 <nav class="nav">
     <a class="nav-logo" href="/">{nav.logo}<span class="nav-logo__dot">.</span>dev</a>
     <div class="nav-actions">
-        <div class="nav-lang" aria-label={languagePicker?.label ?? 'Language'}>
-            <button class="nav-lang__trigger" type="button" aria-expanded="false" aria-haspopup="true">
-                <span class="nav-lang__flag">{currentConfig.flag}</span>
-                <span class="nav-lang__label">{shortLabel}</span>
-                <svg class="nav-lang__chevron" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </button>
-            <div class="nav-lang__dropdown">
-                {locales.map((loc) => (
-                    <a
-                        class="nav-lang__option"
-                        href={getRelativeLocaleUrl(loc, '/')}
-                        data-locale={loc}
-                        data-current={loc === currentLocale ? 'true' : undefined}
-                        aria-current={loc === currentLocale ? 'true' : undefined}
-                    >
-                        <span class="nav-lang__option-flag">{localeConfig[loc].flag}</span>
-                        <span class="nav-lang__option-label">{localeConfig[loc].label}</span>
-                    </a>
-                ))}
-            </div>
+        <div class="nav-lang" role="navigation" aria-label={languagePicker?.label ?? 'Language'}>
+            {locales.map((loc) => (
+                <a
+                    class:list={['nav-lang__link', { 'nav-lang__link--active': loc === currentLocale }]}
+                    href={getRelativeLocaleUrl(loc, '/')}
+                    data-locale={loc}
+                    aria-current={loc === currentLocale ? 'page' : undefined}
+                >
+                    {loc.split('-')[1].toUpperCase()}
+                </a>
+            ))}
         </div>
         <div class="nav-theme-toggle" role="radiogroup" aria-label="Theme">
             <button class="nav-theme-toggle__btn" type="button" data-theme="system" aria-label="System theme">
@@ -116,38 +105,9 @@ const shortLabel = currentLocale.toUpperCase();
 </script>
 
 <script>
-    const trigger = document.querySelector('.nav-lang__trigger') as HTMLButtonElement;
-    const dropdown = document.querySelector('.nav-lang__dropdown') as HTMLElement;
-
-    function toggleDropdown(open?: boolean) {
-        const isOpen = open ?? !dropdown.classList.contains('nav-lang__dropdown--open');
-        dropdown.classList.toggle('nav-lang__dropdown--open', isOpen);
-        trigger.setAttribute('aria-expanded', String(isOpen));
-    }
-
-    trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleDropdown();
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-        if (!(e.target as Element).closest('.nav-lang')) {
-            toggleDropdown(false);
-        }
-    });
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            toggleDropdown(false);
-        }
-    });
-
-    // Store locale on option click
-    document.querySelectorAll('.nav-lang__option').forEach(option => {
-        option.addEventListener('click', () => {
-            const locale = (option as HTMLElement).dataset.locale;
+    document.querySelectorAll('.nav-lang__link').forEach(link => {
+        link.addEventListener('click', () => {
+            const locale = (link as HTMLElement).dataset.locale;
             if (locale) {
                 localStorage.setItem('locale', locale);
             }
@@ -188,96 +148,33 @@ const shortLabel = currentLocale.toUpperCase();
         }
 
         &-lang {
-            position: relative;
+            display: flex;
+            border: 1px solid var(--v8-border);
 
-            &__trigger {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                background: none;
-                border: 1px solid var(--v8-border);
-                color: var(--v8-text-muted);
-                cursor: pointer;
-                padding: 6px 10px;
+            &__link {
                 font-family: var(--v8-font-mono);
-                font-size: 11px;
-                letter-spacing: 0.06em;
-                text-transform: uppercase;
-                transition: color 0.2s ease, border-color 0.2s ease;
-
-                &:hover {
-                    color: var(--v8-accent);
-                    border-color: var(--v8-accent);
-                }
-            }
-
-            &__flag {
-                font-size: 14px;
-                line-height: 1;
-            }
-
-            &__label {
-                line-height: 1;
-            }
-
-            &__chevron {
-                transition: transform 0.2s ease;
-            }
-
-            &__dropdown {
-                position: absolute;
-                top: calc(100% + 6px);
-                right: 0;
-                min-width: 160px;
-                background: var(--v8-bg-surface);
-                border: 1px solid var(--v8-border);
-                display: none;
-                flex-direction: column;
-                z-index: 100;
-
-                &--open {
-                    display: flex;
-                }
-            }
-
-            &__option {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 8px 12px;
-                font-family: var(--v8-font-mono);
-                font-size: 11px;
-                letter-spacing: 0.04em;
+                font-size: 10px;
+                letter-spacing: 0.1em;
                 color: var(--v8-text-muted);
                 text-decoration: none;
+                padding: 6px 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 transition: color 0.2s ease, background-color 0.2s ease;
 
                 &:not(:last-child) {
-                    border-bottom: 1px solid var(--v8-border);
+                    border-right: 1px solid var(--v8-border);
                 }
 
                 &:hover {
                     color: var(--v8-accent);
-                    background: rgba(255, 255, 255, 0.03);
                 }
 
-                &[data-current] {
+                &--active {
                     color: var(--v8-accent);
+                    background: var(--v8-bg-surface);
                 }
-
-                &-flag {
-                    font-size: 14px;
-                    line-height: 1;
-                }
-
-                &-label {
-                    line-height: 1;
-                }
-            }
-
-            // Rotate chevron when open
-            &:has(&__dropdown--open) &__chevron {
-                transform: rotate(180deg);
             }
         }
 
@@ -331,7 +228,36 @@ const shortLabel = currentLocale.toUpperCase();
 
     @media (max-width: 768px) {
         .nav {
-            padding: 20px 24px;
+            padding: 16px 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+
+            &-logo {
+                font-size: 12px;
+            }
+
+            &-actions {
+                gap: 10px;
+            }
+
+            &-cta {
+                font-size: 10px;
+                padding: 8px 14px;
+                letter-spacing: 0.06em;
+            }
+        }
+    }
+
+    @media (max-width: 400px) {
+        .nav {
+            &-logo {
+                width: 100%;
+            }
+
+            &-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
     }
 </style>

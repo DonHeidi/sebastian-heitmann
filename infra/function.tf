@@ -40,9 +40,9 @@ resource "scaleway_function" "contact_handler" {
   zip_hash     = filesha256("${path.module}/../apps/mail-service/dist/handler.zip")
 
   environment_variables = {
-    MAIL_SENDER    = var.mail_sender
-    ALLOWED_ORIGIN = var.allowed_origin
-    TEM_REGION     = var.tem_region
+    MAIL_SENDER     = var.mail_sender
+    ALLOWED_ORIGINS = var.allowed_origins
+    TEM_REGION      = var.tem_region
   }
 
   secret_environment_variables = {

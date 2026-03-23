@@ -21,7 +21,8 @@ variable "mail_sender" {
   type        = string
 }
 
-variable "allowed_origin" {
-  description = "CORS allowed origin for the mail function"
+variable "allowed_origins" {
+  description = "Comma-separated CORS allowed origins for the mail function"
   type        = string
+  default     = "https://www.sebastian-heitmann.dev,https://sebastian-heitmann.dev"
 }

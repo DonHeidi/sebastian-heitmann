@@ -13,25 +13,29 @@ type ScalewayResponse = {
 
 type ScalewayEvent = {
   httpMethod?: string;
+  headers?: Record<string, string>;
   body: string;
 };
 
 const REQUIRED_ENV = ['TEM_SECRET_KEY', 'TEM_PROJECT_ID', 'MAIL_RECIPIENT', 'MAIL_SENDER'] as const;
 
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
 
-const corsHeaders: Record<string, string> = {
-  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Max-Age': '86400',
-};
+function getCorsHeaders(origin?: string): Record<string, string> {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0] || '';
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400',
+  };
+}
 
-function jsonResponse(statusCode: number, body: Record<string, unknown>): ScalewayResponse {
+function jsonResponse(statusCode: number, body: Record<string, unknown>, origin?: string): ScalewayResponse {
   return {
     statusCode,
     body: JSON.stringify(body),
-    headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    headers: { 'Content-Type': 'application/json', ...getCorsHeaders(origin) },
   };
 }
 
@@ -60,22 +64,24 @@ function validateBody(body: unknown): ContactRequest | string {
 }
 
 export async function handle(event: ScalewayEvent): Promise<ScalewayResponse> {
+  const origin = event.headers?.['origin'] || event.headers?.['Origin'];
+
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 204, body: '', headers: corsHeaders };
+    return { statusCode: 204, body: '', headers: getCorsHeaders(origin) };
   }
 
   const envError = validateEnv();
-  if (envError) return jsonResponse(500, { error: envError });
+  if (envError) return jsonResponse(500, { error: envError }, origin);
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(event.body);
   } catch {
-    return jsonResponse(400, { error: 'Invalid JSON' });
+    return jsonResponse(400, { error: 'Invalid JSON' }, origin);
   }
 
   const validated = validateBody(parsed);
-  if (typeof validated === 'string') return jsonResponse(400, { error: validated });
+  if (typeof validated === 'string') return jsonResponse(400, { error: validated }, origin);
 
   const { name, email, context, message } = validated;
   const subject = `Contact from ${name}`;
@@ -112,12 +118,12 @@ export async function handle(event: ScalewayEvent): Promise<ScalewayResponse> {
     if (!response.ok) {
       const error = await response.text();
       console.error('Scaleway API error:', error);
-      return jsonResponse(502, { error: 'Failed to send email' });
+      return jsonResponse(502, { error: 'Failed to send email' }, origin);
     }
 
-    return jsonResponse(200, { success: true });
+    return jsonResponse(200, { success: true }, origin);
   } catch (err) {
     console.error('Send error:', err);
-    return jsonResponse(500, { error: 'Internal server error' });
+    return jsonResponse(500, { error: 'Internal server error' }, origin);
   }
 }

@@ -4,12 +4,14 @@ resource "scaleway_object_bucket" "website" {
 }
 
 resource "scaleway_object_bucket_acl" "website" {
-  bucket = scaleway_object_bucket.website.id
-  acl    = "public-read"
+  bucket     = scaleway_object_bucket.website.id
+  acl        = "public-read"
+  project_id = scaleway_account_project.main.id
 }
 
 resource "scaleway_object_bucket_website_configuration" "website" {
-  bucket = scaleway_object_bucket.website.name
+  bucket     = scaleway_object_bucket.website.name
+  project_id = scaleway_account_project.main.id
 
   index_document {
     suffix = "index.html"

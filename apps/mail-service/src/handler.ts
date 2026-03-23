@@ -16,7 +16,7 @@ type ScalewayEvent = {
   body: string;
 };
 
-const REQUIRED_ENV = ['SCW_SECRET_KEY', 'SCW_PROJECT_ID', 'MAIL_RECIPIENT', 'MAIL_SENDER'] as const;
+const REQUIRED_ENV = ['TEM_SECRET_KEY', 'TEM_PROJECT_ID', 'MAIL_RECIPIENT', 'MAIL_SENDER'] as const;
 
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
 
@@ -90,12 +90,12 @@ export async function handle(event: ScalewayEvent): Promise<ScalewayResponse> {
     .join('\n');
 
   try {
-    const region = process.env.SCW_REGION || 'nl-ams';
+    const region = process.env.TEM_REGION || 'fr-par';
     const response = await fetch(`https://api.scaleway.com/transactional-email/v1alpha1/regions/${region}/emails`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Auth-Token': process.env.SCW_SECRET_KEY!,
+        'X-Auth-Token': process.env.TEM_SECRET_KEY!,
       },
       body: JSON.stringify({
         from: {
@@ -105,7 +105,7 @@ export async function handle(event: ScalewayEvent): Promise<ScalewayResponse> {
         to: [{ email: process.env.MAIL_RECIPIENT! }],
         subject,
         text: textBody,
-        project_id: process.env.SCW_PROJECT_ID!,
+        project_id: process.env.TEM_PROJECT_ID!,
       }),
     });
 

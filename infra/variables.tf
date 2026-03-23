@@ -10,12 +10,6 @@ variable "tem_region" {
   default     = "fr-par"
 }
 
-variable "scw_secret_key" {
-  description = "Scaleway API secret key for the function to call Transactional Email API"
-  type        = string
-  sensitive   = true
-}
-
 variable "mail_recipient" {
   description = "Email address to receive contact form messages"
   type        = string

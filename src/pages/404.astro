@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout locale="en-us" title="404 — Not Found" description="Page not found.">
+    <div class="not-found">
+        <span class="not-found__code">404</span>
+        <div class="not-found__rule"></div>
+        <p class="not-found__message">This page does not exist.</p>
+        <a class="not-found__link" href="/">
+            <span class="not-found__link-text">Back to start</span>
+            <span class="not-found__link-arrow">&rarr;</span>
+        </a>
+    </div>
+</Layout>
+
+<style lang="scss">
+    .not-found {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        padding: 24px;
+        text-align: center;
+
+        &__code {
+            font-family: var(--v8-font-display);
+            font-size: clamp(120px, 20vw, 240px);
+            line-height: 0.85;
+            color: var(--v8-text);
+            opacity: 0.15;
+        }
+
+        &__rule {
+            width: 48px;
+            height: 2px;
+            background: var(--v8-accent);
+            margin: 32px 0;
+        }
+
+        &__message {
+            font-family: var(--v8-font-body);
+            font-size: 17px;
+            font-weight: 300;
+            color: var(--v8-text-muted);
+            margin-bottom: 32px;
+        }
+
+        &__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--v8-accent);
+            transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+            &:hover {
+                gap: 16px;
+            }
+
+            &-text {
+                font-family: var(--v8-font-mono);
+                font-size: 12px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--v8-text);
+            }
+
+            &-arrow {
+                font-size: 16px;
+                color: var(--v8-accent);
+                transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            &:hover &-arrow {
+                transform: translateX(4px);
+            }
+        }
+    }
+</style>

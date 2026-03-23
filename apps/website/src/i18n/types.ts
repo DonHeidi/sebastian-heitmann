@@ -63,6 +63,9 @@ export interface Strings {
     contextPlaceholder: string;
     messageLabel: string;
     submitLabel: string;
+    sendingLabel: string;
+    successMessage: string;
+    errorMessage: string;
   };
   footer: {
     copyright: string;

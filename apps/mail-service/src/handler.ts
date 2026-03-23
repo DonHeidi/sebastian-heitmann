@@ -11,13 +11,27 @@ type ScalewayResponse = {
   headers: Record<string, string>;
 };
 
+type ScalewayEvent = {
+  httpMethod?: string;
+  body: string;
+};
+
 const REQUIRED_ENV = ['SCW_SECRET_KEY', 'SCW_PROJECT_ID', 'MAIL_RECIPIENT', 'MAIL_SENDER'] as const;
+
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
+
+const corsHeaders: Record<string, string> = {
+  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Max-Age': '86400',
+};
 
 function jsonResponse(statusCode: number, body: Record<string, unknown>): ScalewayResponse {
   return {
     statusCode,
     body: JSON.stringify(body),
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...corsHeaders },
   };
 }
 
@@ -45,7 +59,11 @@ function validateBody(body: unknown): ContactRequest | string {
   };
 }
 
-export async function handle(event: { body: string }): Promise<ScalewayResponse> {
+export async function handle(event: ScalewayEvent): Promise<ScalewayResponse> {
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, body: '', headers: corsHeaders };
+  }
+
   const envError = validateEnv();
   if (envError) return jsonResponse(500, { error: envError });
 

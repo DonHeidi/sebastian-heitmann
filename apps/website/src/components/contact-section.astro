@@ -6,6 +6,7 @@ type Props = {
 };
 
 const { contact } = Astro.props;
+const endpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
 ---
 
 <section class="contact" id="contact">
@@ -16,7 +17,14 @@ const { contact } = Astro.props;
         </div>
 
         <div class="contact-right">
-            <form class="contact-form" action="#" method="POST">
+            <form
+                class="contact-form"
+                data-endpoint={endpoint}
+                data-sending={contact.sendingLabel}
+                data-submit={contact.submitLabel}
+                data-success={contact.successMessage}
+                data-error={contact.errorMessage}
+            >
                 <div class="form-row">
                     <div class="form-field">
                         <label class="form-label" for="name">{contact.nameLabel}</label>
@@ -38,14 +46,76 @@ const { contact } = Astro.props;
                     <textarea class="form-input form-input--textarea" id="message" name="message" rows="4" required></textarea>
                 </div>
 
-                <button class="form-submit" type="submit">
-                    <span class="form-submit__text">{contact.submitLabel}</span>
-                    <span class="form-submit__arrow">&rarr;</span>
-                </button>
+                <div class="form-footer">
+                    <button class="form-submit" type="submit">
+                        <span class="form-submit__text">{contact.submitLabel}</span>
+                        <span class="form-submit__arrow">&rarr;</span>
+                    </button>
+                    <p class="form-status" aria-live="polite"></p>
+                </div>
             </form>
         </div>
     </div>
 </section>
+
+<script>
+    const form = document.querySelector('.contact-form') as HTMLFormElement;
+    if (form) {
+        const endpoint = form.dataset.endpoint;
+        const sendingLabel = form.dataset.sending!;
+        const submitLabel = form.dataset.submit!;
+        const successMsg = form.dataset.success!;
+        const errorMsg = form.dataset.error!;
+        const submitBtn = form.querySelector('.form-submit') as HTMLButtonElement;
+        const submitText = form.querySelector('.form-submit__text') as HTMLElement;
+        const status = form.querySelector('.form-status') as HTMLElement;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            status.textContent = '';
+            status.className = 'form-status';
+
+            if (!endpoint) {
+                status.textContent = errorMsg;
+                status.classList.add('form-status--error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitText.textContent = sendingLabel;
+
+            const data = {
+                name: (form.elements.namedItem('name') as HTMLInputElement).value,
+                email: (form.elements.namedItem('email') as HTMLInputElement).value,
+                context: (form.elements.namedItem('context') as HTMLInputElement).value || undefined,
+                message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+            };
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (res.ok) {
+                    status.textContent = successMsg;
+                    status.classList.add('form-status--success');
+                    form.reset();
+                } else {
+                    status.textContent = errorMsg;
+                    status.classList.add('form-status--error');
+                }
+            } catch {
+                status.textContent = errorMsg;
+                status.classList.add('form-status--error');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = submitLabel;
+            }
+        });
+    }
+</script>
 
 <style lang="scss">
     .contact {
@@ -178,6 +248,32 @@ const { contact } = Astro.props;
 
             &:hover &__arrow {
                 transform: translateX(4px);
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: default;
+            }
+        }
+
+        &-footer {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        &-status {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.02em;
+            color: var(--v8-text-muted);
+
+            &--success {
+                color: var(--v8-accent-status);
+            }
+
+            &--error {
+                color: var(--v8-accent);
             }
         }
     }

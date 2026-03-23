@@ -120,6 +120,9 @@ export const deDe: Strings = {
     contextPlaceholder: 'z.\u00A0B. eine Migration, eine Team-Umstrukturierung, eine Architekturentscheidung',
     messageLabel: 'Wobei soll ich dich unterstützen – bei Klarheit, Bewertung oder dem nächsten konkreten Schritt?',
     submitLabel: 'Senden',
+    sendingLabel: 'Wird gesendet',
+    successMessage: 'Nachricht gesendet. Ich melde mich bald.',
+    errorMessage: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
   },
   footer: {
     copyright: '\u00A9 2026 Sebastian Heitmann',

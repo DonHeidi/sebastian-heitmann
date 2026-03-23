@@ -120,6 +120,9 @@ export const enGb: Strings = {
     contextPlaceholder: 'e.g. a migration, a team restructure, an architecture decision',
     messageLabel: 'What would you like me to help you clarify, assess, or move forward?',
     submitLabel: 'Send',
+    sendingLabel: 'Sending',
+    successMessage: 'Message sent. I will get back to you soon.',
+    errorMessage: 'Something went wrong. Please try again.',
   },
   footer: {
     copyright: '\u00A9 2026 Sebastian Heitmann',

@@ -24,15 +24,16 @@ const { situations } = Astro.props;
 
 <style lang="scss">
     .situations {
-        padding: 80px 80px 0;
-        max-width: 1440px;
-        margin: 0 auto;
+        padding: 80px 80px 80px;
+        max-width: 100%;
+        background: var(--v8-bg-alt);
 
         &-inner {
             display: flex;
             flex-direction: column;
             gap: 24px;
-            padding-top: 80px;
+            max-width: 1440px;
+            margin: 0 auto;
         }
 
         &-header {
@@ -94,21 +95,13 @@ const { situations } = Astro.props;
 
     @media (max-width: 1024px) {
         .situations {
-            padding: 40px 48px 0;
-
-            &-inner {
-                padding-top: 40px;
-            }
+            padding: 40px 48px;
         }
     }
 
     @media (max-width: 768px) {
         .situations {
-            padding: 40px 24px 0;
-
-            &-inner {
-                padding-top: 40px;
-            }
+            padding: 40px 24px;
 
             &-item {
                 font-size: 15px;

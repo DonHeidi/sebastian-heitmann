@@ -50,15 +50,15 @@ const { contact } = Astro.props;
 <style lang="scss">
     .contact {
         padding: 120px 80px;
-        max-width: 1440px;
-        margin: 0 auto;
-        border-top: 1px solid var(--v8-border);
+        background: var(--v8-bg-alt);
 
         &-inner {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 80px;
             align-items: start;
+            max-width: 1440px;
+            margin: 0 auto;
         }
 
         &-left {

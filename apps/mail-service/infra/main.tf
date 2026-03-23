@@ -52,6 +52,8 @@ resource "scaleway_function" "contact_handler" {
   max_scale    = 5
   timeout      = 30
   memory_limit = 256
+  zip_file     = "${path.module}/../dist/handler.zip"
+  zip_hash     = filesha256("${path.module}/../dist/handler.zip")
 
   environment_variables = {
     MAIL_SENDER    = var.mail_sender

@@ -1,4 +1,4 @@
-region         = "fr-par"
+region         = "nl-ams"
 mail_recipient = "you@example.com"
 mail_sender    = "contact@sebastian-heitmann.dev"
 allowed_origin = "https://sebastian-heitmann.dev"

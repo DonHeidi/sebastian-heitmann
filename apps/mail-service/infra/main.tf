@@ -17,7 +17,7 @@ provider "scaleway" {
 variable "region" {
   description = "Scaleway region"
   type        = string
-  default     = "fr-par"
+  default     = "nl-ams"
 }
 
 variable "mail_recipient" {
@@ -56,6 +56,7 @@ resource "scaleway_function" "contact_handler" {
   environment_variables = {
     MAIL_SENDER    = var.mail_sender
     ALLOWED_ORIGIN = var.allowed_origin
+    SCW_REGION     = var.region
   }
 
   secret_environment_variables = {

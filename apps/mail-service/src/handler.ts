@@ -90,7 +90,8 @@ export async function handle(event: ScalewayEvent): Promise<ScalewayResponse> {
     .join('\n');
 
   try {
-    const response = await fetch('https://api.scaleway.com/transactional-email/v1alpha1/regions/fr-par/emails', {
+    const region = process.env.SCW_REGION || 'nl-ams';
+    const response = await fetch(`https://api.scaleway.com/transactional-email/v1alpha1/regions/${region}/emails`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -100,7 +100,10 @@ Terraform config managing a dedicated Scaleway project (`sebastian-heitmann-dev`
 - `SCW_*` env vars are reserved in Scaleway Functions — use `TEM_*` prefix instead
 - S3 API requires `ACCESS_KEY@PROJECT_ID` format to target non-default projects
 - Edge Services requires a `scaleway_edge_services_plan` before creating pipelines
-- `scaleway_edge_services_head_stage` returns 404 — configure via console
+- `scaleway_edge_services_head_stage` must point to the DNS stage, not cache/backend
+- Backend stage needs `is_website = true` to serve HTML (otherwise returns XML bucket listing)
+- CDN CNAME target is `<pipeline_id>.svc.edge.scw.cloud` (only visible via API, not console)
+- TLS certificate is auto-provisioned once CNAME points to Edge Services endpoint
 
 ### Deployment
 

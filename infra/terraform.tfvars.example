@@ -1,0 +1,5 @@
+region         = "nl-ams"
+mail_recipient = "you@example.com"
+mail_sender    = "contact@contact.sebastian-heitmann.dev"
+allowed_origin = "https://www.sebastian-heitmann.dev"
+scw_secret_key = "your-scaleway-secret-key"

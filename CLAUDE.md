@@ -10,6 +10,7 @@ Bun workspaces monorepo containing the personal portfolio website and supporting
 apps/
 ├── website/          # Astro 6 portfolio site
 └── mail-service/     # Scaleway serverless contact form handler
+infra/                # Terraform — Scaleway project, function, object storage, CDN
 docs/                 # Shared project documentation
 ```
 
@@ -18,6 +19,7 @@ docs/                 # Shared project documentation
 - **Runtime/Package Manager:** Bun (managed via mise) with workspaces
 - **Website:** Astro 6, SCSS, TypeScript
 - **Mail Service:** TypeScript, Scaleway Transactional Email API
+- **Infrastructure:** Terraform (Scaleway provider ~> 2.0)
 
 ## Commands
 
@@ -84,6 +86,53 @@ Instrument Serif (display), DM Sans (body) via Google Fonts; IBM Plex Mono (mono
 
 ---
 
+## Infrastructure (`infra/`)
+
+Terraform config managing a dedicated Scaleway project (`sebastian-heitmann-dev`) containing:
+- **Object Storage** bucket (`sebastian-heitmann-website`) — static website hosting
+- **Edge Services** pipeline — CDN with cache stage
+- **Serverless Function** — contact form handler (Node.js 22, Amsterdam)
+- **IAM** — project-scoped API key with `TransactionalEmailEmailApiCreate` permission
+
+### Scaleway Gotchas
+
+- TEM API is only available in `fr-par`, function hosts in `nl-ams`
+- `SCW_*` env vars are reserved in Scaleway Functions — use `TEM_*` prefix instead
+- S3 API requires `ACCESS_KEY@PROJECT_ID` format to target non-default projects
+- Edge Services requires a `scaleway_edge_services_plan` before creating pipelines
+- `scaleway_edge_services_head_stage` returns 404 — configure via console
+
+### Deployment
+
+Order matters: function must deploy before website build (endpoint baked in at build time).
+
+```bash
+# 1. Build mail handler
+cd apps/mail-service && bun run build
+
+# 2. Deploy infrastructure (uses TF_VAR_* env vars)
+cd infra
+source ../apps/mail-service/.env
+TF_VAR_region="nl-ams" \
+TF_VAR_mail_recipient="$MAIL_RECIPIENT" \
+TF_VAR_mail_sender="$MAIL_SENDER" \
+TF_VAR_allowed_origin="$ALLOWED_ORIGIN" \
+terraform apply
+
+# 3. Build website with function endpoint
+cd apps/website
+PUBLIC_MAIL_ENDPOINT="https://<function_endpoint>" bun run build
+
+# 4. Sync to bucket (note @PROJECT_ID on access key)
+AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@<project_id>" \
+AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY" \
+aws s3 cp dist/ s3://sebastian-heitmann-website/ \
+  --endpoint-url https://s3.nl-ams.scw.cloud \
+  --acl public-read --recursive
+```
+
+---
+
 ## Mail Service (`apps/mail-service/`)
 
 Scaleway serverless function that receives contact form submissions and sends emails via Scaleway Transactional Email API.
@@ -92,10 +141,11 @@ Scaleway serverless function that receives contact form submissions and sends em
 
 | Variable | Description |
 |----------|-------------|
-| `SCW_SECRET_KEY` | Scaleway API secret key |
-| `SCW_PROJECT_ID` | Scaleway project ID |
+| `TEM_SECRET_KEY` | Scaleway API secret key (managed by Terraform IAM) |
+| `TEM_PROJECT_ID` | Scaleway project ID (auto-filled by Terraform) |
+| `TEM_REGION` | TEM API region (default: `fr-par`) |
 | `MAIL_RECIPIENT` | Email address to receive contact form messages |
-| `MAIL_SENDER` | Sender email address (must be verified in Scaleway) |
+| `MAIL_SENDER` | Sender email address (verified domain: `contact.sebastian-heitmann.dev`) |
 
 ---
 

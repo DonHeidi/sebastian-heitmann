@@ -23,3 +23,13 @@ export const localeConfig: Record<Locale, { flag: string; label: string; htmlLan
   'en-gb': { flag: '\uD83C\uDDEC\uD83C\uDDE7', label: 'English (GB)', htmlLang: 'en-GB' },
   'de-de': { flag: '\uD83C\uDDE9\uD83C\uDDEA', label: 'Deutsch', htmlLang: 'de-DE' },
 };
+
+export function getHreflangAlternates() {
+  const siteUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://sebastian-heitmann.dev').replace(/\/$/, '');
+  return [
+    { hreflang: 'en-US', href: `${siteUrl}/` },
+    { hreflang: 'en-GB', href: `${siteUrl}/en-gb/` },
+    { hreflang: 'de-DE', href: `${siteUrl}/de-de/` },
+    { hreflang: 'x-default', href: `${siteUrl}/` },
+  ];
+}

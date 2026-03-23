@@ -34,7 +34,6 @@ variable "mail_sender" {
 variable "allowed_origin" {
   description = "CORS allowed origin"
   type        = string
-  default     = "https://sebastian-heitmann.dev"
 }
 
 resource "scaleway_function_namespace" "mail" {

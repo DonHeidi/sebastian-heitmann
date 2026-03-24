@@ -44,7 +44,7 @@ export const deDe: Strings = {
       {
         metric: 'Risiko minimiert',
         metricLabel: '54 % Projektrisiko erkannt und adressiert',
-        description: 'Im Rahmen eines Assessments ein projiziertes Ausfallrisiko von 54 % identifiziert, daraufhin das Projektmanagement neu aufgesetzt und die Rahmenbedingungen so verändert, dass die folgenden Initiativen auf einer tragfähigen Basis umgesetzt werden konnten.',
+        description: 'Im Rahmen eines Assessments ein Projektrisiko von 54 % identifiziert, daraufhin das Projektmanagement neu aufgesetzt und die Rahmenbedingungen so verändert, dass die folgenden Initiativen auf einer tragfähigen Basis umgesetzt werden konnten.',
         tag: 'Ausführungsrisiko',
       },
       {

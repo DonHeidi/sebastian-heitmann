@@ -2,8 +2,8 @@ import type { Strings } from './types';
 
 export const enGb: Strings = {
   meta: {
-    title: 'Sebastian Heitmann \u2014 Fractional CTO',
-    description: 'Fractional CTO & Technical Partner. Architecture, Delivery, Teams.',
+    title: 'Sebastian Heitmann \u2014 Strategic Technology Consultant',
+    description: 'Strategic Technology Consultant. Architecture, Delivery, Teams.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -17,7 +17,7 @@ export const enGb: Strings = {
     cta: 'Book an Introduction Call',
     ctaNote: '30 minutes. No slides. No pitch.',
     photoAlt: 'Sebastian Heitmann',
-    role: { label: 'Role', value: 'Fractional CTO & Technical Partner' },
+    role: { label: 'Role', value: 'Strategic Technology Consultant' },
     focus: { label: 'Focus', value: 'Architecture, Delivery, Teams' },
     experience: { label: 'Experience', value: '15 years' },
     projects: { label: 'Projects', value: '20+ delivered' },

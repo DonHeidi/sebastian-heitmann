@@ -2,8 +2,8 @@ import type { Strings } from './types';
 
 export const deDe: Strings = {
   meta: {
-    title: 'Sebastian Heitmann \u2014 Fractional CTO',
-    description: 'Fractional CTO & Technischer Partner. Architektur, Delivery, Teams.',
+    title: 'Sebastian Heitmann \u2014 Strategic Technology Consultant',
+    description: 'Strategic Technology Consultant. Architektur, Delivery, Teams.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -17,7 +17,7 @@ export const deDe: Strings = {
     cta: 'Erstgespr\u00E4ch vereinbaren',
     ctaNote: '30 Minuten. Keine Folien. Kein Pitch.',
     photoAlt: 'Sebastian Heitmann',
-    role: { label: 'Rolle', value: 'Fractional CTO & Technischer Partner' },
+    role: { label: 'Rolle', value: 'Strategic Technology Consultant' },
     focus: { label: 'Fokus', value: 'Architektur, Delivery, Teams' },
     experience: { label: 'Erfahrung', value: '15 Jahre' },
     projects: { label: 'Projekte', value: '20+ umgesetzt' },

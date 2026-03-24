@@ -34,11 +34,7 @@ const { proof } = Astro.props;
                 {proof.engagements.map((e) => (
                     <div class:list={['engagement', { 'engagement--featured': e.featured }]}>
                         <span class="engagement-model">{e.model}</span>
-                        <div class="engagement-price">
-                            <span class="engagement-price__amount">{e.price}</span>
-                            <span class="engagement-price__unit">{e.unit}</span>
-                        </div>
-                        {e.cycleNote && <span class="engagement-cycle-note">{e.cycleNote}</span>}
+                        <span class="engagement-billing">{e.billing}</span>
                         <p class="engagement-desc">{e.description}</p>
                     </div>
                 ))}
@@ -163,10 +159,6 @@ const { proof } = Astro.props;
 
         &--featured {
             background: var(--v8-bg-surface);
-
-            .engagement-price__amount {
-                color: var(--v8-accent);
-            }
         }
 
         &-model {
@@ -177,31 +169,11 @@ const { proof } = Astro.props;
             color: var(--v8-text-muted);
         }
 
-        &-price {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-
-            &__amount {
-                font-family: var(--v8-font-display);
-                font-size: 40px;
-                line-height: 1;
-                color: var(--v8-text);
-            }
-
-            &__unit {
-                font-family: var(--v8-font-mono);
-                font-size: 12px;
-                color: var(--v8-text-muted);
-            }
-        }
-
-        &-cycle-note {
-            font-family: var(--v8-font-mono);
-            font-size: 10px;
-            letter-spacing: 0.08em;
-            color: var(--v8-text-muted);
-            margin-top: -8px;
+        &-billing {
+            font-family: var(--v8-font-display);
+            font-size: 28px;
+            line-height: 1.2;
+            color: var(--v8-text);
         }
 
         &-desc {

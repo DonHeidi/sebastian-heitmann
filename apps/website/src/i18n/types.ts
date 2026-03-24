@@ -42,9 +42,7 @@ export interface Strings {
     engagementLabel: string;
     engagements: Array<{
       model: string;
-      price: string;
-      unit: string;
-      cycleNote?: string;
+      billing: string;
       description: string;
       featured?: boolean;
     }>;

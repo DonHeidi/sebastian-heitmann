@@ -6,7 +6,7 @@ export default defineConfig({
         icon(),
     ],
     i18n: {
-        locales: ['en-us', 'en-gb', 'de-de'],
+        locales: ['en-us', 'de-de'],
         defaultLocale: 'en-us',
         routing: {
             prefixDefaultLocale: false,

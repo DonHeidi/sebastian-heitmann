@@ -45,7 +45,6 @@ const htmlLang = localeConfig[locale].htmlLang;
                     var lang = (navigator.language || '').toLowerCase();
                     var target;
                     if (lang.startsWith('de')) target = 'de-de';
-                    else if (lang === 'en-gb') target = 'en-gb';
                     if (target) {
                         localStorage.setItem('locale', target);
                         window.location.replace('/' + target + '/');

@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/navigation.astro';
+import Footer from '../../components/footer.astro';
+import { getStrings, getHreflangAlternates } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+
+const locale = Astro.currentLocale as Locale;
+const s = getStrings(locale);
+const alternates = getHreflangAlternates();
+---
+<Layout locale={locale} title="Impressum — Sebastian Heitmann" description="Impressum und Kontaktinformationen." alternates={alternates}>
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <main class="legal">
+        <div class="legal-inner">
+            <h1 class="legal-title">Impressum</h1>
+            <div class="legal-rule"></div>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Angaben gem. § 5 DDG</h2>
+                <p>Sebastian Heitmann<br/>Strategic Technology Consultant<br/>Kastanienallee 24<br/>21255 Tostedt</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Kontakt</h2>
+                <p>E-Mail: me@sebastian-heitmann.dev<br/>Kontaktformular: <a href="/de-de/#contact">www.sebastian-heitmann.dev/de-de/#contact</a></p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Umsatzsteuer</h2>
+                <p>Gem. § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmerregelung).</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Verantwortlich f&uuml;r den Inhalt nach § 18 Abs. 2 MStV</h2>
+                <p>Sebastian Heitmann<br/>Kastanienallee 24<br/>21255 Tostedt</p>
+            </section>
+        </div>
+    </main>
+    <Footer footer={s.footer} />
+</Layout>
+
+<style lang="scss">
+    .legal {
+        padding: 160px 80px 120px;
+        max-width: 1440px;
+        margin: 0 auto;
+
+        &-inner {
+            max-width: 640px;
+        }
+
+        &-title {
+            font-family: var(--v8-font-display);
+            font-size: clamp(40px, 5vw, 64px);
+            line-height: 1.05;
+            color: var(--v8-text);
+            margin-bottom: 24px;
+        }
+
+        &-rule {
+            width: 48px;
+            height: 2px;
+            background: var(--v8-accent);
+            margin-bottom: 64px;
+        }
+
+        &-section {
+            margin-bottom: 48px;
+
+            p {
+                font-family: var(--v8-font-body);
+                font-size: 16px;
+                font-weight: 300;
+                line-height: 1.8;
+                color: var(--v8-text-tertiary);
+            }
+
+            a {
+                color: var(--v8-accent);
+                text-decoration: none;
+                border-bottom: 1px solid transparent;
+                transition: border-color 0.2s;
+
+                &:hover {
+                    border-bottom-color: var(--v8-accent);
+                }
+            }
+        }
+
+        &-heading {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            margin-bottom: 16px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .legal {
+            padding: 120px 24px 80px;
+        }
+    }
+</style>

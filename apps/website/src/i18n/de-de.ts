@@ -25,7 +25,7 @@ export const deDe: Strings = {
   },
   logos: {
     workingWithLabel: 'Aktuelle Zusammenarbeit',
-    workingWith: ['Pool Position GmbH', 'mobilespace GmbH'],
+    workingWith: ['Pool Position GmbH'],
     previouslyAtLabel: 'Zuvor bei',
     previouslyAt: ['Jung von Matt', 'Synergy', 'Granny & Smith', 'OFFIS'],
   },

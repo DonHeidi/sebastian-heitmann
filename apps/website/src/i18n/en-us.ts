@@ -25,7 +25,7 @@ export const enUs: Strings = {
   },
   logos: {
     workingWithLabel: 'Working with',
-    workingWith: ['Pool Position GmbH', 'mobilespace GmbH'],
+    workingWith: ['Pool Position GmbH'],
     previouslyAtLabel: 'Previously at',
     previouslyAt: ['Jung von Matt', 'Synergy', 'Granny & Smith', 'OFFIS'],
   },

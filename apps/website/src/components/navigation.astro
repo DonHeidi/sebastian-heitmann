@@ -60,7 +60,7 @@ const pagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$/, 
                 </svg>
             </button>
         </div>
-        <a class="nav-cta" href="#contact">{nav.cta}</a>
+        <a class="nav-cta" href={`${getRelativeLocaleUrl(currentLocale, '/')}#contact`}>{nav.cta}</a>
     </div>
 </nav>
 

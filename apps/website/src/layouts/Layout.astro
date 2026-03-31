@@ -20,6 +20,9 @@ const htmlLang = localeConfig[locale].htmlLang;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{title}</title>
         <meta name="description" content={description}>
+        <link rel="preload" href="/fonts/InstrumentSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/DMSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
         {alternates.map(alt => (
             <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
         ))}

@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/navigation.astro';
+import Footer from '../components/footer.astro';
+import { getStrings, getHreflangAlternates } from '../i18n/utils';
+import type { Locale } from '../i18n/utils';
+
+const locale = Astro.currentLocale as Locale;
+const s = getStrings(locale);
+const alternates = getHreflangAlternates();
+---
+<Layout locale={locale} title="Privacy Policy — Sebastian Heitmann" description="Privacy policy and data protection information." alternates={alternates}>
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <main class="legal">
+        <div class="legal-inner">
+            <h1 class="legal-title">Privacy Policy</h1>
+            <div class="legal-rule"></div>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Controller</h2>
+                <p>Sebastian Heitmann<br/>Kastanienallee 24<br/>21255 Tostedt<br/>Email: me@sebastian-heitmann.dev</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Overview</h2>
+                <p>This website does not use cookies, analytics, or tracking tools. No personal data is collected automatically. All fonts are self-hosted — no requests are made to external services like Google Fonts.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Hosting</h2>
+                <p>This website is hosted by Scaleway (Scaleway SAS, 8 rue de la Ville l'Ev&ecirc;que, 75008 Paris, France). As part of delivering the website, Scaleway may process connection data such as IP addresses and timestamps. This processing is governed by Scaleway's <a href="https://www.scaleway.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer">privacy policy</a> and data processing agreement. Scaleway operates within the European Union and is subject to GDPR.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Contact form</h2>
+                <p>When you submit the contact form, the following data is transmitted: your name, email address, an optional context field, and your message. This data is sent via Scaleway Transactional Email to the site operator and is used solely to respond to your inquiry. The data is not stored beyond email delivery and is not shared with third parties. The legal basis for processing is Art. 6(1)(b) GDPR (pre-contractual communication).</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Local storage</h2>
+                <p>This website stores your language and theme preferences in your browser's local storage. This data never leaves your device and is not transmitted to any server.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Your rights</h2>
+                <p>Under GDPR, you have the right to access, rectification, erasure, restriction of processing, data portability, and objection. To exercise these rights, contact me at me@sebastian-heitmann.dev.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2 class="legal-heading">Supervisory authority</h2>
+                <p>You have the right to lodge a complaint with a data protection supervisory authority. The responsible authority is the Landesbeauftragte f&uuml;r den Datenschutz Niedersachsen, Prinzenstra&szlig;e 5, 30159 Hannover.</p>
+            </section>
+        </div>
+    </main>
+    <Footer footer={s.footer} />
+</Layout>
+
+<style lang="scss">
+    .legal {
+        padding: 160px 80px 120px;
+        max-width: 1440px;
+        margin: 0 auto;
+
+        &-inner {
+            max-width: 640px;
+        }
+
+        &-title {
+            font-family: var(--v8-font-display);
+            font-size: clamp(40px, 5vw, 64px);
+            line-height: 1.05;
+            color: var(--v8-text);
+            margin-bottom: 24px;
+        }
+
+        &-rule {
+            width: 48px;
+            height: 2px;
+            background: var(--v8-accent);
+            margin-bottom: 64px;
+        }
+
+        &-section {
+            margin-bottom: 48px;
+
+            p {
+                font-family: var(--v8-font-body);
+                font-size: 16px;
+                font-weight: 300;
+                line-height: 1.8;
+                color: var(--v8-text-tertiary);
+            }
+
+            a {
+                color: var(--v8-accent);
+                text-decoration: none;
+                border-bottom: 1px solid transparent;
+                transition: border-color 0.2s;
+
+                &:hover {
+                    border-bottom-color: var(--v8-accent);
+                }
+            }
+        }
+
+        &-heading {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            margin-bottom: 16px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .legal {
+            padding: 120px 24px 80px;
+        }
+    }
+</style>

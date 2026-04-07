@@ -26,6 +26,34 @@ const htmlLang = localeConfig[locale].htmlLang;
         {alternates.map(alt => (
             <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
         ))}
+        <script type="application/ld+json" set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ProfessionalService",
+            "name": "Sebastian Heitmann",
+            "description": description,
+            "url": "https://www.sebastian-heitmann.dev",
+            "founder": {
+                "@type": "Person",
+                "name": "Sebastian Heitmann",
+                "jobTitle": "Strategic Technology Consultant",
+                "url": "https://www.sebastian-heitmann.dev",
+                "sameAs": [
+                    "https://www.linkedin.com/in/don-heidi/",
+                    "https://github.com/DonHeidi"
+                ]
+            },
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Kastanienallee 24",
+                "addressLocality": "Tostedt",
+                "postalCode": "21255",
+                "addressCountry": "DE"
+            },
+            "email": "me@sebastian-heitmann.dev",
+            "areaServed": ["DE", "AT", "CH", "EU"],
+            "knowsLanguage": ["de", "en"],
+            "priceRange": "$$"
+        })} />
         <script is:inline>
             (function() {
                 var stored = localStorage.getItem('theme');

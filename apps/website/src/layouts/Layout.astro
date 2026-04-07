@@ -20,6 +20,14 @@ const htmlLang = localeConfig[locale].htmlLang;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{title}</title>
         <meta name="description" content={description}>
+        <meta property="og:type" content="website">
+        <meta property="og:title" content={title}>
+        <meta property="og:description" content={description}>
+        <meta property="og:url" content={`https://www.sebastian-heitmann.dev${Astro.url.pathname}`}>
+        <meta property="og:image" content="https://www.sebastian-heitmann.dev/og-image.jpg">
+        <meta property="og:locale" content={locale === 'de-de' ? 'de_DE' : 'en_US'}>
+        <meta property="og:locale:alternate" content={locale === 'de-de' ? 'en_US' : 'de_DE'}>
+        <meta name="twitter:card" content="summary_large_image">
         <link rel="preload" href="/fonts/InstrumentSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/DMSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>

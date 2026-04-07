@@ -68,14 +68,14 @@ const { situations } = Astro.props;
 
         &-item {
             font-family: var(--v8-font-body);
-            font-size: 17px;
+            font-size: 20px;
             font-weight: 300;
-            line-height: 1.5;
+            line-height: 1.6;
             color: var(--v8-text-tertiary);
-            padding: 16px 0;
+            padding: 24px 0 24px 32px;
             border-bottom: 1px solid var(--v8-border);
-            padding-left: 24px;
             position: relative;
+            transition: color 0.3s ease;
 
             &::before {
                 content: '';
@@ -83,9 +83,19 @@ const { situations } = Astro.props;
                 left: 0;
                 top: 50%;
                 transform: translateY(-50%);
-                width: 6px;
-                height: 1px;
-                background: var(--v8-accent);
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                border: 1px solid var(--v8-accent);
+                transition: background 0.3s ease;
+            }
+
+            &:hover {
+                color: var(--v8-text);
+
+                &::before {
+                    background: var(--v8-accent);
+                }
             }
 
             &:first-child {

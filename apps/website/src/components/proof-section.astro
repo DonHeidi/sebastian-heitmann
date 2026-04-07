@@ -152,13 +152,17 @@ const { proof } = Astro.props;
 
     .engagement {
         background: var(--v8-bg);
-        padding: 40px 32px;
+        padding: 48px 32px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 20px;
 
         &--featured {
             background: var(--v8-bg-surface);
+
+            .engagement-billing {
+                color: var(--v8-accent);
+            }
         }
 
         &-model {
@@ -171,17 +175,18 @@ const { proof } = Astro.props;
 
         &-billing {
             font-family: var(--v8-font-display);
-            font-size: 28px;
-            line-height: 1.2;
+            font-size: 36px;
+            line-height: 1.1;
             color: var(--v8-text);
+            letter-spacing: -0.01em;
         }
 
         &-desc {
             font-family: var(--v8-font-body);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 300;
-            line-height: 1.6;
-            color: var(--v8-text-dim);
+            line-height: 1.7;
+            color: var(--v8-text-tertiary);
         }
     }
 

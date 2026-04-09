@@ -98,7 +98,8 @@ Terraform config managing a dedicated Scaleway project (`sebastian-heitmann-dev`
 
 - TEM API is only available in `fr-par`, function hosts in `nl-ams`
 - `SCW_*` env vars are reserved in Scaleway Functions — use `TEM_*` prefix instead
-- S3 API requires `ACCESS_KEY@PROJECT_ID` format to target non-default projects
+- S3 API requires `ACCESS_KEY@PROJECT_ID` format to target non-default projects — the `PROJECT_ID` is the Terraform-managed project, not the default org project from `~/.config/scw/config.yaml`
+- Bucket ACL is managed by Terraform (`public-read`) — do not pass `--acl public-read` on `aws s3 cp` as it requires extra permissions
 - Edge Services requires a `scaleway_edge_services_plan` before creating pipelines
 - `scaleway_edge_services_head_stage` must point to the DNS stage, not cache/backend
 - Backend stage needs `is_website = true` to serve HTML (otherwise returns XML bucket listing)
@@ -126,12 +127,18 @@ terraform apply
 cd apps/website
 PUBLIC_MAIL_ENDPOINT="https://<function_endpoint>" bun run build
 
-# 4. Sync to bucket (note @PROJECT_ID on access key)
-AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@<project_id>" \
+# 4. Sync to bucket
+# Uses Scaleway CLI credentials (~/.config/scw/config.yaml)
+# PROJECT_ID is the Terraform-managed project (not the default org project):
+#   cd infra && terraform state show scaleway_account_project.main | grep ' id'
+SCW_ACCESS_KEY="$(grep access_key ~/.config/scw/config.yaml | awk '{print $2}')" \
+SCW_SECRET_KEY="$(grep secret_key ~/.config/scw/config.yaml | awk '{print $2}')" \
+PROJECT_ID="$(cd ../infra && terraform output -raw 2>/dev/null; terraform state show scaleway_account_project.main 2>/dev/null | grep ' id' | awk '{print $NF}' | tr -d '"')" \
+AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}" \
 AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY" \
 aws s3 cp dist/ s3://sebastian-heitmann-website/ \
   --endpoint-url https://s3.nl-ams.scw.cloud \
-  --acl public-read --recursive
+  --recursive
 ```
 
 ---

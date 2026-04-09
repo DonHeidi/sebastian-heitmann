@@ -13,7 +13,7 @@ export const enUs: Strings = {
   hero: {
     firstName: 'Sebastian',
     lastName: 'Heitmann',
-    pitch: 'When architecture, delivery, or team structure becomes the constraint, I help leadership teams make the next technical decisions with clarity.',
+    pitch: 'Developer, project manager, consultant. I\'ve been all three. Now I deliver all three at once, with AI as a force multiplier. One person replacing a team at a fraction of the cost and twice the speed.',
     cta: 'Book an Introduction Call',
     ctaNote: '30 minutes. No slides. No pitch.',
     photoAlt: 'Sebastian Heitmann',

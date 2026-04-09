@@ -13,7 +13,7 @@ export const deDe: Strings = {
   hero: {
     firstName: 'Sebastian',
     lastName: 'Heitmann',
-    pitch: 'Wenn Architektur, Delivery oder Teamstruktur zum Engpass werden, helfe ich Führungsteams, die nächsten technischen Entscheidungen mit mehr Klarheit und Sicherheit zu treffen.',
+    pitch: 'Entwickler, Projektmanager, Berater. Ich war jedes davon. Heute bin ich alle drei gleichzeitig. Mit KI als Hebel liefere ich, wofür andere ein ganzes Team brauchen. Zum Bruchteil der Kosten, in halber Zeit.',
     cta: 'Erstgespr\u00E4ch vereinbaren',
     ctaNote: '30 Minuten. Keine Folien. Kein Pitch.',
     photoAlt: 'Sebastian Heitmann',

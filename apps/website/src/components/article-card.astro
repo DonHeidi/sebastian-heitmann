@@ -1,0 +1,160 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+type Props = {
+  title: string;
+  abstract: string;
+  overline?: string;
+  tags: string[];
+  publishedAt: Date;
+  slug: string;
+  headerImage?: ImageMetadata;
+  locale: string;
+};
+
+const { title, abstract, overline, tags, publishedAt, slug, headerImage, locale } = Astro.props;
+
+const href = `${locale === 'de-de' ? '/de-de' : ''}/articles/${slug}/`;
+
+const dateLocale = locale === 'de-de' ? 'de-DE' : 'en-US';
+const formattedDate = publishedAt.toLocaleDateString(dateLocale, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<a href={href} class="article-card">
+  {headerImage && (
+    <div class="article-card__image-wrap">
+      <Image
+        src={headerImage}
+        alt={title}
+        width={600}
+        height={340}
+        class="article-card__image"
+      />
+    </div>
+  )}
+
+  <div class="article-card__content">
+    <div class="article-card__meta">
+      <span class="article-card__overline">
+        {overline ?? ''}
+      </span>
+      <span class="article-card__date">{formattedDate}</span>
+    </div>
+
+    <h2 class="article-card__title">{title}</h2>
+
+    <p class="article-card__abstract">{abstract}</p>
+
+    {tags.length > 0 && (
+      <div class="article-card__tags">
+        {tags.map((tag) => (
+          <span class="article-card__tag">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+</a>
+
+<style lang="scss">
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--v8-border);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease;
+    overflow: hidden;
+
+    &:hover {
+      border-color: var(--v8-text-muted);
+    }
+
+    &:hover .article-card__image {
+      transform: scale(1.03);
+    }
+
+    &__image-wrap {
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    &__image {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      display: block;
+    }
+
+    &__content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    &__meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &__overline {
+      font-family: var(--v8-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--v8-accent);
+    }
+
+    &__date {
+      font-family: var(--v8-font-mono);
+      font-size: 10px;
+      color: var(--v8-text-muted);
+      white-space: nowrap;
+    }
+
+    &__title {
+      font-family: var(--v8-font-display);
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--v8-text);
+    }
+
+    &__abstract {
+      font-family: var(--v8-font-body);
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--v8-text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    &__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    &__tag {
+      font-family: var(--v8-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      color: var(--v8-text-muted);
+      border: 1px solid var(--v8-border);
+      padding: 3px 8px;
+    }
+  }
+</style>

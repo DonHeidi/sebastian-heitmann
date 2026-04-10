@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Navigation from '../../../components/navigation.astro';
+import ArticleCard from '../../../components/article-card.astro';
+import Footer from '../../../components/footer.astro';
+import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
+import type { Locale } from '../../../i18n/utils';
+
+const locale = (Astro.currentLocale ?? 'de-de') as Locale;
+const s = getStrings(locale);
+const alternates = getHreflangAlternates();
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const enArticles = allArticles.filter(({ id }) => !id.startsWith('de-de/'));
+const deArticles = allArticles.filter(({ id }) => id.startsWith('de-de/'));
+const deSlugs = new Set(deArticles.map(({ id }) => id.replace('de-de/', '')));
+const articles = [
+  ...deArticles,
+  ...enArticles.filter(({ id }) => !deSlugs.has(id)),
+];
+
+const sorted = articles.sort((a, b) =>
+  b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+---
+
+<Layout
+  locale={locale}
+  title={`Artikel — Sebastian Heitmann`}
+  description={s.meta.description}
+  alternates={alternates}
+>
+  <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+
+  <main class="articles-page">
+    <header class="articles-page__header">
+      <h1 class="articles-page__title">Artikel</h1>
+      <div class="articles-page__rule"></div>
+    </header>
+
+    <div class="articles-page__grid">
+      {sorted.map((article, i) => {
+        const slug = article.id.startsWith('de-de/')
+          ? article.id.replace('de-de/', '')
+          : article.id;
+        return (
+          <div
+            class="reveal"
+            style={`transition-delay: ${Math.min(i * 80, 400)}ms`}
+          >
+            <ArticleCard
+              title={article.data.title}
+              abstract={article.data.abstract}
+              overline={article.data.overline}
+              tags={article.data.tags}
+              publishedAt={article.data.publishedAt}
+              slug={slug}
+              headerImage={article.data.headerImage}
+              locale={locale}
+            />
+          </div>
+        );
+      })}
+    </div>
+  </main>
+
+  <Footer footer={s.footer} />
+</Layout>
+
+<style lang="scss">
+  .articles-page {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 160px 80px 120px;
+
+    &__header {
+      margin-bottom: 64px;
+    }
+
+    &__title {
+      font-family: var(--v8-font-display);
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 400;
+      line-height: 1.0;
+      color: var(--v8-text);
+      margin-bottom: 48px;
+    }
+
+    &__rule {
+      width: 48px;
+      height: 2px;
+      background-color: var(--v8-accent);
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .articles-page {
+      padding: 120px 48px 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .articles-page {
+      padding: 100px 24px 60px;
+
+      &__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+</style>

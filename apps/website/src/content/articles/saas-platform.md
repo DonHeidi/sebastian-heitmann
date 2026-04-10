@@ -1,8 +1,12 @@
 ---
 title: "SaaS Platform"
-subtitle: "LOREM IPSUM"
-excerpt: "We build intelligent software solutions from modern landing pages, mobile applications, so SaaS applications with a strategic approach driven by incremental growth."
-image: "../../../assets/fb.jpg"
+overline: "Case Study"
+abstract: "We build intelligent software solutions from modern landing pages, mobile applications, so SaaS applications with a strategic approach driven by incremental growth."
+type: "case-study"
+tags: ["saas", "b2b", "cloud", "data", "digital-transformation"]
+author: "sebastian-heitmann"
+headerImage: "../../assets/fb.jpg"
+publishedAt: 2025-02-01
 order: 2
 ---
 

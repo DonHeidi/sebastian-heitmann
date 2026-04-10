@@ -2,15 +2,43 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
-const cases = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/cases' }),
+const authors = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/authors' }),
   schema: ({ image }) => z.object({
-    title: z.string(),
-    subtitle: z.string(),
-    excerpt: z.string(),
-    image: image(),
-    order: z.number(),
+    name: z.string(),
+    slug: z.string(),
+    role: z.string(),
+    description: z.string(),
+    email: z.string().email().optional(),
+    avatar: image(),
+    socials: z.array(z.object({
+      platform: z.string(),
+      url: z.string().url(),
+    })).optional().default([]),
   }),
 });
 
-export const collections = { cases };
+const articles = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/articles' }),
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    overline: z.string().optional(),
+    subline: z.string().optional(),
+    abstract: z.string(),
+    type: z.enum(['article', 'case-study', 'blog-post', 'series-part']),
+    tags: z.array(z.string()).optional().default([]),
+    author: z.string(),
+    headerImage: image().optional(),
+    headerDetailImage: image().optional(),
+    publishedAt: z.coerce.date(),
+    updatedAt: z.coerce.date().optional(),
+    draft: z.boolean().optional().default(false),
+    order: z.number().optional(),
+    series: z.object({
+      name: z.string(),
+      part: z.number(),
+    }).optional(),
+  }),
+});
+
+export const collections = { authors, articles };

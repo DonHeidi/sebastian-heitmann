@@ -8,9 +8,9 @@ import type { Locale } from '../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
 export async function getStaticPaths() {
-  const cases = await getCollection('cases', ({ id }) => id.startsWith('en-us/'));
+  const cases = await getCollection('articles', ({ id }) => !id.startsWith('de-de/'));
   return cases.map((entry) => ({
-    params: { id: entry.id.replace('en-us/', '') },
+    params: { id: entry.id },
     props: { entry },
   }));
 }
@@ -24,25 +24,27 @@ const s = getStrings(locale);
 <Layout
   locale={locale}
   title={`${entry.data.title} — Sebastian Heitmann`}
-  description={entry.data.subtitle ?? s.meta.description}
+  description={entry.data.abstract ?? s.meta.description}
   includeRedirectScript={true}
 >
   <Navigation nav={s.nav} languagePicker={s.languagePicker} />
   <div class="detail-page">
     <article class="detail-page__article">
       <div class="detail-page__hero">
-        <Image
-          src={entry.data.image}
-          alt={entry.data.title}
-          width={1200}
-          height={600}
-          class="detail-page__hero-image"
-        />
+        {entry.data.headerImage && (
+          <Image
+            src={entry.data.headerImage}
+            alt={entry.data.title}
+            width={1200}
+            height={600}
+            class="detail-page__hero-image"
+          />
+        )}
       </div>
       <div class="detail-page__content">
         <header class="detail-page__header">
           <h1 class="detail-page__title">{entry.data.title}</h1>
-          <p class="detail-page__subtitle">{entry.data.subtitle}</p>
+          {entry.data.overline && <p class="detail-page__subtitle">{entry.data.overline}</p>}
         </header>
         <div class="detail-page__body">
           <Content />

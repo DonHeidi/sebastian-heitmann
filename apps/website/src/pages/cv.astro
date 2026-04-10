@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/navigation.astro';
+import CvSection from '../components/cv-section.astro';
+import Footer from '../components/footer.astro';
+import { getStrings, getHreflangAlternates } from '../i18n/utils';
+import type { Locale } from '../i18n/utils';
+
+const locale = Astro.currentLocale as Locale;
+const s = getStrings(locale);
+const alternates = getHreflangAlternates();
+---
+<Layout locale={locale} title={s.cv.meta.title} description={s.cv.meta.description} alternates={alternates}>
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <main>
+        <CvSection cv={s.cv} />
+    </main>
+    <Footer footer={s.footer} />
+</Layout>

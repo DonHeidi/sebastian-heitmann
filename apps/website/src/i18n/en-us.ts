@@ -8,6 +8,7 @@ export const enUs: Strings = {
   nav: {
     logo: 'sebastian-heitmann',
     logoDot: '.dev',
+    cvLabel: 'CV',
     cta: 'Book a Call',
   },
   hero: {
@@ -115,5 +116,189 @@ export const enUs: Strings = {
   },
   caseDetail: {
     backLabel: 'Back',
+  },
+  cv: {
+    meta: {
+      title: 'CV \u2014 Sebastian Heitmann',
+      description: 'Curriculum Vitae. 15 years of architecture, delivery, and team leadership.',
+    },
+    headline: 'Curriculum Vitae',
+    summary: 'Strategic Technology Consultant with 15 years across software architecture, project delivery, and team leadership. I combine deep technical expertise with executive-level communication to turn stalled initiatives into shipped products.',
+    experienceLabel: 'Experience',
+    experience: [
+      {
+        period: 'Jun 2023 \u2014 Present',
+        role: 'Independent Technology Consultant',
+        company: 'Self-Employed',
+        location: 'Hamburg, DE',
+        description: 'Consulting, development, and project management for mid-sized companies and startups. Personal sabbatical and medical rehabilitation from Jun 2023 to Aug 2024.',
+        highlights: [
+          'Automated lead generation software for local SMBs [internal product] \u2014 TypeScript (Bun), TanStack Start, TailwindCSS, SQLite, PostgreSQL',
+          'Mobile app for Pool Position GmbH \u2014 porting core web app features to mobile \u2014 TypeScript, React Native, AWS, Pulumi',
+          'Digitalization project manager (Oct 2025\u2013Mar 2026) \u2014 advisory and delivery for a rental service',
+          'Data & Analytics market consultations \u2014 one-hour analyses for market research and strategy firms',
+        ],
+      },
+      {
+        period: 'Jan 2023 \u2014 May 2023',
+        role: 'Senior Agile Project Manager',
+        company: 'i22 Digitalagentur GmbH',
+        location: 'Remote',
+        description: 'Project lead and key account management for a major telecom client.',
+        highlights: [
+          'Led development of the ordering process for the Magenta Zuhause App',
+          'Client relationship management and coordination with third-party suppliers',
+        ],
+      },
+      {
+        period: 'Apr 2021 \u2014 Jan 2023',
+        role: 'Senior Consultant Project Operations',
+        company: 'Datadrivers GmbH',
+        location: 'Hamburg, DE',
+        description: 'Technical project leadership, service delivery, and hands-on development across data and cloud migration engagements. Promoted from Consultant Development (Nov 2021).',
+        highlights: [
+          'Technical project lead: SAP BW \u2192 AWS cloud migration for fashion/e-commerce \u2014 introduced agile methods, stakeholder management, scaled team to 8 consultants (7-figure annual budget)',
+          'Service delivery manager: on-premise \u2192 Azure migration for a mobility provider \u2014 vendor screening, communication interface, stable delivery despite high C-level turnover',
+          'Developer: ambassador marketing platform for a festival startup \u2014 Next.js introduction, TypeScript, Go, Terraform, AWS',
+          'Cross-functional exchange via bar camps and community of practice; built the knowledge base for Project Operations',
+        ],
+      },
+      {
+        period: 'Sep 2019 \u2014 Mar 2021',
+        role: 'Technical Consultant',
+        company: 'Jung von Matt AG',
+        location: 'Hamburg, DE',
+        description: 'Technical advisory and project management for digital products. Promoted from Junior Technical Project Manager (Feb 2020).',
+        highlights: [
+          'Whitelabel virtual launch platform for a home appliance manufacturer \u2014 JavaScript, Next.js \u2014 stable content pipeline, reliable international rollout, technical leadership',
+          'Product owner: intranet relaunch \u2014 concept, planning, cross-agency team steering, stakeholder management \u2014 internal pitch and six-figure budget approval, content and tech leadership of 7 people',
+          'Decentralized IT support to improve satisfaction \u2192 +2 points for the worst-case candidate',
+          'Gap analysis for IT project execution \u2192 risk assessment and action plan for future projects',
+        ],
+      },
+      {
+        period: 'Oct 2018 \u2014 Aug 2019',
+        role: 'Software Developer (Working Student)',
+        company: 'Granny & Smith GmbH',
+        location: 'Oldenburg, DE',
+        description: 'Software development and rapid prototyping for client projects and internal showcases.',
+        highlights: [
+          'Showcase for a productivity app and meeting documentation tool for an office electronics manufacturer \u2014 TypeScript, Kotlin, Azure, Docker',
+          'Software prototyping in design sprints \u2014 PHP, JavaScript, TypeScript, Java',
+        ],
+      },
+      {
+        period: 'May 2016 \u2014 Sep 2018',
+        role: 'Research Assistant',
+        company: 'OFFIS \u2014 Institute for Information Technology',
+        location: 'Oldenburg, DE',
+        description: 'Development of research software for energy systems at the OFFIS research institute.',
+        highlights: [
+          'Control room software for co-simulation of an agent-based energy grid \u2014 feasibility analysis, concept and development \u2014 Python, Java',
+          'Forecasting tool for the energy market \u2014 development and maintenance of a knowledge topology visualization \u2014 Java',
+        ],
+      },
+    ],
+    earlierExperienceLabel: 'Earlier Positions',
+    earlierExperience: [
+      {
+        period: 'Jan 2015 \u2014 Apr 2016',
+        role: 'Software Developer (Part-Time)',
+        company: 'Pool Position GmbH',
+        location: 'Schwanewede, DE',
+      },
+      {
+        period: 'Jan 2015 \u2014 Mar 2016',
+        role: 'Project Manager / .NET Developer (Part-Time)',
+        company: 'Syneriax Inh. A. Hruska',
+        location: 'Schwanewede, DE',
+      },
+      {
+        period: 'Oct 2013 \u2014 Jan 2015',
+        role: 'Software Developer (Part-Time)',
+        company: 'Goldkalb GmbH',
+        location: 'Schwanewede, DE',
+      },
+    ],
+    skillsLabel: 'Skills & Expertise',
+    skillGroups: [
+      {
+        label: 'Technologies',
+        skills: ['TypeScript', 'TailwindCSS', 'Python', 'PostgreSQL', 'Next.js', 'React', 'Astro', 'TanStack Start', 'Vue', 'Vert.x', 'Drizzle ORM', 'Git', 'GitHub / GitHub Actions', 'Pulumi', 'AWS', 'Docker', 'Podman', 'Terraform'],
+      },
+      {
+        label: 'Project Management',
+        skills: ['Stakeholder Management', 'Requirements Engineering', 'Design Sprints', 'Scrum', 'Kanban', 'Continuous Delivery', 'Design Thinking', 'Jira', 'MS 365', 'Google Workspace'],
+      },
+      {
+        label: 'Architecture & Design',
+        skills: ['PlantUML', 'MVP / MVC', 'Composable Design & Architecture', 'Service-Oriented Architecture', 'Microservices', 'RESTful', 'GraphQL', 'OpenAPI'],
+      },
+    ],
+    educationLabel: 'Education',
+    education: [
+      {
+        period: 'Apr 2016 \u2014 Sep 2019',
+        degree: 'B.Sc. Computer Science (not completed)',
+        institution: 'University of Oldenburg',
+        description: 'Incl. Software Project (grade: 1.0), Internet Technologies (grade: 1.0).',
+      },
+      {
+        period: 'Jan 2015',
+        degree: 'Vocational School Diploma (grade: 1.1)',
+        institution: 'BBS Osterholz-Scharmbeck',
+        description: 'Scholarship offer for certified management accounting.',
+      },
+      {
+        period: 'Oct 2013 \u2014 Jan 2015',
+        degree: 'Apprenticeship: Office Manager (IHK, 87/100)',
+        institution: 'Pool Position GmbH',
+        description: 'Completed in 16 months (standard: 36 months).',
+      },
+      {
+        period: 'Oct 2011 \u2014 Sep 2013',
+        degree: 'B.Sc. Information Management & Technology (not completed)',
+        institution: 'University of Hildesheim',
+        description: 'Incl. Programming Lab (grade: 1.0), Business Administration (grade: 1.0).',
+      },
+      {
+        period: 'Oct 2010 \u2014 Sep 2011',
+        degree: 'B.Sc. Economics (not completed)',
+        institution: 'University of Bremen',
+        description: 'Incl. Mathematics for Business (grade: 1.8), Business Psychology (grade: 1.3).',
+      },
+    ],
+    softSkillsLabel: 'Soft Skills',
+    softSkills: ['Communication & Teamwork', 'Problem Solving', 'Conflict Resolution & Empathy', 'Initiative & Proactivity', 'Creativity & Innovation'],
+    languagesLabel: 'Languages',
+    languages: [
+      { language: 'German', level: 'Native' },
+      { language: 'English', level: 'Business Fluent' },
+      { language: 'Spanish', level: 'Basic' },
+    ],
+    certificationsLabel: 'Certifications',
+    currentFocusLabel: 'Current Training & Focus',
+    currentFocus: ['AWS Cloud Practitioner', 'Google UX Designer', 'AI Engineering'],
+    certifications: [
+      { name: 'Certified Scrum Product Owner', issuer: 'Scrum Alliance', date: 'Since Dec 2021' },
+      { name: 'Certified Junior Consultant', issuer: 'JCNetwork e.V. / UMS GmbH', date: 'Nov 2019' },
+    ],
+    communityLabel: 'Community & Volunteering',
+    communityActivities: [
+      'Mentoring a junior developer from Kashmir \u2192 software development internships \u2192 university enrollment 04/2025 in Berlin',
+      'Speaker at JS User Group 12/2024',
+      'Mentoring junior professionals',
+    ],
+    communityRoles: [
+      { period: 'May 2020 \u2014 Present', role: 'Advisory Board Member', organization: 'CARLO Consulting e.V.' },
+      { period: 'Oct 2018 \u2014 Mar 2020', role: 'Fellow Software Development', organization: 'JCNetwork e.V.' },
+      { period: 'Dec 2018 \u2014 Apr 2019', role: 'Head of Quality & Innovation Management', organization: 'CARLO Consulting e.V.' },
+      { period: 'Sep 2017 \u2014 Nov 2018', role: 'Chairman of the Board', organization: 'CARLO Consulting e.V.' },
+      { period: 'Sep 2017 \u2014 Nov 2019', role: 'Head of Acquisition & Project Management', organization: 'CARLO Consulting e.V.' },
+      { period: 'Aug 2009 \u2014 Jul 2010', role: 'Voluntary Social Year', organization: 'Gemeinde Ritterhude' },
+    ],
+    interestsLabel: 'Hobbies & Interests',
+    interests: ['Content Creation (Tech, Mental Health & Entrepreneurship)', 'Writing (Sci-Fi/Fantasy)', 'Video Games', 'Reading (Sci-Fi/Fantasy, Tech, Mental Health, Leadership, Biographies)'],
+    downloadLabel: 'Download PDF',
   },
 };

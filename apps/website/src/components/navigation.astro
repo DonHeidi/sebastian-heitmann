@@ -9,7 +9,7 @@ type Props = {
 };
 
 const { nav: navProp, languagePicker } = Astro.props;
-const nav = navProp ?? { logo: 'sebastian-heitmann', logoDot: '.dev', cta: 'Book a Call' };
+const nav = navProp ?? { logo: 'sebastian-heitmann', logoDot: '.dev', cvLabel: 'CV', cta: 'Book a Call' };
 const currentLocale = (Astro.currentLocale ?? 'en-us') as Locale;
 const currentConfig = localeConfig[currentLocale];
 
@@ -60,6 +60,7 @@ const pagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$/, 
                 </svg>
             </button>
         </div>
+        <a class="nav-link" href={getRelativeLocaleUrl(currentLocale, 'cv')}>{nav.cvLabel}</a>
         <a class="nav-cta" href={`${getRelativeLocaleUrl(currentLocale, '/')}#contact`}>{nav.cta}</a>
     </div>
 </nav>
@@ -208,6 +209,23 @@ const pagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$/, 
                     color: var(--v8-accent);
                     background: var(--v8-bg-surface);
                 }
+            }
+        }
+
+        &-link {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border: 1px solid var(--v8-border);
+            transition: color 0.2s ease, border-color 0.2s ease;
+
+            &:hover {
+                color: var(--v8-text);
+                border-color: var(--v8-text-muted);
             }
         }
 

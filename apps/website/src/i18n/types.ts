@@ -6,6 +6,7 @@ export interface Strings {
   nav: {
     logo: string;
     logoDot: string;
+    cvLabel: string;
     cta: string;
   };
   hero: {
@@ -70,5 +71,66 @@ export interface Strings {
   };
   caseDetail: {
     backLabel: string;
+  };
+  cv: {
+    meta: {
+      title: string;
+      description: string;
+    };
+    headline: string;
+    summary: string;
+    experienceLabel: string;
+    experience: Array<{
+      period: string;
+      role: string;
+      company: string;
+      location: string;
+      description: string;
+      highlights: string[];
+    }>;
+    earlierExperienceLabel: string;
+    earlierExperience: Array<{
+      period: string;
+      role: string;
+      company: string;
+      location: string;
+    }>;
+    skillsLabel: string;
+    skillGroups: Array<{
+      label: string;
+      skills: string[];
+    }>;
+    educationLabel: string;
+    education: Array<{
+      period: string;
+      degree: string;
+      institution: string;
+      description: string;
+    }>;
+    languagesLabel: string;
+    languages: Array<{
+      language: string;
+      level: string;
+    }>;
+    softSkillsLabel: string;
+    softSkills: string[];
+    certificationsLabel: string;
+    currentFocusLabel: string;
+    currentFocus: string[];
+    certifications: Array<{
+      name: string;
+      issuer: string;
+      date: string;
+    }>;
+    communityLabel: string;
+    communityActivities: string[];
+    communityRoles: Array<{
+      period: string;
+      role: string;
+      organization: string;
+    }>;
+    interestsLabel: string;
+    interests: string[];
+    downloadLabel: string;
   };
 }

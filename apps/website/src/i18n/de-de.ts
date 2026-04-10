@@ -8,6 +8,7 @@ export const deDe: Strings = {
   nav: {
     logo: 'sebastian-heitmann',
     logoDot: '.dev',
+    cvLabel: 'Lebenslauf',
     cta: 'Gespr\u00E4ch buchen',
   },
   hero: {
@@ -115,5 +116,189 @@ export const deDe: Strings = {
   },
   caseDetail: {
     backLabel: 'Zur\u00FCck',
+  },
+  cv: {
+    meta: {
+      title: 'Lebenslauf \u2014 Sebastian Heitmann',
+      description: 'Lebenslauf. 15 Jahre Architektur, Delivery und Team-F\u00FChrung.',
+    },
+    headline: 'Lebenslauf',
+    summary: 'Strategic Technology Consultant mit 15 Jahren Erfahrung in Software-Architektur, Projekt-Delivery und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation auf F\u00FChrungsebene, um blockierte Initiativen in ausgelieferte Produkte zu verwandeln.',
+    experienceLabel: 'Berufserfahrung',
+    experience: [
+      {
+        period: 'Jun 2023 \u2014 Heute',
+        role: 'Selbstst\u00E4ndiger Technologieberater',
+        company: 'Selbstst\u00E4ndig',
+        location: 'Hamburg, DE',
+        description: 'Beratung, Entwicklung und Projektmanagement f\u00FCr mittelst\u00E4ndische Unternehmen und Startups. Pers\u00F6nliche Auszeit und medizinische Rehabilitation von Jun 2023 bis Aug 2024.',
+        highlights: [
+          'Automatisierte Leadgenerierungs-Software f\u00FCr lokale KMU [internes Produkt] \u2014 TypeScript (Bun), TanStack Start, TailwindCSS, SQLite, PostgreSQL',
+          'Mobile App f\u00FCr Pool Position GmbH \u2014 Portierung zentraler Web-App-Funktionen auf mobile Endger\u00E4te \u2014 TypeScript, React Native, AWS, Pulumi',
+          'Projektmanager Digitalisierung (Okt 2025\u2013M\u00E4r 2026) \u2014 Beratung und Begleitung eines Digitalisierungsvorhabens f\u00FCr einen Rental Service',
+          'Konsultationen zum Data-&-Analytics-Markt \u2014 einst\u00FCndige Analysen f\u00FCr Marktforschungs- und Strategieberatungen',
+        ],
+      },
+      {
+        period: 'Jan 2023 \u2014 Mai 2023',
+        role: 'Senior Agile Project Manager',
+        company: 'i22 Digitalagentur GmbH',
+        location: 'Remote',
+        description: 'Projektleitung und Key Account Management f\u00FCr einen gro\u00DFen Telekommunikationskunden.',
+        highlights: [
+          'Projektleitung: Weiterentwicklung des Bestellprozesses der Magenta Zuhause App',
+          'Kundenbetreuung und Abstimmung mit weiteren Zulieferern',
+        ],
+      },
+      {
+        period: 'Apr 2021 \u2014 Jan 2023',
+        role: 'Senior Consultant Project Operations',
+        company: 'Datadrivers GmbH',
+        location: 'Hamburg, DE',
+        description: 'Technische Projektleitung, Service Delivery und Hands-on-Entwicklung in Daten- und Cloud-Migrationsprojekten. Bef\u00F6rderung von Consultant Development (Nov 2021).',
+        highlights: [
+          'Technischer Projektleiter: Migration SAP BW \u2192 AWS-Cloud-basierte L\u00F6sung Fashion/E-Commerce \u2014 Einf\u00FChrung agiler Methoden, Stakeholder-Management, Teamausbau auf 8 Berater:innen (7-stelliges Jahresbudget)',
+          'Service Delivery Manager: Migration on-premise \u2192 Azure-Umgebung Mobility Provider \u2014 Lieferanten-Screening, Kommunikationsschnittstelle, stabile Auslieferung trotz hoher Fluktuation im oberen Management',
+          'Developer: Botschafter-Marketing-Plattform f\u00FCr ein Festival-Startup \u2014 Next.js-Einf\u00FChrung, TypeScript, Go, Terraform, AWS',
+          'Cross-funktionaler Austausch \u00FCber Bar Camps und Community of Practice; Aufbau der Knowledge Base f\u00FCr Project Operations',
+        ],
+      },
+      {
+        period: 'Sep 2019 \u2014 M\u00E4r 2021',
+        role: 'Technical Consultant',
+        company: 'Jung von Matt AG',
+        location: 'Hamburg, DE',
+        description: 'Technische Beratung und Projektmanagement f\u00FCr digitale Produkte. Bef\u00F6rderung von Junior Technical Project Manager (Feb 2020).',
+        highlights: [
+          'Whitelabel Virtual Launch Plattform f\u00FCr einen Hausger\u00E4tehersteller \u2014 JavaScript, Next.js \u2014 stabile Content Pipeline, verl\u00E4sslicher intl. Rollout, technische F\u00FChrung',
+          'Product Owner: Intranet-Relaunch \u2014 Konzeption, Planung, agentur\u00FCbergreifende Teamsteuerung, Stakeholdermanagement \u2014 interner Pitch und Freigabe sechsstelligen Budgets, inhaltliche und tech. F\u00FChrung von 7 Personen',
+          'Dezentraler IT-Support zur Steigerung der IT-Zufriedenheit \u2192 +2 Punkte beim Worst-Case-Kandidat',
+          'Gap-Analyse zur Durchf\u00FChrung von IT-Projekten \u2192 Risikobewertung und Ma\u00DFnahmenkatalog f\u00FCr zuk\u00FCnftige Projekte',
+        ],
+      },
+      {
+        period: 'Okt 2018 \u2014 Aug 2019',
+        role: 'Software Developer (Werksstudent)',
+        company: 'Granny & Smith GmbH',
+        location: 'Oldenburg, DE',
+        description: 'Softwareentwicklung und Rapid Prototyping f\u00FCr Kundenprojekte und interne Showcases.',
+        highlights: [
+          'Showcase f\u00FCr eine Produktivit\u00E4ts-App und Meeting-Dokumentation f\u00FCr einen B\u00FCroelektronikhersteller \u2014 TypeScript, Kotlin, Azure, Docker',
+          'Software-Prototyping in Design Sprints \u2014 PHP, JavaScript, TypeScript, Java',
+        ],
+      },
+      {
+        period: 'Mai 2016 \u2014 Sep 2018',
+        role: 'Wissenschaftliche Hilfskraft',
+        company: 'OFFIS \u2014 Institut f\u00FCr Informatik',
+        location: 'Oldenburg, DE',
+        description: 'Entwicklung von Forschungssoftware f\u00FCr Energiesysteme am OFFIS Forschungsinstitut.',
+        highlights: [
+          'Leitwartensoftware f\u00FCr Co-Simulation eines agentenbasierten Energienetzes \u2014 Machbarkeitsanalyse, Konzept und Entwicklung \u2014 Python, Java',
+          'Prognose-Tool f\u00FCr den Energiemarkt \u2014 Entwicklung und Wartung einer Visualisierung von Wissenstopologien \u2014 Java',
+        ],
+      },
+    ],
+    earlierExperienceLabel: 'Weitere T\u00E4tigkeiten',
+    earlierExperience: [
+      {
+        period: 'Jan 2015 \u2014 Apr 2016',
+        role: 'Software Developer (Teilzeit)',
+        company: 'Pool Position GmbH',
+        location: 'Schwanewede, DE',
+      },
+      {
+        period: 'Jan 2015 \u2014 M\u00E4r 2016',
+        role: 'Project Manager / .NET Developer (Teilzeit)',
+        company: 'Syneriax Inh. A. Hruska',
+        location: 'Schwanewede, DE',
+      },
+      {
+        period: 'Okt 2013 \u2014 Jan 2015',
+        role: 'Software Developer (Teilzeit)',
+        company: 'Goldkalb GmbH',
+        location: 'Schwanewede, DE',
+      },
+    ],
+    skillsLabel: 'Kenntnisse & Fertigkeiten',
+    skillGroups: [
+      {
+        label: 'Technologien',
+        skills: ['TypeScript', 'TailwindCSS', 'Python', 'PostgreSQL', 'Next.js', 'React', 'Astro', 'TanStack Start', 'Vue', 'Vert.x', 'Drizzle ORM', 'Git', 'GitHub / GitHub Actions', 'Pulumi', 'AWS', 'Docker', 'Podman', 'Terraform'],
+      },
+      {
+        label: 'Projektmanagement',
+        skills: ['Stakeholder Management', 'Requirements Engineering', 'Design Sprints', 'Scrum', 'Kanban', 'Continuous Delivery', 'Design Thinking', 'Jira', 'MS 365', 'Google Workspace'],
+      },
+      {
+        label: 'Konzeption',
+        skills: ['PlantUML', 'MVP / MVC', 'Composable Design & Architecture', 'Service-Oriented Architecture', 'Microservices', 'RESTful', 'GraphQL', 'OpenAPI'],
+      },
+    ],
+    educationLabel: 'Ausbildung',
+    education: [
+      {
+        period: 'Apr 2016 \u2014 Sep 2019',
+        degree: 'Informatik B.Sc. (ohne Abschluss)',
+        institution: 'Universit\u00E4t Oldenburg',
+        description: 'u.\u00A0a. Softwareprojekt (Note: 1,0), Internettechnologien (Note: 1,0).',
+      },
+      {
+        period: 'Jan 2015',
+        degree: 'Berufsschulabschluss (Note: 1,1)',
+        institution: 'BBS Osterholz-Scharmbeck',
+        description: 'Stipendiatsangebot f\u00FCr Bilanzbuchhaltung.',
+      },
+      {
+        period: 'Okt 2013 \u2014 Jan 2015',
+        degree: 'Ausbildung IHK B\u00FCrokaufmann (87/100 Punkte)',
+        institution: 'Pool Position GmbH',
+        description: 'Abschluss nach 16 Monaten (statt 36 Monaten).',
+      },
+      {
+        period: 'Okt 2011 \u2014 Sep 2013',
+        degree: 'Informationsmanagement & -technologie B.Sc. (ohne Abschluss)',
+        institution: 'Universit\u00E4t Hildesheim',
+        description: 'u.\u00A0a. Programmierpraktikum (Note: 1,0), BWL (Note: 1,0).',
+      },
+      {
+        period: 'Okt 2010 \u2014 Sep 2011',
+        degree: 'Wirtschaftswissenschaften B.Sc. (ohne Abschluss)',
+        institution: 'Universit\u00E4t Bremen',
+        description: 'u.\u00A0a. Mathematik f\u00FCr BWL (Note: 1,8), Wirtschaftspsychologie (Note: 1,3).',
+      },
+    ],
+    softSkillsLabel: 'Soft Skills',
+    softSkills: ['Kommunikations- & Teamf\u00E4higkeit', 'Probleml\u00F6sekompetenz', 'Konfliktl\u00F6sung & Empathie', 'Eigeninitiative & Proaktivit\u00E4t', 'Kreativit\u00E4t & Innovation'],
+    languagesLabel: 'Sprachen',
+    languages: [
+      { language: 'Deutsch', level: 'Muttersprache' },
+      { language: 'Englisch', level: 'Verhandlungssicher' },
+      { language: 'Spanisch', level: 'Schulkenntnisse' },
+    ],
+    certificationsLabel: 'Zertifikate',
+    currentFocusLabel: 'Aktuelle Fortbildungen & Schwerpunkte',
+    currentFocus: ['AWS Cloud Practitioner', 'Google UX Designer', 'AI Engineering'],
+    certifications: [
+      { name: 'Certified Scrum Product Owner', issuer: 'Scrum Alliance', date: 'Seit Dez 2021' },
+      { name: 'Certified Junior Consultant', issuer: 'JCNetwork e.V. / UMS GmbH', date: 'Nov 2019' },
+    ],
+    communityLabel: 'Soziales & Ehrenamtliches Engagement',
+    communityActivities: [
+      'Begleitung eines Kashmiri \u2192 Praktika als Softwareentwickler \u2192 Studienbeginn 04/2025 in Berlin',
+      'Speaker auf der JS User Group 12/2024',
+      'Begleitung von Junior Professionals',
+    ],
+    communityRoles: [
+      { period: 'Mai 2020 \u2014 Heute', role: 'Mitglied des Beirats', organization: 'CARLO Consulting e.V.' },
+      { period: 'Okt 2018 \u2014 M\u00E4r 2020', role: 'Fellow Software Development', organization: 'JCNetwork e.V.' },
+      { period: 'Dez 2018 \u2014 Apr 2019', role: 'Ressortleiter Quality and Innovation Management', organization: 'CARLO Consulting e.V.' },
+      { period: 'Sep 2017 \u2014 Nov 2018', role: 'Vorstandsvorsitzender', organization: 'CARLO Consulting e.V.' },
+      { period: 'Sep 2017 \u2014 Nov 2019', role: 'Ressortleiter Acquisition & Project Management', organization: 'CARLO Consulting e.V.' },
+      { period: 'Aug 2009 \u2014 Jul 2010', role: 'Freiwilliges Soziales Jahr', organization: 'Gemeinde Ritterhude' },
+    ],
+    interestsLabel: 'Hobbies & Interessen',
+    interests: ['Content Creation (Tech, Mental Health & Entrepreneurship)', 'Schreiben (Sci-Fi/Fantasy)', 'Video Games', 'Lesen (Sci-Fi/Fantasy, Tech, Mental Health, Leadership, Biografien)'],
+    downloadLabel: 'PDF herunterladen',
   },
 };

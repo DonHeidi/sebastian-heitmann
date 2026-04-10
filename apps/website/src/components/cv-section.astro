@@ -1,0 +1,1041 @@
+---
+import type { Strings } from '../i18n/types';
+
+type Props = {
+    cv: Strings['cv'];
+};
+
+const { cv } = Astro.props;
+---
+
+<section class="cv">
+    <div class="cv-header reveal">
+        <div class="cv-header__top">
+            <h1 class="cv-headline">{cv.headline}</h1>
+            <button class="cv-download" onclick="window.print()" type="button">
+                <span class="cv-download__text">{cv.downloadLabel}</span>
+                <span class="cv-download__arrow">&darr;</span>
+            </button>
+        </div>
+        <div class="cv-rule"></div>
+        <p class="cv-summary">{cv.summary}</p>
+    </div>
+
+    <!-- Experience Timeline -->
+    <div class="cv-experience reveal" style="transition-delay: 0.1s">
+        <div class="cv-section-header">
+            <span class="cv-section-label">{cv.experienceLabel}</span>
+            <div class="cv-section-line"></div>
+        </div>
+
+        <div class="cv-timeline">
+            {cv.experience.map((entry, i) => (
+                <article class="cv-entry reveal" style={`transition-delay: ${0.15 + i * 0.06}s`}>
+                    <div class="cv-entry__aside">
+                        <span class="cv-entry__period">{entry.period}</span>
+                        <span class="cv-entry__location">{entry.location}</span>
+                    </div>
+                    <div class="cv-entry__marker">
+                        <span class="cv-entry__dot"></span>
+                        <span class="cv-entry__stem"></span>
+                    </div>
+                    <div class="cv-entry__body">
+                        <h3 class="cv-entry__role">{entry.role}</h3>
+                        <span class="cv-entry__company">{entry.company}</span>
+                        <p class="cv-entry__description">{entry.description}</p>
+                        <ul class="cv-entry__highlights">
+                            {entry.highlights.map((h) => (
+                                <li>{h}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </article>
+            ))}
+        </div>
+
+        <!-- Earlier positions fade into the timeline -->
+        <div class="cv-earlier reveal" style="transition-delay: 0.5s">
+            <span class="cv-earlier__label">{cv.earlierExperienceLabel}</span>
+            {cv.earlierExperience.map((entry) => (
+                <div class="cv-earlier__row">
+                    <span class="cv-earlier__period">{entry.period}</span>
+                    <span class="cv-earlier__role">{entry.role}</span>
+                    <span class="cv-earlier__company">{entry.company}</span>
+                </div>
+            ))}
+        </div>
+    </div>
+
+    <!-- Bento Grid: Everything Else -->
+    <div class="bento reveal" style="transition-delay: 0.2s">
+        <div class="cv-section-header">
+            <span class="cv-section-label">{cv.skillsLabel}</span>
+            <div class="cv-section-line"></div>
+        </div>
+
+        <div class="bento-grid">
+            <!-- Skills: Technologies -->
+            <div class="bento-cell bento-area--tech reveal" style="transition-delay: 0.25s">
+                <span class="bento-cell__label">{cv.skillGroups[0].label}</span>
+                <div class="bento-tags">
+                    {cv.skillGroups[0].skills.map((skill) => (
+                        <span class="bento-tag">{skill}</span>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Skills: Project Management -->
+            <div class="bento-cell bento-area--pm reveal" style="transition-delay: 0.28s">
+                <span class="bento-cell__label">{cv.skillGroups[1].label}</span>
+                <div class="bento-tags">
+                    {cv.skillGroups[1].skills.map((skill) => (
+                        <span class="bento-tag">{skill}</span>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Skills: Architecture -->
+            <div class="bento-cell bento-area--arch reveal" style="transition-delay: 0.31s">
+                <span class="bento-cell__label">{cv.skillGroups[2].label}</span>
+                <div class="bento-tags">
+                    {cv.skillGroups[2].skills.map((skill) => (
+                        <span class="bento-tag">{skill}</span>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Languages -->
+            <div class="bento-cell bento-area--lang reveal" style="transition-delay: 0.34s">
+                <span class="bento-cell__label">{cv.languagesLabel}</span>
+                <div class="bento-langs">
+                    {cv.languages.map((lang) => (
+                        <div class="bento-lang">
+                            <span class="bento-lang__name">{lang.language}</span>
+                            <span class="bento-lang__level">{lang.level}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Soft Skills -->
+            <div class="bento-cell bento-area--soft reveal" style="transition-delay: 0.37s">
+                <span class="bento-cell__label">{cv.softSkillsLabel}</span>
+                <div class="bento-tags">
+                    {cv.softSkills.map((skill) => (
+                        <span class="bento-tag">{skill}</span>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="bento-cell bento-area--edu reveal" style="transition-delay: 0.3s">
+                <span class="bento-cell__label">{cv.educationLabel}</span>
+                <div class="bento-edu-list">
+                    {cv.education.map((entry) => (
+                        <div class="bento-edu">
+                            <span class="bento-edu__period">{entry.period}</span>
+                            <span class="bento-edu__degree">{entry.degree}</span>
+                            <span class="bento-edu__institution">{entry.institution}</span>
+                            <p class="bento-edu__desc">{entry.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="bento-cell bento-area--cert reveal" style="transition-delay: 0.36s">
+                <span class="bento-cell__label">{cv.certificationsLabel}</span>
+                <div class="bento-cert-list">
+                    <div class="bento-cert-focus">
+                        <span class="bento-cert-focus__label">{cv.currentFocusLabel}</span>
+                        <div class="bento-tags">
+                            {cv.currentFocus.map((item) => (
+                                <span class="bento-tag">{item}</span>
+                            ))}
+                        </div>
+                    </div>
+                    {cv.certifications.map((cert) => (
+                        <div class="bento-cert">
+                            <span class="bento-cert__name">{cert.name}</span>
+                            <span class="bento-cert__meta">{cert.issuer} &middot; {cert.date}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Community -->
+            <div class="bento-cell bento-area--comm reveal" style="transition-delay: 0.39s">
+                <span class="bento-cell__label">{cv.communityLabel}</span>
+                <div class="bento-community">
+                    <ul class="bento-community__activities">
+                        {cv.communityActivities.map((activity) => (
+                            <li>{activity}</li>
+                        ))}
+                    </ul>
+                    <div class="bento-community__roles">
+                        {cv.communityRoles.map((entry) => (
+                            <div class="bento-community__role">
+                                <span class="bento-community__role-name">{entry.role}</span>
+                                <span class="bento-community__role-meta">{entry.organization} &middot; {entry.period}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="bento-cell bento-area--interests reveal" style="transition-delay: 0.42s">
+                <span class="bento-cell__label">{cv.interestsLabel}</span>
+                <div class="bento-tags">
+                    {cv.interests.map((interest) => (
+                        <span class="bento-tag">{interest}</span>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    /* ── Page Shell ── */
+    .cv {
+        padding: 160px 80px 120px;
+        max-width: 1440px;
+        margin: 0 auto;
+
+        &-header {
+            max-width: 720px;
+            margin-bottom: 96px;
+
+            &__top {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 32px;
+            }
+        }
+
+        &-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: 1px solid var(--v8-border);
+            padding: 10px 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 12px;
+            transition: border-color 0.2s, gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+            &:hover {
+                border-color: var(--v8-accent);
+                gap: 12px;
+            }
+
+            &__text {
+                font-family: var(--v8-font-mono);
+                font-size: 12px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--v8-text);
+            }
+
+            &__arrow {
+                font-size: 14px;
+                color: var(--v8-accent);
+                transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            &:hover &__arrow {
+                transform: translateY(2px);
+            }
+        }
+
+        &-headline {
+            font-family: var(--v8-font-display);
+            font-size: clamp(48px, 6vw, 80px);
+            line-height: 1;
+            letter-spacing: -0.02em;
+            color: var(--v8-text);
+            margin-bottom: 24px;
+        }
+
+        &-rule {
+            width: 48px;
+            height: 2px;
+            background: var(--v8-accent);
+            margin-bottom: 32px;
+        }
+
+        &-summary {
+            font-family: var(--v8-font-body);
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--v8-text-secondary);
+            max-width: 600px;
+        }
+    }
+
+    /* ── Section Headers ── */
+    .cv-section-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 48px;
+    }
+
+    .cv-section-label {
+        font-family: var(--v8-font-mono);
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--v8-text-muted);
+        flex-shrink: 0;
+    }
+
+    .cv-section-line {
+        flex: 1;
+        height: 1px;
+        background: var(--v8-border);
+    }
+
+    /* ── Experience Timeline ── */
+    .cv-experience {
+        margin-bottom: 96px;
+    }
+
+    .cv-timeline {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cv-entry {
+        display: grid;
+        grid-template-columns: 180px 32px 1fr;
+        gap: 0;
+
+        &__aside {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding-top: 4px;
+            padding-right: 24px;
+            text-align: right;
+        }
+
+        &__period {
+            font-family: var(--v8-font-mono);
+            font-size: 13px;
+            color: var(--v8-text);
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        &__location {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-muted);
+            letter-spacing: 0.04em;
+        }
+
+        &__marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &__dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--v8-accent);
+            flex-shrink: 0;
+            margin-top: 8px;
+            z-index: 1;
+        }
+
+        &__stem {
+            width: 1px;
+            flex: 1;
+            background: var(--v8-border);
+        }
+
+        &:last-child &__stem {
+            background: linear-gradient(to bottom, var(--v8-border) 60%, transparent);
+        }
+
+        &__body {
+            padding: 0 0 48px 24px;
+        }
+
+        &__role {
+            font-family: var(--v8-font-display);
+            font-size: 28px;
+            line-height: 1.15;
+            color: var(--v8-text);
+            letter-spacing: -0.01em;
+            margin-bottom: 6px;
+        }
+
+        &__company {
+            font-family: var(--v8-font-mono);
+            font-size: 13px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--v8-accent);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        &__description {
+            font-family: var(--v8-font-body);
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--v8-text-tertiary);
+            margin-bottom: 16px;
+            max-width: 640px;
+        }
+
+        &__highlights {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 640px;
+
+            li {
+                font-family: var(--v8-font-body);
+                font-size: 15px;
+                font-weight: 300;
+                line-height: 1.6;
+                color: var(--v8-text-dim);
+                padding-left: 16px;
+                position: relative;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 10px;
+                    width: 5px;
+                    height: 1px;
+                    background: var(--v8-text-muted);
+                }
+            }
+        }
+    }
+
+    /* ── Earlier Positions (timeline coda) ── */
+    .cv-earlier {
+        margin-top: 8px;
+        padding-top: 32px;
+        padding-left: 212px;
+        border-top: 1px solid var(--v8-border);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        &__label {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-faint);
+            margin-bottom: 4px;
+        }
+
+        &__row {
+            display: flex;
+            gap: 16px;
+            align-items: baseline;
+        }
+
+        &__period {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            color: var(--v8-text-faint);
+            letter-spacing: 0.02em;
+            flex-shrink: 0;
+        }
+
+        &__role {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--v8-text-dim);
+        }
+
+        &__company {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            color: var(--v8-text-faint);
+            flex-shrink: 0;
+        }
+    }
+
+    /* ── Bento Grid ── */
+    .bento {
+        margin-bottom: 0;
+    }
+
+    .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas:
+            "tech      tech      pm"
+            "arch      lang      soft"
+            "edu       cert      cert"
+            "edu       comm      comm"
+            "interests comm      comm";
+        gap: 1px;
+        background: var(--v8-text-faint);
+        overflow: hidden;
+    }
+
+    .bento-area--tech { grid-area: tech; }
+    .bento-area--pm { grid-area: pm; }
+    .bento-area--arch { grid-area: arch; }
+    .bento-area--lang { grid-area: lang; }
+    .bento-area--soft { grid-area: soft; }
+    .bento-area--edu { grid-area: edu; }
+    .bento-area--cert { grid-area: cert; }
+    .bento-area--comm { grid-area: comm; }
+    .bento-area--interests { grid-area: interests; }
+
+    .bento-cell {
+        padding: 32px;
+        background: var(--v8-bg);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        &__label {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+        }
+    }
+
+    /* ── Bento: Tags ── */
+    .bento-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .bento-tag {
+        font-family: var(--v8-font-mono);
+        font-size: 13px;
+        color: var(--v8-text-tertiary);
+        padding: 4px 10px;
+        border: 1px solid var(--v8-border);
+        border-radius: 2px;
+        transition: border-color 0.2s, color 0.2s;
+
+        &:hover {
+            border-color: var(--v8-border-accent);
+            color: var(--v8-text);
+        }
+    }
+
+    /* ── Bento: Languages ── */
+    .bento-langs {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .bento-lang {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        &__name {
+            font-family: var(--v8-font-display);
+            font-size: 20px;
+            line-height: 1.2;
+            color: var(--v8-text);
+        }
+
+        &__level {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+        }
+    }
+
+    /* ── Bento: Education ── */
+    .bento-edu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .bento-edu {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--v8-border);
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        &__period {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-faint);
+            letter-spacing: 0.04em;
+        }
+
+        &__degree {
+            font-family: var(--v8-font-display);
+            font-size: 20px;
+            line-height: 1.25;
+            color: var(--v8-text);
+        }
+
+        &__institution {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--v8-accent);
+        }
+
+        &__desc {
+            font-family: var(--v8-font-body);
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--v8-text-dim);
+            margin-top: 4px;
+        }
+    }
+
+    /* ── Bento: Certifications ── */
+    .bento-cert-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .bento-cert-focus {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--v8-border);
+
+        &__label {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-text-faint);
+        }
+    }
+
+    .bento-cert {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        &__name {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--v8-text-tertiary);
+        }
+
+        &__meta {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-faint);
+            letter-spacing: 0.04em;
+        }
+    }
+
+    /* ── Bento: Community ── */
+    .bento-community {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        &__activities {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--v8-border);
+
+            li {
+                font-family: var(--v8-font-body);
+                font-size: 15px;
+                font-weight: 300;
+                line-height: 1.5;
+                color: var(--v8-text-tertiary);
+                padding-left: 14px;
+                position: relative;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 9px;
+                    width: 5px;
+                    height: 1px;
+                    background: var(--v8-text-muted);
+                }
+            }
+        }
+
+        &__roles {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        &__role {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        &__role-name {
+            font-family: var(--v8-font-body);
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--v8-text-dim);
+        }
+
+        &__role-meta {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            color: var(--v8-text-faint);
+            letter-spacing: 0.04em;
+        }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+        .cv {
+            padding: 120px 48px 80px;
+
+            &-header {
+                margin-bottom: 72px;
+            }
+        }
+
+        .cv-entry {
+            grid-template-columns: 140px 32px 1fr;
+
+            &__role {
+                font-size: 24px;
+            }
+        }
+
+        .cv-earlier {
+            padding-left: 172px;
+        }
+
+        .bento-grid {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-areas:
+                "tech      tech"
+                "pm        arch"
+                "lang      soft"
+                "edu       edu"
+                "cert      cert"
+                "comm      comm"
+                "interests interests";
+        }
+    }
+
+    @media (max-width: 768px) {
+        .cv {
+            padding: 120px 24px 80px;
+
+            &-header {
+                margin-bottom: 64px;
+            }
+        }
+
+        .cv-experience {
+            margin-bottom: 64px;
+        }
+
+        .cv-entry {
+            grid-template-columns: 1fr;
+            gap: 0;
+
+            &__aside {
+                text-align: left;
+                padding-right: 0;
+                padding-bottom: 8px;
+                flex-direction: row;
+                gap: 12px;
+                align-items: baseline;
+            }
+
+            &__marker {
+                display: none;
+            }
+
+            &__body {
+                padding: 0 0 40px 0;
+                border-left: 2px solid var(--v8-border);
+                padding-left: 20px;
+            }
+
+            &:first-child &__body {
+                border-image: linear-gradient(to bottom, var(--v8-accent), var(--v8-border) 40%) 1;
+            }
+
+            &__role {
+                font-size: 22px;
+            }
+        }
+
+        .cv-earlier {
+            padding-left: 0;
+
+            &__row {
+                flex-wrap: wrap;
+                gap: 4px 12px;
+            }
+        }
+
+        .bento-grid {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "tech"
+                "pm"
+                "arch"
+                "lang"
+                "soft"
+                "edu"
+                "cert"
+                "comm"
+                "interests";
+        }
+    }
+
+
+</style>
+
+<style is:inline>
+@page { size: A4; margin: 0; }
+
+@media print {
+  html {
+    --v8-bg: #fff !important;
+    --v8-bg-alt: #f5f5f2 !important;
+    --v8-bg-surface: #f0eeea !important;
+    --v8-text: #111 !important;
+    --v8-text-muted: rgba(0,0,0,0.55) !important;
+    --v8-text-secondary: rgba(0,0,0,0.72) !important;
+    --v8-text-tertiary: rgba(0,0,0,0.6) !important;
+    --v8-text-dim: rgba(0,0,0,0.55) !important;
+    --v8-text-faint: rgba(0,0,0,0.4) !important;
+    --v8-accent: #B82A00 !important;
+    --v8-border: rgba(0,0,0,0.15) !important;
+    --v8-border-accent: rgba(184,42,0,0.3) !important;
+    scrollbar-gutter: auto !important;
+    width: auto !important;
+  }
+  body {
+    background: #fff !important;
+    width: auto !important;
+    min-width: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  nav, footer { display: none !important; }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  main {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Page shell */
+  .cv {
+    padding: 14mm 16mm !important;
+    max-width: none !important;
+    width: 100% !important;
+    display: block !important;
+  }
+  .cv-download { display: none !important; }
+  .cv-header {
+    margin-bottom: 20px !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+  .cv-header__top { display: block !important; }
+  .cv-headline { font-size: 28px !important; margin-bottom: 6px !important; }
+  .cv-rule { width: 32px !important; margin-bottom: 8px !important; }
+  .cv-summary {
+    font-size: 10px !important;
+    line-height: 1.5 !important;
+    max-width: none !important;
+  }
+
+  /* Section headers */
+  .cv-section-header { margin-bottom: 10px !important; }
+  .cv-section-label { font-size: 8px !important; }
+  .cv-section-line {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background: rgba(0,0,0,0.15) !important;
+  }
+
+  /* Experience */
+  .cv-experience { margin-bottom: 16px !important; width: 100% !important; }
+  .cv-timeline { width: 100% !important; }
+  .cv-entry,
+  .cv-entry:first-child {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 6px !important;
+    border: none !important;
+    border-image: none !important;
+  }
+  .cv-entry__aside {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    width: 100% !important;
+    text-align: left !important;
+    padding: 0 !important;
+    margin-bottom: 2px !important;
+  }
+  .cv-entry__marker,
+  .cv-entry__dot,
+  .cv-entry__stem { display: none !important; }
+  .cv-entry__period { font-size: 8px !important; }
+  .cv-entry__location { font-size: 7px !important; }
+  .cv-entry__body {
+    padding: 0 !important;
+    width: 100% !important;
+    border: none !important;
+    border-image: none !important;
+  }
+  .cv-entry__role { font-size: 13px !important; margin-bottom: 1px !important; }
+  .cv-entry__company { font-size: 8px !important; margin-bottom: 3px !important; }
+  .cv-entry__description {
+    font-size: 9px !important;
+    line-height: 1.45 !important;
+    margin-bottom: 3px !important;
+    max-width: none !important;
+  }
+  .cv-entry__highlights { gap: 1px !important; max-width: none !important; }
+  .cv-entry__highlights li {
+    font-size: 8px !important;
+    line-height: 1.35 !important;
+    padding-left: 10px !important;
+  }
+  .cv-entry__highlights li::before { top: 5px !important; width: 4px !important; }
+
+  /* Earlier positions */
+  .cv-earlier {
+    padding-left: 0 !important;
+    padding-top: 8px !important;
+    gap: 3px !important;
+    width: 100% !important;
+    border: none !important;
+  }
+  .cv-earlier__label { font-size: 8px !important; margin-bottom: 0 !important; }
+  .cv-earlier__row { flex-wrap: wrap !important; gap: 2px 8px !important; }
+  .cv-earlier__period { font-size: 7.5px !important; }
+  .cv-earlier__role { font-size: 8.5px !important; }
+  .cv-earlier__company { font-size: 7px !important; }
+
+  /* Bento grid */
+  .bento {
+    width: 100% !important;
+    break-before: page !important;
+    padding: 14mm 16mm !important;
+  }
+  .bento-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-areas:
+      "tech      tech      pm"
+      "arch      lang      soft"
+      "edu       cert      cert"
+      "edu       comm      comm"
+      "interests comm      comm" !important;
+    gap: 1px !important;
+    width: 100% !important;
+    background: rgba(0,0,0,0.2) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .bento-cell {
+    padding: 8px 10px !important;
+    gap: 5px !important;
+    background: #fff !important;
+    border: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .bento-cell__label { font-size: 7px !important; }
+  .bento-tags { gap: 3px !important; }
+  .bento-tag {
+    font-size: 8px !important;
+    padding: 2px 6px !important;
+    border-color: rgba(0,0,0,0.15) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bento-langs { gap: 6px !important; }
+  .bento-lang__name { font-size: 12px !important; }
+  .bento-lang__level { font-size: 7.5px !important; }
+
+  .bento-edu-list { gap: 8px !important; }
+  .bento-edu { padding-bottom: 6px !important; }
+  .bento-edu__period { font-size: 7.5px !important; }
+  .bento-edu__degree { font-size: 11px !important; }
+  .bento-edu__institution { font-size: 7.5px !important; }
+  .bento-edu__desc { font-size: 8px !important; margin-top: 1px !important; }
+
+  .bento-cert-focus { padding-bottom: 6px !important; gap: 4px !important; }
+  .bento-cert-focus__label { font-size: 7px !important; }
+  .bento-cert-list { gap: 6px !important; }
+  .bento-cert__name { font-size: 9px !important; }
+  .bento-cert__meta { font-size: 7.5px !important; }
+
+  .bento-community { gap: 6px !important; }
+  .bento-community__activities { padding-bottom: 6px !important; gap: 2px !important; }
+  .bento-community__activities li {
+    font-size: 8.5px !important;
+    line-height: 1.4 !important;
+    padding-left: 10px !important;
+  }
+  .bento-community__activities li::before { top: 5px !important; width: 4px !important; }
+  .bento-community__roles { gap: 4px !important; }
+  .bento-community__role-name { font-size: 8.5px !important; }
+  .bento-community__role-meta { font-size: 7px !important; }
+
+  .cv-entry, .bento-cell { break-inside: avoid; }
+}
+</style>

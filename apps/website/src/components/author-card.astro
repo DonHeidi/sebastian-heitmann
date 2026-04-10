@@ -1,0 +1,140 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+type Props = {
+  name: string;
+  role: string;
+  description: string;
+  avatar: ImageMetadata;
+  email?: string;
+  socials?: Array<{ platform: string; url: string }>;
+};
+
+const { name, role, description, avatar, email, socials = [] } = Astro.props;
+---
+
+<aside class="author-card">
+  <div class="author-card__avatar-wrap">
+    <Image
+      src={avatar}
+      alt={name}
+      width={72}
+      height={72}
+      class="author-card__avatar"
+    />
+  </div>
+  <p class="author-card__name">{name}</p>
+  <p class="author-card__role">{role}</p>
+  <p class="author-card__description">{description}</p>
+  {(socials.length > 0 || email) && (
+    <div class="author-card__socials">
+      {socials.map(({ platform, url }) => (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={platform}
+          class="author-card__social-link"
+        >
+          <Icon name={`simple-icons:${platform}`} width={16} height={16} />
+        </a>
+      ))}
+      {email && (
+        <a
+          href={`mailto:${email}`}
+          aria-label="Email"
+          class="author-card__social-link"
+        >
+          <Icon name="simple-icons:maildotru" width={16} height={16} />
+        </a>
+      )}
+    </div>
+  )}
+</aside>
+
+<style lang="scss">
+  .author-card {
+    border: 1px solid var(--v8-border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: sticky;
+    top: 100px;
+
+    &__avatar-wrap {
+      width: 72px;
+      height: 72px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    &__avatar {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      filter: var(--v8-photo-filter);
+      transition: filter 0.4s ease;
+
+      &:hover {
+        filter: var(--v8-photo-filter-hover);
+      }
+    }
+
+    &__name {
+      font-family: var(--v8-font-display);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--v8-text);
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+
+    &__role {
+      font-family: var(--v8-font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--v8-text-muted);
+    }
+
+    &__description {
+      font-family: var(--v8-font-body);
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--v8-text-secondary);
+    }
+
+    &__socials {
+      display: flex;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    &__social-link {
+      color: var(--v8-text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--v8-text);
+      }
+
+      :global(svg) {
+        color: inherit;
+        fill: currentColor;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .author-card {
+      position: static;
+    }
+  }
+</style>

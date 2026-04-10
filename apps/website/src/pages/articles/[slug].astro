@@ -1,0 +1,358 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/navigation.astro';
+import Footer from '../../components/footer.astro';
+import AuthorCard from '../../components/author-card.astro';
+import { getStrings } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ id, data }) =>
+    !id.startsWith('de-de/') && !data.draft
+  );
+  return articles.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const locale = (Astro.currentLocale ?? 'en-us') as Locale;
+const s = getStrings(locale);
+
+const authorEntry = await getEntry('authors', entry.data.author);
+const publishedDate = entry.data.publishedAt.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout
+  locale={locale}
+  title={`${entry.data.title} — Sebastian Heitmann`}
+  description={entry.data.abstract ?? s.meta.description}
+>
+  <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+
+  <div class="article-page">
+    {entry.data.headerImage && (
+      <div class="article-page__hero">
+        <Image
+          src={entry.data.headerImage}
+          alt={entry.data.title}
+          width={1200}
+          height={480}
+          class="article-page__hero-image"
+        />
+      </div>
+    )}
+
+    <div class="article-page__layout">
+      <main class="article-page__main">
+        <header class="article-page__header">
+          {entry.data.headerDetailImage && (
+            <Image
+              src={entry.data.headerDetailImage}
+              alt={entry.data.title}
+              width={200}
+              height={200}
+              class="article-page__detail-image"
+            />
+          )}
+          <div class="article-page__title-block">
+            {entry.data.overline && (
+              <p class="article-page__overline">{entry.data.overline}</p>
+            )}
+            <h1 class="article-page__title">{entry.data.title}</h1>
+            {entry.data.subline && (
+              <p class="article-page__subline">{entry.data.subline}</p>
+            )}
+            <p class="article-page__date">{publishedDate}</p>
+          </div>
+        </header>
+
+        <div class="article-page__body">
+          <Content />
+        </div>
+
+        {entry.data.tags && entry.data.tags.length > 0 && (
+          <div class="article-page__tags">
+            {entry.data.tags.map((tag) => (
+              <span class="article-page__tag">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        <div class="article-page__footer-row">
+          <a href={getRelativeLocaleUrl(locale, 'articles')} class="article-page__back">
+            &larr; All articles
+          </a>
+        </div>
+      </main>
+
+      <aside class="article-page__sidebar">
+        {authorEntry && (
+          <AuthorCard
+            name={authorEntry.data.name}
+            role={authorEntry.data.role}
+            description={authorEntry.data.description}
+            avatar={authorEntry.data.avatar}
+            email={authorEntry.data.email}
+            socials={authorEntry.data.socials}
+          />
+        )}
+      </aside>
+    </div>
+  </div>
+
+  <Footer footer={s.footer} />
+</Layout>
+
+<style lang="scss">
+  .article-page {
+    max-width: 1440px;
+    margin: 0 auto;
+
+    &__hero {
+      margin-top: 80px;
+      padding: 0 80px;
+      overflow: hidden;
+      max-height: 480px;
+    }
+
+    &__hero-image {
+      width: 100%;
+      max-height: 480px;
+      object-fit: cover;
+    }
+
+    &__layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 64px;
+      padding: 0 80px 120px;
+    }
+
+    &__main {
+      min-width: 0;
+    }
+
+    &__header {
+      padding-top: 80px;
+      margin-bottom: 48px;
+    }
+
+    &__detail-image {
+      float: inline-start;
+      margin: 0 24px 8px 0;
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border: 4px solid var(--v8-bg);
+    }
+
+    &__title-block {
+      margin-top: -40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    &__overline {
+      font-family: var(--v8-font-mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--v8-accent);
+    }
+
+    &__title {
+      font-family: var(--v8-font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--v8-text);
+    }
+
+    &__subline {
+      font-family: var(--v8-font-body);
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--v8-text-secondary);
+    }
+
+    &__date {
+      font-family: var(--v8-font-mono);
+      font-size: 12px;
+      color: var(--v8-text-muted);
+    }
+
+    &__body {
+      font-family: var(--v8-font-body);
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--v8-text-secondary);
+
+      :global(h2) {
+        font-family: var(--v8-font-display);
+        font-size: 28px;
+        font-weight: 400;
+        color: var(--v8-text);
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      :global(h3) {
+        font-family: var(--v8-font-display);
+        font-size: 22px;
+        font-weight: 400;
+        color: var(--v8-text);
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+      }
+
+      :global(p) {
+        margin-bottom: 1.25rem;
+      }
+
+      :global(blockquote) {
+        font-style: italic;
+        border-left: 3px solid var(--v8-accent);
+        padding-left: 1.25rem;
+        margin: 1.5rem 0;
+        color: var(--v8-text-muted);
+      }
+
+      :global(code) {
+        font-family: var(--v8-font-mono);
+        font-size: 0.9em;
+        background-color: var(--v8-bg-surface);
+        padding: 0.1em 0.35em;
+        border-radius: 2px;
+      }
+
+      :global(pre) {
+        background-color: var(--v8-bg-surface);
+        padding: 1.25rem;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        border-radius: 2px;
+
+        :global(code) {
+          background: none;
+          padding: 0;
+          font-size: 14px;
+        }
+      }
+
+      :global(img) {
+        max-width: 100%;
+        height: auto;
+      }
+
+      :global(ul),
+      :global(ol) {
+        padding-left: 1.5rem;
+        margin-bottom: 1.25rem;
+      }
+
+      :global(li) {
+        margin-bottom: 0.5rem;
+      }
+
+      :global(a) {
+        color: var(--v8-accent);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+    }
+
+    &__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--v8-border);
+      margin-top: 48px;
+    }
+
+    &__tag {
+      font-family: var(--v8-font-mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--v8-text-muted);
+      border: 1px solid var(--v8-border);
+      padding: 4px 10px;
+    }
+
+    &__footer-row {
+      margin-top: 32px;
+    }
+
+    &__back {
+      font-family: var(--v8-font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: var(--v8-accent);
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    &__sidebar {
+      padding-top: 80px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .article-page {
+      &__layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      &__sidebar {
+        order: -1;
+        padding-top: 40px;
+        padding-bottom: 0;
+      }
+
+      &__header {
+        padding-top: 40px;
+      }
+
+      &__title-block {
+        margin-top: 0;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .article-page {
+      &__hero {
+        padding: 0 24px;
+        margin-top: 40px;
+      }
+
+      &__layout {
+        padding: 0 24px 60px;
+      }
+
+      &__detail-image {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  }
+</style>

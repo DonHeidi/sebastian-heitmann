@@ -18,6 +18,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "astro": "6.0.4",
     "cz-conventional-changelog": "^3.3.0",
     "sass": "^1.86.3",

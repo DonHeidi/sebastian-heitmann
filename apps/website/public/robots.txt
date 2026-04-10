@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.sebastian-heitmann.dev/sitemap-index.xml

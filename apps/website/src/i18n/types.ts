@@ -72,6 +72,10 @@ export interface Strings {
   caseDetail: {
     backLabel: string;
   };
+  featuredArticles: {
+    label: string;
+    viewAllLabel: string;
+  };
   cv: {
     meta: {
       title: string;

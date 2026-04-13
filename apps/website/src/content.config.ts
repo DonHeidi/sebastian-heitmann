@@ -32,7 +32,9 @@ const articles = defineCollection({
     headerDetailImage: image().optional(),
     publishedAt: z.coerce.date(),
     updatedAt: z.coerce.date().optional(),
+    authorship: z.enum(['human', 'ai-assisted', 'agent-written']).optional().default('human'),
     draft: z.boolean().optional().default(false),
+    displayFrontpage: z.boolean().optional().default(false),
     order: z.number().optional(),
     series: z.object({
       name: z.string(),

@@ -9,6 +9,7 @@ author: "sebastian-heitmann"
 publishedAt: 2026-04-13
 authorship: "ai-assisted"
 draft: false
+displayFrontpage: true
 ---
 
 **Mein härtester Tag in diesem Jahr war kein Tag, an dem ich Code geschrieben habe. Es war ein Tag, an dem ich sechs Stunden lang fünf KI-Agenten parallel orchestriert habe.**

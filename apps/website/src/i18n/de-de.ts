@@ -117,6 +117,10 @@ export const deDe: Strings = {
   caseDetail: {
     backLabel: 'Zur\u00FCck',
   },
+  featuredArticles: {
+    label: 'Texte',
+    viewAllLabel: 'Alle Artikel',
+  },
   cv: {
     meta: {
       title: 'Lebenslauf \u2014 Sebastian Heitmann',

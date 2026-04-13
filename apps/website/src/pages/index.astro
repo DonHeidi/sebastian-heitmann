@@ -1,10 +1,12 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/navigation.astro';
 import Hero from '../components/hero.astro';
 import LogoSection from '../components/logo-section.astro';
 import SituationsSection from '../components/situations-section.astro';
 import ProofSection from '../components/proof-section.astro';
+import FeaturedArticlesSection from '../components/featured-articles-section.astro';
 import ContactSection from '../components/contact-section.astro';
 import Footer from '../components/footer.astro';
 import { getStrings, getHreflangAlternates } from '../i18n/utils';
@@ -13,6 +15,14 @@ import type { Locale } from '../i18n/utils';
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates();
+
+const featured = (
+    await getCollection('articles', ({ id, data }) =>
+        !id.startsWith('de-de/') && !data.draft && data.displayFrontpage
+    )
+)
+    .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+    .map((entry) => ({ entry, slug: entry.id }));
 ---
 <Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} />
@@ -21,6 +31,7 @@ const alternates = getHreflangAlternates();
         <LogoSection logos={s.logos} />
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} />
+        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} />
         <ContactSection contact={s.contact} />
     </main>
     <Footer footer={s.footer} />

@@ -117,6 +117,10 @@ export const enUs: Strings = {
   caseDetail: {
     backLabel: 'Back',
   },
+  featuredArticles: {
+    label: 'Writing',
+    viewAllLabel: 'All articles',
+  },
   cv: {
     meta: {
       title: 'CV \u2014 Sebastian Heitmann',

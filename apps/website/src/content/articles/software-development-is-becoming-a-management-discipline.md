@@ -9,6 +9,7 @@ author: "sebastian-heitmann"
 publishedAt: 2026-04-13
 authorship: "ai-assisted"
 draft: false
+displayFrontpage: true
 ---
 
 **The hardest day I've had this year wasn't writing code. It was managing five AI agents for six straight hours.**

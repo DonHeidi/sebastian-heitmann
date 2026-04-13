@@ -1,0 +1,122 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ArticleCard from './article-card.astro';
+import type { Strings } from '../i18n/types';
+import type { Locale } from '../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+type Props = {
+    articles: Array<{ entry: CollectionEntry<'articles'>; slug: string }>;
+    strings: Strings['featuredArticles'];
+    locale: Locale;
+};
+
+const { articles, strings, locale } = Astro.props;
+---
+
+{articles.length > 0 && (
+    <section class="featured-articles" id="writing">
+        <div class="featured-articles__inner">
+            <div class="featured-articles__header reveal">
+                <span class="featured-articles__label">{strings.label}</span>
+                <div class="featured-articles__rule"></div>
+                <a class="featured-articles__view-all" href={getRelativeLocaleUrl(locale, 'articles')}>
+                    {strings.viewAllLabel} &rarr;
+                </a>
+            </div>
+
+            <div class="featured-articles__grid">
+                {articles.map(({ entry, slug }, i) => (
+                    <div
+                        class="reveal"
+                        style={`transition-delay: ${Math.min(i * 80, 240)}ms`}
+                    >
+                        <ArticleCard
+                            title={entry.data.title}
+                            abstract={entry.data.abstract}
+                            overline={entry.data.overline}
+                            tags={entry.data.tags}
+                            publishedAt={entry.data.publishedAt}
+                            slug={slug}
+                            headerImage={entry.data.headerImage}
+                            locale={locale}
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+)}
+
+<style lang="scss">
+    .featured-articles {
+        padding: 120px 80px;
+        max-width: 1440px;
+        margin: 0 auto;
+        border-top: 1px solid var(--v8-border);
+
+        &__inner {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        &__header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        &__label {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            flex-shrink: 0;
+        }
+
+        &__rule {
+            flex: 1;
+            height: 1px;
+            background: var(--v8-border);
+        }
+
+        &__view-all {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-accent);
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+
+        &__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .featured-articles {
+            padding: 48px 48px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .featured-articles {
+            padding: 60px 24px;
+
+            &__grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+</style>

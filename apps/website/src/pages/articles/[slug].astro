@@ -34,6 +34,11 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('en-US', {
 const publishedISO = entry.data.publishedAt.toISOString();
 const modifiedISO = entry.data.updatedAt?.toISOString();
 
+const wordCount = entry.body
+  ? entry.body.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolean).length
+  : 0;
+const readingMinutes = Math.max(1, Math.round(wordCount / 200));
+
 const siteOrigin = 'https://www.sebastian-heitmann.dev';
 const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
 const heroImageUrl = entry.data.headerImage
@@ -132,7 +137,11 @@ if (entry.data.series) {
             {entry.data.subline && (
               <p class="article-page__subline">{entry.data.subline}</p>
             )}
-            <time class="article-page__date" datetime={publishedISO}>{publishedDate}</time>
+            <p class="article-page__meta-line">
+              <time class="article-page__date" datetime={publishedISO}>{publishedDate}</time>
+              <span class="article-page__meta-sep" aria-hidden="true">&middot;</span>
+              <span class="article-page__reading-time">{readingMinutes} min read</span>
+            </p>
           </div>
         </header>
 
@@ -277,10 +286,24 @@ if (entry.data.series) {
       color: var(--v8-text-secondary);
     }
 
-    &__date {
+    &__meta-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-family: var(--v8-font-mono);
       font-size: 12px;
       color: var(--v8-text-muted);
+    }
+
+    &__date,
+    &__reading-time {
+      font-family: var(--v8-font-mono);
+      font-size: 12px;
+      color: var(--v8-text-muted);
+    }
+
+    &__meta-sep {
+      color: var(--v8-text-faint);
     }
 
     &__body {

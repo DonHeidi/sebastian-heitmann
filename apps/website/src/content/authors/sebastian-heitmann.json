@@ -6,7 +6,7 @@
   "email": "me@sebastian-heitmann.dev",
   "avatar": "../../assets/fb.jpg",
   "socials": [
-    { "platform": "linkedin", "url": "https://www.linkedin.com/in/don-heidi/" },
+    { "platform": "linkedin", "url": "https://www.linkedin.com/in/sebastian-heitmann/" },
     { "platform": "github", "url": "https://github.com/DonHeidi" },
     { "platform": "bluesky", "url": "https://www.bluesky.com/e2e_developer" }
   ]

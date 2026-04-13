@@ -41,6 +41,66 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
   month: 'long',
   day: 'numeric',
 });
+const publishedISO = entry.data.publishedAt.toISOString();
+const modifiedISO = entry.data.updatedAt?.toISOString();
+
+const siteOrigin = 'https://www.sebastian-heitmann.dev';
+const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
+const heroImageUrl = entry.data.headerImage
+  ? `${siteOrigin}${entry.data.headerImage.src}`
+  : `${siteOrigin}/og-image.jpg`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: entry.data.title,
+  description: entry.data.abstract,
+  image: [heroImageUrl],
+  datePublished: publishedISO,
+  ...(modifiedISO ? { dateModified: modifiedISO } : {}),
+  author: authorEntry
+    ? {
+        '@type': 'Person',
+        name: authorEntry.data.name,
+        url: siteOrigin,
+      }
+    : undefined,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Sebastian Heitmann',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteOrigin}/og-image.jpg`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+  },
+  inLanguage: 'de-DE',
+  ...(entry.data.tags && entry.data.tags.length > 0
+    ? { keywords: entry.data.tags.join(', ') }
+    : {}),
+};
+
+// Series lookup — prefer German articles, fall back to English
+let seriesParts: Array<{ slug: string; title: string; part: number }> = [];
+if (entry.data.series) {
+  const seriesName = entry.data.series.name;
+  const all = await getCollection('articles', ({ data }) => !data.draft && data.series?.name === seriesName);
+  const deParts = all.filter(({ id }) => id.startsWith('de-de/'));
+  const enParts = all.filter(({ id }) => !id.startsWith('de-de/'));
+  const deSlugs = new Set(deParts.map(({ id }) => id.replace('de-de/', '')));
+  const merged = [
+    ...deParts.map((a) => ({ slug: a.id.replace('de-de/', ''), title: a.data.title, part: a.data.series!.part })),
+    ...enParts
+      .filter(({ id }) => !deSlugs.has(id))
+      .map((a) => ({ slug: a.id, title: a.data.title, part: a.data.series!.part })),
+  ];
+  seriesParts = merged.sort((a, b) => a.part - b.part);
+}
+
+const currentSlug = entry.id.replace('de-de/', '');
 ---
 
 <Layout
@@ -48,9 +108,10 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
   title={`${entry.data.title} — Sebastian Heitmann`}
   description={entry.data.abstract ?? s.meta.description}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <Navigation nav={s.nav} languagePicker={s.languagePicker} />
 
-  <div class="article-page">
+  <main class="article-page">
     {entry.data.headerImage && (
       <div class="article-page__hero">
         <Image
@@ -64,7 +125,7 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
     )}
 
     <div class="article-page__layout">
-      <main class="article-page__main">
+      <article class="article-page__main">
         <header class="article-page__header">
           {entry.data.headerDetailImage && (
             <Image
@@ -76,6 +137,11 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
             />
           )}
           <div class="article-page__title-block">
+            {entry.data.series && seriesParts.length > 0 && (
+              <p class="article-page__series-label">
+                {entry.data.series.name} &middot; Teil {entry.data.series.part} von {seriesParts.length}
+              </p>
+            )}
             {entry.data.overline && (
               <p class="article-page__overline">{entry.data.overline}</p>
             )}
@@ -83,7 +149,7 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
             {entry.data.subline && (
               <p class="article-page__subline">{entry.data.subline}</p>
             )}
-            <p class="article-page__date">{publishedDate}</p>
+            <time class="article-page__date" datetime={publishedISO}>{publishedDate}</time>
           </div>
         </header>
 
@@ -99,12 +165,33 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
           </div>
         )}
 
+        {entry.data.series && seriesParts.length > 0 && (
+          <nav class="article-page__series" aria-label="Serien-Navigation">
+            <div class="article-page__series-header">
+              <span class="article-page__series-overline">Serie</span>
+              <span class="article-page__series-name">{entry.data.series.name}</span>
+            </div>
+            <ol class="article-page__series-list">
+              {seriesParts.map((part) => (
+                <li class:list={['article-page__series-item', { 'article-page__series-item--current': part.slug === currentSlug }]}>
+                  <span class="article-page__series-part">{String(part.part).padStart(2, '0')}</span>
+                  {part.slug === currentSlug ? (
+                    <span class="article-page__series-title">{part.title}</span>
+                  ) : (
+                    <a class="article-page__series-title" href={getRelativeLocaleUrl(locale, `articles/${part.slug}`)}>{part.title}</a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
         <div class="article-page__footer-row">
           <a href={getRelativeLocaleUrl(locale, 'articles')} class="article-page__back">
             &larr; Alle Artikel
           </a>
         </div>
-      </main>
+      </article>
 
       <aside class="article-page__sidebar">
         {authorEntry && (
@@ -117,9 +204,14 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
             socials={authorEntry.data.socials}
           />
         )}
+        <div class="article-page__authorship">
+          {entry.data.authorship === 'human' && 'Geschrieben von einem Menschen'}
+          {entry.data.authorship === 'ai-assisted' && 'KI-unterst\u00FCtzt'}
+          {entry.data.authorship === 'agent-written' && 'Geschrieben von einem KI-Agenten'}
+        </div>
       </aside>
     </div>
-  </div>
+  </main>
 
   <Footer footer={s.footer} />
 </Layout>
@@ -289,6 +381,93 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
       }
     }
 
+    &__series-label {
+      font-family: var(--v8-font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--v8-text-muted);
+      margin-bottom: 4px;
+    }
+
+    &__series {
+      margin-top: 48px;
+      padding: 24px;
+      border: 1px solid var(--v8-border);
+    }
+
+    &__series-header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--v8-border);
+    }
+
+    &__series-overline {
+      font-family: var(--v8-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--v8-text-muted);
+    }
+
+    &__series-name {
+      font-family: var(--v8-font-display);
+      font-size: 20px;
+      line-height: 1.2;
+      color: var(--v8-text);
+    }
+
+    &__series-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__series-item {
+      display: flex;
+      gap: 16px;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--v8-border);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &--current .article-page__series-part {
+        color: var(--v8-accent);
+      }
+
+      &--current .article-page__series-title {
+        color: var(--v8-text);
+      }
+    }
+
+    &__series-part {
+      font-family: var(--v8-font-mono);
+      font-size: 11px;
+      color: var(--v8-text-muted);
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+    }
+
+    &__series-title {
+      font-family: var(--v8-font-body);
+      font-size: 15px;
+      color: var(--v8-text-tertiary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:is(a):hover {
+        color: var(--v8-text);
+      }
+    }
+
     &__tags {
       display: flex;
       flex-wrap: wrap;
@@ -326,6 +505,17 @@ const publishedDate = entry.data.publishedAt.toLocaleDateString('de-DE', {
 
     &__sidebar {
       padding-top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    &__authorship {
+      font-family: var(--v8-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--v8-text-faint);
     }
   }
 

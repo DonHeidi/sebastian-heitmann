@@ -74,6 +74,7 @@ const htmlLang = localeConfig[locale].htmlLang;
                 }
             })();
         </script>
+        <slot name="head" />
         {includeRedirectScript && (
             <script is:inline>
                 (function() {

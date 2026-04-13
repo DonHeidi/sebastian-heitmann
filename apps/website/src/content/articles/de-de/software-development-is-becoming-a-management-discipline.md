@@ -6,6 +6,8 @@ abstract: "Agentisches Coding macht Engineers nicht einfach nur schneller. Es le
 type: "article"
 tags: ["KI-Agenten", "Engineering Leadership", "Org Design", "Knowledge as Code", "KI-übersetzt"]
 author: "sebastian-heitmann"
+headerImage: "../../../assets/articles/management-discipline-header.png"
+headerDetailImage: "../../../assets/articles/management-discipline-detail.png"
 publishedAt: 2026-04-13
 authorship: "ai-assisted"
 draft: false

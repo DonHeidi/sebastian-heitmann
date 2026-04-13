@@ -6,6 +6,8 @@ abstract: "Agentic coding doesn't just speed up engineers. It collapses three ro
 type: "article"
 tags: ["AI Agents", "Engineering Leadership", "Org Design", "Knowledge as Code"]
 author: "sebastian-heitmann"
+headerImage: "../../assets/articles/management-discipline-header.png"
+headerDetailImage: "../../assets/articles/management-discipline-detail.png"
 publishedAt: 2026-04-13
 authorship: "ai-assisted"
 draft: false

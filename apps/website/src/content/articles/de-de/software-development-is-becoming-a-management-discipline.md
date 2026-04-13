@@ -4,12 +4,13 @@ category: "leadership-management"
 subline: "Agenten ersetzen nicht die Engineers — sie ersetzen die Koordinationsebene darüber"
 abstract: "Agentisches Coding macht Engineers nicht einfach nur schneller. Es legt drei Rollen — Designer, Tech Lead, Projektmanager — auf eine einzige Person, die parallel mehrere Projekte fährt. Der Engpass ist nicht der Durchsatz der Agenten, sondern wie viele tragfähige Entscheidungen ein Mensch am Tag durchhält. Dieser Text zeigt, was wirklich bricht, wer mit der Veränderung davonkommt — und welche Praktiken (Knowledge as Code, eine neue Junior-Rolle, Org-Design rund um Entscheidungskapazität) der neuen Last standhalten."
 type: "article"
-tags: ["KI-Agenten", "Engineering Leadership", "Org Design", "Knowledge as Code", "KI-übersetzt"]
+tags: ["KI-Agenten", "Engineering Leadership", "Org Design", "Knowledge as Code"]
 author: "sebastian-heitmann"
 headerImage: "../../../assets/articles/management-discipline-header.png"
 headerDetailImage: "../../../assets/articles/management-discipline-detail.png"
 publishedAt: 2026-04-13
 authorship: "ai-assisted"
+aiTranslated: true
 draft: false
 displayFrontpage: true
 ---

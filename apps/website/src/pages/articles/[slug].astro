@@ -198,6 +198,12 @@ if (entry.data.series) {
           {entry.data.authorship === 'human' && 'Written by a human'}
           {entry.data.authorship === 'ai-assisted' && 'AI-assisted'}
           {entry.data.authorship === 'agent-written' && 'Written by an AI agent'}
+          {entry.data.aiTranslated && (
+            <>
+              <span class="article-page__authorship-sep" aria-hidden="true">&middot;</span>
+              <span>AI translated</span>
+            </>
+          )}
         </div>
       </aside>
     </div>
@@ -306,10 +312,11 @@ if (entry.data.series) {
 
     &__body {
       font-family: var(--v8-font-body);
-      font-size: 17px;
+      font-size: 24px;
       font-weight: 300;
       line-height: 1.7;
       color: var(--v8-text-secondary);
+      max-width: 53ch;
 
       :global(h2) {
         font-family: var(--v8-font-display);
@@ -512,6 +519,9 @@ if (entry.data.series) {
       display: flex;
       flex-direction: column;
       gap: 16px;
+      position: sticky;
+      top: 24px;
+      align-self: start;
     }
 
     &__authorship {
@@ -520,6 +530,14 @@ if (entry.data.series) {
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--v8-text-faint);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    &__authorship-sep {
+      color: var(--v8-text-faint);
+      opacity: 0.6;
     }
   }
 
@@ -534,6 +552,7 @@ if (entry.data.series) {
         order: -1;
         padding-top: 40px;
         padding-bottom: 0;
+        position: static;
       }
 
       &__header {
@@ -542,6 +561,11 @@ if (entry.data.series) {
 
       &__title-block {
         margin-top: 0;
+      }
+
+      &__body {
+        font-size: 17px;
+        max-width: none;
       }
     }
   }

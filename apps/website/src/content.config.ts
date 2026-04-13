@@ -39,6 +39,7 @@ const articles = defineCollection({
     publishedAt: z.coerce.date(),
     updatedAt: z.coerce.date().optional(),
     authorship: z.enum(['human', 'ai-assisted', 'agent-written']).optional().default('human'),
+    aiTranslated: z.boolean().optional().default(false),
     draft: z.boolean().optional().default(false),
     displayFrontpage: z.boolean().optional().default(false),
     order: z.number().optional(),

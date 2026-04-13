@@ -215,6 +215,12 @@ const currentSlug = entry.id.replace('de-de/', '');
           {entry.data.authorship === 'human' && 'Geschrieben von einem Menschen'}
           {entry.data.authorship === 'ai-assisted' && 'KI-unterst\u00FCtzt'}
           {entry.data.authorship === 'agent-written' && 'Geschrieben von einem KI-Agenten'}
+          {entry.data.aiTranslated && (
+            <>
+              <span class="article-page__authorship-sep" aria-hidden="true">&middot;</span>
+              <span>KI-übersetzt</span>
+            </>
+          )}
         </div>
       </aside>
     </div>
@@ -323,10 +329,11 @@ const currentSlug = entry.id.replace('de-de/', '');
 
     &__body {
       font-family: var(--v8-font-body);
-      font-size: 17px;
+      font-size: 24px;
       font-weight: 300;
       line-height: 1.7;
       color: var(--v8-text-secondary);
+      max-width: 53ch;
 
       :global(h2) {
         font-family: var(--v8-font-display);
@@ -529,6 +536,9 @@ const currentSlug = entry.id.replace('de-de/', '');
       display: flex;
       flex-direction: column;
       gap: 16px;
+      position: sticky;
+      top: 24px;
+      align-self: start;
     }
 
     &__authorship {
@@ -537,6 +547,14 @@ const currentSlug = entry.id.replace('de-de/', '');
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--v8-text-faint);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    &__authorship-sep {
+      color: var(--v8-text-faint);
+      opacity: 0.6;
     }
   }
 
@@ -551,6 +569,7 @@ const currentSlug = entry.id.replace('de-de/', '');
         order: -1;
         padding-top: 40px;
         padding-bottom: 0;
+        position: static;
       }
 
       &__header {
@@ -559,6 +578,11 @@ const currentSlug = entry.id.replace('de-de/', '');
 
       &__title-block {
         margin-top: 0;
+      }
+
+      &__body {
+        font-size: 17px;
+        max-width: none;
       }
     }
   }

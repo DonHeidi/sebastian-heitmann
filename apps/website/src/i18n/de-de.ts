@@ -3,7 +3,7 @@ import type { Strings } from './types';
 export const deDe: Strings = {
   meta: {
     title: 'Sebastian Heitmann \u2014 Strategic Technology Consultant',
-    description: 'Strategic Technology Consultant. Architektur, Delivery, Teams.',
+    description: 'Strategic Technology Consultant. Architektur, Entwicklung, Teams.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -19,7 +19,7 @@ export const deDe: Strings = {
     ctaNote: '30 Minuten. Keine Folien. Kein Pitch.',
     photoAlt: 'Sebastian Heitmann',
     role: { label: 'Rolle', value: 'Strategic Technology Consultant' },
-    focus: { label: 'Fokus', value: 'Architektur, Delivery, Teams' },
+    focus: { label: 'Fokus', value: 'Architektur, Entwicklung, Teams' },
     experience: { label: 'Erfahrung', value: '15 Jahre' },
     projects: { label: 'Projekte', value: '20+ umgesetzt' },
     status: { label: 'Status', value: 'Verf\u00FCgbar' },
@@ -33,7 +33,7 @@ export const deDe: Strings = {
   situations: {
     label: 'Wann ein Gespräch sinnvoll ist',
     items: [
-      'Die Delivery ist ins Stocken geraten, und im Team sieht jeder eine andere Ursache.',
+      'Die Entwicklung ist ins Stocken geraten, und im Team sieht jeder eine andere Ursache.',
       'Deine Architektur hat dich weit gebracht, aber trägt die nächste Phase nicht weiter.',
       'Technische Entscheidungen fühlen sich schwer an und prägen Kosten, Geschwindigkeit und Teamstrukturen für Jahre.',
       'Eine Migration, ein Rebuild oder eine Reorganisation braucht jemanden, der das schon einmal gemacht hat.',
@@ -51,14 +51,14 @@ export const deDe: Strings = {
       {
         metric: 'AWS',
         metricLabel: 'Migration von SAP BW',
-        description: 'Eine bestehende Analytics-Umgebung von SAP BW in ein AWS-basiertes Setup überführt und damit die Grundlage für belastbareres Reporting und kontinuierliche Delivery geschaffen.',
+        description: 'Eine bestehende Analytics-Umgebung von SAP BW in ein AWS-basiertes Setup überführt und damit die Grundlage für belastbareres Reporting und kontinuierliche Entwicklung geschaffen.',
         tag: 'Cloud-Migration',
       },
       {
         metric: '7 Länder',
         metricLabel: 'internationaler Rollout',
         description: 'Plattform und Content-Pipeline vor dem Launch stabilisiert und damit einen zuverlässigen Rollout in sieben Ländern ab dem ersten Tag ermöglicht.',
-        tag: 'Technische Delivery',
+        tag: 'Technische Entwicklung',
       },
       {
         metric: 'Stillstand → Live',
@@ -83,13 +83,13 @@ export const deDe: Strings = {
       {
         model: 'Umsetzen',
         billing: 'Pro Zyklus',
-        description: 'Festpreis pro Delivery-Zyklus. Ein fokussiertes Engagement mit klarem Ziel \u2014 etwa ein MVP, eine Migration, ein Rebuild oder ein Delivery-Reset.',
+        description: 'Festpreis pro Entwicklungszyklus. Ein fokussiertes Engagement mit klarem Ziel \u2014 etwa ein MVP, eine Migration, ein Rebuild oder ein Entwicklungs-Reset.',
         featured: true,
       },
       {
         model: 'Begleiten',
         billing: 'Monatlicher Retainer',
-        description: 'Laufender monatlicher Retainer. Erfahrene technische Partnerschaft in Architektur, Delivery und Umsetzungskontinuität.',
+        description: 'Laufender monatlicher Retainer. Erfahrene technische Partnerschaft in Architektur, Entwicklung und Umsetzungskontinuität.',
       },
     ],
   },
@@ -131,10 +131,10 @@ export const deDe: Strings = {
   cv: {
     meta: {
       title: 'Lebenslauf \u2014 Sebastian Heitmann',
-      description: 'Lebenslauf. 15 Jahre Architektur, Delivery und Team-F\u00FChrung.',
+      description: 'Lebenslauf. 15 Jahre Architektur, Entwicklung und Team-F\u00FChrung.',
     },
     headline: 'Lebenslauf',
-    summary: 'Strategic Technology Consultant mit 15 Jahren Erfahrung in Software-Architektur, Projekt-Delivery und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation auf F\u00FChrungsebene, um blockierte Initiativen in ausgelieferte Produkte zu verwandeln.',
+    summary: 'Strategic Technology Consultant mit 15 Jahren Erfahrung in Software-Architektur, Entwicklung und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation auf F\u00FChrungsebene, um blockierte Initiativen in ausgelieferte Produkte zu verwandeln.',
     experienceLabel: 'Berufserfahrung',
     experience: [
       {

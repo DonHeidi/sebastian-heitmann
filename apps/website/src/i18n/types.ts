@@ -76,6 +76,13 @@ export interface Strings {
     label: string;
     viewAllLabel: string;
   };
+  categories: {
+    'solopreneurship-career': string;
+    'leadership-management': string;
+    'technical-decisions': string;
+    'shipping-with-ai': string;
+    'mental-health': string;
+  };
   cv: {
     meta: {
       title: string;

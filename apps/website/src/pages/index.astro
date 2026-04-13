@@ -22,7 +22,11 @@ const featured = (
     )
 )
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
-    .map((entry) => ({ entry, slug: entry.id }));
+    .map((entry) => ({
+        entry,
+        slug: entry.id,
+        categoryLabel: s.categories[entry.data.category],
+    }));
 ---
 <Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} />

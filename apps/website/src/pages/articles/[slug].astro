@@ -130,9 +130,7 @@ if (entry.data.series) {
                 {entry.data.series.name} &middot; Part {entry.data.series.part} of {seriesParts.length}
               </p>
             )}
-            {entry.data.overline && (
-              <p class="article-page__overline">{entry.data.overline}</p>
-            )}
+            <p class="article-page__category">{s.categories[entry.data.category]}</p>
             <h1 class="article-page__title">{entry.data.title}</h1>
             {entry.data.subline && (
               <p class="article-page__subline">{entry.data.subline}</p>
@@ -262,7 +260,7 @@ if (entry.data.series) {
       gap: 12px;
     }
 
-    &__overline {
+    &__category {
       font-family: var(--v8-font-mono);
       font-size: 12px;
       letter-spacing: 0.1em;

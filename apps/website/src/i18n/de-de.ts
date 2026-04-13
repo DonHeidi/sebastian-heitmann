@@ -121,6 +121,13 @@ export const deDe: Strings = {
     label: 'Texte',
     viewAllLabel: 'Alle Artikel',
   },
+  categories: {
+    'solopreneurship-career': 'Solopreneurship & Karriere',
+    'leadership-management': 'F\u00FChrung & Management',
+    'technical-decisions': 'Technische Entscheidungen',
+    'shipping-with-ai': 'Bauen mit KI',
+    'mental-health': 'Mental Health',
+  },
   cv: {
     meta: {
       title: 'Lebenslauf \u2014 Sebastian Heitmann',

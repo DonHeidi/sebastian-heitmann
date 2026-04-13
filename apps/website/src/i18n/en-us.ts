@@ -121,6 +121,13 @@ export const enUs: Strings = {
     label: 'Writing',
     viewAllLabel: 'All articles',
   },
+  categories: {
+    'solopreneurship-career': 'Solopreneurship & Career',
+    'leadership-management': 'Leadership & Management',
+    'technical-decisions': 'Technical Decisions',
+    'shipping-with-ai': 'Shipping with AI',
+    'mental-health': 'Mental Health',
+  },
   cv: {
     meta: {
       title: 'CV \u2014 Sebastian Heitmann',

@@ -5,7 +5,7 @@ import type { ImageMetadata } from 'astro';
 type Props = {
   title: string;
   abstract: string;
-  overline?: string;
+  categoryLabel: string;
   tags: string[];
   publishedAt: Date;
   slug: string;
@@ -13,7 +13,7 @@ type Props = {
   locale: string;
 };
 
-const { title, abstract, overline, tags, publishedAt, slug, headerImage, locale } = Astro.props;
+const { title, abstract, categoryLabel, tags, publishedAt, slug, headerImage, locale } = Astro.props;
 
 const href = `${locale === 'de-de' ? '/de-de' : ''}/articles/${slug}/`;
 
@@ -40,8 +40,8 @@ const formattedDate = publishedAt.toLocaleDateString(dateLocale, {
 
   <div class="article-card__content">
     <div class="article-card__meta">
-      <span class="article-card__overline">
-        {overline ?? ''}
+      <span class="article-card__category">
+        {categoryLabel}
       </span>
       <span class="article-card__date">{formattedDate}</span>
     </div>
@@ -106,7 +106,7 @@ const formattedDate = publishedAt.toLocaleDateString(dateLocale, {
       gap: 8px;
     }
 
-    &__overline {
+    &__category {
       font-family: var(--v8-font-mono);
       font-size: 10px;
       letter-spacing: 0.1em;

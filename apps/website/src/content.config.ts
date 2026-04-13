@@ -22,7 +22,13 @@ const articles = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/articles' }),
   schema: ({ image }) => z.object({
     title: z.string(),
-    overline: z.string().optional(),
+    category: z.enum([
+      'solopreneurship-career',
+      'leadership-management',
+      'technical-decisions',
+      'shipping-with-ai',
+      'mental-health',
+    ]),
     subline: z.string().optional(),
     abstract: z.string(),
     type: z.enum(['article', 'case-study', 'blog-post', 'series-part']),

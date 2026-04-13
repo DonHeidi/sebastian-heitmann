@@ -6,7 +6,7 @@ import type { Locale } from '../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
 type Props = {
-    articles: Array<{ entry: CollectionEntry<'articles'>; slug: string }>;
+    articles: Array<{ entry: CollectionEntry<'articles'>; slug: string; categoryLabel: string }>;
     strings: Strings['featuredArticles'];
     locale: Locale;
 };
@@ -26,7 +26,7 @@ const { articles, strings, locale } = Astro.props;
             </div>
 
             <div class="featured-articles__grid">
-                {articles.map(({ entry, slug }, i) => (
+                {articles.map(({ entry, slug, categoryLabel }, i) => (
                     <div
                         class="reveal"
                         style={`transition-delay: ${Math.min(i * 80, 240)}ms`}
@@ -34,7 +34,7 @@ const { articles, strings, locale } = Astro.props;
                         <ArticleCard
                             title={entry.data.title}
                             abstract={entry.data.abstract}
-                            overline={entry.data.overline}
+                            categoryLabel={categoryLabel}
                             tags={entry.data.tags}
                             publishedAt={entry.data.publishedAt}
                             slug={slug}

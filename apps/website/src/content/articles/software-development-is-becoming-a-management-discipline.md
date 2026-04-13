@@ -1,6 +1,6 @@
 ---
 title: "Software Development Is Becoming a Management Discipline. The Old Managers Aren't Invited."
-overline: "Leadership"
+category: "leadership-management"
 subline: "Agents aren't replacing engineers — they're replacing the coordination layer above them"
 abstract: "Agentic coding doesn't just speed up engineers. It collapses three roles — designer, tech lead, project manager — onto a single operator running multiple projects in parallel. The bottleneck isn't agent throughput; it's the ceiling on sustainable human decisions per day. This piece maps what's actually breaking, who walks away from it, and the practices — Knowledge as Code, judgment-first juniors, decision-capacity org design — that hold up under the new load."
 type: "article"

@@ -52,7 +52,7 @@ const sorted = articles.sort((a, b) =>
             <ArticleCard
               title={article.data.title}
               abstract={article.data.abstract}
-              overline={article.data.overline}
+              categoryLabel={s.categories[article.data.category]}
               tags={article.data.tags}
               publishedAt={article.data.publishedAt}
               slug={slug}

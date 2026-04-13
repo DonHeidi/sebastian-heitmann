@@ -1,6 +1,6 @@
 ---
 title: "Softwareentwicklung wird zur Management-Disziplin. Die alten Manager bleiben außen vor."
-overline: "Führung"
+category: "leadership-management"
 subline: "Agenten ersetzen nicht die Engineers — sie ersetzen die Koordinationsebene darüber"
 abstract: "Agentisches Coding macht Engineers nicht einfach nur schneller. Es legt drei Rollen — Designer, Tech Lead, Projektmanager — auf eine einzige Person, die parallel mehrere Projekte fährt. Der Engpass ist nicht der Durchsatz der Agenten, sondern wie viele tragfähige Entscheidungen ein Mensch am Tag durchhält. Dieser Text zeigt, was wirklich bricht, wer mit der Veränderung davonkommt — und welche Praktiken (Knowledge as Code, eine neue Junior-Rolle, Org-Design rund um Entscheidungskapazität) der neuen Last standhalten."
 type: "article"

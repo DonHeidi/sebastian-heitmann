@@ -30,6 +30,7 @@ const featured = [
     .map((entry) => ({
         entry,
         slug: entry.id.startsWith('de-de/') ? entry.id.replace('de-de/', '') : entry.id,
+        categoryLabel: s.categories[entry.data.category],
     }));
 ---
 <Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates}>

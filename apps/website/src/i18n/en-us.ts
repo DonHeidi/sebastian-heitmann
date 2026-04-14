@@ -2,8 +2,8 @@ import type { Strings } from './types';
 
 export const enUs: Strings = {
   meta: {
-    title: 'Sebastian Heitmann \u2014 Strategic Technology Consultant',
-    description: 'Strategic Technology Consultant. Architecture, Delivery, Teams.',
+    title: 'Sebastian Heitmann \u2014 Technology Consultant',
+    description: 'Technology Consultant. Architecture, Delivery, Teams.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -19,7 +19,7 @@ export const enUs: Strings = {
     cta: 'Send a Message',
     ctaNote: 'Direct to my inbox. No funnel. I read every message.',
     photoAlt: 'Sebastian Heitmann',
-    role: { label: 'Role', value: 'Strategic Technology Consultant' },
+    role: { label: 'Role', value: 'Technology Consultant' },
     focus: { label: 'Focus', value: 'Architecture, Delivery, Teams' },
     experience: { label: 'Experience', value: '15 years' },
     projects: { label: 'Projects', value: '20+ delivered' },
@@ -135,7 +135,7 @@ export const enUs: Strings = {
       description: 'Curriculum Vitae. 15 years of architecture, delivery, and team leadership.',
     },
     headline: 'Curriculum Vitae',
-    summary: 'Strategic Technology Consultant with 15 years across software architecture, project delivery, and team leadership. I combine deep technical expertise with executive-level communication to turn stalled initiatives into shipped products.',
+    summary: 'Technology Consultant with 15 years across software architecture, project delivery, and team leadership. I combine deep technical expertise with executive-level communication to turn stalled initiatives into shipped products.',
     experienceLabel: 'Experience',
     experience: [
       {

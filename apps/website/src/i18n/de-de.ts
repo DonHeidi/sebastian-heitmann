@@ -2,8 +2,8 @@ import type { Strings } from './types';
 
 export const deDe: Strings = {
   meta: {
-    title: 'Sebastian Heitmann \u2014 Strategic Technology Consultant',
-    description: 'Strategic Technology Consultant. Architektur, Entwicklung, Teams.',
+    title: 'Sebastian Heitmann \u2014 Technology Consultant',
+    description: 'Technology Consultant. Architektur, Entwicklung, Teams.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -19,7 +19,7 @@ export const deDe: Strings = {
     cta: 'Nachricht senden',
     ctaNote: 'Direkt in mein Postfach. Kein Funnel. Ich lese jede Nachricht.',
     photoAlt: 'Sebastian Heitmann',
-    role: { label: 'Rolle', value: 'Strategic Technology Consultant' },
+    role: { label: 'Rolle', value: 'Technology Consultant' },
     focus: { label: 'Fokus', value: 'Architektur, Entwicklung, Teams' },
     experience: { label: 'Erfahrung', value: '15 Jahre' },
     projects: { label: 'Projekte', value: '20+ umgesetzt' },
@@ -135,7 +135,7 @@ export const deDe: Strings = {
       description: 'Lebenslauf. 15 Jahre Architektur, Entwicklung und Team-F\u00FChrung.',
     },
     headline: 'Lebenslauf',
-    summary: 'Strategic Technology Consultant mit 15 Jahren Erfahrung in Software-Architektur, Entwicklung und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation auf F\u00FChrungsebene, um blockierte Initiativen in ausgelieferte Produkte zu verwandeln.',
+    summary: 'Technology Consultant mit 15 Jahren Erfahrung in Software-Architektur, Entwicklung und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation auf F\u00FChrungsebene, um blockierte Initiativen in ausgelieferte Produkte zu verwandeln.',
     experienceLabel: 'Berufserfahrung',
     experience: [
       {

@@ -142,6 +142,7 @@ export const enUs: Strings = {
       agentWritten: 'Written by an AI agent',
     },
     aiTranslated: 'AI translated',
+    aboutAuthorLabel: 'About the author',
   },
   cv: {
     meta: {

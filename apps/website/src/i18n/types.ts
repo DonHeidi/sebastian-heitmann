@@ -97,6 +97,7 @@ export interface Strings {
       agentWritten: string;
     };
     aiTranslated: string;
+    aboutAuthorLabel: string;
   };
   cv: {
     meta: {

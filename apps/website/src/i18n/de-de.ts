@@ -142,6 +142,7 @@ export const deDe: Strings = {
       agentWritten: 'Geschrieben von einem KI-Agenten',
     },
     aiTranslated: 'KI-\u00FCbersetzt',
+    aboutAuthorLabel: '\u00DCber den Autor',
   },
   cv: {
     meta: {

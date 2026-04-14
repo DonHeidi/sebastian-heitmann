@@ -12,6 +12,7 @@ export interface Strings {
   hero: {
     firstName: string;
     lastName: string;
+    pitchLead: string;
     pitch: string;
     cta: string;
     ctaNote: string;

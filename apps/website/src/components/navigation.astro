@@ -9,7 +9,7 @@ type Props = {
 };
 
 const { nav: navProp, languagePicker } = Astro.props;
-const nav = navProp ?? { logo: 'sebastian-heitmann', logoDot: '.dev', cvLabel: 'CV', cta: 'Book a Call' };
+const nav = navProp ?? { logo: 'sebastian-heitmann', logoDot: '.dev', cvLabel: 'CV', cta: 'Contact' };
 const currentLocale = (Astro.currentLocale ?? 'en-us') as Locale;
 const currentConfig = localeConfig[currentLocale];
 

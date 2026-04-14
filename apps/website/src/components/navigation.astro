@@ -19,7 +19,7 @@ const pagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$/, 
 ---
 
 <nav class="nav">
-    <a class="nav-logo" href="/">{nav.logo}<span class="nav-logo__dot">.</span>dev</a>
+    <a class="nav-logo" href={getRelativeLocaleUrl(currentLocale, '/')}>{nav.logo}<span class="nav-logo__dot">.</span>dev</a>
     <div class="nav-actions">
         <div class="nav-lang" role="navigation" aria-label={languagePicker?.label ?? 'Language'}>
             {locales.map((loc) => (

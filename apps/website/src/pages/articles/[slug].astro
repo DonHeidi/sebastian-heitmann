@@ -43,14 +43,14 @@ const siteOrigin = 'https://www.sebastian-heitmann.dev';
 const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
 const heroImageUrl = entry.data.headerImage
   ? `${siteOrigin}${entry.data.headerImage.src}`
-  : `${siteOrigin}/og-image.jpg`;
+  : undefined;
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: entry.data.title,
   description: entry.data.abstract,
-  image: [heroImageUrl],
+  ...(heroImageUrl ? { image: [heroImageUrl] } : {}),
   datePublished: publishedISO,
   ...(modifiedISO ? { dateModified: modifiedISO } : {}),
   author: authorEntry
@@ -95,8 +95,18 @@ if (entry.data.series) {
   locale={locale}
   title={`${entry.data.title} — Sebastian Heitmann`}
   description={entry.data.abstract ?? s.meta.description}
+  ogType="article"
+  ogImage={heroImageUrl}
+  canonical={canonicalUrl}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <meta slot="head" property="article:published_time" content={publishedISO} />
+  {modifiedISO && <meta slot="head" property="article:modified_time" content={modifiedISO} />}
+  {authorEntry && <meta slot="head" property="article:author" content={authorEntry.data.name} />}
+  <meta slot="head" property="article:section" content={s.categories[entry.data.category]} />
+  {entry.data.tags?.map((tag) => (
+    <meta slot="head" property="article:tag" content={tag} />
+  ))}
   <Navigation nav={s.nav} languagePicker={s.languagePicker} />
 
   <main class="article-page">
@@ -121,7 +131,10 @@ if (entry.data.series) {
               alt={entry.data.title}
               width={200}
               height={200}
-              class="article-page__detail-image"
+              class:list={[
+                'article-page__detail-image',
+                { 'article-page__detail-image--no-hero': !entry.data.headerImage },
+              ]}
             />
           )}
           <div class="article-page__title-block">
@@ -258,6 +271,11 @@ if (entry.data.series) {
       top: -120px;
       margin-bottom: -104px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+      &--no-hero {
+        top: 0;
+        margin-bottom: 16px;
+      }
     }
 
     &__title-block {

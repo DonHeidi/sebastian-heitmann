@@ -8,10 +8,25 @@ type Props = {
   description: string;
   alternates?: Array<{ hreflang: string; href: string }>;
   includeRedirectScript?: boolean;
+  ogType?: string;
+  ogImage?: string;
+  canonical?: string;
 };
 
-const { locale, title, description, alternates = [], includeRedirectScript = false } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  alternates = [],
+  includeRedirectScript = false,
+  ogType = 'website',
+  ogImage,
+  canonical,
+} = Astro.props;
 const htmlLang = localeConfig[locale].htmlLang;
+const siteOrigin = 'https://www.sebastian-heitmann.dev';
+const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
+const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-image.jpg` : undefined);
 ---
 
 <html lang={htmlLang}>
@@ -20,14 +35,18 @@ const htmlLang = localeConfig[locale].htmlLang;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{title}</title>
         <meta name="description" content={description}>
-        <meta property="og:type" content="website">
+        <link rel="canonical" href={canonicalUrl}>
+        <meta property="og:type" content={ogType}>
         <meta property="og:title" content={title}>
         <meta property="og:description" content={description}>
-        <meta property="og:url" content={`https://www.sebastian-heitmann.dev${Astro.url.pathname}`}>
-        <meta property="og:image" content="https://www.sebastian-heitmann.dev/og-image.jpg">
+        <meta property="og:url" content={canonicalUrl}>
+        {resolvedOgImage && <meta property="og:image" content={resolvedOgImage} />}
         <meta property="og:locale" content={locale === 'de-de' ? 'de_DE' : 'en_US'}>
         <meta property="og:locale:alternate" content={locale === 'de-de' ? 'en_US' : 'de_DE'}>
-        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:card" content={resolvedOgImage ? 'summary_large_image' : 'summary'}>
+        <meta name="twitter:title" content={title}>
+        <meta name="twitter:description" content={description}>
+        {resolvedOgImage && <meta name="twitter:image" content={resolvedOgImage} />}
         <link rel="preload" href="/fonts/InstrumentSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/DMSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>

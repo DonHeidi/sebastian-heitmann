@@ -216,6 +216,10 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-metric-label-color: var(--v8-text-muted);
         --v8-photo-filter: saturate(0) contrast(1.1) brightness(0.9);
         --v8-photo-filter-hover: saturate(0.8) contrast(1.05);
+        --v8-glass-bg: rgba(18, 18, 18, 0.55);
+        --v8-glass-border: rgba(242, 240, 235, 0.12);
+        --v8-glass-highlight: rgba(242, 240, 235, 0.08);
+        --v8-dot-color: rgba(242, 240, 235, 0.22);
     }
 
     html.light {
@@ -236,6 +240,10 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-border-accent: rgba(184, 42, 0, 0.35);
         --v8-photo-filter: saturate(0.85) contrast(1.08);
         --v8-photo-filter-hover: saturate(1) contrast(1);
+        --v8-glass-bg: rgba(247, 246, 242, 0.55);
+        --v8-glass-border: rgba(20, 20, 19, 0.1);
+        --v8-glass-highlight: rgba(255, 255, 255, 0.5);
+        --v8-dot-color: rgba(20, 20, 19, 0.22);
     }
 
     :root {

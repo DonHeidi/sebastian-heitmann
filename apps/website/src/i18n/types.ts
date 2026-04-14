@@ -84,6 +84,20 @@ export interface Strings {
     'shipping-with-ai': string;
     'mental-health': string;
   };
+  article: {
+    seriesPartPrefix: string;
+    seriesPartOf: string;
+    readingTimeSuffix: string;
+    seriesOverline: string;
+    seriesNavLabel: string;
+    backToAll: string;
+    authorship: {
+      human: string;
+      aiAssisted: string;
+      agentWritten: string;
+    };
+    aiTranslated: string;
+  };
   cv: {
     meta: {
       title: string;

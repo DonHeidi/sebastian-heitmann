@@ -129,6 +129,20 @@ export const enUs: Strings = {
     'shipping-with-ai': 'Shipping with AI',
     'mental-health': 'Mental Health',
   },
+  article: {
+    seriesPartPrefix: 'Part',
+    seriesPartOf: 'of',
+    readingTimeSuffix: 'min read',
+    seriesOverline: 'Series',
+    seriesNavLabel: 'Series navigation',
+    backToAll: 'All articles',
+    authorship: {
+      human: 'Written by a human',
+      aiAssisted: 'AI-assisted',
+      agentWritten: 'Written by an AI agent',
+    },
+    aiTranslated: 'AI translated',
+  },
   cv: {
     meta: {
       title: 'CV \u2014 Sebastian Heitmann',

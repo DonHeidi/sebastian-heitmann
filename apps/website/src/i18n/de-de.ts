@@ -129,6 +129,20 @@ export const deDe: Strings = {
     'shipping-with-ai': 'Bauen mit KI',
     'mental-health': 'Mental Health',
   },
+  article: {
+    seriesPartPrefix: 'Teil',
+    seriesPartOf: 'von',
+    readingTimeSuffix: 'Min. Lesezeit',
+    seriesOverline: 'Serie',
+    seriesNavLabel: 'Serien-Navigation',
+    backToAll: 'Alle Artikel',
+    authorship: {
+      human: 'Geschrieben von einem Menschen',
+      aiAssisted: 'KI-unterst\u00FCtzt',
+      agentWritten: 'Geschrieben von einem KI-Agenten',
+    },
+    aiTranslated: 'KI-\u00FCbersetzt',
+  },
   cv: {
     meta: {
       title: 'Lebenslauf \u2014 Sebastian Heitmann',

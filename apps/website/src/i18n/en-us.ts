@@ -50,9 +50,9 @@ export const enUs: Strings = {
         tag: 'Execution Risk',
       },
       {
-        metric: 'AWS',
-        metricLabel: 'migration from SAP BW',
-        description: 'Moved a legacy analytics environment from SAP BW toward an AWS-based setup, replacing brittle internal tooling with a more workable foundation for reporting and ongoing delivery.',
+        metric: '9+',
+        metricLabel: 'Contributors',
+        description: 'Led technical project management for migrating a legacy SAP BW analytics environment to AWS, coordinating across architecture, data engineering, and delivery to build a scalable reporting foundation.',
         tag: 'Cloud Migration',
       },
       {

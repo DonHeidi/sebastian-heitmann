@@ -50,9 +50,9 @@ export const deDe: Strings = {
         tag: 'Ausführungsrisiko',
       },
       {
-        metric: 'AWS',
-        metricLabel: 'Migration von SAP BW',
-        description: 'Eine bestehende Analytics-Umgebung von SAP BW in ein AWS-basiertes Setup überführt und damit die Grundlage für belastbareres Reporting und kontinuierliche Entwicklung geschaffen.',
+        metric: '9+',
+        metricLabel: 'Mitwirkende',
+        description: 'Technische Projektleitung für die Migration einer bestehenden SAP-BW-Analytics-Umgebung nach AWS — mit Abstimmung über Architektur, Data Engineering und Entwicklung hinweg, um eine skalierbare Reporting-Grundlage aufzubauen.',
         tag: 'Cloud-Migration',
       },
       {

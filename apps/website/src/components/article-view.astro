@@ -2,6 +2,7 @@
 import { getEntry, render, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import AuthorCard from './author-card.astro';
+import ArticleCta from './article-cta.astro';
 import { getStrings } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
@@ -49,7 +50,12 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
   )}
 
   <div class="article-page__layout">
-    <article class="article-page__main">
+    <article
+      class:list={[
+        'article-page__main',
+        { 'article-page__main--no-hero': !entry.data.headerImage },
+      ]}
+    >
       <header
         class:list={[
           'article-page__header',
@@ -157,6 +163,12 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
         </div>
       )}
 
+      <ArticleCta
+        cta={s.article.cta}
+        socials={authorEntry?.data.socials}
+        email={authorEntry?.data.email}
+      />
+
       <div class="article-page__footer-row">
         <a href={getRelativeLocaleUrl(locale, 'articles')} class="article-page__back">
           &larr; {s.article.backToAll}
@@ -257,6 +269,10 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
       box-shadow:
         0 1px 0 var(--v8-glass-highlight) inset,
         0 30px 80px -40px rgba(0, 0, 0, 0.35);
+
+      &--no-hero {
+        margin-top: 60px;
+      }
     }
 
     &__header {
@@ -649,6 +665,10 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
       &__main {
         margin-top: -120px;
         padding: 40px 40px 48px;
+
+        &--no-hero {
+          margin-top: 40px;
+        }
       }
 
       &__header {
@@ -680,6 +700,10 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
         padding: 32px 24px 36px;
         border-left: none;
         border-right: none;
+
+        &--no-hero {
+          margin-top: 24px;
+        }
       }
 
       &__author-block {

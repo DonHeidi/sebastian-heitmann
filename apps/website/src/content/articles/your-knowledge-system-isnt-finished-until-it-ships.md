@@ -6,6 +6,8 @@ abstract: "Andrej Karpathy just published how he uses an LLM to manage his perso
 type: "article"
 tags: ["AI Writing", "Knowledge Management", "Agents", "Workflow", "Craft"]
 author: "sebastian-heitmann"
+headerImage: "../../assets/articles/knowledge-systems-header.png"
+headerDetailImage: "../../assets/articles/knowledge-systems-detail.png"
 publishedAt: 2026-04-15
 authorship: "ai-assisted"
 draft: false

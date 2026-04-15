@@ -143,6 +143,10 @@ export const deDe: Strings = {
     },
     aiTranslated: 'KI-\u00FCbersetzt',
     aboutAuthorLabel: '\u00DCber den Autor',
+    cta: {
+      lead: 'Wenn dich das angesprochen hat, findest du mich auf',
+      conjunction: 'oder',
+    },
   },
   cv: {
     meta: {

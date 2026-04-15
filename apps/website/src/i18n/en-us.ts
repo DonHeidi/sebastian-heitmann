@@ -143,6 +143,10 @@ export const enUs: Strings = {
     },
     aiTranslated: 'AI translated',
     aboutAuthorLabel: 'About the author',
+    cta: {
+      lead: 'If this resonated, you can find me on',
+      conjunction: 'or',
+    },
   },
   cv: {
     meta: {

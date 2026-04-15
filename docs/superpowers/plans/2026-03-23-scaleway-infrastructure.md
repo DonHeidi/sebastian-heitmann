@@ -89,12 +89,6 @@ variable "tem_region" {
   default     = "fr-par"
 }
 
-variable "scw_secret_key" {
-  description = "Scaleway API secret key for the function to call Transactional Email API"
-  type        = string
-  sensitive   = true
-}
-
 variable "mail_recipient" {
   description = "Email address to receive contact form messages"
   type        = string
@@ -106,9 +100,10 @@ variable "mail_sender" {
   type        = string
 }
 
-variable "allowed_origin" {
-  description = "CORS allowed origin for the mail function"
+variable "allowed_origins" {
+  description = "Comma-separated CORS allowed origins for the mail function"
   type        = string
+  default     = "https://www.sebastian-heitmann.dev,https://sebastian-heitmann.dev"
 }
 ```
 
@@ -151,14 +146,14 @@ resource "scaleway_function" "contact_handler" {
   zip_hash     = filesha256("${path.module}/../apps/mail-service/dist/handler.zip")
 
   environment_variables = {
-    MAIL_SENDER    = var.mail_sender
-    ALLOWED_ORIGIN = var.allowed_origin
-    SCW_REGION     = var.tem_region
+    MAIL_SENDER     = var.mail_sender
+    ALLOWED_ORIGINS = var.allowed_origins
+    TEM_REGION      = var.tem_region
   }
 
   secret_environment_variables = {
-    SCW_SECRET_KEY = sensitive(scaleway_account_project.main.id != "" ? var.scw_secret_key : "")
-    SCW_PROJECT_ID = scaleway_account_project.main.id
+    TEM_SECRET_KEY = scaleway_iam_api_key.mail_service.secret_key
+    TEM_PROJECT_ID = scaleway_account_project.main.id
     MAIL_RECIPIENT = var.mail_recipient
   }
 
@@ -201,6 +196,8 @@ resource "scaleway_object_bucket_website_configuration" "website" {
   }
 }
 ```
+
+Note: uploaded objects still default to private on Scaleway Object Storage, so the deployment step must set object ACLs to `public-read` or use an equivalent bucket policy.
 
 - [ ] **Step 2: Commit**
 
@@ -299,10 +296,10 @@ git commit -m "feat(infra): add outputs.tf with endpoint URLs"
 
 ```hcl
 region         = "nl-ams"
+tem_domain     = "contact.sebastian-heitmann.dev"
 mail_recipient = "you@example.com"
 mail_sender    = "contact@contact.sebastian-heitmann.dev"
-allowed_origin = "https://www.sebastian-heitmann.dev"
-scw_secret_key = "your-scaleway-secret-key"
+allowed_origins = "https://www.sebastian-heitmann.dev,https://sebastian-heitmann.dev"
 ```
 
 - [ ] **Step 2: Create `infra/.gitignore`**

@@ -1,0 +1,82 @@
+---
+import type { Strings } from '../i18n/types';
+
+type Props = {
+  cta: Strings['article']['cta'];
+  socials?: Array<{ platform: string; url: string }>;
+};
+
+const { cta, socials = [] } = Astro.props;
+
+const platformNames: Record<string, string> = {
+  linkedin: 'LinkedIn',
+  github: 'GitHub',
+  bluesky: 'Bluesky',
+  twitter: 'Twitter',
+  x: 'X',
+  mastodon: 'Mastodon',
+  threads: 'Threads',
+  youtube: 'YouTube',
+  instagram: 'Instagram',
+};
+
+const items = socials.map(({ platform, url }) => ({
+  label: platformNames[platform] ?? platform.charAt(0).toUpperCase() + platform.slice(1),
+  url,
+}));
+
+type Node =
+  | { kind: 'text'; value: string }
+  | { kind: 'link'; label: string; url: string };
+
+const nodes: Node[] = [];
+if (items.length > 0) {
+  nodes.push({ kind: 'text', value: `${cta.lead} ` });
+  items.forEach((item, index) => {
+    if (index > 0) {
+      const isLast = index === items.length - 1;
+      nodes.push({
+        kind: 'text',
+        value: isLast ? ` ${cta.conjunction} ` : ', ',
+      });
+    }
+    nodes.push({ kind: 'link', label: item.label, url: item.url });
+  });
+  nodes.push({ kind: 'text', value: '.' });
+}
+---
+
+{nodes.length > 0 && (
+  <p class="article-cta">
+    {nodes.map((node) =>
+      node.kind === 'link' ? (
+        <a href={node.url} target="_blank" rel="noopener noreferrer" class="article-cta__link">{node.label}</a>
+      ) : (
+        <span>{node.value}</span>
+      )
+    )}
+  </p>
+)}
+
+<style lang="scss">
+  .article-cta {
+    margin-top: 32px;
+    font-family: var(--v8-font-body);
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--v8-text-muted);
+    font-style: italic;
+
+    &__link {
+      color: var(--v8-text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--v8-accent);
+      }
+    }
+  }
+</style>

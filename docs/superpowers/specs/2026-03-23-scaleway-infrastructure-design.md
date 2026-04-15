@@ -65,12 +65,19 @@ Unified Terraform configuration managing all Scaleway infrastructure for sebasti
 - **Source:** `apps/mail-service/dist/handler.zip`
 - **Environment variables:**
   - `MAIL_SENDER` — verified sender email
-  - `ALLOWED_ORIGIN` — CORS origin
-  - `SCW_REGION` — `fr-par` (TEM API region)
+  - `ALLOWED_ORIGINS` — comma-separated CORS origins
+  - `TEM_REGION` — `fr-par` (TEM API region)
 - **Secret environment variables:**
-  - `SCW_SECRET_KEY` — API key for TEM
-  - `SCW_PROJECT_ID` — auto-filled from project resource
+  - `TEM_SECRET_KEY` — API key for TEM
+  - `TEM_PROJECT_ID` — auto-filled from project resource
   - `MAIL_RECIPIENT` — destination email
+
+### Transactional Email (TEM)
+
+- **Region:** `fr-par`
+- **Sender domain:** `contact.sebastian-heitmann.dev`
+- **Project scope:** Managed in the same `sebastian-heitmann-dev` Scaleway project as the function
+- **DNS:** SPF, DKIM, DMARC, and MX records are published in external DNS using Terraform outputs
 
 ## Terraform Layout
 
@@ -95,8 +102,7 @@ Moved from `apps/mail-service/infra/` to `infra/` at repo root.
 | `tem_region` | `fr-par` | No | TEM API region |
 | `mail_recipient` | — | Yes | Contact form destination email |
 | `mail_sender` | — | No | Verified sender email |
-| `allowed_origin` | — | No | CORS allowed origin |
-| `scw_secret_key` | — | Yes | Scaleway API secret key |
+| `allowed_origins` | `https://www.sebastian-heitmann.dev,https://sebastian-heitmann.dev` | No | Comma-separated CORS allowed origins |
 
 ## Outputs
 
@@ -110,15 +116,19 @@ Moved from `apps/mail-service/infra/` to `infra/` at repo root.
 
 Order matters: the function must be deployed before the website is built, because the website bakes in the function endpoint at build time via `PUBLIC_MAIL_ENDPOINT`.
 
-1. Build mail handler: `cd apps/mail-service && bun run build`
-2. Deploy infra: `cd infra && terraform apply` → note `function_endpoint` from output
-3. Set `PUBLIC_MAIL_ENDPOINT=<function_endpoint>` in `apps/website/.env`
-4. Build website: `cd apps/website && bun run build`
-5. Sync website files to bucket: `scw object cp -r apps/website/dist/ s3://sebastian-heitmann-website/`
+1. Copy `infra/terraform.tfvars.example` to `infra/terraform.tfvars` and fill in real values
+2. Apply infra via `./scripts/apply-infra.sh`
+3. Deploy website via `./scripts/deploy-website.sh`
+
+## Environment Strategy
+
+- `infra/terraform.tfvars` owns infrastructure configuration
+- `apps/mail-service/.env` is for local mail-service development only
+- `apps/website/.env` is for local website development only
+- Production `PUBLIC_MAIL_ENDPOINT` is derived from Terraform output during website deployment
 
 ## Out of Scope (for now)
 
-- TEM domain management via Terraform
 - DNS management (stays on GoDaddy)
 - Custom domain attachment on CDN (done via Scaleway console)
 - CI/CD pipeline

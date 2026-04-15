@@ -98,6 +98,10 @@ export interface Strings {
     };
     aiTranslated: string;
     aboutAuthorLabel: string;
+    cta: {
+      lead: string;
+      conjunction: string;
+    };
   };
   cv: {
     meta: {

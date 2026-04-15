@@ -24,6 +24,18 @@ SCW_SECRET_KEY="$(grep secret_key "$SCW_CONFIG" | awk '{print $2}')"
 cd "$WEBSITE_DIR"
 PUBLIC_MAIL_ENDPOINT="https://${FUNCTION_ENDPOINT}" bun run build
 
+# Astro's content-collection image() schema imports each source asset via Vite,
+# which emits the originals to dist/_astro/ even when only transformed variants
+# (webp/jpg) are referenced. Prune any file in dist/_astro/ that isn't
+# referenced by any emitted HTML/CSS/JS.
+REFERENCED="$(grep -rhoE '_astro/[A-Za-z0-9._-]+' dist --include='*.html' --include='*.css' --include='*.js' --include='*.xml' | sort -u)"
+while IFS= read -r -d '' file; do
+  rel="${file#dist/}"
+  if ! grep -qxF "$rel" <<< "$REFERENCED"; then
+    rm -f "$file"
+  fi
+done < <(find dist/_astro -maxdepth 1 -type f -print0)
+
 AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}" \
 AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY" \
 aws s3 cp dist/ s3://sebastian-heitmann-website/ \

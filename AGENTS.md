@@ -79,6 +79,11 @@ apps/website/
 
 Instrument Serif (display), DM Sans (body) via Google Fonts; IBM Plex Mono (mono) self-hosted.
 
+### Image Handling Gotchas
+
+- Reference image URLs through `getImage()` from `astro:assets`, not `ImageMetadata.src`. Using `.src` directly (e.g. for OG meta, JSON-LD) forces Astro to emit the original source file (often multi-MB PNGs) to `dist/_astro/`.
+- Astro's content-collection `image()` schema imports every referenced asset via Vite, which emits the source file even when only transformed variants (webp/jpg) are actually referenced in HTML. `scripts/deploy-website.sh` prunes these orphans before upload by cross-referencing every file in `dist/_astro/` against URLs appearing in emitted HTML/CSS/JS.
+
 ### Design System
 
 - **Light/dark mode:** `html.dark` / `html.light` class, three-option toggle (system/light/dark)

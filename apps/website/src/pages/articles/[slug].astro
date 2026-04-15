@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/navigation.astro';
 import Footer from '../../components/footer.astro';
@@ -28,9 +29,16 @@ const modifiedISO = entry.data.updatedAt?.toISOString();
 
 const siteOrigin = 'https://www.sebastian-heitmann.dev';
 const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
-const heroImageUrl = entry.data.headerImage
-  ? `${siteOrigin}${entry.data.headerImage.src}`
+const ogImage = entry.data.headerImage
+  ? await getImage({
+      src: entry.data.headerImage,
+      width: 1200,
+      height: 630,
+      format: 'jpg',
+      fit: 'cover',
+    })
   : undefined;
+const heroImageUrl = ogImage ? `${siteOrigin}${ogImage.src}` : undefined;
 
 const jsonLd = {
   '@context': 'https://schema.org',

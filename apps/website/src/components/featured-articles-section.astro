@@ -9,9 +9,10 @@ type Props = {
     articles: Array<{ entry: CollectionEntry<'articles'>; slug: string; categoryLabel: string }>;
     strings: Strings['featuredArticles'];
     locale: Locale;
+    totalCount?: number;
 };
 
-const { articles, strings, locale } = Astro.props;
+const { articles, strings, locale, totalCount } = Astro.props;
 ---
 
 {articles.length > 0 && (
@@ -21,7 +22,7 @@ const { articles, strings, locale } = Astro.props;
                 <span class="featured-articles__label">{strings.label}</span>
                 <div class="featured-articles__rule"></div>
                 <a class="featured-articles__view-all" href={getRelativeLocaleUrl(locale, 'articles')}>
-                    {strings.viewAllLabel} &rarr;
+                    {strings.viewAllLabel}{totalCount != null && <span class="featured-articles__count">{totalCount}</span>} &rarr;
                 </a>
             </div>
 
@@ -91,10 +92,22 @@ const { articles, strings, locale } = Astro.props;
             text-decoration: none;
             flex-shrink: 0;
             transition: opacity 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
 
             &:hover {
                 opacity: 0.7;
             }
+        }
+
+        &__count {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.06em;
+            color: var(--v8-text-muted);
+            padding: 2px 7px;
+            border: 1px solid var(--v8-border);
         }
 
         &__grid {

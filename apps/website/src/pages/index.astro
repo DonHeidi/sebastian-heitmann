@@ -17,12 +17,15 @@ const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates();
 
-const featured = (
-    await getCollection('articles', ({ id, data }) =>
-        !id.startsWith('de-de/') && !data.draft && data.displayFrontpage
-    )
-)
+const allPublished = await getCollection('articles', ({ id, data }) =>
+    !id.startsWith('de-de/') && !data.draft
+);
+const totalArticleCount = allPublished.length;
+
+const featured = allPublished
+    .filter((entry) => entry.data.displayFrontpage)
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+    .slice(0, 3)
     .map((entry) => ({
         entry,
         slug: entry.id,
@@ -37,7 +40,7 @@ const featured = (
         <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} />
-        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} />
+        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} totalCount={totalArticleCount} />
         <ContactSection contact={s.contact} />
     </main>
     <Footer footer={s.footer} />

@@ -17,17 +17,22 @@ const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates();
 
-const allFeatured = await getCollection('articles', ({ data }) =>
-    !data.draft && data.displayFrontpage
-);
+const allPublished = await getCollection('articles', ({ data }) => !data.draft);
+const dePublished = allPublished.filter(({ id }) => id.startsWith('de-de/'));
+const enPublished = allPublished.filter(({ id }) => !id.startsWith('de-de/'));
+const deSlugs = new Set(dePublished.map(({ id }) => id.replace('de-de/', '')));
+const totalArticleCount = [...dePublished, ...enPublished.filter(({ id }) => !deSlugs.has(id))].length;
+
+const allFeatured = allPublished.filter(({ data }) => data.displayFrontpage);
 const deFeatured = allFeatured.filter(({ id }) => id.startsWith('de-de/'));
 const enFeatured = allFeatured.filter(({ id }) => !id.startsWith('de-de/'));
-const deSlugs = new Set(deFeatured.map(({ id }) => id.replace('de-de/', '')));
+const deFeaturedSlugs = new Set(deFeatured.map(({ id }) => id.replace('de-de/', '')));
 const featured = [
     ...deFeatured,
-    ...enFeatured.filter(({ id }) => !deSlugs.has(id)),
+    ...enFeatured.filter(({ id }) => !deFeaturedSlugs.has(id)),
 ]
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+    .slice(0, 3)
     .map((entry) => ({
         entry,
         slug: entry.id.startsWith('de-de/') ? entry.id.replace('de-de/', '') : entry.id,
@@ -42,7 +47,7 @@ const featured = [
         <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} />
-        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} />
+        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} totalCount={totalArticleCount} />
         <ContactSection contact={s.contact} />
     </main>
     <Footer footer={s.footer} />

@@ -31,6 +31,27 @@ export const enUs: Strings = {
     previouslyAtLabel: 'Previously at',
     previouslyAt: ['Jung von Matt', 'Synergy', 'Granny & Smith', 'OFFIS'],
   },
+  capabilities: {
+    eyebrow: 'What I do',
+    categories: [
+      {
+        title: 'Software Development',
+        items: ['App Development', 'Fullstack Development', 'API & Backend Systems', 'Cloud Infrastructure'],
+      },
+      {
+        title: 'AI & Automation',
+        items: ['Agentic Workflows', 'Prompt & Context Engineering', 'AI-assisted Development', 'Human-in-the-Loop Systems'],
+      },
+      {
+        title: 'Architecture & Compliance',
+        items: ['System Architecture', 'Domain-Driven Design', 'GDPR & Data Protection', 'AI Trust Boundaries'],
+      },
+      {
+        title: 'Concept, Planning & Management',
+        items: ['Technical Leadership', 'Requirements Shaping', 'Design Sprints', 'Rapid Prototyping'],
+      },
+    ],
+  },
   situations: {
     label: 'When to reach out',
     items: [

@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/navigation.astro';
 import Hero from '../../components/hero.astro';
 import LogoSection from '../../components/logo-section.astro';
+import CapabilitiesSection from '../../components/capabilities-section.astro';
 import SituationsSection from '../../components/situations-section.astro';
 import ProofSection from '../../components/proof-section.astro';
 import FeaturedArticlesSection from '../../components/featured-articles-section.astro';
@@ -38,6 +39,7 @@ const featured = [
     <main>
         <Hero hero={s.hero} />
         <LogoSection logos={s.logos} />
+        <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} />
         <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} />

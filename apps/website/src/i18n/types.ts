@@ -29,6 +29,13 @@ export interface Strings {
     previouslyAtLabel: string;
     previouslyAt: string[];
   };
+  capabilities: {
+    eyebrow: string;
+    categories: Array<{
+      title: string;
+      items: string[];
+    }>;
+  };
   situations: {
     label: string;
     items: string[];

@@ -1,0 +1,173 @@
+---
+import type { Strings } from '../i18n/types';
+
+type Props = {
+    capabilities: Strings['capabilities'];
+};
+
+const { capabilities } = Astro.props;
+---
+
+<section class="cap reveal">
+    <div class="cap-header">
+        <span class="cap-eyebrow">{capabilities.eyebrow}</span>
+        <div class="cap-rule"></div>
+    </div>
+
+    <div class="cap-grid">
+        {capabilities.categories.map((cat, i) => (
+            <div class="cap-category">
+                <div class="cap-category-head">
+                    <span class="cap-num">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="cap-title">{cat.title}</h3>
+                </div>
+                <ul class="cap-items">
+                    {cat.items.map(item => (
+                        <li class="cap-item">{item}</li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+    </div>
+</section>
+
+<style lang="scss">
+    .cap {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 80px 80px;
+    }
+
+    .cap-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 0;
+    }
+
+    .cap-eyebrow {
+        font-family: var(--v8-font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--v8-text-muted);
+        flex-shrink: 0;
+    }
+
+    .cap-rule {
+        flex: 1;
+        height: 1px;
+        background: var(--v8-border);
+    }
+
+    .cap-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--v8-border);
+    }
+
+    .cap-category {
+        display: grid;
+        grid-row: span 2;
+        grid-template-rows: subgrid;
+        padding: 32px 32px 40px 0;
+        border-bottom: 1px solid var(--v8-border);
+
+        &:not(:last-child) {
+            border-right: 1px solid var(--v8-border);
+            padding-right: 32px;
+        }
+
+        &:not(:first-child) {
+            padding-left: 32px;
+        }
+    }
+
+    .cap-category-head {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+
+    .cap-num {
+        font-family: var(--v8-font-mono);
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        color: var(--v8-accent);
+    }
+
+    .cap-title {
+        font-family: var(--v8-font-display);
+        font-style: italic;
+        font-size: clamp(22px, 2.4vw, 30px);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--v8-text);
+        margin: 0;
+    }
+
+    .cap-items {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .cap-item {
+        font-family: var(--v8-font-mono);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        color: var(--v8-text-secondary);
+        padding: 10px 0;
+        border-top: 1px solid var(--v8-border);
+        transition: color 0.2s ease, padding-left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        cursor: default;
+
+        &:hover {
+            color: var(--v8-text);
+            padding-left: 8px;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .cap { padding: 60px 48px; }
+
+        .cap-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .cap-category {
+            &:nth-child(odd) {
+                border-right: 1px solid var(--v8-border);
+                padding-right: 32px;
+                padding-left: 0;
+            }
+
+            &:nth-child(even) {
+                border-right: none;
+                padding-left: 32px;
+                padding-right: 0;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .cap { padding: 40px 24px; }
+        .cap-header { margin-bottom: 40px; }
+
+        .cap-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cap-category {
+            padding: 28px 0 32px;
+            border-right: none !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+</style>

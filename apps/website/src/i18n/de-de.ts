@@ -31,6 +31,27 @@ export const deDe: Strings = {
     previouslyAtLabel: 'Zuvor bei',
     previouslyAt: ['Jung von Matt', 'Synergy', 'Granny & Smith', 'OFFIS'],
   },
+  capabilities: {
+    eyebrow: 'Was ich mache',
+    categories: [
+      {
+        title: 'Softwareentwicklung',
+        items: ['App-Entwicklung', 'Fullstack-Entwicklung', 'API- & Backend-Systeme', 'Cloud-Infrastruktur'],
+      },
+      {
+        title: 'KI & Automatisierung',
+        items: ['Agentische Workflows', 'Prompt- & Context-Engineering', 'KI-gestützte Entwicklung', 'Human-in-the-Loop-Systeme'],
+      },
+      {
+        title: 'Architektur & Compliance',
+        items: ['Systemarchitektur', 'Domain-Driven Design', 'DSGVO & Datenschutz', 'KI-Vertrauensgrenzen'],
+      },
+      {
+        title: 'Konzept, Planung & Management',
+        items: ['Technische Leitung', 'Anforderungsgestaltung', 'Design Sprints', 'Rapid Prototyping'],
+      },
+    ],
+  },
   situations: {
     label: 'Wann ein Gespräch sinnvoll ist',
     items: [

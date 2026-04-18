@@ -183,12 +183,13 @@ export const deDe: Strings = {
         role: 'Selbstst\u00E4ndiger Technologieberater',
         company: 'Selbstst\u00E4ndig',
         location: 'Hamburg, DE',
-        description: 'Beratung, Entwicklung und Projektmanagement f\u00FCr mittelst\u00E4ndische Unternehmen und Startups. Pers\u00F6nliche Auszeit und medizinische Rehabilitation von Jun 2023 bis Aug 2024.',
+        description: 'Beratung, Entwicklung und Projektmanagement f\u00FCr mittelst\u00E4ndische Unternehmen und Startups.',
         highlights: [
           'Automatisierte Leadgenerierungs-Software f\u00FCr lokale KMU [internes Produkt] \u2014 TypeScript (Bun), TanStack Start, TailwindCSS, SQLite, PostgreSQL',
           'Mobile App f\u00FCr Pool Position GmbH \u2014 Portierung zentraler Web-App-Funktionen auf mobile Endger\u00E4te \u2014 TypeScript, React Native, AWS, Pulumi',
           'Projektmanager Digitalisierung (Okt 2025\u2013M\u00E4r 2026) \u2014 Beratung und Begleitung eines Digitalisierungsvorhabens f\u00FCr einen Rental Service',
           'Konsultationen zum Data-&-Analytics-Markt \u2014 einst\u00FCndige Analysen f\u00FCr Marktforschungs- und Strategieberatungen',
+          'Pers\u00F6nliche Auszeit und medizinische Rehabilitation von Jun 2023 bis Aug 2024',
         ],
       },
       {

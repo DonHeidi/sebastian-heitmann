@@ -183,12 +183,13 @@ export const enUs: Strings = {
         role: 'Independent Technology Consultant',
         company: 'Self-Employed',
         location: 'Hamburg, DE',
-        description: 'Consulting, development, and project management for mid-sized companies and startups. Personal sabbatical and medical rehabilitation from Jun 2023 to Aug 2024.',
+        description: 'Consulting, development, and project management for mid-sized companies and startups.',
         highlights: [
           'Automated lead generation software for local SMBs [internal product] \u2014 TypeScript (Bun), TanStack Start, TailwindCSS, SQLite, PostgreSQL',
           'Mobile app for Pool Position GmbH \u2014 porting core web app features to mobile \u2014 TypeScript, React Native, AWS, Pulumi',
           'Digitalization project manager (Oct 2025\u2013Mar 2026) \u2014 advisory and delivery for a rental service',
           'Data & Analytics market consultations \u2014 one-hour analyses for market research and strategy firms',
+          'Personal sabbatical and medical rehabilitation from Jun 2023 to Aug 2024',
         ],
       },
       {

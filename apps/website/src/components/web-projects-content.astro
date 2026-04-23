@@ -1,0 +1,1193 @@
+---
+import type { Strings } from '../i18n/types';
+import type { Locale } from '../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Icon } from 'astro-icon/components';
+
+const packageIcons = ['mdi:file-document-outline', 'mdi:folder-multiple-outline', 'mdi:tune-variant'] as const;
+const addonIcons = ['mdi:rocket-launch-outline', 'mdi:shield-check-outline', 'mdi:shield-check-outline', 'mdi:shield-check-outline'] as const;
+
+type Props = {
+    content: Strings['webProjects'];
+    locale: Locale;
+};
+
+const { content, locale } = Astro.props;
+const contactUrl = '#contact';
+const homeUrl = getRelativeLocaleUrl(locale, '/');
+---
+
+<!-- 1. Hero -->
+<section class="wp-hero reveal">
+    <div class="wp-hero__content">
+        <span class="wp-eyebrow">{content.hero.eyebrow}</span>
+        <h1 class="wp-hero__headline">{content.hero.headline}</h1>
+        <p class="wp-hero__subline">{content.hero.subline}</p>
+        <a class="wp-cta-link" href={contactUrl}>
+            <span class="wp-cta-link__text">{content.hero.cta}</span>
+            <span class="wp-cta-link__arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- 2. Packages -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.packages.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <h2 class="wp-headline">{content.packages.headline}</h2>
+    <p class="wp-body__single">{content.packages.intro}</p>
+    <div class="wp-packages">
+        {content.packages.items.map((pkg, i) => (
+            <div class="wp-package">
+                <Icon name={packageIcons[i]} class="wp-package__icon" width={40} height={40} />
+                <h3 class="wp-package__name">{pkg.name}</h3>
+                <span class="wp-package__price">{pkg.price}</span>
+                <p class="wp-package__audience">{pkg.audience}</p>
+                <ul class="wp-package__features">
+                    {pkg.features.map(f => (
+                        <li class="wp-package__feature">{f}</li>
+                    ))}
+                </ul>
+                <span class="wp-package__delivery">{pkg.delivery}</span>
+            </div>
+        ))}
+    </div>
+    <div class="wp-packages__cta">
+        <a class="wp-cta-link" href={contactUrl}>
+            <span class="wp-cta-link__text">{content.hero.cta}</span>
+            <span class="wp-cta-link__arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- 3. Add-ons -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.addons.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <h2 class="wp-headline">{content.addons.headline}</h2>
+    <div class="wp-addons">
+        {content.addons.items.map((addon, i) => (
+            <div class={`wp-addon${addon.price ? ' wp-addon--priced' : ''}`}>
+                <Icon name={addonIcons[i]} class="wp-addon__icon" width={32} height={32} />
+                <h3 class="wp-addon__name">{addon.name}</h3>
+                {addon.price && <span class="wp-addon__price">{addon.price}</span>}
+                <p class="wp-addon__desc">{addon.description}</p>
+                <ul class="wp-addon__features">
+                    {addon.features.map(f => (
+                        <li class="wp-addon__feature">{f}</li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+    </div>
+    <p class="wp-support-note">{content.addons.supportNote}</p>
+</section>
+
+<!-- 4. Problem ("What counts") -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.problem.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <p class="wp-lead">{content.problem.intro}</p>
+    <ul class="wp-list">
+        {content.problem.items.map((item, i) => (
+            <li class="wp-list__item" style={`transition-delay: ${i * 0.06}s`}>{item}</li>
+        ))}
+    </ul>
+</section>
+
+<!-- 5. Approach -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.approach.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <h2 class="wp-headline">{content.approach.headline}</h2>
+    <div class="wp-body">
+        {content.approach.body.map(p => (
+            <p>{p}</p>
+        ))}
+    </div>
+</section>
+
+<!-- 6. Comparison -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.comparison.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <h2 class="wp-headline">{content.comparison.headline}</h2>
+    <div class="wp-comparison">
+        <div class="wp-comparison__head">
+            <div class="wp-comparison__label-cell"></div>
+            {content.comparison.columnHeaders.map(h => (
+                <div class="wp-comparison__head-cell">{h}</div>
+            ))}
+        </div>
+        {content.comparison.rows.map(row => (
+            <div class="wp-comparison__row">
+                <div class="wp-comparison__label-cell">{row.label}</div>
+                {row.cells.map((cell, ci) => (
+                    <div class="wp-comparison__cell" data-header={content.comparison.columnHeaders[ci]}>
+                        {cell}
+                    </div>
+                ))}
+            </div>
+        ))}
+    </div>
+</section>
+
+<!-- 7. AI usage -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.ai.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <h2 class="wp-headline">{content.ai.headline}</h2>
+    <p class="wp-body__single">{content.ai.intro}</p>
+    <div class="wp-split">
+        <div class="wp-split__col">
+            <h3 class="wp-split__label">{content.ai.doesLabel}</h3>
+            <ul class="wp-split__list">
+                {content.ai.does.map(item => (
+                    <li class="wp-split__item">{item}</li>
+                ))}
+            </ul>
+        </div>
+        <div class="wp-split__col">
+            <h3 class="wp-split__label">{content.ai.doesNotLabel}</h3>
+            <ul class="wp-split__list wp-split__list--muted">
+                {content.ai.doesNot.map(item => (
+                    <li class="wp-split__item">{item}</li>
+                ))}
+            </ul>
+        </div>
+    </div>
+    <p class="wp-body__single wp-body__closing">{content.ai.closing}</p>
+</section>
+
+<!-- 8. Scope -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.scope.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <h2 class="wp-headline">{content.scope.headline}</h2>
+    <div class="wp-split">
+        <div class="wp-split__col">
+            <h3 class="wp-split__label">{content.scope.includedLabel}</h3>
+            <ul class="wp-split__list wp-split__list--accent">
+                {content.scope.included.map(item => (
+                    <li class="wp-split__item"><Icon name="mdi:check" class="wp-split__icon wp-split__icon--yes" width={18} height={18} />{item}</li>
+                ))}
+            </ul>
+        </div>
+        <div class="wp-split__col">
+            <h3 class="wp-split__label">{content.scope.notIncludedLabel}</h3>
+            <ul class="wp-split__list wp-split__list--muted">
+                {content.scope.notIncluded.map(item => (
+                    <li class="wp-split__item"><Icon name="mdi:close" class="wp-split__icon wp-split__icon--no" width={18} height={18} />{item}</li>
+                ))}
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- 9. Consulting bridge -->
+<section class="wp-consulting reveal">
+    <div class="wp-consulting__inner">
+        <div class="wp-header">
+            <span class="wp-eyebrow">{content.consulting.eyebrow}</span>
+            <div class="wp-rule"></div>
+        </div>
+        <h2 class="wp-headline">{content.consulting.headline}</h2>
+        <div class="wp-body">
+            {content.consulting.body.map(p => (
+                <p>{p}</p>
+            ))}
+        </div>
+        <a class="wp-cta-link" href={homeUrl}>
+            <span class="wp-cta-link__text">{content.consulting.cta}</span>
+            <span class="wp-cta-link__arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- 10. FAQ -->
+<section class="wp-section reveal">
+    <div class="wp-header">
+        <span class="wp-eyebrow">{content.faq.eyebrow}</span>
+        <div class="wp-rule"></div>
+    </div>
+    <div class="wp-faq">
+        {content.faq.items.map(item => (
+            <details class="wp-faq__item">
+                <summary class="wp-faq__question">
+                    <span>{item.q}</span>
+                    <span class="wp-faq__chevron"></span>
+                </summary>
+                <p class="wp-faq__answer">{item.a}</p>
+            </details>
+        ))}
+    </div>
+</section>
+
+
+<style lang="scss">
+    /* ------------------------------------------------
+       Shared atoms
+       ------------------------------------------------ */
+    .wp-eyebrow {
+        font-family: var(--v8-font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--v8-text-muted);
+        flex-shrink: 0;
+    }
+
+    .wp-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding-bottom: 32px;
+    }
+
+    .wp-rule {
+        flex: 1;
+        height: 1px;
+        background: var(--v8-border);
+    }
+
+    .wp-headline {
+        font-family: var(--v8-font-display);
+        font-size: clamp(32px, 4vw, 48px);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--v8-text);
+        margin: 0 0 32px;
+    }
+
+    .wp-lead {
+        font-family: var(--v8-font-body);
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 1.65;
+        color: var(--v8-text-secondary);
+        max-width: 640px;
+        margin: 0 0 32px;
+    }
+
+    .wp-body {
+        max-width: 640px;
+
+        p {
+            font-family: var(--v8-font-body);
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            margin: 0 0 20px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .wp-body__single {
+        font-family: var(--v8-font-body);
+        font-size: 17px;
+        font-weight: 300;
+        line-height: 1.65;
+        color: var(--v8-text-secondary);
+        max-width: 640px;
+        margin: 0 0 32px;
+    }
+
+    .wp-body__closing {
+        margin-top: 40px;
+    }
+
+    .wp-cta-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--v8-accent);
+        align-self: flex-start;
+        transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+        &:hover {
+            gap: 20px;
+        }
+
+        &__text {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-text);
+        }
+
+        &__arrow {
+            font-size: 16px;
+            color: var(--v8-accent);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        &:hover &__arrow {
+            transform: translateX(4px);
+        }
+    }
+
+    /* ------------------------------------------------
+       Shared section wrapper
+       ------------------------------------------------ */
+    .wp-section {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 80px 80px;
+    }
+
+    /* ------------------------------------------------
+       1. Hero
+       ------------------------------------------------ */
+    .wp-hero {
+        width: 100%;
+        padding: 160px 80px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        &__content {
+            position: relative;
+            z-index: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .wp-eyebrow {
+            margin-bottom: 8px;
+        }
+
+        &__headline {
+            font-family: var(--v8-font-display);
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--v8-text);
+            margin: 0;
+        }
+
+        &__subline {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 640px;
+            margin: 0;
+        }
+    }
+
+    /* ------------------------------------------------
+       2. Problem list
+       ------------------------------------------------ */
+    .wp-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-tertiary);
+            padding: 24px 0 24px 32px;
+            border-bottom: 1px solid var(--v8-border);
+            position: relative;
+            transition: color 0.3s ease;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--v8-accent);
+                transition: transform 0.3s ease;
+            }
+
+            &:hover {
+                color: var(--v8-text);
+
+                &::before {
+                    transform: translateY(-50%) scale(1.3);
+                }
+            }
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       4. Comparison grid
+       ------------------------------------------------ */
+    .wp-comparison {
+        margin-top: 8px;
+        border-top: 1px solid var(--v8-border);
+
+        &__head,
+        &__row {
+            display: grid;
+            grid-template-columns: 200px repeat(3, 1fr);
+        }
+
+        &__head {
+            border-bottom: 1px solid var(--v8-border);
+        }
+
+        &__head-cell {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            padding: 16px 20px;
+            border-left: 1px solid var(--v8-border);
+        }
+
+        &__label-cell {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            color: var(--v8-text);
+            padding: 20px 20px 20px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        &__row {
+            border-bottom: 1px solid var(--v8-border);
+        }
+
+        &__cell {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.55;
+            color: var(--v8-text-secondary);
+            padding: 20px;
+            border-left: 1px solid var(--v8-border);
+
+            &::before {
+                display: none;
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       5 & 8. Split columns (AI does/doesn't, Scope)
+       ------------------------------------------------ */
+    .wp-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+
+        &__col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__label {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            margin: 0 0 20px;
+        }
+
+        &__list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-secondary);
+            padding: 14px 0;
+            border-bottom: 1px solid var(--v8-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+
+        &__icon {
+            flex-shrink: 0;
+            margin-top: 3px;
+
+            &--yes { color: var(--v8-accent); }
+            &--no { color: var(--v8-text-faint); }
+        }
+
+        &__list--muted &__item {
+            color: var(--v8-text-faint);
+        }
+    }
+
+    /* ------------------------------------------------
+       6. Packages
+       ------------------------------------------------ */
+    .wp-packages {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    .wp-package {
+        border: 1px solid var(--v8-border);
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+
+        &__icon {
+            color: var(--v8-accent);
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        &__name {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(22px, 2.4vw, 30px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--v8-text);
+            margin: 0 0 6px;
+        }
+
+        &__price {
+            font-family: var(--v8-font-mono);
+            font-size: 14px;
+            letter-spacing: 0.04em;
+            color: var(--v8-accent);
+            margin-bottom: 12px;
+        }
+
+        &__audience {
+            font-family: var(--v8-font-body);
+            font-style: italic;
+            font-size: 14px;
+            font-weight: 300;
+            color: var(--v8-text-muted);
+            margin: 0 0 24px;
+        }
+
+        &__features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px;
+            flex: 1;
+        }
+
+        &__feature {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            color: var(--v8-text-secondary);
+            padding: 10px 0;
+            border-top: 1px solid var(--v8-border);
+
+            &:last-child {
+                border-bottom: 1px solid var(--v8-border);
+            }
+        }
+
+        &__delivery {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            color: var(--v8-accent);
+            margin-top: auto;
+            padding-top: 8px;
+        }
+    }
+
+    /* ------------------------------------------------
+       7. Add-ons
+       ------------------------------------------------ */
+    .wp-addons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        border-top: 1px solid var(--v8-border);
+    }
+
+    .wp-addon {
+        display: flex;
+        flex-direction: column;
+        padding: 32px 24px 32px 0;
+        border-bottom: 1px solid var(--v8-border);
+
+        &:not(:last-child) {
+            border-right: 1px solid var(--v8-border);
+            padding-right: 24px;
+        }
+
+        &:not(:first-child) {
+            padding-left: 24px;
+        }
+
+        &__name {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(20px, 2vw, 26px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--v8-text);
+            margin: 0 0 6px;
+        }
+
+        &__icon {
+            color: var(--v8-accent);
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+
+        &__price {
+            font-family: var(--v8-font-mono);
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            color: var(--v8-accent);
+            margin-bottom: 12px;
+        }
+
+        &__desc {
+            font-family: var(--v8-font-body);
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.55;
+            color: var(--v8-text-muted);
+            margin: 0 0 20px;
+        }
+
+        &__features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-top: auto;
+        }
+
+        &__feature {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.02em;
+            line-height: 1.5;
+            color: var(--v8-text-secondary);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--v8-border);
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+    }
+
+    .wp-support-note {
+        font-family: var(--v8-font-mono);
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        line-height: 1.6;
+        color: var(--v8-text-faint);
+        margin: 24px 0 0;
+        max-width: 72ch;
+    }
+
+    /* ------------------------------------------------
+       9. Consulting bridge
+       ------------------------------------------------ */
+    .wp-consulting {
+        max-width: 1440px;
+        margin: 0 auto;
+        background: var(--v8-bg-alt);
+        padding: 80px 80px;
+
+        &__inner {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    /* ------------------------------------------------
+       10. FAQ
+       ------------------------------------------------ */
+    .wp-faq {
+        &__item {
+            border-bottom: 1px solid var(--v8-border);
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+
+            &[open] .wp-faq__chevron {
+                transform: rotate(90deg);
+            }
+        }
+
+        &__question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            cursor: pointer;
+            padding: 20px 0;
+            list-style: none;
+            font-family: var(--v8-font-body);
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--v8-text);
+            transition: color 0.2s ease;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::marker {
+                display: none;
+                content: '';
+            }
+
+            &:hover {
+                color: var(--v8-accent);
+            }
+        }
+
+        &__chevron {
+            flex-shrink: 0;
+            width: 8px;
+            height: 8px;
+            border-right: 1.5px solid var(--v8-text-muted);
+            border-bottom: 1.5px solid var(--v8-text-muted);
+            transform: rotate(0deg);
+            transition: transform 0.25s ease;
+            display: inline-block;
+            transform-origin: center center;
+            /* Point right by default, rotate down on open */
+            transform: rotate(-45deg);
+        }
+
+        &__item[open] &__chevron {
+            transform: rotate(45deg);
+        }
+
+        &__answer {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            padding: 0 0 24px;
+            margin: 0;
+            max-width: 640px;
+        }
+    }
+
+    /* ------------------------------------------------
+       11. Final CTA
+       ------------------------------------------------ */
+    .wp-final {
+        width: 100%;
+        padding: 80px 80px 120px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+        overflow: hidden;
+
+        &__content {
+            position: relative;
+            z-index: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        &__headline {
+            font-family: var(--v8-font-display);
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--v8-text);
+            margin: 0;
+        }
+
+        &__body {
+            font-family: var(--v8-font-body);
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 640px;
+            margin: 0;
+        }
+
+        &__note {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            color: var(--v8-text-muted);
+            margin-top: 8px;
+        }
+    }
+
+    /* ------------------------------------------------
+       Responsive: Tablet (1024px)
+       ------------------------------------------------ */
+    @media (max-width: 1024px) {
+        .wp-hero {
+            padding: 120px 48px 60px;
+        }
+
+        .wp-section {
+            padding: 60px 48px;
+        }
+
+        .wp-consulting {
+            padding: 60px 48px;
+        }
+
+        .wp-final {
+            padding: 60px 48px 100px;
+        }
+
+        .wp-comparison {
+            &__head,
+            &__row {
+                grid-template-columns: 160px repeat(3, 1fr);
+            }
+        }
+
+        .wp-addons {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .wp-addon {
+            &:nth-child(odd) {
+                border-right: 1px solid var(--v8-border);
+                padding-right: 24px;
+                padding-left: 0;
+            }
+
+            &:nth-child(even) {
+                border-right: none;
+                padding-left: 24px;
+                padding-right: 0;
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       Responsive: Mobile (768px)
+       ------------------------------------------------ */
+    @media (max-width: 768px) {
+        .wp-hero {
+            padding: 120px 24px 40px;
+
+            &__headline {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+        }
+
+        .wp-section {
+            padding: 40px 24px;
+        }
+
+        .wp-consulting {
+            padding: 40px 24px;
+        }
+
+        .wp-final {
+            padding: 40px 24px 80px;
+
+            &__headline {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+        }
+
+        .wp-list__item {
+            font-size: 15px;
+        }
+
+        /* Comparison: stack rows as cards */
+        .wp-comparison {
+            &__head {
+                display: none;
+            }
+
+            &__row {
+                display: flex;
+                flex-direction: column;
+                padding: 20px 0;
+                border-bottom: 1px solid var(--v8-border);
+
+                &:first-child {
+                    border-top: 1px solid var(--v8-border);
+                }
+            }
+
+            &__label-cell {
+                font-size: 13px;
+                font-weight: 500;
+                padding: 0 0 12px;
+                border-bottom: 1px solid var(--v8-border);
+            }
+
+            &__cell {
+                border-left: none;
+                padding: 12px 0;
+                border-bottom: 1px solid var(--v8-border);
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &::before {
+                    display: block;
+                    content: attr(data-header);
+                    font-family: var(--v8-font-mono);
+                    font-size: 10px;
+                    letter-spacing: 0.12em;
+                    text-transform: uppercase;
+                    color: var(--v8-text-muted);
+                    margin-bottom: 4px;
+                }
+            }
+        }
+
+        /* Split columns: stack */
+        .wp-split {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        /* Packages: stack */
+        .wp-packages {
+            grid-template-columns: 1fr;
+        }
+
+        /* Add-ons: stack */
+        .wp-addons {
+            grid-template-columns: 1fr;
+        }
+
+        .wp-addon {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-right: none !important;
+        }
+    }
+
+    /* Theme-aware hero background */
+    :global(html.dark) .wp-hero::before { background-image: url('/images/hero-dark.png'); }
+    :global(html.light) .wp-hero::before { background-image: url('/images/hero-light.png'); }
+
+    /* ────────────────────────────────────────────────
+       SECTION THEMING — light/dark alternation
+       ──────────────────────────────────────────────── */
+    $lt-bg: #F5F4F0;
+    $lt-accent: #B82A00;
+
+    @mixin lt {
+        --v8-bg: #{$lt-bg};
+        --v8-bg-alt: #EDECEA;
+        --v8-bg-surface: #E8E7E3;
+        --v8-text: #141413;
+        --v8-text-muted: rgba(20, 20, 19, 0.50);
+        --v8-text-secondary: rgba(20, 20, 19, 0.70);
+        --v8-text-tertiary: rgba(20, 20, 19, 0.65);
+        --v8-text-dim: rgba(20, 20, 19, 0.6);
+        --v8-text-faint: rgba(20, 20, 19, 0.32);
+        --v8-accent: #{$lt-accent};
+        --v8-accent-status: #1A7A52;
+        --v8-border: rgba(20, 20, 19, 0.10);
+        --v8-border-accent: rgba(184, 42, 0, 0.35);
+    }
+
+    @mixin dk {
+        --v8-bg: #0C0C0C;
+        --v8-bg-alt: #101010;
+        --v8-bg-surface: #141414;
+        --v8-text: #F2F0EB;
+        --v8-text-muted: rgba(242, 240, 235, 0.65);
+        --v8-text-secondary: rgba(242, 240, 235, 0.75);
+        --v8-text-tertiary: rgba(242, 240, 235, 0.68);
+        --v8-text-dim: rgba(242, 240, 235, 0.62);
+        --v8-text-faint: rgba(242, 240, 235, 0.45);
+        --v8-accent: #FF3B00;
+        --v8-accent-status: #00DC82;
+        --v8-border: rgba(242, 240, 235, 0.08);
+        --v8-border-accent: rgba(255, 59, 0, 0.3);
+    }
+
+    @mixin bleed-bg($bg) {
+        position: relative;
+        z-index: 0;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 100vw;
+            transform: translateX(-50%);
+            background: #{$bg};
+            z-index: -2;
+        }
+    }
+
+    /*
+     * Section order (children of <main>):
+     *   1  .wp-hero        — Hero (photo bg)
+     *   2  .wp-section     — Packages        LIGHT
+     *   3  .wp-section     — Add-ons         LIGHT
+     *   4  .wp-section     — Problem         LIGHT
+     *   5  .wp-section     — Approach        LIGHT
+     *   6  .wp-section     — Comparison      DARK
+     *   7  .wp-section     — AI              DARK
+     *   8  .wp-section     — Scope           DARK
+     *   9  .wp-consulting  — Bridge          DARK
+     *  10  .wp-section     — FAQ             LIGHT
+     *  11  .contact        — Contact form
+     */
+
+    /* Hero: glass card */
+    .wp-hero {
+        min-height: 85vh;
+        justify-content: flex-end;
+
+        .wp-hero__content {
+            background: var(--v8-glass-bg);
+            backdrop-filter: blur(24px) saturate(1.35);
+            -webkit-backdrop-filter: blur(24px) saturate(1.35);
+            border: 1px solid var(--v8-glass-border);
+            box-shadow:
+                0 1px 0 var(--v8-glass-highlight) inset,
+                0 30px 80px -40px rgba(0, 0, 0, 0.35);
+            padding: 48px 56px;
+            max-width: 800px;
+            margin: 0 !important;
+        }
+
+        @media (max-width: 768px) {
+            min-height: 70vh;
+            padding-bottom: 40px;
+
+            &::before { background-position: 65% center; }
+
+            .wp-hero__content {
+                padding: 24px 20px;
+                max-width: 100%;
+
+                .wp-hero__headline { font-size: clamp(28px, 7vw, 40px); }
+                .wp-hero__subline { font-size: 15px; }
+            }
+        }
+    }
+
+    /* Light band: Packages, Add-ons, Problem, Approach (2-5) */
+    .wp-section:nth-child(2),
+    .wp-section:nth-child(3),
+    .wp-section:nth-child(4),
+    .wp-section:nth-child(5) {
+        @include lt;
+        @include bleed-bg($lt-bg);
+
+        & > * { position: relative; z-index: 1; }
+    }
+
+    .wp-section:nth-child(2) { padding-top: 100px; }
+
+    /* Dark band: Comparison (6), AI (7), Scope (8) */
+    .wp-section:nth-child(6),
+    .wp-section:nth-child(7),
+    .wp-section:nth-child(8) {
+        @include dk;
+    }
+
+    .wp-section:nth-child(6) { padding-top: 100px; }
+
+    /* Consulting bridge (9) */
+    .wp-consulting { @include dk; }
+
+    /* Light band: FAQ (10) */
+    .wp-section:nth-child(10) {
+        @include lt;
+        @include bleed-bg($lt-bg);
+        padding-top: 100px;
+
+        & > * { position: relative; z-index: 1; }
+    }
+
+    /* Card hover effects */
+    .wp-package {
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+        &:hover { transform: translateY(-4px); border-color: var(--v8-text-muted) !important; }
+    }
+
+    .wp-addon {
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+        &:hover { transform: translateY(-3px); border-color: var(--v8-text-muted) !important; }
+    }
+
+    .wp-faq__item {
+        transition: background-color 0.2s ease;
+        &:hover { background-color: var(--v8-bg-alt); }
+    }
+
+    /* Comparison: highlight "This offering" column */
+    .wp-comparison__cell:last-child { color: var(--v8-text); font-weight: 400; }
+    .wp-comparison__header:last-child { color: var(--v8-accent); }
+</style>

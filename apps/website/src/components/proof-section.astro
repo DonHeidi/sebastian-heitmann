@@ -1,11 +1,15 @@
 ---
 import type { Strings } from '../i18n/types';
+import type { Locale } from '../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 type Props = {
     proof: Strings['proof'];
+    locale?: Locale;
+    webDevLink?: { label: string; href: string };
 };
 
-const { proof } = Astro.props;
+const { proof, locale, webDevLink } = Astro.props;
 ---
 
 <section class="proof" id="proof">
@@ -36,6 +40,12 @@ const { proof } = Astro.props;
                         <span class="engagement-model">{e.model}</span>
                         <span class="engagement-billing">{e.billing}</span>
                         <p class="engagement-desc">{e.description}</p>
+                        {e.featured && webDevLink && (
+                            <a class="engagement-link" href={webDevLink.href}>
+                                <span>{webDevLink.label}</span>
+                                <span class="engagement-link__arrow">&rarr;</span>
+                            </a>
+                        )}
                     </div>
                 ))}
             </div>
@@ -187,6 +197,31 @@ const { proof } = Astro.props;
             font-weight: 300;
             line-height: 1.7;
             color: var(--v8-text-tertiary);
+        }
+
+        &-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px solid var(--v8-border);
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-accent);
+            transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+            &:hover { gap: 16px; }
+
+            &__arrow {
+                font-size: 13px;
+                transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            &:hover &__arrow { transform: translateX(3px); }
         }
     }
 

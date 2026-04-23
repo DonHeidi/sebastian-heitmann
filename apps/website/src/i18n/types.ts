@@ -171,4 +171,77 @@ export interface Strings {
     interests: string[];
     downloadLabel: string;
   };
+  webProjects: {
+    meta: { title: string; description: string };
+    hero: { eyebrow: string; headline: string; subline: string; cta: string };
+    problem: { eyebrow: string; intro: string; items: string[] };
+    approach: { eyebrow: string; headline: string; body: string[] };
+    comparison: {
+      eyebrow: string;
+      headline: string;
+      columnHeaders: string[];
+      rows: Array<{ label: string; cells: string[] }>;
+    };
+    ai: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      doesLabel: string;
+      does: string[];
+      doesNotLabel: string;
+      doesNot: string[];
+      closing: string;
+    };
+    packages: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      items: Array<{
+        name: string;
+        price: string;
+        audience: string;
+        features: string[];
+        delivery: string;
+      }>;
+    };
+    addons: {
+      eyebrow: string;
+      headline: string;
+      supportNote: string;
+      items: Array<{
+        name: string;
+        price?: string;
+        description: string;
+        features: string[];
+      }>;
+    };
+    scope: {
+      eyebrow: string;
+      headline: string;
+      includedLabel: string;
+      included: string[];
+      notIncludedLabel: string;
+      notIncluded: string[];
+    };
+    consulting: {
+      eyebrow: string;
+      headline: string;
+      body: string[];
+      cta: string;
+    };
+    faq: {
+      eyebrow: string;
+      items: Array<{ q: string; a: string }>;
+    };
+    cta: {
+      headline: string;
+      body: string;
+      button: string;
+      note: string;
+    };
+    contact: {
+      headline: string;
+      intro: string;
+    };
+  };
 }

@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/navigation.astro';
+import WebProjectsContent from '../components/web-projects-content.astro';
+import ContactSection from '../components/contact-section.astro';
+import Footer from '../components/footer.astro';
+import { getStrings } from '../i18n/utils';
+import type { Locale } from '../i18n/utils';
+
+const locale = Astro.currentLocale as Locale;
+const s = getStrings(locale);
+
+const siteUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://www.sebastian-heitmann.dev').replace(/\/$/, '');
+const alternates = [
+    { hreflang: 'en', href: `${siteUrl}/web-development` },
+    { hreflang: 'de-DE', href: `${siteUrl}/de-de/web-entwicklung` },
+    { hreflang: 'x-default', href: `${siteUrl}/web-development` },
+];
+---
+<Layout
+    locale={locale}
+    title={s.webProjects.meta.title}
+    description={s.webProjects.meta.description}
+    alternates={alternates}
+>
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <main>
+        <WebProjectsContent content={s.webProjects} locale={locale} />
+        <ContactSection contact={{ ...s.contact, headline: s.webProjects.contact.headline, intro: s.webProjects.contact.intro }} />
+    </main>
+    <Footer footer={s.footer} />
+</Layout>

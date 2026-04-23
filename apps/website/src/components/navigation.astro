@@ -15,7 +15,19 @@ const currentConfig = localeConfig[currentLocale];
 
 // Extract the page path without the locale prefix
 const pathname = Astro.url.pathname;
-const pagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$/, '') || '/';
+const rawPagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$/, '') || '/';
+
+// Asymmetric route mapping for pages with different slugs per locale
+const routeMap: Record<string, Record<string, string>> = {
+    '/web-entwicklung': { 'en-us': '/web-development', 'de-de': '/web-entwicklung' },
+    '/web-development': { 'en-us': '/web-development', 'de-de': '/web-entwicklung' },
+};
+
+function getPagePathForLocale(loc: Locale): string {
+    const mapping = routeMap[rawPagePath];
+    if (mapping && mapping[loc]) return mapping[loc];
+    return rawPagePath;
+}
 ---
 
 <nav class="nav">
@@ -25,7 +37,7 @@ const pagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$/, 
             {locales.map((loc) => (
                 <a
                     class:list={['nav-lang__link', { 'nav-lang__link--active': loc === currentLocale }]}
-                    href={getRelativeLocaleUrl(loc, pagePath)}
+                    href={getRelativeLocaleUrl(loc, getPagePathForLocale(loc))}
                     data-locale={loc}
                     aria-current={loc === currentLocale ? 'page' : undefined}
                 >

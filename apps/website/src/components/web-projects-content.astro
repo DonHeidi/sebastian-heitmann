@@ -1155,12 +1155,18 @@ const homeUrl = getRelativeLocaleUrl(locale, '/');
     .wp-section:nth-child(7),
     .wp-section:nth-child(8) {
         @include dk;
+        @include bleed-bg(#0C0C0C);
+
+        & > * { position: relative; z-index: 1; }
     }
 
     .wp-section:nth-child(6) { padding-top: 100px; }
 
     /* Consulting bridge (9) */
-    .wp-consulting { @include dk; }
+    .wp-consulting {
+        @include dk;
+        @include bleed-bg(#101010);
+    }
 
     /* Light band: FAQ (10) */
     .wp-section:nth-child(10) {

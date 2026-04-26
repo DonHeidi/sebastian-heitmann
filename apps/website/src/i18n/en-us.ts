@@ -29,7 +29,7 @@ export const enUs: Strings = {
     workingWithLabel: 'Working with',
     workingWith: ['Pool Position GmbH'],
     previouslyAtLabel: 'Previously at',
-    previouslyAt: ['Jung von Matt', 'Synergy', 'Granny & Smith', 'OFFIS'],
+    previouslyAt: ['Jung von Matt', 'synvert', 'Granny & Smith', 'OFFIS'],
   },
   capabilities: {
     eyebrow: 'What I do',

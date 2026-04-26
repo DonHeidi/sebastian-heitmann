@@ -1,29 +1,73 @@
 ---
 import type { Strings } from '../i18n/types';
+import { Image } from 'astro:assets';
+
+import poolPositionLogo from '../assets/logos/pool-position.png';
+import jvmLogo from '../assets/logos/jvm.svg';
+import synvertLogo from '../assets/logos/synvert.png';
+import grannySmithLogo from '../assets/logos/granny-smith.jpg';
+import offisLogo from '../assets/logos/offis.svg';
 
 type Props = {
     logos: Strings['logos'];
 };
 
 const { logos } = Astro.props;
+
+// Logos that should keep their original colors (no invert filter)
+const noInvert = new Set(['Granny & Smith']);
+
+// Per-logo config to compensate for varying whitespace baked into source images
+// height: render height (taller = more internal whitespace to compensate for)
+// spacing: vertical margin in mobile stacked layout (px) — less for logos with
+//          built-in whitespace, more for tightly cropped logos
+const logoMap: Record<string, { src: ImageMetadata; height: number; spacing: number }> = {
+    'Pool Position GmbH': { src: poolPositionLogo, height: 70, spacing: 0 },
+    'Jung von Matt':      { src: jvmLogo,          height: 24, spacing: 14 },
+    'synvert':            { src: synvertLogo,       height: 31, spacing: 10 },
+    'Granny & Smith':     { src: grannySmithLogo,   height: 53, spacing: 0 },
+    'OFFIS':              { src: offisLogo,         height: 48, spacing: 4 },
+};
 ---
 
 <section class="logos">
     <div class="logos-inner">
         <div class="logos-group">
             <span class="logos-label">{logos.workingWithLabel}</span>
-            <div class="logos-names">
+            <div class="logos-marks">
                 {logos.workingWith.map(name => (
-                    <span class="logos-name">{name}</span>
+                    <span class="logos-mark" title={name} style={logoMap[name] ? `--logo-spacing: ${logoMap[name].spacing}px` : ''}>
+                        {logoMap[name] ? (
+                            <Image
+                                src={logoMap[name].src}
+                                alt={name}
+                                height={logoMap[name].height}
+                                class={`logos-img${noInvert.has(name) ? ' no-invert' : ''}`}
+                            />
+                        ) : (
+                            <span class="logos-name">{name}</span>
+                        )}
+                    </span>
                 ))}
             </div>
         </div>
         <div class="logos-divider"></div>
         <div class="logos-group">
             <span class="logos-label">{logos.previouslyAtLabel}</span>
-            <div class="logos-names">
+            <div class="logos-marks">
                 {logos.previouslyAt.map(name => (
-                    <span class="logos-name">{name}</span>
+                    <span class="logos-mark" title={name} style={logoMap[name] ? `--logo-spacing: ${logoMap[name].spacing}px` : ''}>
+                        {logoMap[name] ? (
+                            <Image
+                                src={logoMap[name].src}
+                                alt={name}
+                                height={logoMap[name].height}
+                                class={`logos-img${noInvert.has(name) ? ' no-invert' : ''}`}
+                            />
+                        ) : (
+                            <span class="logos-name">{name}</span>
+                        )}
+                    </span>
                 ))}
             </div>
         </div>
@@ -32,18 +76,19 @@ const { logos } = Astro.props;
 
 <style lang="scss">
     .logos {
+        background: #0C0C0C;
         padding: 0 80px;
-        max-width: 1440px;
-        margin: 0 auto;
+        max-width: none;
+        margin: 0;
 
         &-inner {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 48px;
-            padding: 28px 0;
-            border-top: 1px solid var(--v8-border);
-            border-bottom: 1px solid var(--v8-border);
+            padding: 32px 0;
+            max-width: 1440px;
+            margin: 0 auto;
         }
 
         &-group {
@@ -57,34 +102,43 @@ const { logos } = Astro.props;
             font-size: 10px;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--v8-text-muted);
+            color: rgba(255, 255, 255, 0.5);
             flex-shrink: 0;
             white-space: nowrap;
         }
 
-        &-names {
+        &-marks {
             display: flex;
             align-items: center;
-            gap: 32px;
+            gap: 36px;
+        }
+
+        &-mark {
+            display: flex;
+            align-items: center;
+            cursor: default;
+        }
+
+        &-img {
+            width: auto;
+            filter: invert(1) saturate(0) brightness(2) contrast(0.8);
+
+            &.no-invert {
+                filter: none;
+            }
         }
 
         &-name {
             font-family: var(--v8-font-display);
             font-size: 18px;
-            color: var(--v8-text);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.7);
             white-space: nowrap;
-            transition: opacity 0.2s ease;
-
-            &:hover {
-                opacity: 0.75;
-            }
         }
 
         &-divider {
             width: 1px;
-            height: 24px;
-            background: var(--v8-border);
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
             flex-shrink: 0;
         }
     }
@@ -95,10 +149,9 @@ const { logos } = Astro.props;
 
             &-inner {
                 gap: 32px;
-                border-top: none;
             }
 
-            &-names {
+            &-marks {
                 gap: 24px;
             }
         }
@@ -110,24 +163,29 @@ const { logos } = Astro.props;
 
             &-inner {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-                padding: 24px 0;
+                align-items: center;
+                gap: 28px;
+                padding: 32px 0;
             }
 
             &-group {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
+                align-items: center;
+                gap: 16px;
             }
 
-            &-names {
-                flex-wrap: wrap;
-                gap: 16px 24px;
+            &-marks {
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+            }
+
+            &-mark {
+                margin-block: var(--logo-spacing, 0);
             }
 
             &-divider {
-                width: 100%;
+                width: 40px;
                 height: 1px;
             }
         }

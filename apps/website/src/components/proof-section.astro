@@ -7,9 +7,10 @@ type Props = {
     proof: Strings['proof'];
     locale?: Locale;
     webDevLink?: { label: string; href: string };
+    tpmLink?: { label: string; href: string };
 };
 
-const { proof, locale, webDevLink } = Astro.props;
+const { proof, locale, webDevLink, tpmLink } = Astro.props;
 ---
 
 <section class="proof" id="proof">
@@ -35,11 +36,17 @@ const { proof, locale, webDevLink } = Astro.props;
         <div class="proof-engagements reveal">
             <span class="proof-label">{proof.engagementLabel}</span>
             <div class="engagements-grid">
-                {proof.engagements.map((e) => (
+                {proof.engagements.map((e, i) => (
                     <div class:list={['engagement', { 'engagement--featured': e.featured }]}>
                         <span class="engagement-model">{e.model}</span>
                         <span class="engagement-billing">{e.billing}</span>
                         <p class="engagement-desc">{e.description}</p>
+                        {i === 0 && tpmLink && (
+                            <a class="engagement-link" href={tpmLink.href}>
+                                <span>{tpmLink.label}</span>
+                                <span class="engagement-link__arrow">&rarr;</span>
+                            </a>
+                        )}
                         {e.featured && webDevLink && (
                             <a class="engagement-link" href={webDevLink.href}>
                                 <span>{webDevLink.label}</span>

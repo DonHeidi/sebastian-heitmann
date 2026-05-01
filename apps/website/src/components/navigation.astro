@@ -21,6 +21,8 @@ const rawPagePath = pathname.replace(/^\/(de-de|en-us)(\/|$)/, '/').replace(/\/$
 const routeMap: Record<string, Record<string, string>> = {
     '/web-entwicklung': { 'en-us': '/web-development', 'de-de': '/web-entwicklung' },
     '/web-development': { 'en-us': '/web-development', 'de-de': '/web-entwicklung' },
+    '/technical-project-management': { 'en-us': '/technical-project-management', 'de-de': '/technisches-projektmanagement' },
+    '/technisches-projektmanagement': { 'en-us': '/technical-project-management', 'de-de': '/technisches-projektmanagement' },
 };
 
 function getPagePathForLocale(loc: Locale): string {

@@ -1,0 +1,1135 @@
+---
+import type { Strings } from '../i18n/types';
+import type { Locale } from '../i18n/utils';
+import { Icon } from 'astro-icon/components';
+
+const situationIcons = ['mdi:rocket-launch-outline', 'mdi:refresh', 'mdi:account-group-outline'] as const;
+const serviceIcons = ['mdi:sitemap-outline', 'mdi:clipboard-text-outline', 'mdi:swap-horizontal', 'mdi:eye-outline'] as const;
+
+type Props = {
+    content: Strings['technicalProjectManagement'];
+    locale: Locale;
+};
+
+const { content, locale } = Astro.props;
+const contactUrl = '#contact';
+---
+
+<!-- 1. Hero -->
+<section class="tpm-hero reveal">
+    <div class="tpm-hero__content">
+        <span class="tpm-eyebrow">{content.hero.eyebrow}</span>
+        <h1 class="tpm-hero__headline">{content.hero.headline}</h1>
+        <p class="tpm-hero__subline">{content.hero.subline}</p>
+        <div class="tpm-hero__actions">
+            <a class="tpm-cta-link" href={contactUrl}>
+                <span class="tpm-cta-link__text">{content.hero.cta}</span>
+                <span class="tpm-cta-link__arrow">&rarr;</span>
+            </a>
+            <a class="tpm-cta-link tpm-cta-link--secondary" href="#situations">
+                <span class="tpm-cta-link__text">{content.hero.ctaSecondary}</span>
+                <span class="tpm-cta-link__arrow">&darr;</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. Definition (compact two-column grid) -->
+<section class="tpm-section reveal">
+    <div class="tpm-header">
+        <span class="tpm-eyebrow">{content.definition.eyebrow}</span>
+        <div class="tpm-rule"></div>
+    </div>
+    <h2 class="tpm-headline">{content.definition.headline}</h2>
+    <p class="tpm-lead">{content.definition.intro}</p>
+    <div class="tpm-def-grid">
+        {content.definition.includes.map((item, i) => (
+            <div class="tpm-def-grid__item">{item}</div>
+        ))}
+    </div>
+    <div class="tpm-not-block">
+        <h3 class="tpm-split__label">{content.definition.notLabel}</h3>
+        <ul class="tpm-not-list">
+            {content.definition.notItems.map(item => (
+                <li class="tpm-not-list__item"><Icon name="mdi:close" class="tpm-not-list__icon" width={16} height={16} />{item}</li>
+            ))}
+        </ul>
+    </div>
+</section>
+
+<!-- 3. Situations (concise cards) -->
+<section class="tpm-section reveal" id="situations">
+    <div class="tpm-header">
+        <span class="tpm-eyebrow">{content.situations.eyebrow}</span>
+        <div class="tpm-rule"></div>
+    </div>
+    <h2 class="tpm-headline">{content.situations.headline}</h2>
+    <div class="tpm-situations">
+        {content.situations.items.map((item, i) => (
+            <div class="tpm-situation">
+                <Icon name={situationIcons[i]} class="tpm-situation__icon" width={36} height={36} />
+                <h3 class="tpm-situation__name">{item.name}</h3>
+                <p class="tpm-situation__audience">{item.audience}</p>
+                <p class="tpm-situation__summary">{item.summary}</p>
+            </div>
+        ))}
+    </div>
+</section>
+
+<!-- 4. Approach (absorbs value) -->
+<section class="tpm-section reveal">
+    <div class="tpm-header">
+        <span class="tpm-eyebrow">{content.approach.eyebrow}</span>
+        <div class="tpm-rule"></div>
+    </div>
+    <h2 class="tpm-headline">{content.approach.headline}</h2>
+    <div class="tpm-body tpm-body--accented">
+        {content.approach.body.map(p => (
+            <p>{p}</p>
+        ))}
+    </div>
+    <div class="tpm-hybrid tpm-hybrid--accented">
+        <p>{content.approach.hybrid}</p>
+    </div>
+</section>
+
+<!-- 4b. Pull-quote break -->
+<div class="tpm-break reveal">
+    <p class="tpm-break__quote">{content.approach.headline}</p>
+</div>
+
+<!-- 5. Services (title + description, no sub-lists) -->
+<section class="tpm-section reveal">
+    <div class="tpm-header">
+        <span class="tpm-eyebrow">{content.services.eyebrow}</span>
+        <div class="tpm-rule"></div>
+    </div>
+    <h2 class="tpm-headline">{content.services.headline}</h2>
+    <div class="tpm-services">
+        {content.services.categories.map((cat, i) => (
+            <div class="tpm-service">
+                <Icon name={serviceIcons[i]} class="tpm-service__icon" width={32} height={32} />
+                <h3 class="tpm-service__title">{cat.title}</h3>
+                <p class="tpm-service__desc">{cat.description}</p>
+            </div>
+        ))}
+    </div>
+</section>
+
+<!-- 6. Comparison -->
+<section class="tpm-section reveal">
+    <div class="tpm-header">
+        <span class="tpm-eyebrow">{content.comparison.eyebrow}</span>
+        <div class="tpm-rule"></div>
+    </div>
+    <h2 class="tpm-headline">{content.comparison.headline}</h2>
+    <div class="tpm-comparison">
+        <div class="tpm-comparison__head">
+            <div class="tpm-comparison__label-cell"></div>
+            {content.comparison.columnHeaders.map(h => (
+                <div class="tpm-comparison__head-cell">{h}</div>
+            ))}
+        </div>
+        {content.comparison.rows.map(row => (
+            <div class="tpm-comparison__row">
+                <div class="tpm-comparison__label-cell">{row.label}</div>
+                {row.cells.map((cell, ci) => (
+                    <div class="tpm-comparison__cell" data-header={content.comparison.columnHeaders[ci]}>
+                        {cell}
+                    </div>
+                ))}
+            </div>
+        ))}
+    </div>
+    <p class="tpm-body__single tpm-body__closing">{content.comparison.closing}</p>
+</section>
+
+<!-- 7. Scope (absorbs AI + billing) -->
+<section class="tpm-section reveal">
+    <div class="tpm-header">
+        <span class="tpm-eyebrow">{content.scope.eyebrow}</span>
+        <div class="tpm-rule"></div>
+    </div>
+    <h2 class="tpm-headline">{content.scope.headline}</h2>
+    <p class="tpm-body__single">{content.scope.intro}</p>
+    <div class="tpm-split">
+        <div class="tpm-split__col">
+            <h3 class="tpm-split__label">{content.scope.includedLabel}</h3>
+            <ul class="tpm-split__list tpm-split__list--accent">
+                {content.scope.included.map(item => (
+                    <li class="tpm-split__item"><Icon name="mdi:check" class="tpm-split__icon tpm-split__icon--yes" width={18} height={18} />{item}</li>
+                ))}
+            </ul>
+        </div>
+        <div class="tpm-split__col">
+            <h3 class="tpm-split__label">{content.scope.notIncludedLabel}</h3>
+            <ul class="tpm-split__list tpm-split__list--muted">
+                {content.scope.notIncluded.map(item => (
+                    <li class="tpm-split__item"><Icon name="mdi:close" class="tpm-split__icon tpm-split__icon--no" width={18} height={18} />{item}</li>
+                ))}
+            </ul>
+        </div>
+    </div>
+    <p class="tpm-body__single tpm-body__closing">{content.scope.billingNote}</p>
+</section>
+
+<!-- 8. FAQ -->
+<section class="tpm-section reveal">
+    <div class="tpm-header">
+        <span class="tpm-eyebrow">{content.faq.eyebrow}</span>
+        <div class="tpm-rule"></div>
+    </div>
+    <div class="tpm-faq">
+        {content.faq.items.map(item => (
+            <details class="tpm-faq__item">
+                <summary class="tpm-faq__question">
+                    <span>{item.q}</span>
+                    <span class="tpm-faq__chevron"></span>
+                </summary>
+                <p class="tpm-faq__answer">{item.a}</p>
+            </details>
+        ))}
+    </div>
+</section>
+
+
+<style lang="scss">
+    /* ------------------------------------------------
+       Shared atoms
+       ------------------------------------------------ */
+    .tpm-eyebrow {
+        font-family: var(--v8-font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--v8-text-muted);
+        flex-shrink: 0;
+    }
+
+    .tpm-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding-bottom: 32px;
+    }
+
+    .tpm-rule {
+        flex: 1;
+        height: 1px;
+        background: var(--v8-border);
+    }
+
+    .tpm-headline {
+        font-family: var(--v8-font-display);
+        font-size: clamp(32px, 4vw, 48px);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--v8-text);
+        margin: 0 0 32px;
+    }
+
+    .tpm-lead {
+        font-family: var(--v8-font-body);
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 1.65;
+        color: var(--v8-text-secondary);
+        max-width: 640px;
+        margin: 0 0 32px;
+    }
+
+    /* ------------------------------------------------
+       Definition compact grid
+       ------------------------------------------------ */
+    .tpm-def-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 48px;
+        margin-bottom: 32px;
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--v8-text-tertiary);
+            padding: 16px 0;
+            border-bottom: 1px solid var(--v8-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            &::before {
+                content: '';
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--v8-accent);
+                flex-shrink: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .tpm-body {
+        max-width: 640px;
+
+        p {
+            font-family: var(--v8-font-body);
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            margin: 0 0 20px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .tpm-body__single {
+        font-family: var(--v8-font-body);
+        font-size: 17px;
+        font-weight: 300;
+        line-height: 1.65;
+        color: var(--v8-text-secondary);
+        max-width: 640px;
+        margin: 0 0 32px;
+    }
+
+    .tpm-body__closing {
+        margin-top: 40px;
+    }
+
+    .tpm-body--accented {
+        border-left: 3px solid var(--v8-accent);
+        padding-left: 28px;
+    }
+
+    .tpm-hybrid--accented {
+        border-left: none;
+        padding-left: 0;
+        border-top: none;
+        margin-top: 24px;
+    }
+
+    .tpm-cta-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--v8-accent);
+        align-self: flex-start;
+        transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+        &:hover {
+            gap: 20px;
+        }
+
+        &__text {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-text);
+        }
+
+        &__arrow {
+            font-size: 16px;
+            color: var(--v8-accent);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        &:hover &__arrow {
+            transform: translateX(4px);
+        }
+
+        &--secondary {
+            border-bottom-color: var(--v8-border);
+
+            &:hover {
+                border-bottom-color: var(--v8-text-muted);
+            }
+
+            .tpm-cta-link__arrow {
+                color: var(--v8-text-muted);
+            }
+
+            &:hover .tpm-cta-link__arrow {
+                transform: translateY(4px);
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       Shared section wrapper
+       ------------------------------------------------ */
+    .tpm-section {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 80px 80px;
+    }
+
+    /* ------------------------------------------------
+       1. Hero (text-only, tight)
+       ------------------------------------------------ */
+    .tpm-hero {
+        width: 100%;
+        padding: 140px 80px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        &__content {
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .tpm-eyebrow {
+            margin-bottom: 8px;
+        }
+
+        &__headline {
+            font-family: var(--v8-font-display);
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--v8-text);
+            margin: 0;
+            max-width: 900px;
+        }
+
+        &__subline {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 640px;
+            margin: 0;
+        }
+
+        &__actions {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+    }
+
+    /* ------------------------------------------------
+       2. Bullet list (definition includes, value items)
+       ------------------------------------------------ */
+    .tpm-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-tertiary);
+            padding: 24px 0 24px 32px;
+            border-bottom: 1px solid var(--v8-border);
+            position: relative;
+            transition: color 0.3s ease;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--v8-accent);
+                transition: transform 0.3s ease;
+            }
+
+            &:hover {
+                color: var(--v8-text);
+
+                &::before {
+                    transform: translateY(-50%) scale(1.3);
+                }
+            }
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       "Not" block (what this is not)
+       ------------------------------------------------ */
+    .tpm-not-block {
+        margin-top: 48px;
+    }
+
+    .tpm-not-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-faint);
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        &__icon {
+            flex-shrink: 0;
+            color: var(--v8-text-faint);
+        }
+    }
+
+    /* ------------------------------------------------
+       3. Situation cards
+       ------------------------------------------------ */
+    .tpm-situations {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    .tpm-situation {
+        border: 1px solid var(--v8-border);
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            border-color: var(--v8-text-muted) !important;
+        }
+
+        &__icon {
+            color: var(--v8-accent);
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        &__name {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(22px, 2.4vw, 30px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--v8-text);
+            margin: 0 0 8px;
+        }
+
+        &__audience {
+            font-family: var(--v8-font-body);
+            font-style: italic;
+            font-size: 14px;
+            font-weight: 300;
+            color: var(--v8-text-muted);
+            margin: 0 0 16px;
+        }
+
+        &__summary {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-secondary);
+            margin: 0;
+            padding-top: 16px;
+            border-top: 1px solid var(--v8-border);
+        }
+    }
+
+    /* ------------------------------------------------
+       5. Hybrid callout (approach)
+       ------------------------------------------------ */
+    .tpm-hybrid {
+        margin-top: 32px;
+        padding: 24px 0;
+        border-top: 1px solid var(--v8-border);
+        max-width: 640px;
+
+        p {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-muted);
+            margin: 0;
+        }
+    }
+
+    /* ------------------------------------------------
+       6. Service categories
+       ------------------------------------------------ */
+    .tpm-services {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        border-top: 1px solid var(--v8-border);
+    }
+
+    .tpm-service {
+        display: flex;
+        flex-direction: column;
+        padding: 32px 24px 32px 0;
+        border-bottom: 1px solid var(--v8-border);
+
+        &:not(:last-child) {
+            border-right: 1px solid var(--v8-border);
+            padding-right: 24px;
+        }
+
+        &:not(:first-child) {
+            padding-left: 24px;
+        }
+
+        &__icon {
+            color: var(--v8-accent);
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+
+        &__title {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(20px, 2vw, 26px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--v8-text);
+            margin: 0 0 20px;
+        }
+
+        &__desc {
+            font-family: var(--v8-font-body);
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-secondary);
+            margin: 0;
+            padding-top: 16px;
+            border-top: 1px solid var(--v8-border);
+        }
+    }
+
+    /* ------------------------------------------------
+       7. Comparison table
+       ------------------------------------------------ */
+    .tpm-comparison {
+        margin-top: 8px;
+        border-top: 1px solid var(--v8-border);
+
+        &__head,
+        &__row {
+            display: grid;
+            grid-template-columns: 200px repeat(3, 1fr);
+        }
+
+        &__head {
+            border-bottom: 1px solid var(--v8-border);
+        }
+
+        &__head-cell {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            padding: 16px 20px;
+            border-left: 1px solid var(--v8-border);
+        }
+
+        &__label-cell {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            color: var(--v8-text);
+            padding: 20px 20px 20px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        &__row {
+            border-bottom: 1px solid var(--v8-border);
+        }
+
+        &__cell {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.55;
+            color: var(--v8-text);
+            padding: 20px;
+            border-left: 1px solid var(--v8-border);
+
+            &::before {
+                display: none;
+            }
+        }
+
+        /* Highlight first data column (TPM) */
+        &__cell:nth-child(2) {
+            color: var(--v8-text);
+            font-weight: 400;
+            background: rgba(255, 59, 0, 0.10);
+        }
+        &__head-cell:nth-child(2) {
+            color: var(--v8-accent);
+            background: rgba(255, 59, 0, 0.10);
+            border-top: 2px solid var(--v8-accent);
+        }
+    }
+
+    /* ------------------------------------------------
+       8 & 9. Split columns (AI does/doesn't, Scope)
+       ------------------------------------------------ */
+    .tpm-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+
+        &__col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__label {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            margin: 0 0 20px;
+        }
+
+        &__list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-secondary);
+            padding: 14px 0;
+            border-bottom: 1px solid var(--v8-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+
+        &__icon {
+            flex-shrink: 0;
+            margin-top: 3px;
+
+            &--yes { color: var(--v8-accent); }
+            &--no { color: var(--v8-text-faint); }
+        }
+
+        &__list--muted &__item {
+            color: var(--v8-text-faint);
+        }
+    }
+
+    /* ------------------------------------------------
+       10. Billing
+       ------------------------------------------------ */
+    /* (billing and factors removed — absorbed into scope) */
+
+    /* ------------------------------------------------
+       11. FAQ
+       ------------------------------------------------ */
+    .tpm-faq {
+        &__item {
+            border-bottom: 1px solid var(--v8-border);
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+
+            &[open] .tpm-faq__chevron {
+                transform: rotate(90deg);
+            }
+
+            transition: background-color 0.2s ease;
+            &:hover { background-color: var(--v8-bg-alt); }
+        }
+
+        &__question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            cursor: pointer;
+            padding: 20px 0;
+            list-style: none;
+            font-family: var(--v8-font-body);
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--v8-text);
+            transition: color 0.2s ease;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::marker {
+                display: none;
+                content: '';
+            }
+
+            &:hover {
+                color: var(--v8-accent);
+            }
+        }
+
+        &__chevron {
+            flex-shrink: 0;
+            width: 8px;
+            height: 8px;
+            border-right: 1.5px solid var(--v8-text-muted);
+            border-bottom: 1.5px solid var(--v8-text-muted);
+            transform: rotate(-45deg);
+            transition: transform 0.25s ease;
+            display: inline-block;
+            transform-origin: center center;
+        }
+
+        &__item[open] &__chevron {
+            transform: rotate(45deg);
+        }
+
+        &__answer {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            padding: 0 0 24px;
+            margin: 0;
+            max-width: 640px;
+        }
+    }
+
+    /* ------------------------------------------------
+       Responsive: Tablet (1024px)
+       ------------------------------------------------ */
+    @media (max-width: 1024px) {
+        .tpm-hero {
+            padding: 120px 48px 60px;
+        }
+
+        .tpm-section {
+            padding: 60px 48px;
+        }
+
+        .tpm-comparison {
+            &__head,
+            &__row {
+                grid-template-columns: 160px repeat(3, 1fr);
+            }
+        }
+
+        .tpm-services {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .tpm-service {
+            &:nth-child(odd) {
+                border-right: 1px solid var(--v8-border);
+                padding-right: 24px;
+                padding-left: 0;
+            }
+
+            &:nth-child(even) {
+                border-right: none;
+                padding-left: 24px;
+                padding-right: 0;
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       Responsive: Mobile (768px)
+       ------------------------------------------------ */
+    @media (max-width: 768px) {
+        .tpm-hero {
+            padding: 100px 24px 40px;
+
+            &__headline {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+
+            &__subline {
+                font-size: 15px;
+            }
+        }
+
+        .tpm-section {
+            padding: 40px 24px;
+        }
+
+        .tpm-list__item {
+            font-size: 15px;
+        }
+
+        /* Situations: stack */
+        .tpm-situations {
+            grid-template-columns: 1fr;
+        }
+
+        /* Comparison: stack rows as cards */
+        .tpm-comparison {
+            &__head {
+                display: none;
+            }
+
+            &__row {
+                display: flex;
+                flex-direction: column;
+                padding: 20px 0;
+                border-bottom: 1px solid var(--v8-border);
+
+                &:first-child {
+                    border-top: 1px solid var(--v8-border);
+                }
+            }
+
+            &__label-cell {
+                font-size: 13px;
+                font-weight: 500;
+                padding: 0 0 12px;
+                border-bottom: 1px solid var(--v8-border);
+            }
+
+            &__cell {
+                border-left: none;
+                padding: 12px 0;
+                border-bottom: 1px solid var(--v8-border);
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &::before {
+                    display: block;
+                    content: attr(data-header);
+                    font-family: var(--v8-font-mono);
+                    font-size: 10px;
+                    letter-spacing: 0.12em;
+                    text-transform: uppercase;
+                    color: var(--v8-text-muted);
+                    margin-bottom: 4px;
+                }
+            }
+        }
+
+        /* Split columns: stack */
+        .tpm-split {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        /* Services: stack */
+        .tpm-services {
+            grid-template-columns: 1fr;
+        }
+
+        .tpm-service {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-right: none !important;
+        }
+
+    }
+
+    /* ────────────────────────────────────────────────
+       SECTION THEMING — light/dark alternation
+       ──────────────────────────────────────────────── */
+    $lt-bg: #F5F4F0;
+    $lt-accent: #B82A00;
+
+    @mixin lt {
+        --v8-bg: #{$lt-bg};
+        --v8-bg-alt: #EDECEA;
+        --v8-bg-surface: #E8E7E3;
+        --v8-text: #141413;
+        --v8-text-muted: rgba(20, 20, 19, 0.50);
+        --v8-text-secondary: rgba(20, 20, 19, 0.70);
+        --v8-text-tertiary: rgba(20, 20, 19, 0.65);
+        --v8-text-dim: rgba(20, 20, 19, 0.6);
+        --v8-text-faint: rgba(20, 20, 19, 0.32);
+        --v8-accent: #{$lt-accent};
+        --v8-accent-status: #1A7A52;
+        --v8-border: rgba(20, 20, 19, 0.10);
+        --v8-border-accent: rgba(184, 42, 0, 0.35);
+    }
+
+    @mixin dk {
+        --v8-bg: #0C0C0C;
+        --v8-bg-alt: #101010;
+        --v8-bg-surface: #141414;
+        --v8-text: #F2F0EB;
+        --v8-text-muted: rgba(242, 240, 235, 0.65);
+        --v8-text-secondary: rgba(242, 240, 235, 0.75);
+        --v8-text-tertiary: rgba(242, 240, 235, 0.68);
+        --v8-text-dim: rgba(242, 240, 235, 0.62);
+        --v8-text-faint: rgba(242, 240, 235, 0.45);
+        --v8-accent: #FF3B00;
+        --v8-accent-status: #00DC82;
+        --v8-border: rgba(242, 240, 235, 0.08);
+        --v8-border-accent: rgba(255, 59, 0, 0.3);
+    }
+
+    @mixin bleed-bg($bg) {
+        position: relative;
+        z-index: 0;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 100vw;
+            transform: translateX(-50%);
+            background: #{$bg};
+            z-index: -2;
+        }
+    }
+
+    @mixin grain($opacity) {
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 100vw;
+            transform: translateX(-50%);
+            z-index: -1;
+            pointer-events: none;
+            opacity: #{$opacity};
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+        }
+    }
+
+    /*
+     * Section order (children of <main>):
+     *   1  .tpm-hero       — Hero
+     *   2  .tpm-section    — Definition               LIGHT
+     *   3  .tpm-section    — Situations                LIGHT
+     *   4  .tpm-section    — Approach                  LIGHT
+     *   5  .tpm-break      — Pull-quote (accent band)
+     *   6  .tpm-section    — Services                  DARK
+     *   7  .tpm-section    — Comparison                DARK
+     *   8  .tpm-section    — Scope                     DARK
+     *   9  .tpm-section    — FAQ                       LIGHT
+     *  10  .contact        — Contact form
+     */
+
+    /* Light band: Definition (2), Situations (3), Approach (4) */
+    .tpm-section:nth-child(2),
+    .tpm-section:nth-child(3),
+    .tpm-section:nth-child(4) {
+        @include lt;
+        @include bleed-bg($lt-bg);
+        @include grain(0.12);
+
+        & > * { position: relative; z-index: 1; }
+    }
+
+    .tpm-section:nth-child(2) { padding-top: 100px; }
+
+    /* Pull-quote break (5) */
+    .tpm-break {
+        position: relative;
+        z-index: 0;
+        padding: 80px 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 100vw;
+            transform: translateX(-50%);
+            background: var(--v8-accent, #B82A00);
+            z-index: -2;
+        }
+
+        &__quote {
+            font-family: var(--v8-font-display);
+            font-size: clamp(32px, 4vw, 56px);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: #F2F0EB;
+            margin: 0;
+            max-width: 900px;
+        }
+
+        @media (max-width: 768px) {
+            padding: 60px 24px;
+        }
+    }
+
+    /* Dark band: Services (6), Comparison (7), Scope (8) */
+    .tpm-section:nth-child(6),
+    .tpm-section:nth-child(7),
+    .tpm-section:nth-child(8) {
+        @include dk;
+        @include bleed-bg(#0C0C0C);
+        @include grain(0.15);
+
+        & > * { position: relative; z-index: 1; }
+    }
+
+    .tpm-section:nth-child(6) { padding-top: 100px; }
+
+    /* Light band: FAQ (9) */
+    .tpm-section:nth-child(9) {
+        @include lt;
+        @include bleed-bg($lt-bg);
+        @include grain(0.12);
+        padding-top: 100px;
+
+        & > * { position: relative; z-index: 1; }
+    }
+</style>

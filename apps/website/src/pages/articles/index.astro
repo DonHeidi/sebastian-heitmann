@@ -17,6 +17,8 @@ const articles = await getCollection('articles', ({ id, data }) =>
 const sorted = articles.sort((a, b) =>
   b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
 );
+const editorialArticles = sorted.filter((article) => article.data.type !== 'service-description');
+const serviceDescriptions = sorted.filter((article) => article.data.type === 'service-description');
 ---
 
 <Layout
@@ -33,24 +35,45 @@ const sorted = articles.sort((a, b) =>
       <div class="articles-page__rule"></div>
     </header>
 
-    <div class="articles-page__grid">
-      {sorted.map((article, i) => (
-        <div
-          class="reveal"
-          style={`transition-delay: ${Math.min(i * 80, 400)}ms`}
-        >
-          <ArticleCard
-            title={article.data.title}
-            abstract={article.data.abstract}
-            categoryLabel={s.categories[article.data.category]}
-            tags={article.data.tags}
-            publishedAt={article.data.publishedAt}
-            slug={article.id}
-            headerImage={article.data.headerImage}
-            locale={locale}
-          />
+    <div class="articles-page__layout">
+      <section class="articles-page__main" aria-label="Articles">
+        <div class="articles-page__grid">
+          {editorialArticles.map((article, i) => (
+            <div
+              class="reveal"
+              style={`transition-delay: ${Math.min(i * 80, 400)}ms`}
+            >
+              <ArticleCard
+                title={article.data.title}
+                abstract={article.data.abstract}
+                categoryLabel={s.categories[article.data.category]}
+                tags={article.data.tags}
+                publishedAt={article.data.publishedAt}
+                slug={article.id}
+                headerImage={article.data.headerImage}
+                locale={locale}
+              />
+            </div>
+          ))}
         </div>
-      ))}
+      </section>
+
+      {serviceDescriptions.length > 0 && (
+        <aside class="articles-page__sidebar" aria-labelledby="service-descriptions-heading">
+          <h2 class="articles-page__sidebar-title" id="service-descriptions-heading">About services</h2>
+          <ul class="articles-page__service-list">
+            {serviceDescriptions.map((article, i) => (
+              <li class="service-item reveal" style={`transition-delay: ${Math.min(i * 80, 400)}ms`}>
+                <a class="service-item__link" href={`/${locale === 'en-us' ? '' : locale + '/'}articles/${article.id}`}>
+                  <span class="service-item__category">{s.categories[article.data.category]}</span>
+                  <span class="service-item__title">{article.data.title}</span>
+                  <span class="service-item__abstract">{article.data.abstract}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
     </div>
   </main>
 
@@ -82,16 +105,101 @@ const sorted = articles.sort((a, b) =>
       background-color: var(--v8-accent);
     }
 
+    &__layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    &__main {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
     &__grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 24px;
+    }
+
+    &__sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    &__sidebar-title {
+      font-family: var(--v8-font-mono);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--v8-text-muted);
+      margin: 0 0 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--v8-border);
+    }
+
+    &__service-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .service-item {
+    &__link {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-decoration: none;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--v8-border);
+      transition: border-color 0.2s ease;
+
+      &:hover {
+        border-color: var(--v8-text-muted);
+      }
+    }
+
+    &__category {
+      font-family: var(--v8-font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--v8-accent);
+    }
+
+    &__title {
+      font-family: var(--v8-font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--v8-text);
+    }
+
+    &__abstract {
+      font-family: var(--v8-font-body);
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--v8-text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
 
   @media (max-width: 1024px) {
     .articles-page {
       padding: 120px 48px 80px;
+
+      &__layout {
+        grid-template-columns: 1fr 240px;
+        gap: 48px;
+      }
     }
   }
 
@@ -99,8 +207,19 @@ const sorted = articles.sort((a, b) =>
     .articles-page {
       padding: 100px 24px 60px;
 
+      &__layout {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
       &__grid {
         grid-template-columns: 1fr;
+      }
+
+      &__sidebar {
+        position: static;
+        border-top: 1px solid var(--v8-border);
+        padding-top: 32px;
       }
     }
   }

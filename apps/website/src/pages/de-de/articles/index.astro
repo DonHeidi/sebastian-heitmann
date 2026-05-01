@@ -23,6 +23,8 @@ const articles = [
 const sorted = articles.sort((a, b) =>
   b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
 );
+const editorialArticles = sorted.filter((article) => article.data.type !== 'service-description');
+const serviceDescriptions = sorted.filter((article) => article.data.type === 'service-description');
 ---
 
 <Layout
@@ -39,30 +41,62 @@ const sorted = articles.sort((a, b) =>
       <div class="articles-page__rule"></div>
     </header>
 
-    <div class="articles-page__grid">
-      {sorted.map((article, i) => {
-        const slug = article.id.startsWith('de-de/')
-          ? article.id.replace('de-de/', '')
-          : article.id;
-        return (
-          <div
-            class="reveal"
-            style={`transition-delay: ${Math.min(i * 80, 400)}ms`}
-          >
-            <ArticleCard
-              title={article.data.title}
-              abstract={article.data.abstract}
-              categoryLabel={s.categories[article.data.category]}
-              tags={article.data.tags}
-              publishedAt={article.data.publishedAt}
-              slug={slug}
-              headerImage={article.data.headerImage}
-              locale={locale}
-            />
-          </div>
-        );
-      })}
-    </div>
+    <section class="articles-page__section" aria-label="Artikel">
+      <div class="articles-page__grid">
+        {editorialArticles.map((article, i) => {
+          const slug = article.id.startsWith('de-de/')
+            ? article.id.replace('de-de/', '')
+            : article.id;
+          return (
+            <div
+              class="reveal"
+              style={`transition-delay: ${Math.min(i * 80, 400)}ms`}
+            >
+              <ArticleCard
+                title={article.data.title}
+                abstract={article.data.abstract}
+                categoryLabel={s.categories[article.data.category]}
+                tags={article.data.tags}
+                publishedAt={article.data.publishedAt}
+                slug={slug}
+                headerImage={article.data.headerImage}
+                locale={locale}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    {serviceDescriptions.length > 0 && (
+      <section class="articles-page__section" aria-labelledby="service-descriptions-heading">
+        <h2 class="articles-page__section-title" id="service-descriptions-heading">Leistungen</h2>
+        <div class="articles-page__grid">
+          {serviceDescriptions.map((article, i) => {
+            const slug = article.id.startsWith('de-de/')
+              ? article.id.replace('de-de/', '')
+              : article.id;
+            return (
+              <div
+                class="reveal"
+                style={`transition-delay: ${Math.min(i * 80, 400)}ms`}
+              >
+                <ArticleCard
+                  title={article.data.title}
+                  abstract={article.data.abstract}
+                  categoryLabel={s.categories[article.data.category]}
+                  tags={article.data.tags}
+                  publishedAt={article.data.publishedAt}
+                  slug={slug}
+                  headerImage={article.data.headerImage}
+                  locale={locale}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )}
   </main>
 
   <Footer footer={s.footer} />
@@ -91,6 +125,27 @@ const sorted = articles.sort((a, b) =>
       width: 48px;
       height: 2px;
       background-color: var(--v8-accent);
+    }
+
+    &__section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+
+      & + & {
+        margin-top: 72px;
+        padding-top: 72px;
+        border-top: 1px solid var(--v8-border);
+      }
+    }
+
+    &__section-title {
+      font-family: var(--v8-font-mono);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--v8-text-muted);
     }
 
     &__grid {

@@ -148,6 +148,7 @@ export const deDe: Strings = {
     'leadership-management': 'F\u00FChrung & Management',
     'technical-decisions': 'Technische Entscheidungen',
     'shipping-with-ai': 'Bauen mit KI',
+    'product-development': 'Produktentwicklung',
     'mental-health': 'Mental Health',
   },
   article: {
@@ -581,6 +582,145 @@ export const deDe: Strings = {
     contact: {
       headline: 'Erzählen Sie mir von Ihrem Projekt.',
       intro: 'Beschreiben Sie, was Sie brauchen \u2014 eine neue Website, einen Relaunch oder etwas, bei dem Sie sich noch nicht sicher sind. Ich melde mich innerhalb eines Werktags mit einer ehrlichen Einschätzung.',
+    },
+  },
+  technicalProjectManagement: {
+    meta: {
+      title: 'Technisches Projektmanagement — Sebastian Heitmann',
+      description: 'Technisches Projektmanagement für digitale Projekte. Stundenbasierte Beratung mit Struktur, Koordination und technischem Urteilsvermögen für Software-, Web-, KI- und Digitalisierungsprojekte.',
+    },
+    hero: {
+      eyebrow: 'Technisches Projektmanagement',
+      headline: 'Digitale Projekte brauchen Richtung — nicht mehr Meetings.',
+      subline: 'Für Software-, Web-, KI- und Digitalisierungsprojekte, bei denen Anforderungen, Stakeholder, Dienstleister und Umsetzung zusammengebracht werden müssen.',
+      cta: 'Projekt besprechen',
+      ctaSecondary: 'Wann mich einbeziehen',
+    },
+    definition: {
+      eyebrow: 'Was das ist',
+      headline: 'Zwischen Business und Umsetzung.',
+      intro: 'Technisches Projektmanagement steht an der Schnittstelle von Geschäftszielen und technischer Lieferung. Es schafft die Struktur, Klarheit und Koordination, die digitale Projekte brauchen, um voranzukommen.',
+      includes: [
+        'Ziele und Anforderungen klären',
+        'Arbeit in umsetzbare Meilensteine strukturieren',
+        'Stakeholder und Teams koordinieren',
+        'Abhängigkeiten und Blocker managen',
+        'Technische Risiken frühzeitig erkennen',
+        'Zwischen Business und Technik übersetzen',
+        'Entscheidungen mit Kontext und Abwägungen unterstützen',
+        'Umsetzung an Geschäftszielen ausgerichtet halten',
+      ],
+      notLabel: 'Das ist nicht',
+      notItems: [
+        'Allgemeine Projektverwaltung',
+        'Nur Scrum-Master-Arbeit',
+        'Reines Status-Reporting',
+        'Vollzeit-Management-Ersatz',
+        'Garantierte Lieferverantwortung für Drittanbieter-Arbeit',
+      ],
+    },
+    situations: {
+      eyebrow: 'Wann mich einbeziehen',
+      headline: 'Drei Situationen, in denen das hilft.',
+      items: [
+        {
+          name: 'Ein digitales Projekt starten',
+          audience: 'Für Unternehmen, die eine Idee, Anforderung oder ein Geschäftsziel haben, aber noch keine klare Umsetzungsstruktur.',
+          summary: 'Ziele klären, Meilensteine definieren, Risiken identifizieren und Zusammenarbeit vorbereiten, bevor die Umsetzung beginnt.',
+        },
+        {
+          name: 'Ein stehendes Projekt in Bewegung bringen',
+          audience: 'Für Projekte, die aktiv aber langsam, unklar, blockiert oder schwer zu koordinieren sind.',
+          summary: 'Ursachen sichtbar machen, technische von organisatorischen Problemen trennen und einen realistischen Nächste-Schritte-Plan erstellen.',
+        },
+        {
+          name: 'Externe Umsetzung steuern',
+          audience: 'Für Unternehmen, die mit Agenturen, Freelancern, Softwareanbietern oder internen IT-Teams arbeiten.',
+          summary: 'Kommunikation koordinieren, Lieferergebnisse prüfen und technischen Status verständlich für Entscheider machen.',
+        },
+      ],
+    },
+    approach: {
+      eyebrow: 'Ansatz',
+      headline: 'Kein Ticket-Management. Technische Projektführung.',
+      body: [
+        'Der Wert liegt nicht darin, mehr Boards, Meetings oder Status-Reports zu produzieren. Der Wert liegt darin, eine funktionierende Struktur um das Projekt zu schaffen — eine Struktur, die Entscheidungen ermöglicht und Lieferung mit Absicht verbindet.',
+        'Die Arbeit konzentriert sich darauf, was entschieden werden muss, was tatsächlich gebaut werden kann, was blockiert ist, wer einbezogen werden muss, welche Risiken relevant sind und was der nächste sinnvolle Schritt ist. Aus vagen Ideen werden umsetzbare Entscheidungen. Risiken werden früh sichtbar. Blocker werden adressiert statt versteckt.',
+      ],
+      hybrid: 'Dieses Angebot vereint Softwareentwicklungserfahrung, Projektmanagement-Praxis und beraterisches Urteilsvermögen. Das ermöglicht es, technische Annahmen zu hinterfragen, Umsetzungsbeschränkungen zu verstehen und in Business-Sprache zu kommunizieren — ohne einen separaten Übersetzer zwischen den Räumen zu brauchen.',
+    },
+    services: {
+      eyebrow: 'Was ich mache',
+      headline: 'Konkrete Leistungsbereiche.',
+      categories: [
+        {
+          title: 'Projektstruktur',
+          description: 'Aufbau, Kickoff, Roadmaps, Meilensteine, Workflows, Verantwortlichkeiten und Kommunikationsrhythmus.',
+        },
+        {
+          title: 'Anforderungen & Scope',
+          description: 'Klärung, User Stories, Abnahmekriterien, MVP-Definition, Priorisierung und Abhängigkeiten-Mapping.',
+        },
+        {
+          title: 'Delivery-Koordination',
+          description: 'Koordination interner Teams und externer Dienstleister, Fortschrittsverfolgung, Blocker-Management und Stakeholder-Kommunikation.',
+        },
+        {
+          title: 'Technisches Urteilsvermögen',
+          description: 'Machbarkeitsprüfungen, Risikobewertung, Architektur-Fragen, Anbieter-Review und Qualitätsaspekte.',
+        },
+      ],
+    },
+    comparison: {
+      eyebrow: 'Abgrenzung',
+      headline: 'Was den Unterschied macht.',
+      columnHeaders: ['Technisches Projektmanagement', 'Projektverwaltung', 'Technischer Experte'],
+      rows: [
+        { label: 'Fokus', cells: ['Struktur, Koordination und technisches Urteilsvermögen kombiniert', 'Aufgabenverfolgung und Statussammlung', 'Technische Korrektheit und Umsetzungsdetail'] },
+        { label: 'Anforderungen', cells: ['Klärt, hinterfragt und macht Ziele zu umsetzbaren Anforderungen', 'Dokumentiert, was andere definieren', 'Prüft Machbarkeit auf Nachfrage'] },
+        { label: 'Stakeholder', cells: ['Koordiniert zwischen Business, Technik-Teams und Dienstleistern', 'Plant Meetings und sammelt Updates', 'Managt möglicherweise keine Stakeholder'] },
+        { label: 'Entscheidungen', cells: ['Übersetzt technische Realität in Business-Entscheidungen', 'Dokumentiert Fortschritt und liefert Status', 'Berät zu technischen Optionen'] },
+        { label: 'Risiken', cells: ['Verbindet technische Risiken frühzeitig mit Business-Auswirkungen', 'Meldet Probleme, nachdem sie auftreten', 'Identifiziert technische Risiken'] },
+        { label: 'Bewegung', cells: ['Schafft Bewegung durch Adressierung von Blockern, Prioritäten und Abhängigkeiten', 'Folgt dem Plan', 'Fokussiert auf den Umsetzungsumfang'] },
+      ],
+      closing: 'Dieses Angebot verbindet Richtung, Struktur, technisches Urteilsvermögen und Delivery-Koordination.',
+    },
+    scope: {
+      eyebrow: 'Umfang & Abrechnung',
+      headline: 'Was enthalten ist — und was nicht.',
+      intro: 'KI unterstützt bei Dokumentation, Strukturierung und Vergleichsarbeit — aber alle Entscheidungen, Prioritäten und Verantwortlichkeiten bleiben bei Menschen. Abrechnung auf Stundenbasis, weil die erforderliche Beteiligung von der Projektsituation abhängt.',
+      includedLabel: 'Je nach Bedarf enthalten',
+      included: [
+        'Projektstruktur, Koordination und Stakeholder-Kommunikation',
+        'Anforderungsklärung und Scope-Definition',
+        'Fortschritts-, Risiko- und Blocker-Review',
+        'Technisches Sparring für Umsetzungsentscheidungen',
+        'Entscheidungsdokumente und Statuszusammenfassungen',
+      ],
+      notIncludedLabel: 'Nicht enthalten, außer separat vereinbart',
+      notIncluded: [
+        'Vollzeit-operative Projektverantwortung',
+        'Rechts-, Steuer- oder Beschaffungsberatung',
+        'Garantierte Ergebnisse für Drittanbieter-Umsetzung',
+        'Softwareentwicklung über den vereinbarten Support hinaus',
+      ],
+      billingNote: 'Keine festen Pakete. Der Umfang passt sich an das an, was das Projekt tatsächlich braucht — Komplexität, Stakeholder, Dringlichkeit und Koordinationsbedarf fließen alle ein.',
+    },
+    faq: {
+      eyebrow: 'Häufig gestellte Fragen',
+      items: [
+        { q: 'Wann sollte ich Sie einbeziehen?', a: 'Wenn ein digitales Projekt unklar, festgefahren, am Anfang steht oder auf technische Koordination zwischen Business, Dienstleistern und Umsetzungsteams angewiesen ist.' },
+        { q: 'Ersetzen Sie einen internen Projektmanager?', a: 'Nicht unbedingt. Ich kann interne Projektverantwortliche unterstützen, technische Koordination übernehmen oder Projekte strukturieren helfen, in denen technisches Urteilsvermögen gebraucht wird. Die Beteiligung hängt von der Situation ab.' },
+        { q: 'Arbeiten Sie mit Agenturen, Freelancern oder Softwareanbietern?', a: 'Ja. Ich kann bei der Kommunikationskoordination helfen, Fortschritt prüfen, Anforderungen klären und technische Risiken für Business-Entscheider verständlich machen.' },
+        { q: 'Arbeiten Sie mit Scrum oder Kanban?', a: 'Ja, wo sinnvoll. Die Methode sollte dem Projekt dienen, nicht umgekehrt. Für kleinere oder unklare Projekte sind leichtgewichtige Kanban-basierte Workflows oft nützlicher als aufwendige Zeremonien.' },
+        { q: 'Kann daraus Umsetzungsarbeit werden?', a: 'Ja. Wenn die Arbeit ausreichend definiert ist, kann sie in ein zyklusbasiertes Umsetzungsprojekt übergehen.' },
+        { q: 'Warum stundenbasiert?', a: 'Weil der Aufwand von der tatsächlichen Projektsituation abhängt — Unsicherheit, Stakeholder und benötigter Beteiligungsgrad. Ein Festpreis würde unkomplizierte Situationen zu teuer oder komplexe zu günstig machen.' },
+        { q: 'Was brauchen Sie, um zu starten?', a: 'Eine kurze Beschreibung des Projekts, den aktuellen Stand, beteiligte Parteien, vorhandene Dokumentation falls verfügbar, und das Hauptproblem, das Klarheit oder Bewegung braucht.' },
+      ],
+    },
+    contact: {
+      headline: 'Sagen Sie mir, was unklar, festgefahren oder gefährdet ist.',
+      intro: 'Beschreiben Sie die Projektsituation, wer beteiligt ist und wo Sie Unterstützung brauchen. Ich bewerte, ob technisches Projektmanagement der richtige Ansatz ist und welche Art der Beteiligung sinnvoll wäre.',
     },
   },
 };

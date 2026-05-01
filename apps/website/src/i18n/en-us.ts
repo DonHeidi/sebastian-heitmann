@@ -148,6 +148,7 @@ export const enUs: Strings = {
     'leadership-management': 'Leadership & Management',
     'technical-decisions': 'Technical Decisions',
     'shipping-with-ai': 'Shipping with AI',
+    'product-development': 'Product Development',
     'mental-health': 'Mental Health',
   },
   article: {
@@ -581,6 +582,145 @@ export const enUs: Strings = {
     contact: {
       headline: 'Tell me about your project.',
       intro: 'Describe what you need — a new website, a redesign, or something you\u2019re not sure about yet. I\u2019ll get back to you within one business day with an honest assessment.',
+    },
+  },
+  technicalProjectManagement: {
+    meta: {
+      title: 'Technical Project Management — Sebastian Heitmann',
+      description: 'Technical project management for digital projects. Hourly consulting that brings structure, coordination, and technical judgement to software, web, AI, and digitalisation initiatives.',
+    },
+    hero: {
+      eyebrow: 'Technical Project Management',
+      headline: 'Digital projects need direction — not more meetings.',
+      subline: 'For software, web, AI, and digitalisation projects where requirements, stakeholders, providers, and implementation need to be aligned.',
+      cta: 'Discuss your project',
+      ctaSecondary: 'When to involve me',
+    },
+    definition: {
+      eyebrow: 'What this is',
+      headline: 'Between business and implementation.',
+      intro: 'Technical Project Management sits at the intersection of business goals and technical delivery. It creates the structure, clarity, and coordination that digital projects need to move forward.',
+      includes: [
+        'Clarifying goals and requirements',
+        'Structuring work into actionable milestones',
+        'Coordinating stakeholders and teams',
+        'Managing dependencies and blockers',
+        'Identifying technical risks early',
+        'Translating between business and technical teams',
+        'Supporting decisions with context and trade-offs',
+        'Keeping implementation aligned with business goals',
+      ],
+      notLabel: 'This is not',
+      notItems: [
+        'Generic project administration',
+        'Scrum Master work only',
+        'Pure status reporting',
+        'Full-time management replacement',
+        'Guaranteed delivery ownership for third-party work',
+      ],
+    },
+    situations: {
+      eyebrow: 'When to involve me',
+      headline: 'Three situations where this helps.',
+      items: [
+        {
+          name: 'Starting a digital project',
+          audience: 'For companies that have an idea, requirement, or business goal but no clear implementation structure yet.',
+          summary: 'Clarify goals, define milestones, identify risks, and prepare collaboration before implementation begins.',
+        },
+        {
+          name: 'Getting a stuck project moving',
+          audience: 'For projects that are active but slow, unclear, blocked, or difficult to coordinate.',
+          summary: 'Surface root causes, separate technical from organisational issues, and create a realistic next-step plan.',
+        },
+        {
+          name: 'Managing external implementation',
+          audience: 'For companies working with agencies, freelancers, software vendors, or internal IT teams.',
+          summary: 'Coordinate communication, review deliverables, and make technical status understandable for decision-makers.',
+        },
+      ],
+    },
+    approach: {
+      eyebrow: 'Approach',
+      headline: 'Not ticket management. Technical project leadership.',
+      body: [
+        'The value is not in producing more boards, meetings, or status reports. The value is in creating working structure around the project — structure that makes decisions possible and keeps delivery connected to intent.',
+        'The work focuses on what needs to be decided, what can actually be built, what is blocked, who needs to be involved, which risks matter, and what the next meaningful step is. Vague ideas become actionable decisions. Risks become visible early. Blockers are addressed instead of hidden.',
+      ],
+      hybrid: 'This service combines software development experience, project management practice, and consulting judgement. That makes it possible to challenge technical assumptions, understand implementation constraints, and communicate in business terms — without needing a separate translator between rooms.',
+    },
+    services: {
+      eyebrow: 'What I do',
+      headline: 'Concrete service areas.',
+      categories: [
+        {
+          title: 'Project structure',
+          description: 'Setup, kickoff, roadmaps, milestones, workflows, responsibilities, and communication cadence.',
+        },
+        {
+          title: 'Requirements & scope',
+          description: 'Clarification, user stories, acceptance criteria, MVP definition, prioritisation, and dependency mapping.',
+        },
+        {
+          title: 'Delivery coordination',
+          description: 'Coordination of internal teams and external providers, progress tracking, blocker management, and stakeholder communication.',
+        },
+        {
+          title: 'Technical judgement',
+          description: 'Feasibility checks, risk assessment, architecture questions, vendor review, and quality concerns.',
+        },
+      ],
+    },
+    comparison: {
+      eyebrow: 'Differentiation',
+      headline: 'What makes this different.',
+      columnHeaders: ['Technical Project Management', 'Project administration', 'Technical expert'],
+      rows: [
+        { label: 'Focus', cells: ['Structure, coordination, and technical judgement combined', 'Task tracking and status collection', 'Technical correctness and implementation detail'] },
+        { label: 'Requirements', cells: ['Clarifies, challenges, and turns goals into workable requirements', 'Documents what others define', 'Assesses feasibility when asked'] },
+        { label: 'Stakeholders', cells: ['Coordinates across business, technical teams, and providers', 'Schedules meetings and collects updates', 'May not manage stakeholders'] },
+        { label: 'Decisions', cells: ['Translates technical reality into business decisions', 'Documents progress and surfaces status', 'Advises on technical options'] },
+        { label: 'Risks', cells: ['Connects technical risks to business impact early', 'Reports issues after they surface', 'Identifies technical risks'] },
+        { label: 'Movement', cells: ['Creates movement by addressing blockers, priorities, and dependencies', 'Follows the plan', 'Focuses on implementation scope'] },
+      ],
+      closing: 'This offering connects direction, structure, technical judgement, and delivery coordination.',
+    },
+    scope: {
+      eyebrow: 'Scope & billing',
+      headline: 'What is included — and what is not.',
+      intro: 'AI supports documentation, structuring, and comparison work — but all decisions, priorities, and accountability stay with people. Billed hourly, because the required involvement depends on the project situation.',
+      includedLabel: 'Included depending on need',
+      included: [
+        'Project structure, coordination, and stakeholder communication',
+        'Requirements clarification and scope definition',
+        'Progress, risk, and blocker review',
+        'Technical sparring for implementation decisions',
+        'Decision documents and status summaries',
+      ],
+      notIncludedLabel: 'Not included unless scoped separately',
+      notIncluded: [
+        'Full-time operational project ownership',
+        'Legal, tax, or procurement advice',
+        'Guaranteed outcomes for third-party implementation',
+        'Software development beyond agreed support',
+      ],
+      billingNote: 'No fixed packages. The scope adapts to what the project actually needs — complexity, stakeholders, urgency, and coordination level all factor in.',
+    },
+    faq: {
+      eyebrow: 'Frequently asked questions',
+      items: [
+        { q: 'When should I involve you?', a: 'When a digital project is unclear, stuck, starting, or dependent on technical coordination between business, providers, and implementation teams.' },
+        { q: 'Do you replace an internal project manager?', a: 'Not necessarily. I can support internal project owners, take over technical coordination, or help structure projects where technical judgement is needed. The involvement depends on the situation.' },
+        { q: 'Do you work with agencies, freelancers, or software vendors?', a: 'Yes. I can help coordinate communication, review progress, clarify requirements, and make technical risks understandable for business decision-makers.' },
+        { q: 'Do you work with Scrum or Kanban?', a: 'Yes, where useful. The method should serve the project, not the other way around. For smaller or unclear projects, lightweight Kanban-style workflows are often more useful than heavy ceremony.' },
+        { q: 'Can this turn into implementation work?', a: 'Yes. If the work becomes defined enough, it can move into a cycle-based implementation project.' },
+        { q: 'Why hourly?', a: 'Because the effort depends on the actual project situation — uncertainty, stakeholders, and level of involvement required. A fixed price would either overcharge straightforward situations or undercut complex ones.' },
+        { q: 'What do you need to start?', a: 'A short description of the project, current status, involved parties, existing documentation if available, and the main issue that needs clarity or movement.' },
+      ],
+    },
+    contact: {
+      headline: 'Tell me what is unclear, stuck, or at risk.',
+      intro: 'Describe the project situation, who is involved, and where you need support. I\u2019ll assess whether technical project management is the right fit and what kind of involvement would make sense.',
     },
   },
 };

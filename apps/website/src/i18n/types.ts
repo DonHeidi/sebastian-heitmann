@@ -89,6 +89,7 @@ export interface Strings {
     'leadership-management': string;
     'technical-decisions': string;
     'shipping-with-ai': string;
+    'product-development': string;
     'mental-health': string;
   };
   article: {
@@ -238,6 +239,66 @@ export interface Strings {
       body: string;
       button: string;
       note: string;
+    };
+    contact: {
+      headline: string;
+      intro: string;
+    };
+  };
+  technicalProjectManagement: {
+    meta: { title: string; description: string };
+    hero: { eyebrow: string; headline: string; subline: string; cta: string; ctaSecondary: string };
+    definition: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      includes: string[];
+      notLabel: string;
+      notItems: string[];
+    };
+    situations: {
+      eyebrow: string;
+      headline: string;
+      items: Array<{
+        name: string;
+        audience: string;
+        summary: string;
+      }>;
+    };
+    approach: {
+      eyebrow: string;
+      headline: string;
+      body: string[];
+      hybrid: string;
+    };
+    services: {
+      eyebrow: string;
+      headline: string;
+      categories: Array<{
+        title: string;
+        description: string;
+      }>;
+    };
+    comparison: {
+      eyebrow: string;
+      headline: string;
+      columnHeaders: string[];
+      rows: Array<{ label: string; cells: string[] }>;
+      closing: string;
+    };
+    scope: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      includedLabel: string;
+      included: string[];
+      notIncludedLabel: string;
+      notIncluded: string[];
+      billingNote: string;
+    };
+    faq: {
+      eyebrow: string;
+      items: Array<{ q: string; a: string }>;
     };
     contact: {
       headline: string;

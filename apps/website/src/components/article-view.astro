@@ -60,6 +60,7 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
         class:list={[
           'article-page__header',
           { 'article-page__header--no-hero': !entry.data.headerImage },
+          { 'article-page__header--has-detail': !!entry.data.headerDetailImage },
         ]}
       >
         {entry.data.headerDetailImage && (
@@ -280,6 +281,15 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
       margin-bottom: 56px;
       padding-bottom: 32px;
       border-bottom: 1px solid var(--v8-glass-border);
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+
+      :global(html.light) & {
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+      }
+
+      &--has-detail {
+        min-height: 272px;
+      }
 
       &--no-hero {
         padding-top: 16px;

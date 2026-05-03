@@ -117,6 +117,11 @@ export interface Strings {
       description: string;
     };
     headline: string;
+    print: {
+      name: string;
+      address: string;
+      contact: string;
+    };
     summary: string;
     experienceLabel: string;
     experience: Array<{

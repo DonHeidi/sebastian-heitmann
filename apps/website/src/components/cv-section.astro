@@ -17,6 +17,11 @@ const { cv } = Astro.props;
                 <span class="cv-download__arrow">&darr;</span>
             </button>
         </div>
+        <div class="cv-print-identity">
+            <p class="cv-print-name">{cv.print.name}</p>
+            <p class="cv-print-address">{cv.print.address}</p>
+            <p class="cv-print-contact">{cv.print.contact}</p>
+        </div>
         <div class="cv-rule"></div>
         <p class="cv-summary">{cv.summary}</p>
     </div>
@@ -276,6 +281,8 @@ const { cv } = Astro.props;
             max-width: 600px;
         }
     }
+
+    .cv-print-identity { display: none; }
 
     /* ── Section Headers ── */
     .cv-section-header {
@@ -888,7 +895,36 @@ const { cv } = Astro.props;
     width: 100% !important;
   }
   .cv-header__top { display: block !important; }
-  .cv-headline { font-size: 28px !important; margin-bottom: 6px !important; }
+  .cv-headline {
+    font-family: var(--v8-font-mono) !important;
+    font-size: 10px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: rgba(0,0,0,0.55) !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+  }
+  .cv-print-identity {
+    display: block !important;
+    margin-bottom: 10px !important;
+  }
+  .cv-print-name {
+    font-family: var(--v8-font-display) !important;
+    font-size: 22px !important;
+    line-height: 1.1 !important;
+    color: #111 !important;
+    margin: 0 0 6px 0 !important;
+  }
+  .cv-print-address,
+  .cv-print-contact {
+    font-family: var(--v8-font-mono) !important;
+    font-size: 9px !important;
+    line-height: 1.5 !important;
+    letter-spacing: 0.04em !important;
+    color: rgba(0,0,0,0.55) !important;
+    margin: 0 !important;
+  }
   .cv-rule { width: 32px !important; margin-bottom: 8px !important; }
   .cv-summary {
     font-size: 10px !important;

@@ -176,6 +176,11 @@ export const enUs: Strings = {
       description: 'Curriculum Vitae. 15 years of architecture, delivery, and team leadership.',
     },
     headline: 'Curriculum Vitae',
+    print: {
+      name: 'Sebastian Heitmann',
+      address: 'Kastanienallee 24 · 21255 Tostedt',
+      contact: 'me@sebastian-heitmann.dev · sebastian-heitmann.dev',
+    },
     summary: 'Technology Consultant with 15 years across software architecture, project delivery, and team leadership. I combine deep technical expertise with executive-level communication to turn stalled initiatives into shipped products.',
     experienceLabel: 'Experience',
     experience: [
@@ -207,7 +212,7 @@ export const enUs: Strings = {
       {
         period: 'Apr 2021 \u2014 Jan 2023',
         role: 'Senior Consultant Project Operations',
-        company: 'Datadrivers GmbH',
+        company: 'Datadrivers GmbH (now Synvert GmbH)',
         location: 'Hamburg, DE',
         description: 'Technical project leadership, service delivery, and hands-on development across data and cloud migration engagements. Promoted from Consultant Development (Nov 2021).',
         highlights: [

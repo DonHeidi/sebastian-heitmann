@@ -176,6 +176,11 @@ export const deDe: Strings = {
       description: 'Lebenslauf. 15 Jahre Architektur, Entwicklung und Team-F\u00FChrung.',
     },
     headline: 'Lebenslauf',
+    print: {
+      name: 'Sebastian Heitmann',
+      address: 'Kastanienallee 24 \u00B7 21255 Tostedt',
+      contact: 'me@sebastian-heitmann.dev \u00B7 sebastian-heitmann.dev',
+    },
     summary: 'Technology Consultant mit 15 Jahren Erfahrung in Software-Architektur, Entwicklung und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation auf F\u00FChrungsebene, um blockierte Initiativen in ausgelieferte Produkte zu verwandeln.',
     experienceLabel: 'Berufserfahrung',
     experience: [
@@ -207,7 +212,7 @@ export const deDe: Strings = {
       {
         period: 'Apr 2021 \u2014 Jan 2023',
         role: 'Senior Consultant Project Operations',
-        company: 'Datadrivers GmbH',
+        company: 'Datadrivers GmbH (now Synvert GmbH)',
         location: 'Hamburg, DE',
         description: 'Technische Projektleitung, Service Delivery und Hands-on-Entwicklung in Daten- und Cloud-Migrationsprojekten. Bef\u00F6rderung von Consultant Development (Nov 2021).',
         highlights: [

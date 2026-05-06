@@ -238,25 +238,6 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
       & > .article-page__main {
         grid-column: 1;
       }
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: calc(50% - 50vw);
-        right: calc(50% - 50vw);
-        z-index: -1;
-        pointer-events: none;
-        background-image: radial-gradient(
-          circle at center,
-          var(--v8-dot-color) 1px,
-          transparent 1.5px
-        );
-        background-size: 24px 24px;
-        background-position: 0 0;
-        opacity: 0.55;
-      }
     }
 
     &__main {

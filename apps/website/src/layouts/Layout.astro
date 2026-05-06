@@ -223,6 +223,12 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-glass-border: rgba(242, 240, 235, 0.12);
         --v8-glass-highlight: rgba(242, 240, 235, 0.08);
         --v8-dot-color: rgba(242, 240, 235, 0.22);
+        --v8-bp-dot: rgba(140, 195, 230, 0.085);
+        --v8-bp-line: rgba(140, 195, 230, 0.022);
+        --v8-bp-line-minor: rgba(140, 195, 230, 0.008);
+        --v8-bp-fiducial: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='112' height='112'><g fill='%238CC3E6' fill-opacity='0.13'><rect x='0' y='0' width='6' height='1'/><rect x='0' y='0' width='1' height='6'/><rect x='106' y='0' width='6' height='1'/><rect x='111' y='0' width='1' height='6'/><rect x='0' y='106' width='1' height='6'/><rect x='0' y='111' width='6' height='1'/><rect x='106' y='111' width='6' height='1'/><rect x='111' y='106' width='1' height='6'/></g></svg>");
+        --v8-bp-reticle: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><g fill='none' stroke='%238CC3E6' stroke-opacity='0.05' stroke-width='1'><circle cx='80' cy='80' r='56'/><circle cx='80' cy='80' r='36'/><line x1='80' y1='8' x2='80' y2='32'/><line x1='80' y1='128' x2='80' y2='152'/><line x1='8' y1='80' x2='32' y2='80'/><line x1='128' y1='80' x2='152' y2='80'/></g><circle cx='80' cy='80' r='1.5' fill='%238CC3E6' fill-opacity='0.1'/></svg>");
+        --v8-bp-bracket: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><g fill='none' stroke='%238CC3E6' stroke-opacity='0.12' stroke-width='1'><polyline points='0,28 0,0 28,0'/><polyline points='92,0 120,0 120,28'/><polyline points='120,92 120,120 92,120'/><polyline points='28,120 0,120 0,92'/></g></svg>");
     }
 
     html.light {
@@ -247,6 +253,12 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-glass-border: rgba(20, 20, 19, 0.1);
         --v8-glass-highlight: rgba(255, 255, 255, 0.5);
         --v8-dot-color: rgba(20, 20, 19, 0.22);
+        --v8-bp-dot: rgba(120, 75, 35, 0.16);
+        --v8-bp-line: rgba(120, 75, 35, 0.045);
+        --v8-bp-line-minor: rgba(120, 75, 35, 0.014);
+        --v8-bp-fiducial: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='112' height='112'><g fill='%23784B23' fill-opacity='0.2'><rect x='0' y='0' width='6' height='1'/><rect x='0' y='0' width='1' height='6'/><rect x='106' y='0' width='6' height='1'/><rect x='111' y='0' width='1' height='6'/><rect x='0' y='106' width='1' height='6'/><rect x='0' y='111' width='6' height='1'/><rect x='106' y='111' width='6' height='1'/><rect x='111' y='106' width='1' height='6'/></g></svg>");
+        --v8-bp-reticle: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><g fill='none' stroke='%23784B23' stroke-opacity='0.07' stroke-width='1'><circle cx='80' cy='80' r='56'/><circle cx='80' cy='80' r='36'/><line x1='80' y1='8' x2='80' y2='32'/><line x1='80' y1='128' x2='80' y2='152'/><line x1='8' y1='80' x2='32' y2='80'/><line x1='128' y1='80' x2='152' y2='80'/></g><circle cx='80' cy='80' r='1.5' fill='%23784B23' fill-opacity='0.14'/></svg>");
+        --v8-bp-bracket: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><g fill='none' stroke='%23784B23' stroke-opacity='0.18' stroke-width='1'><polyline points='0,28 0,0 28,0'/><polyline points='92,0 120,0 120,28'/><polyline points='120,92 120,120 92,120'/><polyline points='28,120 0,120 0,92'/></g></svg>");
     }
 
     :root {
@@ -271,9 +283,94 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
 <style lang="scss">
     body {
         background-color: var(--v8-bg);
+        background-image:
+            var(--v8-bp-reticle),
+            var(--v8-bp-reticle),
+            var(--v8-bp-reticle),
+            var(--v8-bp-bracket),
+            var(--v8-bp-bracket),
+            var(--v8-bp-bracket);
+        background-position:
+            right 6% top 320px,
+            left 7% top 1480px,
+            right 11% top 2840px,
+            left 4% top 760px,
+            right 4% top 2080px,
+            left 9% top 3520px;
+        background-repeat: no-repeat;
+        background-size:
+            160px 160px,
+            128px 128px,
+            104px 104px,
+            120px 120px,
+            96px 96px,
+            140px 140px;
         color: var(--v8-text);
         width: 100%;
         min-height: 100%;
         transition: background-color 0.3s ease, color 0.3s ease;
+        position: relative;
+        isolation: isolate;
+    }
+
+    body::before,
+    body::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    body::before {
+        background-image:
+            radial-gradient(circle at 1px 1px, var(--v8-bp-dot) 1px, transparent 1.5px);
+        background-size: 28px 28px;
+        -webkit-mask-image:
+            radial-gradient(ellipse 70% 22% at 20% 8%, #000 0%, transparent 75%),
+            radial-gradient(ellipse 55% 18% at 85% 32%, rgba(0, 0, 0, 0.85) 0%, transparent 70%),
+            radial-gradient(ellipse 80% 25% at 15% 68%, rgba(0, 0, 0, 0.7) 0%, transparent 75%),
+            radial-gradient(ellipse 50% 16% at 90% 92%, rgba(0, 0, 0, 0.6) 0%, transparent 70%);
+        mask-image:
+            radial-gradient(ellipse 70% 22% at 20% 8%, #000 0%, transparent 75%),
+            radial-gradient(ellipse 55% 18% at 85% 32%, rgba(0, 0, 0, 0.85) 0%, transparent 70%),
+            radial-gradient(ellipse 80% 25% at 15% 68%, rgba(0, 0, 0, 0.7) 0%, transparent 75%),
+            radial-gradient(ellipse 50% 16% at 90% 92%, rgba(0, 0, 0, 0.6) 0%, transparent 70%);
+        -webkit-mask-composite: source-over;
+        mask-composite: add;
+    }
+
+    body::after {
+        background-image:
+            var(--v8-bp-fiducial),
+            linear-gradient(to right, var(--v8-bp-line) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--v8-bp-line) 1px, transparent 1px),
+            linear-gradient(to right, var(--v8-bp-line-minor) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--v8-bp-line-minor) 1px, transparent 1px);
+        background-size:
+            112px 112px,
+            112px 112px,
+            112px 112px,
+            28px 28px,
+            28px 28px;
+        background-repeat: repeat;
+        -webkit-mask-image:
+            radial-gradient(ellipse 60% 18% at 80% 14%, #000 0%, transparent 75%),
+            radial-gradient(ellipse 75% 22% at 25% 42%, rgba(0, 0, 0, 0.85) 0%, transparent 75%),
+            radial-gradient(ellipse 55% 18% at 75% 72%, rgba(0, 0, 0, 0.75) 0%, transparent 75%),
+            radial-gradient(ellipse 70% 20% at 30% 96%, rgba(0, 0, 0, 0.65) 0%, transparent 75%);
+        mask-image:
+            radial-gradient(ellipse 60% 18% at 80% 14%, #000 0%, transparent 75%),
+            radial-gradient(ellipse 75% 22% at 25% 42%, rgba(0, 0, 0, 0.85) 0%, transparent 75%),
+            radial-gradient(ellipse 55% 18% at 75% 72%, rgba(0, 0, 0, 0.75) 0%, transparent 75%),
+            radial-gradient(ellipse 70% 20% at 30% 96%, rgba(0, 0, 0, 0.65) 0%, transparent 75%);
+        -webkit-mask-composite: source-over;
+        mask-composite: add;
+    }
+
+    @media (max-width: 768px) {
+        body::before { background-size: 22px 22px; }
+        body::after { background-size: 88px 88px, 88px 88px, 88px 88px, 22px 22px, 22px 22px; }
     }
 </style>

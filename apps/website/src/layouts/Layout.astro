@@ -115,6 +115,13 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         )}
     </head>
     <body>
+        <div class="page-backdrop" aria-hidden="true">
+            <div class="page-backdrop__blobs page-backdrop__blobs--warm"></div>
+            <div class="page-backdrop__blobs page-backdrop__blobs--cool"></div>
+            <div class="page-backdrop__blobs page-backdrop__blobs--mint"></div>
+            <div class="page-backdrop__dots"></div>
+            <div class="page-backdrop__grid"></div>
+        </div>
         <slot />
     </body>
 </html>
@@ -219,16 +226,22 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-metric-label-color: var(--v8-text-muted);
         --v8-photo-filter: saturate(0) contrast(1.1) brightness(0.9);
         --v8-photo-filter-hover: saturate(0.8) contrast(1.05);
-        --v8-glass-bg: rgba(18, 18, 18, 0.55);
+        --v8-glass-bg: rgba(18, 18, 18, 0.4);
         --v8-glass-border: rgba(242, 240, 235, 0.12);
         --v8-glass-highlight: rgba(242, 240, 235, 0.08);
-        --v8-dot-color: rgba(242, 240, 235, 0.22);
+        --v8-dot-color: rgba(168, 176, 192, 0.5);
+        --v8-grid-fine: rgba(168, 176, 192, 0.05);
+        --v8-grid-medium: rgba(168, 176, 192, 0.10);
+        --v8-grid-major: rgba(168, 176, 192, 0.20);
+        --v8-blob-warm: rgba(255, 59, 0, 0.22);
+        --v8-blob-cool: rgba(120, 140, 200, 0.16);
+        --v8-blob-mint: rgba(0, 220, 130, 0.14);
     }
 
     html.light {
-        --v8-bg: #F7F6F2;
-        --v8-bg-alt: #E9E6DE;
-        --v8-bg-surface: #ECEAE4;
+        --v8-bg: #F4EEDE;
+        --v8-bg-alt: #E8E0CD;
+        --v8-bg-surface: #ECE4D2;
         --v8-text: #141413;
         --v8-text-muted: rgba(20, 20, 19, 0.6);
         --v8-text-secondary: rgba(20, 20, 19, 0.75);
@@ -243,16 +256,149 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-border-accent: rgba(184, 42, 0, 0.35);
         --v8-photo-filter: saturate(0.85) contrast(1.08);
         --v8-photo-filter-hover: saturate(1) contrast(1);
-        --v8-glass-bg: rgba(247, 246, 242, 0.55);
-        --v8-glass-border: rgba(20, 20, 19, 0.1);
-        --v8-glass-highlight: rgba(255, 255, 255, 0.5);
-        --v8-dot-color: rgba(20, 20, 19, 0.22);
+        --v8-glass-bg: rgba(255, 252, 245, 0.32);
+        --v8-glass-border: rgba(20, 20, 19, 0.18);
+        --v8-glass-highlight: rgba(255, 255, 255, 0.85);
+        --v8-dot-color: rgba(60, 70, 40, 0.55);
+        --v8-grid-fine: rgba(60, 70, 40, 0.08);
+        --v8-grid-medium: rgba(60, 70, 40, 0.16);
+        --v8-grid-major: rgba(60, 70, 40, 0.28);
+        --v8-blob-warm: rgba(184, 42, 0, 0.45);
+        --v8-blob-cool: rgba(36, 50, 90, 0.32);
+        --v8-blob-mint: rgba(26, 122, 82, 0.36);
     }
 
     :root {
         --v8-font-display: 'Instrument Serif', Georgia, serif;
         --v8-font-body: 'DM Sans', system-ui, sans-serif;
         --v8-font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    @function _zone($w, $h, $x, $y, $stop: 70%) {
+        @return radial-gradient(ellipse $w $h at $x $y, black 0%, transparent $stop);
+    }
+
+    @function spot($r, $x, $y) {
+        @return _zone($r, $r, $x, $y);
+    }
+
+    @function stripe-h($w, $h, $x, $y) {
+        @return _zone($w, $h, $x, $y);
+    }
+
+    @function stripe-v($w, $h, $x, $y) {
+        @return _zone($w, $h, $x, $y);
+    }
+
+    @mixin masked($zones) {
+        -webkit-mask-image: $zones;
+        mask-image: $zones;
+    }
+
+    $dot-zones:
+        spot(9%, 70%, 14%),
+        stripe-h(16%, 5%, 56%, 48%),
+        stripe-v(6%, 12%, 84%, 80%);
+
+    $grid-zones:
+        // L-shape — vertical column + horizontal foot (hero, 3×)
+        stripe-v(12%, 33%, 26%, 16%),
+        stripe-h(27%, 9%, 38%, 30%),
+        // T-shape — horizontal top + vertical descender (capabilities)
+        stripe-h(16%, 4%, 72%, 38%),
+        stripe-v(4%, 11%, 72%, 44%),
+        // cross — horizontal + vertical (situations)
+        stripe-h(14%, 4%, 26%, 56%),
+        stripe-v(4%, 12%, 26%, 56%),
+        // triangle of three spots (proof)
+        spot(5%, 64%, 64%),
+        spot(5%, 72%, 64%),
+        spot(5%, 68%, 71%),
+        // peanut — two side-by-side circles (engagement)
+        spot(6%, 20%, 82%),
+        spot(6%, 30%, 82%),
+        // diamond — two stacked spots (articles)
+        spot(5%, 56%, 90%),
+        spot(5%, 56%, 96%);
+
+    .page-backdrop {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+
+        // All backdrop layers track the content column (max 1440px, centered),
+        // so positions stay aligned with sections at any viewport width.
+        & > &__blobs,
+        & > &__dots,
+        & > &__grid {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(100%, 1440px);
+        }
+
+        &__blobs {
+            filter: blur(40px);
+        }
+
+        &__blobs--warm {
+            background-image:
+                radial-gradient(ellipse 700px 320px at 18% 7%,  var(--v8-blob-warm) 0%, transparent 65%),
+                radial-gradient(ellipse 600px 280px at 62% 22%, var(--v8-blob-warm) 0%, transparent 65%),
+                radial-gradient(ellipse 660px 300px at 28% 44%, var(--v8-blob-warm) 0%, transparent 65%),
+                radial-gradient(ellipse 580px 260px at 70% 62%, var(--v8-blob-warm) 0%, transparent 65%),
+                radial-gradient(ellipse 640px 290px at 32% 80%, var(--v8-blob-warm) 0%, transparent 65%),
+                radial-gradient(ellipse 600px 280px at 72% 92%, var(--v8-blob-warm) 0%, transparent 65%);
+        }
+
+        &__blobs--cool {
+            background-image:
+                radial-gradient(ellipse 320px 700px at 76% 12%, var(--v8-blob-cool) 0%, transparent 65%),
+                radial-gradient(ellipse 280px 620px at 14% 30%, var(--v8-blob-cool) 0%, transparent 65%),
+                radial-gradient(ellipse 340px 720px at 78% 50%, var(--v8-blob-cool) 0%, transparent 65%),
+                radial-gradient(ellipse 300px 660px at 22% 70%, var(--v8-blob-cool) 0%, transparent 65%),
+                radial-gradient(ellipse 320px 700px at 82% 86%, var(--v8-blob-cool) 0%, transparent 65%);
+        }
+
+        &__blobs--mint {
+            background-image:
+                radial-gradient(ellipse 540px 540px at 42% 16%, var(--v8-blob-mint) 0%, transparent 65%),
+                radial-gradient(ellipse 600px 380px at 50% 38%, var(--v8-blob-mint) 0%, transparent 65%),
+                radial-gradient(ellipse 460px 600px at 36% 60%, var(--v8-blob-mint) 0%, transparent 65%),
+                radial-gradient(ellipse 580px 420px at 56% 84%, var(--v8-blob-mint) 0%, transparent 65%);
+        }
+
+        &__dots {
+            background-image: radial-gradient(circle, var(--v8-dot-color) 1px, transparent 1.5px);
+            background-size: 18px 18px;
+            @include masked($dot-zones);
+        }
+
+        &__grid {
+            background-image:
+                /* major: 200px (5cm) */
+                linear-gradient(to right,  var(--v8-grid-major) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--v8-grid-major) 1px, transparent 1px),
+                /* medium: 40px (1cm) */
+                linear-gradient(to right,  var(--v8-grid-medium) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
+                /* fine: 8px (1mm) */
+                linear-gradient(to right,  var(--v8-grid-fine) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
+            background-size:
+                200px 200px,
+                200px 200px,
+                40px 40px,
+                40px 40px,
+                8px 8px,
+                8px 8px;
+            @include masked($grid-zones);
+        }
     }
 
     .reveal {
@@ -274,6 +420,7 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         color: var(--v8-text);
         width: 100%;
         min-height: 100%;
+        position: relative;
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 </style>

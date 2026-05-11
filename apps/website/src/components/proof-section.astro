@@ -14,6 +14,11 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
 ---
 
 <section class="proof" id="proof">
+    <span class="proof-corner proof-corner--tl" aria-hidden="true"></span>
+    <span class="proof-corner proof-corner--tr" aria-hidden="true"></span>
+    <span class="proof-corner proof-corner--bl" aria-hidden="true"></span>
+    <span class="proof-corner proof-corner--br" aria-hidden="true"></span>
+
     <div class="proof-inner">
         <div class="proof-header reveal">
             <span class="proof-label">{proof.resultsLabel}</span>
@@ -34,10 +39,15 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
         </div>
 
         <div class="proof-engagements reveal">
-            <span class="proof-label">{proof.engagementLabel}</span>
+            <div class="proof-header proof-header--inline">
+                <span class="proof-label">{proof.engagementLabel}</span>
+                <div class="proof-rule"></div>
+            </div>
             <div class="engagements-grid">
                 {proof.engagements.map((e, i) => (
                     <div class:list={['engagement', { 'engagement--featured': e.featured }]}>
+                        <span class="engagement-corner engagement-corner--tl" aria-hidden="true"></span>
+                        <span class="engagement-corner engagement-corner--br" aria-hidden="true"></span>
                         <span class="engagement-model">{e.model}</span>
                         <span class="engagement-billing">{e.billing}</span>
                         <p class="engagement-desc">{e.description}</p>
@@ -62,6 +72,7 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
 
 <style lang="scss">
     .proof {
+        position: relative;
         padding: 120px 80px;
         max-width: 1440px;
         margin: 0 auto;
@@ -70,13 +81,50 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
         &-inner {
             display: flex;
             flex-direction: column;
-            gap: 64px;
+            gap: 72px;
+        }
+
+        &-corner {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            color: var(--v8-text-faint);
+            pointer-events: none;
+
+            &--tl {
+                top: 40px;
+                left: 40px;
+                border-top: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--tr {
+                top: 40px;
+                right: 40px;
+                border-top: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
+            &--bl {
+                bottom: 40px;
+                left: 40px;
+                border-bottom: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--br {
+                bottom: 40px;
+                right: 40px;
+                border-bottom: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
         }
 
         &-header {
             display: flex;
             align-items: center;
             gap: 24px;
+
+            &--inline {
+                margin-bottom: 24px;
+            }
         }
 
         &-label {
@@ -90,21 +138,23 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
 
         &-rule {
             flex: 1;
-            height: 1px;
-            background: var(--v8-border);
+            height: 8px;
+            background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+            background-size: 6px 8px;
+            background-repeat: repeat-x;
+            background-position: 0 50%;
+            opacity: 0.85;
         }
 
         &-cases {
             display: flex;
             flex-direction: column;
+            gap: 12px;
         }
 
         &-engagements {
             display: flex;
             flex-direction: column;
-            gap: 24px;
-            padding-top: 64px;
-            border-top: 1px solid var(--v8-border);
         }
     }
 
@@ -113,11 +163,18 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
         grid-template-columns: 280px 1fr auto;
         gap: 48px;
         align-items: baseline;
-        padding: 32px 0;
-        border-bottom: 1px solid var(--v8-border);
+        padding: 36px 32px;
+        background: var(--v8-glass-bg);
+        backdrop-filter: blur(12px) saturate(1.4);
+        -webkit-backdrop-filter: blur(12px) saturate(1.4);
+        border: 1px solid var(--v8-glass-border);
+        box-shadow:
+            0 1px 0 var(--v8-glass-highlight) inset,
+            0 24px 60px -36px rgba(0, 0, 0, 0.25);
+        transition: border-color 0.2s ease;
 
-        &:first-child {
-            border-top: 1px solid var(--v8-border);
+        &:hover {
+            border-color: var(--v8-text-muted);
         }
 
         &-metric {
@@ -163,19 +220,51 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
     .engagements-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1px;
-        background: var(--v8-border);
+        gap: 16px;
     }
 
     .engagement {
-        background: var(--v8-bg);
-        padding: 48px 32px;
+        position: relative;
+        background: var(--v8-glass-bg);
+        backdrop-filter: blur(12px) saturate(1.4);
+        -webkit-backdrop-filter: blur(12px) saturate(1.4);
+        border: 1px solid var(--v8-glass-border);
+        padding: 44px 32px 36px;
         display: flex;
         flex-direction: column;
         gap: 20px;
+        box-shadow:
+            0 1px 0 var(--v8-glass-highlight) inset,
+            0 24px 60px -36px rgba(0, 0, 0, 0.25);
+        transition: border-color 0.3s ease;
+
+        &-corner {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            color: var(--v8-text-faint);
+
+            &--tl {
+                top: 8px;
+                left: 8px;
+                border-top: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--br {
+                bottom: 8px;
+                right: 8px;
+                border-bottom: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
+        }
 
         &--featured {
-            background: var(--v8-bg-surface);
+            border-color: var(--v8-border-accent);
+
+            .engagement-corner {
+                color: var(--v8-accent);
+            }
 
             .engagement-billing {
                 color: var(--v8-accent);
@@ -212,7 +301,7 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
             gap: 10px;
             text-decoration: none;
             margin-top: auto;
-            padding-top: 8px;
+            padding-top: 16px;
             border-top: 1px solid var(--v8-border);
             font-family: var(--v8-font-mono);
             font-size: 10px;
@@ -234,13 +323,21 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
 
     @media (max-width: 1024px) {
         .proof {
-            padding: 48px 48px;
+            padding: 80px 48px;
             border-top: none;
+
+            &-corner {
+                &--tl, &--tr { top: 24px; }
+                &--bl, &--br { bottom: 24px; }
+                &--tl, &--bl { left: 24px; }
+                &--tr, &--br { right: 24px; }
+            }
         }
 
         .case {
             grid-template-columns: 200px 1fr auto;
             gap: 32px;
+            padding: 28px 24px;
 
             &-metric__number {
                 font-size: 44px;
@@ -251,12 +348,22 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
     @media (max-width: 768px) {
         .proof {
             padding: 60px 24px;
+
+            &-corner {
+                width: 24px;
+                height: 24px;
+
+                &--tl, &--tr { top: 16px; }
+                &--bl, &--br { bottom: 16px; }
+                &--tl, &--bl { left: 16px; }
+                &--tr, &--br { right: 16px; }
+            }
         }
 
         .case {
             grid-template-columns: 1fr;
             gap: 12px;
-            padding: 24px 0;
+            padding: 24px 20px;
 
             &-tag {
                 justify-self: start;

@@ -79,8 +79,12 @@ const { articles, strings, locale, totalCount } = Astro.props;
 
         &__rule {
             flex: 1;
-            height: 1px;
-            background: var(--v8-border);
+            height: 8px;
+            background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+            background-size: 6px 8px;
+            background-repeat: repeat-x;
+            background-position: 0 50%;
+            opacity: 0.85;
         }
 
         &__view-all {

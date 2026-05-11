@@ -62,13 +62,45 @@ const formattedDate = publishedAt.toLocaleDateString(dateLocale, {
 
 <style lang="scss">
   .article-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--v8-border);
+    border: 1px solid var(--v8-glass-border);
+    background: var(--v8-glass-bg);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    box-shadow:
+      0 1px 0 var(--v8-glass-highlight) inset,
+      0 24px 60px -36px rgba(0, 0, 0, 0.25);
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.3s ease;
     overflow: hidden;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+      color: var(--v8-text-faint);
+      z-index: 2;
+    }
+
+    &::before {
+      top: 6px;
+      left: 6px;
+      border-top: 1px solid currentColor;
+      border-left: 1px solid currentColor;
+    }
+
+    &::after {
+      bottom: 6px;
+      right: 6px;
+      border-bottom: 1px solid currentColor;
+      border-right: 1px solid currentColor;
+    }
 
     &:hover {
       border-color: var(--v8-text-muted);

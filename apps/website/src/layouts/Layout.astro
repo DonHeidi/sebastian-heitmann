@@ -202,7 +202,8 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
     }
-    img, picture, video, canvas, svg { display: block; max-width: 100%; }
+    img, picture, video, canvas { display: block; max-width: 100%; }
+    svg { display: block; }
     input, button, textarea, select { font: inherit; }
     p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
     p { text-wrap: pretty; }
@@ -295,31 +296,48 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         mask-image: $zones;
     }
 
+    // Shape sizes are in fixed px so silhouettes stay consistent across viewports;
+    // positions stay in % so each cloud tracks the section it sits behind.
     $dot-zones:
-        spot(9%, 70%, 14%),
-        stripe-h(16%, 5%, 56%, 48%),
-        stripe-v(6%, 12%, 84%, 80%);
+        // top-right cloud (~70%, 14%)
+        stripe-h(160px, 400px, 70%, 14%),
+        stripe-v(90px, 520px, 75%, 15%),
+        spot(60px, 64%, 11%),
+        spot(45px, 78%, 18%),
+        // middle cloud (~56%, 48%)
+        stripe-h(190px, 460px, 56%, 47%),
+        stripe-v(75px, 580px, 51%, 49%),
+        spot(60px, 62%, 44%),
+        spot(45px, 50%, 52%),
+        // bottom-right cloud (~84%, 80%)
+        stripe-v(100px, 640px, 84%, 80%),
+        stripe-h(150px, 350px, 80%, 78%),
+        spot(45px, 86%, 73%),
+        spot(60px, 78%, 84%);
 
     $grid-zones:
-        // L-shape — vertical column + horizontal foot (hero, 3×)
-        stripe-v(12%, 33%, 26%, 16%),
-        stripe-h(27%, 9%, 38%, 30%),
-        // T-shape — horizontal top + vertical descender (capabilities)
-        stripe-h(16%, 4%, 72%, 38%),
-        stripe-v(4%, 11%, 72%, 44%),
-        // cross — horizontal + vertical (situations)
-        stripe-h(14%, 4%, 26%, 56%),
-        stripe-v(4%, 12%, 26%, 56%),
-        // triangle of three spots (proof)
-        spot(5%, 64%, 64%),
-        spot(5%, 72%, 64%),
-        spot(5%, 68%, 71%),
-        // peanut — two side-by-side circles (engagement)
-        spot(6%, 20%, 82%),
-        spot(6%, 30%, 82%),
-        // diamond — two stacked spots (articles)
-        spot(5%, 56%, 90%),
-        spot(5%, 56%, 96%);
+        // hero L-shape (~16-30% Y)
+        stripe-v(175px, 1900px, 26%, 16%),
+        stripe-h(390px, 520px, 38%, 30%),
+        // capabilities T-shape (~38-44% Y)
+        stripe-h(230px, 230px, 72%, 38%),
+        stripe-v(60px, 640px, 72%, 44%),
+        // situations cross (~56% Y)
+        stripe-h(200px, 230px, 26%, 56%),
+        stripe-v(60px, 700px, 26%, 56%),
+        // engagement cloud (~68%, 66%)
+        stripe-h(200px, 520px, 67%, 65%),
+        stripe-v(90px, 640px, 75%, 67%),
+        spot(75px, 60%, 62%),
+        spot(60px, 70%, 73%),
+        // writing cloud (~50%, 78%)
+        stripe-h(230px, 580px, 50%, 77%),
+        stripe-v(100px, 700px, 42%, 79%),
+        spot(85px, 59%, 81%),
+        spot(45px, 56%, 73%),
+        // contact diamond (~56%, 93%)
+        spot(75px, 56%, 90%),
+        spot(75px, 56%, 96%);
 
     .page-backdrop {
         position: absolute;
@@ -346,31 +364,36 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
             filter: blur(40px);
         }
 
+        // Each blob is centered on the centroid of its co-located mask cluster
+        // in $dot-zones / $grid-zones, so color and pattern always share area.
         &__blobs--warm {
             background-image:
-                radial-gradient(ellipse 700px 320px at 18% 7%,  var(--v8-blob-warm) 0%, transparent 65%),
-                radial-gradient(ellipse 600px 280px at 62% 22%, var(--v8-blob-warm) 0%, transparent 65%),
-                radial-gradient(ellipse 660px 300px at 28% 44%, var(--v8-blob-warm) 0%, transparent 65%),
-                radial-gradient(ellipse 580px 260px at 70% 62%, var(--v8-blob-warm) 0%, transparent 65%),
-                radial-gradient(ellipse 640px 290px at 32% 80%, var(--v8-blob-warm) 0%, transparent 65%),
-                radial-gradient(ellipse 600px 280px at 72% 92%, var(--v8-blob-warm) 0%, transparent 65%);
+                /* hero L-cluster */
+                radial-gradient(ellipse 600px 520px at 32% 25%, var(--v8-blob-warm) 0%, transparent 65%),
+                /* top-right dot cloud */
+                radial-gradient(ellipse 420px 360px at 71% 14%, var(--v8-blob-warm) 0%, transparent 65%),
+                /* engagement cloud */
+                radial-gradient(ellipse 480px 420px at 69% 66%, var(--v8-blob-warm) 0%, transparent 65%);
         }
 
         &__blobs--cool {
             background-image:
-                radial-gradient(ellipse 320px 700px at 76% 12%, var(--v8-blob-cool) 0%, transparent 65%),
-                radial-gradient(ellipse 280px 620px at 14% 30%, var(--v8-blob-cool) 0%, transparent 65%),
-                radial-gradient(ellipse 340px 720px at 78% 50%, var(--v8-blob-cool) 0%, transparent 65%),
-                radial-gradient(ellipse 300px 660px at 22% 70%, var(--v8-blob-cool) 0%, transparent 65%),
-                radial-gradient(ellipse 320px 700px at 82% 86%, var(--v8-blob-cool) 0%, transparent 65%);
+                /* capabilities T-cluster */
+                radial-gradient(ellipse 360px 540px at 72% 41%, var(--v8-blob-cool) 0%, transparent 65%),
+                /* bottom-right dot cloud */
+                radial-gradient(ellipse 280px 580px at 82% 79%, var(--v8-blob-cool) 0%, transparent 65%),
+                /* contact diamond */
+                radial-gradient(ellipse 380px 460px at 56% 93%, var(--v8-blob-cool) 0%, transparent 65%);
         }
 
         &__blobs--mint {
             background-image:
-                radial-gradient(ellipse 540px 540px at 42% 16%, var(--v8-blob-mint) 0%, transparent 65%),
-                radial-gradient(ellipse 600px 380px at 50% 38%, var(--v8-blob-mint) 0%, transparent 65%),
-                radial-gradient(ellipse 460px 600px at 36% 60%, var(--v8-blob-mint) 0%, transparent 65%),
-                radial-gradient(ellipse 580px 420px at 56% 84%, var(--v8-blob-mint) 0%, transparent 65%);
+                /* middle dot cloud */
+                radial-gradient(ellipse 560px 300px at 54% 48%, var(--v8-blob-mint) 0%, transparent 65%),
+                /* situations cross */
+                radial-gradient(ellipse 460px 460px at 26% 56%, var(--v8-blob-mint) 0%, transparent 65%),
+                /* writing cloud */
+                radial-gradient(ellipse 580px 380px at 48% 78%, var(--v8-blob-mint) 0%, transparent 65%);
         }
 
         &__dots {

@@ -32,7 +32,7 @@ const featured = allPublished
         categoryLabel: s.categories[entry.data.category],
     }));
 ---
-<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true}>
+<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true} showBackdrop={true}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} />
     <main>
         <Hero hero={s.hero} />

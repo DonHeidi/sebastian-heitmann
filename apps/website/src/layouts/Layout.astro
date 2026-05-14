@@ -11,6 +11,7 @@ type Props = {
   ogType?: string;
   ogImage?: string;
   canonical?: string;
+  showBackdrop?: boolean;
 };
 
 const {
@@ -22,6 +23,7 @@ const {
   ogType = 'website',
   ogImage,
   canonical,
+  showBackdrop = false,
 } = Astro.props;
 const htmlLang = localeConfig[locale].htmlLang;
 const siteOrigin = 'https://www.sebastian-heitmann.dev';
@@ -116,13 +118,15 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         )}
     </head>
     <body>
-        <div class="page-backdrop" aria-hidden="true">
-            <div class="page-backdrop__blobs page-backdrop__blobs--warm"></div>
-            <div class="page-backdrop__blobs page-backdrop__blobs--cool"></div>
-            <div class="page-backdrop__blobs page-backdrop__blobs--mint"></div>
-            <div class="page-backdrop__dots"></div>
-            <div class="page-backdrop__grid"></div>
-        </div>
+        {showBackdrop && (
+            <div class="page-backdrop" aria-hidden="true">
+                <div class="page-backdrop__blobs page-backdrop__blobs--warm"></div>
+                <div class="page-backdrop__blobs page-backdrop__blobs--cool"></div>
+                <div class="page-backdrop__blobs page-backdrop__blobs--mint"></div>
+                <div class="page-backdrop__dots"></div>
+                <div class="page-backdrop__grid"></div>
+            </div>
+        )}
         <slot />
     </body>
 </html>

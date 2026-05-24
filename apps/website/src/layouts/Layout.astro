@@ -120,9 +120,6 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
     <body>
         {showBackdrop && (
             <div class="page-backdrop" aria-hidden="true">
-                <div class="page-backdrop__blobs page-backdrop__blobs--warm"></div>
-                <div class="page-backdrop__blobs page-backdrop__blobs--cool"></div>
-                <div class="page-backdrop__blobs page-backdrop__blobs--mint"></div>
                 <div class="page-backdrop__dots"></div>
                 <div class="page-backdrop__grid"></div>
             </div>
@@ -239,9 +236,6 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-grid-fine: rgba(168, 176, 192, 0.05);
         --v8-grid-medium: rgba(168, 176, 192, 0.10);
         --v8-grid-major: rgba(168, 176, 192, 0.20);
-        --v8-blob-warm: rgba(255, 59, 0, 0.22);
-        --v8-blob-cool: rgba(120, 140, 200, 0.16);
-        --v8-blob-mint: rgba(0, 220, 130, 0.14);
     }
 
     html.light {
@@ -269,9 +263,6 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         --v8-grid-fine: rgba(60, 70, 40, 0.08);
         --v8-grid-medium: rgba(60, 70, 40, 0.16);
         --v8-grid-major: rgba(60, 70, 40, 0.28);
-        --v8-blob-warm: rgba(184, 42, 0, 0.45);
-        --v8-blob-cool: rgba(36, 50, 90, 0.32);
-        --v8-blob-mint: rgba(26, 122, 82, 0.36);
     }
 
     :root {
@@ -354,7 +345,6 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
 
         // All backdrop layers track the content column (max 1440px, centered),
         // so positions stay aligned with sections at any viewport width.
-        & > &__blobs,
         & > &__dots,
         & > &__grid {
             position: absolute;
@@ -363,42 +353,6 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
             left: 50%;
             transform: translateX(-50%);
             width: min(100%, 1440px);
-        }
-
-        &__blobs {
-            filter: blur(40px);
-        }
-
-        // Each blob is centered on the centroid of its co-located mask cluster
-        // in $dot-zones / $grid-zones, so color and pattern always share area.
-        &__blobs--warm {
-            background-image:
-                /* hero L-cluster */
-                radial-gradient(ellipse 600px 520px at 32% 25%, var(--v8-blob-warm) 0%, transparent 65%),
-                /* top-right dot cloud */
-                radial-gradient(ellipse 420px 360px at 71% 14%, var(--v8-blob-warm) 0%, transparent 65%),
-                /* engagement cloud */
-                radial-gradient(ellipse 480px 420px at 69% 66%, var(--v8-blob-warm) 0%, transparent 65%);
-        }
-
-        &__blobs--cool {
-            background-image:
-                /* capabilities T-cluster */
-                radial-gradient(ellipse 360px 540px at 72% 41%, var(--v8-blob-cool) 0%, transparent 65%),
-                /* bottom-right dot cloud */
-                radial-gradient(ellipse 280px 580px at 82% 79%, var(--v8-blob-cool) 0%, transparent 65%),
-                /* contact diamond */
-                radial-gradient(ellipse 380px 460px at 56% 93%, var(--v8-blob-cool) 0%, transparent 65%);
-        }
-
-        &__blobs--mint {
-            background-image:
-                /* middle dot cloud */
-                radial-gradient(ellipse 560px 300px at 54% 48%, var(--v8-blob-mint) 0%, transparent 65%),
-                /* situations cross */
-                radial-gradient(ellipse 460px 460px at 26% 56%, var(--v8-blob-mint) 0%, transparent 65%),
-                /* writing cloud */
-                radial-gradient(ellipse 580px 380px at 48% 78%, var(--v8-blob-mint) 0%, transparent 65%);
         }
 
         &__dots {

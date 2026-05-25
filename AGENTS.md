@@ -102,6 +102,19 @@ Terraform config managing a dedicated Scaleway project (`sebastian-heitmann-dev`
 - **Transactional Email domain** (`contact.sebastian-heitmann.dev`) — project-scoped sender domain for TEM
 - **IAM** — project-scoped API key with `TransactionalEmailEmailApiCreate` permission
 
+### Terraform State Backend
+
+State lives in a Scaleway Object Storage bucket (`sebastian-heitmann-tfstate`, region `nl-ams`) inside the `sebastian-heitmann-dev` project. The bucket is created manually via the Scaleway console (not in Terraform) to avoid managing the bucket that holds its own state. Configure with: private visibility, SSE-ONE encryption, versioning enabled, no object lock.
+
+The S3 backend in `infra/main.tf` uses S3-native locking (`use_lockfile = true`, requires Terraform ≥ 1.10). Auth uses AWS-prefixed env vars that mirror your Scaleway credentials:
+
+```bash
+export AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@<TF-managed-project-id>"
+export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
+```
+
+The `@<project-id>` suffix is required to target the `sebastian-heitmann-dev` project (see Scaleway gotcha below). The project ID is visible in `terraform output` or the Scaleway console.
+
 ### Scaleway Gotchas
 
 - TEM API is only available in `fr-par`, function hosts in `nl-ams`

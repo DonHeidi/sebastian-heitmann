@@ -1,3 +1,8 @@
+output "project_id" {
+  description = "Scaleway project ID containing all managed resources (used for AWS_ACCESS_KEY@PROJECT_ID auth on the state bucket)"
+  value       = scaleway_account_project.main.id
+}
+
 output "function_endpoint" {
   description = "Public URL of the contact handler function"
   value       = scaleway_function.contact_handler.domain_name

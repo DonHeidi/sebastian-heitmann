@@ -5,21 +5,28 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 INFRA_DIR="$ROOT_DIR/infra"
 WEBSITE_DIR="$ROOT_DIR/apps/website"
 SCW_CONFIG="${HOME}/.config/scw/config.yaml"
-
-if [[ ! -f "$INFRA_DIR/terraform.tfstate" ]]; then
-  echo "Missing infra/terraform.tfstate. Apply infrastructure before deploying the website." >&2
-  exit 1
-fi
+PROJECT_NAME="sebastian-heitmann-dev"
 
 if [[ ! -f "$SCW_CONFIG" ]]; then
   echo "Missing Scaleway CLI config at $SCW_CONFIG." >&2
   exit 1
 fi
 
-FUNCTION_ENDPOINT="$(cd "$INFRA_DIR" && terraform output -raw function_endpoint)"
-PROJECT_ID="$(jq -r '.resources[] | select(.type=="scaleway_account_project" and .name=="main") | .instances[0].attributes.id' "$INFRA_DIR/terraform.tfstate")"
 SCW_ACCESS_KEY="$(grep access_key "$SCW_CONFIG" | awk '{print $2}')"
 SCW_SECRET_KEY="$(grep secret_key "$SCW_CONFIG" | awk '{print $2}')"
+
+PROJECT_ID=$(scw account project list -o json | jq -r --arg n "$PROJECT_NAME" '.[] | select(.name == $n) | .id')
+if [[ -z "$PROJECT_ID" ]]; then
+  echo "Could not resolve Scaleway project '$PROJECT_NAME' via scw CLI. Check ~/.config/scw/config.yaml." >&2
+  exit 1
+fi
+
+if [[ -z "${AWS_ACCESS_KEY_ID:-}" || -z "${AWS_SECRET_ACCESS_KEY:-}" ]]; then
+  export AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}"
+  export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
+fi
+
+FUNCTION_ENDPOINT="$(cd "$INFRA_DIR" && terraform output -raw function_endpoint)"
 
 cd "$WEBSITE_DIR"
 PUBLIC_MAIL_ENDPOINT="https://${FUNCTION_ENDPOINT}" bun run build

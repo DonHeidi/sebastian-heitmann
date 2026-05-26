@@ -418,6 +418,12 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
         margin-bottom: 1.25rem;
       }
 
+      :global(strong),
+      :global(b) {
+        font-weight: 600;
+        color: var(--v8-text);
+      }
+
       :global(blockquote) {
         font-style: italic;
         border-left: 3px solid var(--v8-accent);

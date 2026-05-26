@@ -1,0 +1,162 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+    const jobs = await getCollection('jobs');
+    return jobs.map((job) => ({
+        params: { slug: job.id },
+        props: { job },
+    }));
+}
+
+const { job } = Astro.props;
+const { Content } = await render(job);
+const dateFmt = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
+---
+
+<Layout title={`${job.data.title} — ${job.data.company}`} description={`${job.data.title} at ${job.data.company}.`}>
+    <main class="page">
+        <a class="back" href="/">← All jobs</a>
+
+        <header class="header">
+            <h1 class="header__title">{job.data.title}</h1>
+            <p class="header__meta">
+                <span class="header__company">{job.data.company}</span>
+                {job.data.location && <><span class="dot">·</span><span>{job.data.location}</span></>}
+                {job.data.remote && <><span class="dot">·</span><span>Remote</span></>}
+                {job.data.posted_at && <><span class="dot">·</span><time datetime={job.data.posted_at.toISOString()}>{dateFmt.format(job.data.posted_at)}</time></>}
+            </p>
+            {job.data.tags.length > 0 && (
+                <ul class="tags">
+                    {job.data.tags.map((t) => <li class="tag">{t}</li>)}
+                </ul>
+            )}
+            <a class="apply" href={job.data.url} target="_blank" rel="noopener">View original posting →</a>
+        </header>
+
+        <section class="body">
+            <Content />
+        </section>
+    </main>
+</Layout>
+
+<style lang="scss">
+    .page {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 6rem;
+    }
+
+    .back {
+        font-family: var(--v8-font-mono);
+        font-size: 0.8rem;
+        color: var(--v8-text-muted);
+        text-decoration: none;
+
+        &:hover { color: var(--v8-accent); }
+    }
+
+    .header {
+        margin: 2rem 0 3rem;
+
+        &__title {
+            font-family: var(--v8-font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 0.75rem;
+        }
+
+        &__meta {
+            font-size: 0.95rem;
+            color: var(--v8-text-secondary);
+            margin-bottom: 1rem;
+
+            .dot {
+                color: var(--v8-text-faint);
+                margin: 0 0.4rem;
+            }
+        }
+
+        &__company {
+            color: var(--v8-text);
+        }
+    }
+
+    .tags {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.25rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+    }
+
+    .tag {
+        font-family: var(--v8-font-mono);
+        font-size: 0.7rem;
+        color: var(--v8-text-tertiary);
+        border: 1px solid var(--v8-border);
+        border-radius: 999px;
+        padding: 0.15rem 0.55rem;
+    }
+
+    .apply {
+        display: inline-block;
+        font-family: var(--v8-font-mono);
+        font-size: 0.85rem;
+        color: var(--v8-accent);
+        text-decoration: none;
+        border: 1px solid var(--v8-border-accent);
+        border-radius: 4px;
+        padding: 0.5rem 0.9rem;
+
+        &:hover { background: var(--v8-bg-alt); }
+    }
+
+    .body {
+        color: var(--v8-text-secondary);
+        line-height: 1.65;
+
+        :global(h1),
+        :global(h2),
+        :global(h3) {
+            font-family: var(--v8-font-display);
+            font-weight: 400;
+            color: var(--v8-text);
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        :global(h2) { font-size: 1.4rem; }
+        :global(h3) { font-size: 1.15rem; }
+
+        :global(p) { margin-bottom: 1rem; }
+
+        :global(ul),
+        :global(ol) {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        :global(li) { margin-bottom: 0.4rem; }
+
+        :global(a) {
+            color: var(--v8-accent);
+            text-decoration: none;
+
+            &:hover { text-decoration: underline; }
+        }
+
+        :global(strong) { color: var(--v8-text); }
+
+        :global(code) {
+            font-family: var(--v8-font-mono);
+            font-size: 0.85em;
+            background: var(--v8-bg-alt);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+        }
+    }
+</style>

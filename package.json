@@ -1,5 +1,8 @@
 {
   "name": "sebastian-heitmann",
   "private": true,
-  "workspaces": ["apps/*"]
+  "workspaces": ["apps/*"],
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
 }

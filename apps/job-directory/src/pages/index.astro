@@ -1,0 +1,177 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const jobs = (await getCollection('jobs')).sort((a, b) => {
+    const ad = a.data.posted_at?.getTime() ?? 0;
+    const bd = b.data.posted_at?.getTime() ?? 0;
+    return bd - ad;
+});
+const dateFmt = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
+---
+
+<Layout title="Job Directory" description="Curated job postings.">
+    <main class="page">
+        <header class="header">
+            <p class="header__eyebrow">Curated by agent</p>
+            <h1 class="header__title">Job Directory</h1>
+            <p class="header__lede">Job postings and freelance briefs curated by an external agent.</p>
+        </header>
+
+        {jobs.length === 0 ? (
+            <p class="empty">No jobs yet. Drop Markdown files in <code>src/content/jobs/</code>.</p>
+        ) : (
+            <ul class="jobs">
+                {jobs.map((job) => (
+                    <li class="job">
+                        <a class="job__link" href={`/jobs/${job.id}/`}>
+                            <div class="job__head">
+                                <h2 class="job__title">{job.data.title}</h2>
+                                {job.data.posted_at && (
+                                    <time class="job__date" datetime={job.data.posted_at.toISOString()}>
+                                        {dateFmt.format(job.data.posted_at)}
+                                    </time>
+                                )}
+                            </div>
+                            <p class="job__sub">
+                                <span class="job__company">{job.data.company}</span>
+                                {job.data.location && <><span class="dot">·</span><span>{job.data.location}</span></>}
+                                {job.data.remote && <><span class="dot">·</span><span>Remote</span></>}
+                            </p>
+                            {job.data.tags.length > 0 && (
+                                <ul class="tags">
+                                    {job.data.tags.map((t) => <li class="tag">{t}</li>)}
+                                </ul>
+                            )}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        )}
+    </main>
+</Layout>
+
+<style lang="scss">
+    .page {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem 6rem;
+    }
+
+    .header {
+        margin-bottom: 3rem;
+
+        &__eyebrow {
+            font-family: var(--v8-font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--v8-accent);
+            margin-bottom: 0.75rem;
+        }
+
+        &__title {
+            font-family: var(--v8-font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            line-height: 1.05;
+            margin-bottom: 0.75rem;
+        }
+
+        &__lede {
+            color: var(--v8-text-muted);
+            max-width: 60ch;
+        }
+    }
+
+    .empty {
+        color: var(--v8-text-muted);
+        font-family: var(--v8-font-mono);
+        font-size: 0.875rem;
+
+        code {
+            background: var(--v8-bg-surface);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+        }
+    }
+
+    .jobs {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .job {
+        border: 1px solid var(--v8-border);
+        border-radius: 6px;
+        background: var(--v8-bg-surface);
+        transition: border-color 0.2s ease;
+
+        &:hover { border-color: var(--v8-border-accent); }
+
+        &__link {
+            display: block;
+            padding: 1.5rem;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        &__head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        &__title {
+            font-family: var(--v8-font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        &__date {
+            font-family: var(--v8-font-mono);
+            font-size: 0.75rem;
+            color: var(--v8-text-faint);
+            white-space: nowrap;
+        }
+
+        &__sub {
+            font-size: 0.9rem;
+            color: var(--v8-text-secondary);
+            margin-bottom: 0.75rem;
+
+            .dot {
+                color: var(--v8-text-faint);
+                margin: 0 0.4rem;
+            }
+        }
+
+        &__company {
+            color: var(--v8-text);
+        }
+    }
+
+    .tags {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+    }
+
+    .tag {
+        font-family: var(--v8-font-mono);
+        font-size: 0.7rem;
+        color: var(--v8-text-tertiary);
+        border: 1px solid var(--v8-border);
+        border-radius: 999px;
+        padding: 0.15rem 0.55rem;
+    }
+</style>

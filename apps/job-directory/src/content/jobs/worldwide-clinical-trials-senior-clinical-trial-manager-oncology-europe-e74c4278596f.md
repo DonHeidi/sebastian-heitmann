@@ -3,12 +3,12 @@ title: "Senior / Clinical Trial Manager – Oncology – Europe"
 company: "Worldwide Clinical Trials"
 url: "https://jobicy.com/jobs/144824-senior-clinical-trial-manager-oncology-europe"
 location: "Serbia"
-posted_at: 2026-05-26
+posted_at: 2026-05-27
 tags: ["jobicy", "Healthcare &amp; Medical", "Full-Time", "Senior", "quick-glance", "remote"]
 remote: true
 ---
 
-Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.
+Imported from the public job-search scan generated at `2026-05-27T00:01:06Z`.
 
 ## Agent scoring notes
 

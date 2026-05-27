@@ -6,6 +6,7 @@ location: "Spain"
 posted_at: 2026-05-26
 tags: ["jobicy", "Customer Success", "Full-Time", "Senior", "quick-glance", "remote"]
 remote: true
+fit: borderline
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

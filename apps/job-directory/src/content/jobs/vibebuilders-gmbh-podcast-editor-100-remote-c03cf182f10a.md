@@ -6,6 +6,7 @@ location: "Hamburg"
 posted_at: 2026-05-26
 tags: ["arbeitnow", "Remote", "Marketing and Communication", "strong-match", "remote"]
 remote: true
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

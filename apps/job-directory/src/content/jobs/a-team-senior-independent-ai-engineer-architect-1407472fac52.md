@@ -6,6 +6,7 @@ location: "Americas, Europe, Israel"
 posted_at: 2026-05-26
 tags: ["remotive", "go", "UI/UX", "wordpress", "chat", "apple", "testing", "catalyst", "possible-match", "remote"]
 remote: true
+fit: top
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

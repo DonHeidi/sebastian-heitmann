@@ -6,6 +6,7 @@ location: "Germany"
 posted_at: 2026-05-26
 tags: ["jobicy", "Business Development", "Full-Time", "Senior", "quick-glance", "remote"]
 remote: true
+fit: top
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

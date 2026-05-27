@@ -3,12 +3,12 @@ title: "Product Specialist"
 company: "Pulse Games"
 url: "https://weworkremotely.com/remote-jobs/pulse-games-product-specialist"
 location: "Remote"
-posted_at: 2026-05-26
+posted_at: 2026-05-27
 tags: ["wwr-product", "weworkremotely:product", "quick-glance", "remote"]
 remote: true
 ---
 
-Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.
+Imported from the public job-search scan generated at `2026-05-27T00:01:06Z`.
 
 ## Agent scoring notes
 

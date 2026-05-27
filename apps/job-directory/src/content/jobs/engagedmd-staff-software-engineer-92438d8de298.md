@@ -6,6 +6,7 @@ location: "Remote"
 posted_at: 2026-05-26
 tags: ["wwr-programming", "weworkremotely:programming", "possible-match", "remote"]
 remote: true
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

@@ -3,12 +3,12 @@ title: "Freelance Catalan Language Specialist"
 company: "Deepdub"
 url: "https://jobicy.com/jobs/144827-freelance-catalan-language-specialist"
 location: "Spain"
-posted_at: 2026-05-26
+posted_at: 2026-05-27
 tags: ["jobicy", "Education &amp; E-learning", "Full-Time", "Midweight", "possible-match", "remote"]
 remote: true
 ---
 
-Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.
+Imported from the public job-search scan generated at `2026-05-27T00:01:06Z`.
 
 ## Agent scoring notes
 

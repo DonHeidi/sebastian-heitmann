@@ -6,6 +6,7 @@ location: "Americas, Europe, Asia, Oceania"
 posted_at: 2026-05-26
 tags: ["remotive", ".Net", "android", "AWS", "azure", "C", "C#", "C++", "data science", "golang"]
 remote: true
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

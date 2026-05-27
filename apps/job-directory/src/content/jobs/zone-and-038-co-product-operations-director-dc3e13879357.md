@@ -6,6 +6,7 @@ location: "UK"
 posted_at: 2026-05-26
 tags: ["jobicy", "Product &amp; Operations", "Full-Time", "Director", "possible-match", "remote"]
 remote: true
+fit: top
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

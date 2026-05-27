@@ -3,12 +3,12 @@ title: "International Recruitment Consultant"
 company: "Atlean World"
 url: "https://jobicy.com/jobs/144775-international-recruitment-consultant"
 location: "Portugal"
-posted_at: 2026-05-26
+posted_at: 2026-05-27
 tags: ["jobicy", "HR &amp; Recruiting", "Full-Time", "Entry-Level, Junior", "quick-glance", "remote"]
 remote: true
 ---
 
-Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.
+Imported from the public job-search scan generated at `2026-05-27T00:01:06Z`.
 
 ## Agent scoring notes
 

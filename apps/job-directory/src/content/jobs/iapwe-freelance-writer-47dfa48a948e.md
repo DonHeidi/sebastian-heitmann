@@ -6,6 +6,7 @@ location: "Worldwide"
 posted_at: 2026-05-26
 tags: ["remotive", "REST", "quick-glance", "remote"]
 remote: true
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-05-26T10:54:26Z`.

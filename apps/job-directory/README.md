@@ -1,70 +1,115 @@
 # Job Directory
 
-Astro site that surfaces curated job postings and freelance briefs. Entries are written as Markdown files under `src/content/jobs/` by an external agent and rendered at build time via Astro content collections.
+TanStack Start site that surfaces curated job postings and freelance briefs. Entries live in a SQLite database (`data/jobs.db`) and are prerendered to static HTML at build time. New entries are POSTed via the HTTP API by an external agent.
 
 ## Commands
 
 ```bash
-bun run dev       # local dev server
+bun run dev       # local dev server (http://localhost:3000)
 bun run build     # production build to dist/
 bun run preview   # preview the production build
 ```
 
-## Content model
+## Storage
 
-Each job posting is a single Markdown file in `src/content/jobs/`. The frontmatter schema is enforced by `src/content.config.ts`; unknown keys or missing required fields fail the build. Files whose name starts with `_` are ignored by the loader (use this for templates or drafts).
+All content lives in `apps/job-directory/data/jobs.db` (better-sqlite3). The schema lives in `src/db/connection.ts` and is created on first connection. The seed migration in `scripts/seed-job-directory-db.mjs` (project root) ingests markdown files if present.
 
-### Filename and slug
+Tables:
 
-- One file per posting. The filename without `.md` becomes both the collection ID and the route segment (`/jobs/<slug>/`).
-- Pick a stable, deterministic slug — `<company-kebab>-<role-kebab>` is a good default (e.g. `acme-staff-platform-engineer.md`). When the same posting reappears in a later run, reuse the same slug so the file is overwritten rather than duplicated.
-- Remove a posting by deleting its file.
+- `jobs` — one row per posting, keyed by slug.
+- `briefings` — one row per scan run, keyed by `YYYY-MM-DD` date.
 
-### Frontmatter schema
+The site prerenders the DB at `bun run build` time, so the DB file must exist before a build. For now the DB is checked into git as binary; this trade-off can change when a deploy story emerges.
 
-| Field       | Type       | Required | Notes |
-| ----------- | ---------- | -------- | ----- |
-| `title`     | string     | yes      | Job title as posted. |
-| `company`   | string     | yes      | Hiring company. |
-| `url`       | URL string | yes      | Canonical link to the original posting. |
-| `location`  | string     | no       | Free-form (e.g. `Berlin, DE`, `EU remote`). |
-| `posted_at` | date       | no       | ISO-8601 string (or any value `z.coerce.date()` accepts). Used to sort the index newest-first. |
-| `tags`      | string[]   | no       | Defaults to `[]`. Rendered as chips on the index and detail pages. |
-| `remote`    | boolean    | no       | If true, shows a "Remote" badge. |
+## Routing
 
-### Body
+| Route | Purpose |
+| ----- | ------- |
+| `/` | Home — renders the latest briefing with links to both overviews. |
+| `/briefings/` | Overview of every briefing by date. |
+| `/briefings/<YYYY-MM-DD>/` | A single briefing's body. |
+| `/jobs/` | Overview of every job posting, newest first. |
+| `/jobs/<slug>/` | A single job posting. |
+| `POST /api/jobs` | Create or update a job (see below). |
+| `GET /api/jobs` | List all jobs (auth required). |
+| `POST /api/briefings` | Create or update a briefing. |
+| `GET /api/briefings` | List all briefings (auth required). |
 
-The Markdown body is rendered on `/jobs/<slug>/`. Use it for the freeform write-up: responsibilities, stack notes, comp band, contact info, and any agent commentary worth keeping (why it scored well, caveats, etc.).
+## API
 
-### Example
+All API endpoints require `Authorization: Bearer <token>` matching the `JOB_DIRECTORY_API_TOKEN` environment variable. Responses are JSON.
 
-```markdown
----
-title: Staff Platform Engineer
-company: Acme
-location: Berlin, DE
-url: https://acme.example/careers/staff-platform-engineer
-posted_at: 2026-05-25
-tags: [platform, golang, kubernetes]
-remote: true
----
+### `POST /api/jobs`
 
-Acme is rebuilding its multi-tenant platform on managed Kubernetes. Looking
-for deep infra experience with a track record of taking systems from prototype
-to production-grade.
+Upserts a job by `id`. Body is JSON validated against the schema below.
 
-**Why it scored well:** matches the "infra leadership with code" search; comp
-band is competitive for the region; team lead has a strong public track record.
+| Field | Type | Required | Notes |
+| ----- | ---- | -------- | ----- |
+| `id` | string (kebab-case) | yes | Stable slug; `<company>-<role>` is a good default. Becomes the route segment `/jobs/<id>/`. |
+| `title` | string | yes | Job title as posted. |
+| `company` | string | yes | Hiring company. |
+| `url` | URL | yes | Canonical link to the original posting. |
+| `location` | string\|null | no | Free-form (e.g. `Berlin, DE`, `EU remote`). |
+| `posted_at` | ISO-8601 date | no | Used to sort the index newest-first. |
+| `tags` | string[] | no | Defaults to `[]`. Rendered as chips on the index and detail pages. |
+| `remote` | boolean\|null | no | If true, shows a "Remote" badge. |
+| `fit` | `top` \| `borderline` \| `skip` \| null | no | Drives color-grading on the listing. |
+| `body` | string (Markdown) | no | Free-form body. Rendered on the detail page. |
+
+Returns `201` on create, `200` on update, `401` if auth fails, `422` with Zod issues if validation fails.
+
+```bash
+curl -X POST http://localhost:3000/api/jobs \
+  -H "Authorization: Bearer $JOB_DIRECTORY_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "acme-staff-platform-engineer",
+    "title": "Staff Platform Engineer",
+    "company": "Acme",
+    "url": "https://acme.example/careers/staff-platform-engineer",
+    "location": "Berlin, DE",
+    "posted_at": "2026-05-25",
+    "tags": ["platform", "golang", "kubernetes"],
+    "remote": true,
+    "fit": "top",
+    "body": "Acme is rebuilding its multi-tenant platform...\n\n**Why it scored well:** ..."
+  }'
 ```
 
-## Pipeline for the upstream agent
+### `POST /api/briefings`
 
-1. Run scan / curation out of repo.
-2. For each posting kept, write `apps/job-directory/src/content/jobs/<slug>.md` with the frontmatter above. Reuse the slug if the posting was seen before.
-3. Commit using the repo's conventional-commit style:
-   - `feat(job-directory): add <slug>` for new entries
-   - `chore(job-directory): refresh <slug>` for updates to an existing entry
-   - `chore(job-directory): drop <slug>` for removals
-4. Push to the branch the site builds from.
+Upserts a briefing by `id`. `id` must be a `YYYY-MM-DD` string.
 
-The site is statically rebuilt from `src/content/jobs/` — there is no runtime database, queue, or webhook. A `git push` is the entire deploy trigger.
+| Field | Type | Required | Notes |
+| ----- | ---- | -------- | ----- |
+| `id` | `YYYY-MM-DD` | yes | The scan run date. Re-posting the same id overwrites. |
+| `date` | ISO-8601 date | yes | Used for sorting and as the briefing heading. |
+| `body` | string (Markdown) | no | Free-form. Typical sections: top serious candidates, borderline / quick glance, suppressed/noisy patterns, recommended next actions. Do not include a top-level `# ...` heading — the page provides the date heading. |
+
+```bash
+curl -X POST http://localhost:3000/api/briefings \
+  -H "Authorization: Bearer $JOB_DIRECTORY_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "2026-05-26",
+    "date": "2026-05-26",
+    "body": "## Top serious candidates\n\n..."
+  }'
+```
+
+## Seed script
+
+A one-shot migration ingests legacy markdown files at `apps/job-directory/src/content/{jobs,briefings}/*.md`:
+
+```bash
+node scripts/seed-job-directory-db.mjs
+```
+
+Run from the project root. Requires Node (better-sqlite3 is not yet supported under Bun). Idempotent — safe to re-run; each row is upserted by id.
+
+## Environment variables
+
+| Variable | Used by | Notes |
+| -------- | ------- | ----- |
+| `JOB_DIRECTORY_API_TOKEN` | API routes | Required. Bearer token clients must present. If unset, every API call returns 503. |
+| `JOB_DIRECTORY_DB` | DB connection | Optional. Override the default DB path (`data/jobs.db` relative to `process.cwd()`). |

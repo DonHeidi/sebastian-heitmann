@@ -36,6 +36,14 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # astro
 .astro
 
+# tanstack router generated route tree
+routeTree.gen.ts
+
+# sqlite journal sidecars (job-directory DB is checked in; sidecars are not)
+*.db-journal
+*.db-wal
+*.db-shm
+
 # git worktrees
 .worktrees
 

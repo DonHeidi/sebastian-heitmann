@@ -3,6 +3,9 @@
   "private": true,
   "workspaces": ["apps/*"],
   "devDependencies": {
-    "playwright": "^1.60.0"
+    "better-sqlite3": "^11.3.0",
+    "gray-matter": "^4.0.3",
+    "playwright": "^1.60.0",
+    "zod": "^3.23.8"
   }
 }

@@ -1,0 +1,157 @@
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/InstrumentSerif-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/InstrumentSerif-Italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('/fonts/DMSans-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: italic;
+  font-weight: 300 400;
+  font-display: swap;
+  src: url('/fonts/DMSans-Italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/IBMPlexMono-Bold.woff2') format('woff2');
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  scrollbar-gutter: stable;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img, picture, video, canvas { display: block; max-width: 100%; }
+svg { display: block; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+p { text-wrap: pretty; }
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+
+html.dark {
+  --v8-bg: #0C0C0C;
+  --v8-bg-alt: #101010;
+  --v8-bg-surface: #141414;
+  --v8-text: #F2F0EB;
+  --v8-text-muted: rgba(242, 240, 235, 0.65);
+  --v8-text-secondary: rgba(242, 240, 235, 0.75);
+  --v8-text-tertiary: rgba(242, 240, 235, 0.68);
+  --v8-text-faint: rgba(242, 240, 235, 0.45);
+  --v8-accent: #FF3B00;
+  --v8-accent-status: #00DC82;
+  --v8-border: rgba(242, 240, 235, 0.08);
+  --v8-border-accent: rgba(255, 59, 0, 0.3);
+}
+
+html.light {
+  --v8-bg: #FAF7F0;
+  --v8-bg-alt: #F0EBE0;
+  --v8-bg-surface: #F5F0E6;
+  --v8-text: #141413;
+  --v8-text-muted: rgba(20, 20, 19, 0.6);
+  --v8-text-secondary: rgba(20, 20, 19, 0.75);
+  --v8-text-tertiary: rgba(20, 20, 19, 0.65);
+  --v8-text-faint: rgba(20, 20, 19, 0.4);
+  --v8-accent: #B82A00;
+  --v8-accent-status: #1A7A52;
+  --v8-border: rgba(20, 20, 19, 0.16);
+  --v8-border-accent: rgba(184, 42, 0, 0.35);
+}
+
+:root {
+  --v8-font-display: 'Instrument Serif', Georgia, serif;
+  --v8-font-body: 'DM Sans', system-ui, sans-serif;
+  --v8-font-mono: 'IBM Plex Mono', monospace;
+}
+
+body {
+  background-color: var(--v8-bg);
+  color: var(--v8-text);
+  font-family: var(--v8-font-body);
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.site-nav {
+  border-bottom: 1px solid var(--v8-border);
+  background: var(--v8-bg);
+
+  &__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  &__brand {
+    font-family: var(--v8-font-display);
+    font-size: 1.1rem;
+    color: var(--v8-text);
+    text-decoration: none;
+  }
+
+  &__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  &__link {
+    font-family: var(--v8-font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--v8-text-muted);
+    text-decoration: none;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    &:hover { color: var(--v8-text); }
+
+    &--active {
+      color: var(--v8-accent);
+      border-bottom-color: var(--v8-accent);
+    }
+  }
+}

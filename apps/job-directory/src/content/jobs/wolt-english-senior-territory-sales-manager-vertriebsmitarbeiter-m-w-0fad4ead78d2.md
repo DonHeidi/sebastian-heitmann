@@ -6,6 +6,7 @@ location: "Berlin, Berlin, Germany"
 posted_at: 2026-05-27
 tags: ["arbeitnow", "quick-glance"]
 remote: false
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-05-27T14:18:09Z`.

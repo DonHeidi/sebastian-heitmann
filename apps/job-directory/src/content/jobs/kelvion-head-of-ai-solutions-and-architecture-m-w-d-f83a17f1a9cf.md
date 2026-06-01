@@ -6,6 +6,7 @@ location: "Herne, Nordrhein-Westfalen, Deutschland (Vor Ort)"
 posted_at: 2026-05-27
 tags: ["linkedin-personal", "linkedin-scraped", "scraped from visible LinkedIn search pag", "possible-match"]
 remote: false
+fit: top
 ---
 
 Imported from the public job-search scan generated at `2026-05-27T14:18:09Z`.

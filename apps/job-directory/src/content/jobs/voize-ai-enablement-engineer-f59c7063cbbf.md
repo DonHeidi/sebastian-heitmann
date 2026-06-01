@@ -6,6 +6,7 @@ location: "Berlin, Berlin, Deutschland (Hybrid)"
 posted_at: 2026-05-27
 tags: ["linkedin-personal", "linkedin-scraped", "scraped from visible LinkedIn search pag", "quick-glance"]
 remote: false
+fit: borderline
 ---
 
 Imported from the public job-search scan generated at `2026-05-27T14:18:09Z`.

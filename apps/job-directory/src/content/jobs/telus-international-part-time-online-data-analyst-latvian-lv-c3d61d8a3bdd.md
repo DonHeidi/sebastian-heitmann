@@ -6,6 +6,7 @@ location: "Latvia"
 posted_at: 2026-05-27
 tags: ["jobicy", "Data Science &amp; Analytics", "Part-Time", "Entry-Level, Junior", "quick-glance", "remote"]
 remote: true
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-05-27T14:18:09Z`.

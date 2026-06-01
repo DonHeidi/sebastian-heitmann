@@ -6,6 +6,7 @@ location: "Remote"
 posted_at: 2026-05-27
 tags: ["wwr-management-finance", "weworkremotely:management-finance", "quick-glance", "remote"]
 remote: true
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-05-27T14:18:09Z`.

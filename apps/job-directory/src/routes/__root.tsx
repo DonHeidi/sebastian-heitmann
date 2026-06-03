@@ -8,6 +8,7 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
+import '../styles/tailwind.css';
 import '../styles/global.scss';
 
 export const Route = createRootRoute({

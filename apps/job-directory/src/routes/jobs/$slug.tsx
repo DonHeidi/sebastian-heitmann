@@ -1,6 +1,14 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
-import { fetchJob } from '../../server/content';
+import {
+  fetchFeedback,
+  fetchJob,
+  fetchJobStatus,
+  fetchOutreach,
+} from '../../server/content';
 import { formatDate } from '../../lib/format';
+import { FeedbackForm } from '../../components/feedback-form';
+import { OutreachForm } from '../../components/outreach-form';
+import { StatusSelector } from '../../components/status-selector';
 import styles from './$slug.module.scss';
 
 const fitLabel: Record<string, string> = {
@@ -11,9 +19,14 @@ const fitLabel: Record<string, string> = {
 
 export const Route = createFileRoute('/jobs/$slug')({
   loader: async ({ params }) => {
-    const job = await fetchJob({ data: params.slug });
+    const [job, feedback, outreach, status] = await Promise.all([
+      fetchJob({ data: params.slug }),
+      fetchFeedback({ data: params.slug }),
+      fetchOutreach({ data: params.slug }),
+      fetchJobStatus({ data: params.slug }),
+    ]);
     if (!job) throw notFound();
-    return { job };
+    return { job, feedback, outreach, status };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return {};
@@ -32,7 +45,7 @@ export const Route = createFileRoute('/jobs/$slug')({
 });
 
 function JobDetail() {
-  const { job } = Route.useLoaderData();
+  const { job, feedback, outreach, status } = Route.useLoaderData();
   const fitClass = job.fit
     ? job.fit === 'top'
       ? styles.fitTop
@@ -79,11 +92,30 @@ function JobDetail() {
         <a className={styles.apply} href={job.url} target="_blank" rel="noopener">
           View original posting →
         </a>
+
+        <StatusSelector
+          jobId={job.id}
+          current={status.status}
+          updatedAt={status.updated_at}
+        />
       </header>
 
       <section
         className={styles.body}
         dangerouslySetInnerHTML={{ __html: job.html }}
+      />
+
+      <OutreachForm
+        jobId={job.id}
+        initialBody={outreach?.body ?? ''}
+        initialHtml={outreach?.html ?? ''}
+        updatedAt={outreach?.updated_at ?? null}
+      />
+
+      <FeedbackForm
+        jobId={job.id}
+        initialBody={feedback?.body ?? ''}
+        updatedAt={feedback?.updated_at ?? null}
       />
     </main>
   );

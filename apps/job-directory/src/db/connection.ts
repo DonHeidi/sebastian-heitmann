@@ -29,6 +29,33 @@ CREATE TABLE IF NOT EXISTS briefings (
   created_at  TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS shortlist (
+  job_id      TEXT PRIMARY KEY REFERENCES jobs(id) ON DELETE CASCADE,
+  added_at    TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS feedback (
+  job_id      TEXT PRIMARY KEY REFERENCES jobs(id) ON DELETE CASCADE,
+  body        TEXT NOT NULL,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS outreach (
+  job_id      TEXT PRIMARY KEY REFERENCES jobs(id) ON DELETE CASCADE,
+  body        TEXT NOT NULL,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS job_status (
+  job_id      TEXT PRIMARY KEY REFERENCES jobs(id) ON DELETE CASCADE,
+  status      TEXT NOT NULL CHECK (status IN (
+    'new', 'not_considered', 'selected', 'applied', 'rejected', 'further_steps'
+  )),
+  updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
 `;
 
 let cached: Database.Database | undefined;

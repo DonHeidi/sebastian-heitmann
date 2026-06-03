@@ -1,58 +1,60 @@
 import { createServerFn } from '@tanstack/react-start';
-import { marked } from 'marked';
 import {
   listJobs as listJobRows,
   getJobRow,
   listBriefings as listBriefingRows,
   getBriefingRow,
 } from '../db/repo';
-import type { JobRow, BriefingRow } from '../db/schemas';
+import {
+  rowToBriefing,
+  rowToJob,
+  type BriefingView,
+  type JobView,
+} from './views';
+import {
+  addToShortlist,
+  listShortlist,
+  removeFromShortlist,
+  type AddResult,
+  type RemoveResult,
+  type ShortlistEntry,
+} from './shortlist';
+import {
+  clearFeedback,
+  getFeedback,
+  setFeedback,
+  type ClearResult as FeedbackClearResult,
+  type Feedback,
+  type SaveResult as FeedbackSaveResult,
+} from './feedback';
+import {
+  clearOutreach,
+  getOutreach,
+  setOutreach,
+  type ClearResult as OutreachClearResult,
+  type Outreach,
+  type SaveResult as OutreachSaveResult,
+} from './outreach';
+import {
+  clearStatus,
+  getStatus,
+  listAllStatuses,
+  setStatus,
+  type ClearResult as StatusClearResult,
+  type JobStatus,
+  type JobStatusValue,
+  type SaveResult as StatusSaveResult,
+} from './status';
 
-export type JobView = {
-  id: string;
-  title: string;
-  company: string;
-  location: string | null;
-  url: string;
-  posted_at: string | null;
-  tags: string[];
-  remote: boolean | null;
-  fit: 'top' | 'borderline' | 'skip' | null;
-  body: string;
-  html: string;
+export type {
+  JobView,
+  BriefingView,
+  ShortlistEntry,
+  Feedback,
+  Outreach,
+  JobStatus,
+  JobStatusValue,
 };
-
-export type BriefingView = {
-  id: string;
-  date: string;
-  body: string;
-  html: string;
-};
-
-function rowToJob(row: JobRow): JobView {
-  return {
-    id: row.id,
-    title: row.title,
-    company: row.company,
-    location: row.location,
-    url: row.url,
-    posted_at: row.posted_at,
-    tags: JSON.parse(row.tags) as string[],
-    remote: row.remote == null ? null : Boolean(row.remote),
-    fit: row.fit,
-    body: row.body,
-    html: marked.parse(row.body, { async: false }) as string,
-  };
-}
-
-function rowToBriefing(row: BriefingRow): BriefingView {
-  return {
-    id: row.id,
-    date: row.date,
-    body: row.body,
-    html: marked.parse(row.body, { async: false }) as string,
-  };
-}
 
 export const fetchJobs = createServerFn({ method: 'GET' }).handler(() => {
   return listJobRows().map(rowToJob);
@@ -75,3 +77,63 @@ export const fetchBriefing = createServerFn({ method: 'GET' })
     const row = getBriefingRow(data);
     return row ? rowToBriefing(row) : null;
   });
+
+export const fetchShortlist = createServerFn({ method: 'GET' }).handler(
+  (): ShortlistEntry[] => listShortlist(),
+);
+
+export const shortlistJob = createServerFn({ method: 'POST' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): AddResult => addToShortlist(data));
+
+export const unshortlistJob = createServerFn({ method: 'POST' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): RemoveResult => removeFromShortlist(data));
+
+export const fetchFeedback = createServerFn({ method: 'GET' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): Feedback | null => getFeedback(data));
+
+export const saveFeedback = createServerFn({ method: 'POST' })
+  .inputValidator((input: { job_id: string; body: string }) => input)
+  .handler(
+    ({ data }): FeedbackSaveResult => setFeedback(data.job_id, data.body),
+  );
+
+export const removeFeedback = createServerFn({ method: 'POST' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): FeedbackClearResult => clearFeedback(data));
+
+export const fetchOutreach = createServerFn({ method: 'GET' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): Outreach | null => getOutreach(data));
+
+export const saveOutreach = createServerFn({ method: 'POST' })
+  .inputValidator((input: { job_id: string; body: string }) => input)
+  .handler(
+    ({ data }): OutreachSaveResult => setOutreach(data.job_id, data.body),
+  );
+
+export const removeOutreach = createServerFn({ method: 'POST' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): OutreachClearResult => clearOutreach(data));
+
+export const fetchJobStatus = createServerFn({ method: 'GET' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): JobStatus => getStatus(data));
+
+export const fetchAllJobStatuses = createServerFn({ method: 'GET' }).handler(
+  (): Record<string, JobStatusValue> => listAllStatuses(),
+);
+
+export const saveJobStatus = createServerFn({ method: 'POST' })
+  .inputValidator(
+    (input: { job_id: string; status: JobStatusValue }) => input,
+  )
+  .handler(
+    ({ data }): StatusSaveResult => setStatus(data.job_id, data.status),
+  );
+
+export const removeJobStatus = createServerFn({ method: 'POST' })
+  .inputValidator((jobId: string) => jobId)
+  .handler(({ data }): StatusClearResult => clearStatus(data));

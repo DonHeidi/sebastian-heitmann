@@ -1,5 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { fetchJobs } from '../../server/content';
+import { fetchAllJobStatuses, fetchJobs } from '../../server/content';
+import {
+  JOB_STATUS_LABELS,
+  type JobStatusValue,
+} from '../../lib/job-status';
 import { formatDate } from '../../lib/format';
 import styles from './index.module.scss';
 
@@ -18,7 +22,10 @@ export const Route = createFileRoute('/jobs/')({
     ],
   }),
   loader: async () => {
-    const jobs = await fetchJobs();
+    const [jobs, statuses] = await Promise.all([
+      fetchJobs(),
+      fetchAllJobStatuses(),
+    ]);
     return {
       jobs: jobs.sort((a, b) => {
         const ar = a.fit ? fitOrder[a.fit] : 2;
@@ -28,13 +35,22 @@ export const Route = createFileRoute('/jobs/')({
         const bd = b.posted_at ? new Date(b.posted_at).getTime() : 0;
         return bd - ad;
       }),
+      statuses,
     };
   },
   component: JobsIndex,
 });
 
 function JobsIndex() {
-  const { jobs } = Route.useLoaderData();
+  const { jobs, statuses } = Route.useLoaderData();
+
+  const statusClass = (s: JobStatusValue) => {
+    if (s === 'selected' || s === 'applied') return styles.statusActive;
+    if (s === 'further_steps') return styles.statusGood;
+    if (s === 'rejected') return styles.statusRejected;
+    if (s === 'not_considered') return styles.statusMuted;
+    return styles.statusNew;
+  };
 
   const fitClass = (fit?: string | null) => {
     if (fit === 'top') return styles.jobTop;
@@ -82,6 +98,18 @@ function JobsIndex() {
                   )}
                 </div>
                 <p className={styles.sub}>
+                  {(() => {
+                    const s: JobStatusValue = statuses[job.id] ?? 'new';
+                    if (s === 'new') return null;
+                    return (
+                      <>
+                        <span className={statusClass(s)}>
+                          {JOB_STATUS_LABELS[s]}
+                        </span>
+                        <span className={styles.dot}>·</span>
+                      </>
+                    );
+                  })()}
                   {job.fit && (
                     <>
                       <span className={fitLabelClass(job.fit)}>

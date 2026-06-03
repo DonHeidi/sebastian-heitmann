@@ -162,3 +162,19 @@
 .fitTop { composes: fit; color: var(--v8-accent); }
 .fitBorderline { composes: fit; color: var(--v8-text-secondary); }
 .fitSkip { composes: fit; color: var(--v8-text-faint); }
+
+.statusPill {
+  font-family: var(--v8-font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--v8-border);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+}
+
+.statusNew      { composes: statusPill; color: var(--v8-text-muted); }
+.statusActive   { composes: statusPill; color: var(--v8-accent);        border-color: var(--v8-border-accent); }
+.statusGood     { composes: statusPill; color: var(--v8-accent-status); border-color: var(--v8-accent-status); }
+.statusRejected { composes: statusPill; color: var(--v8-text-faint); opacity: 0.85; }
+.statusMuted    { composes: statusPill; color: var(--v8-text-faint); }

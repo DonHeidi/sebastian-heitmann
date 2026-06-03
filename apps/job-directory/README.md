@@ -18,6 +18,10 @@ Tables:
 
 - `jobs` — one row per posting, keyed by slug.
 - `briefings` — one row per scan run, keyed by `YYYY-MM-DD` date.
+- `shortlist` — one row per shortlisted job, keyed by `job_id` with `ON DELETE CASCADE` from `jobs`.
+- `feedback` — one row per job (1:1), `body` text. Captures the curator's free-form notes on each posting for the upstream agent to consume as training signal.
+- `outreach` — one row per job (1:1), `body` markdown. The drafted outreach message for the posting. Read paths return rendered HTML alongside the raw body.
+- `job_status` — one row per job (1:1), `status` enum (`new`, `not_considered`, `selected`, `applied`, `rejected`, `further_steps`). Absence of a row is the implicit `new` state. Captures where the posting sits in the application funnel.
 
 The site prerenders the DB at `bun run build` time, so the DB file must exist before a build. For now the DB is checked into git as binary; this trade-off can change when a deploy story emerges.
 
@@ -34,6 +38,18 @@ The site prerenders the DB at `bun run build` time, so the DB file must exist be
 | `GET /api/jobs` | List all jobs (auth required). |
 | `POST /api/briefings` | Create or update a briefing. |
 | `GET /api/briefings` | List all briefings (auth required). |
+| `GET /api/shortlist` | List shortlisted jobs (auth required). |
+| `POST /api/shortlist` | Add a job to the shortlist. |
+| `DELETE /api/shortlist/<job_id>` | Remove a job from the shortlist. |
+| `GET /api/feedback/<job_id>` | Get the feedback for a job (404 if none). |
+| `PUT /api/feedback/<job_id>` | Create or replace feedback for a job. |
+| `DELETE /api/feedback/<job_id>` | Clear feedback for a job. |
+| `GET /api/outreach/<job_id>` | Get the outreach draft for a job (404 if none). |
+| `PUT /api/outreach/<job_id>` | Create or replace the outreach draft. |
+| `DELETE /api/outreach/<job_id>` | Clear the outreach draft. |
+| `GET /api/status/<job_id>` | Get the status for a job (returns `new` if none set). |
+| `PUT /api/status/<job_id>` | Set the status. Body: `{ "status": "applied" }`. |
+| `DELETE /api/status/<job_id>` | Reset to implicit `new`. |
 
 ## API
 
@@ -96,6 +112,60 @@ curl -X POST http://localhost:3000/api/briefings \
     "body": "## Top serious candidates\n\n..."
   }'
 ```
+
+### Shortlist
+
+`GET /api/shortlist` returns `{ shortlist: ShortlistEntry[] }`, where each entry is a full job view plus an `added_at` timestamp, ordered newest-first.
+
+`POST /api/shortlist` adds a job. Body: `{ "job_id": "<slug>" }`. Returns:
+
+- `201` with `{ status: "added", entry }` on a new add.
+- `200` with `{ status: "already_shortlisted", entry }` if the job was already on the list.
+- `404` with `{ error: "job_not_found" }` if the slug doesn't exist in `jobs`.
+- `422` on a malformed body.
+
+`DELETE /api/shortlist/<job_id>` removes a job. Always `200`; the body reports `{ status: "removed" | "not_shortlisted", job_id }` so the call is idempotent.
+
+```bash
+curl -X POST http://localhost:3000/api/shortlist \
+  -H "Authorization: Bearer $JOB_DIRECTORY_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"job_id": "acme-staff-platform-engineer"}'
+
+curl -X DELETE http://localhost:3000/api/shortlist/acme-staff-platform-engineer \
+  -H "Authorization: Bearer $JOB_DIRECTORY_API_TOKEN"
+```
+
+### Internal access
+
+Server functions in `src/server/content.ts` (`fetchShortlist`, `shortlistJob`, `unshortlistJob`, `fetchFeedback`, `saveFeedback`, `removeFeedback`) wrap the same business logic for use inside route loaders and the in-app form. Both the HTTP API and the server functions delegate to the matching `src/server/{shortlist,feedback}.ts` module.
+
+### Feedback
+
+`GET /api/feedback/<job_id>` returns `{ feedback }` or `404` if there's no row yet.
+
+`PUT /api/feedback/<job_id>` upserts. Body: `{ "body": "..." }`.
+
+- `201` with `{ status: "created", feedback }` on first save.
+- `200` with `{ status: "updated", feedback }` on subsequent saves.
+- `404` if the job slug doesn't exist.
+- `422` on a malformed body.
+
+`DELETE /api/feedback/<job_id>` clears it. Always `200`; reports `{ status: "removed" | "not_found", job_id }`.
+
+The job detail page at `/jobs/<slug>/` also surfaces a TanStack Form + shadcn textarea bound to the same data — saves go through the `saveFeedback` server function, empty saves call `removeFeedback`.
+
+### Outreach
+
+Same shape as feedback, with markdown rendering on read.
+
+`GET /api/outreach/<job_id>` returns `{ outreach }` where `outreach = { job_id, body, html, created_at, updated_at }`. `404` if no row.
+
+`PUT /api/outreach/<job_id>` upserts. Body: `{ "body": "markdown..." }`. Same 201/200/404/422 shape as feedback. Response includes the rendered `html` so callers don't need their own markdown renderer.
+
+`DELETE /api/outreach/<job_id>` clears it. Idempotent — always `200`.
+
+Server functions: `fetchOutreach`, `saveOutreach`, `removeOutreach` (same signatures as the feedback trio).
 
 ## Seed script
 

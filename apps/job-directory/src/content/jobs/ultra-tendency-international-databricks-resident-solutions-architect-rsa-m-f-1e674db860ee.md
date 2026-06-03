@@ -1,0 +1,29 @@
+---
+title: "Databricks Resident Solutions Architect (RSA) (m/f/*)"
+company: "Ultra Tendency International"
+url: "https://www.linkedin.com/jobs/view/4423237386/"
+location: "Deutschland (Remote)"
+posted_at: 2026-06-02
+tags: ["linkedin-personal", "linkedin-scraped", "scraped from visible LinkedIn search pag", "possible-match", "remote"]
+remote: true
+---
+
+Imported from the public job-search scan generated at `2026-06-02T00:01:18Z`.
+
+## Agent scoring notes
+
+- Score: `45`
+- Source: `linkedin-personal`
+- Query: `linkedin-scraped-20260601T230651Z-shard1of7.json`
+- Reasons:
+  - `+9 architect`
+  - `+12 hamburg`
+  - `+2 remote`
+  - `+22 location:hamburg`
+- Duplicate sources: linkedin-personal
+- Source URLs:
+  - https://www.linkedin.com/jobs/view/4423237386/
+
+## Posting excerpt
+
+Databricks Resident Solutions Architect (RSA) (m/f/*) Databricks Resident Solutions Architect (RSA) (m/f/*) with verification Ultra Tendency International Deutschland (Remote) Eine Unternehmensprüfung dauert in der Regel 1 Woche Anzeige Einfach bewerben

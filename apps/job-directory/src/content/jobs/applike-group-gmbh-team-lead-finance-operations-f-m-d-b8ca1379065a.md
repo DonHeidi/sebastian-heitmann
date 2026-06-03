@@ -6,6 +6,7 @@ location: "Hamburg"
 posted_at: 2026-06-01
 tags: ["arbeitnow", "Finance", "possible-match"]
 remote: false
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-06-01T00:00:43Z`.

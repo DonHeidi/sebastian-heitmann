@@ -6,6 +6,7 @@ location: "Hamburg, Deutschland · Vor 2 Wochen · 5 Kandidat:innen haben auf �
 posted_at: 2026-06-01
 tags: ["linkedin-personal", "linkedin-scraped", "scraped from visible LinkedIn search pag", "strong-match"]
 remote: false
+fit: top
 ---
 
 Imported from the public job-search scan generated at `2026-06-01T00:00:43Z`.

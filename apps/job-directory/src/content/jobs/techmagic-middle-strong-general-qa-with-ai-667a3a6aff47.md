@@ -6,6 +6,7 @@ location: "Ukraine"
 posted_at: 2026-06-01
 tags: ["jobicy", "Software Engineering", "Full-Time", "Midweight", "strong-match"]
 remote: false
+fit: skip
 ---
 
 Imported from the public job-search scan generated at `2026-06-01T00:00:43Z`.

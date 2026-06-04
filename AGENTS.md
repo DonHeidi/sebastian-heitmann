@@ -9,8 +9,7 @@ Bun workspaces monorepo containing the personal portfolio website and supporting
 ```
 apps/
 ├── website/          # Astro 6 portfolio site
-├── mail-service/     # Scaleway serverless contact form handler
-└── job-directory/    # TanStack Start job listing app (SQLite + prerender)
+└── mail-service/     # Scaleway serverless contact form handler
 infra/                # Terraform — Scaleway project, function, object storage, CDN
 docs/                 # Shared project documentation
 ```
@@ -20,7 +19,6 @@ docs/                 # Shared project documentation
 - **Runtime/Package Manager:** Bun (managed via mise) with workspaces
 - **Website:** Astro 6, SCSS, TypeScript
 - **Mail Service:** TypeScript, Scaleway Transactional Email API
-- **Job Directory:** TanStack Start (React 19, Vite, prerender), SQLite (better-sqlite3)
 - **Infrastructure:** Terraform (Scaleway provider ~> 2.0)
 
 ## Commands

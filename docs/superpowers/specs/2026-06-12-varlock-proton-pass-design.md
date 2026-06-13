@@ -121,7 +121,22 @@ TF_VAR_mail_recipient=protonPass(pass://sebastian-heitmann/mail/recipient)
 
 Both scripts run their Scaleway-touching commands under `varlock run`, which injects `SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, and `SCW_DEFAULT_ORGANIZATION_ID` into the environment. The `scw` CLI reads these env vars natively, so `scw account project list` resolves the project ID without `~/.config/scw/config.yaml`. From there the existing `AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}"` derivation (Terraform state backend auth) is unchanged.
 
-**Per-machine prerequisites (not secrets):** `bun`, `terraform` (≥ 1.10), `scw` CLI, `pass-cli`, `bun install` (for `@varlock/proton-pass-plugin`), and a repo checkout. The only auth step is `pass-cli` login with a personal access token scoped to the `sebastian-heitmann` vault.
+**Per-machine prerequisites (not secrets):** the toolchain is pinned via mise (see below), so setup is `mise install` + `bun install` + `pass-cli login`. The only auth step is `pass-cli` login with a personal access token scoped to the `sebastian-heitmann` vault.
+
+## Toolchain (mise)
+
+The repo already pins `bun` in the root `mise.toml`. This design extends it to pin the rest of the deploy toolchain so any machine resolves identical binaries:
+
+```toml
+[tools]
+bun = "latest"
+terraform = "<pinned exact, ≥ 1.10>"   # ≥ 1.10 required for S3-native state locking (use_lockfile)
+scaleway = "<pinned exact>"            # provides the `scw` binary (aqua:scaleway/scaleway-cli)
+```
+
+- **Exact versions** are pinned (not `latest`) for reproducibility; resolve the current `terraform` and `scaleway` versions at implementation and write them in. `terraform` must stay ≥ 1.10.
+- **`pass-cli`** is *not* in the mise registry, so it stays a documented install (`curl -fsSL https://proton.me/download/pass-cli/install.sh | bash`), or wired via mise's `ubi:` backend if it ships GitHub releases — verify at implementation.
+- **`varlock` + `@varlock/proton-pass-plugin`** are workspace dev dependencies resolved by `bun install`; they are not pinned through mise.
 
 ## Cleanup baked into this work
 
@@ -139,7 +154,7 @@ Terraform continues to self-generate `TEM_SECRET_KEY` and inject the function's 
 ## Onboarding
 
 Documented in `AGENTS.md`:
-1. `bun add -D varlock @varlock/proton-pass-plugin` (workspace dev dependencies).
+1. `mise install` (bun, terraform, scaleway CLI) + `bun install` (adds `varlock` + `@varlock/proton-pass-plugin`).
 2. Install `pass-cli` (`curl -fsSL https://proton.me/download/pass-cli/install.sh | bash`) and authenticate with a personal access token scoped to the `sebastian-heitmann` vault.
 3. Create the `sebastian-heitmann` vault and the three items/fields above.
 4. Run any app via its existing `bun run dev` (now wrapped); deploy via the existing scripts.
@@ -147,7 +162,7 @@ Documented in `AGENTS.md`:
 ## Files touched
 
 - **Add:** `apps/website/.env.schema`, `apps/mail-service/.env.schema`, `apps/job-directory/.env.schema`, `infra/.env.schema`.
-- **Modify:** the three apps' `package.json` scripts; `scripts/apply-infra.sh`; `scripts/deploy-website.sh`; `infra/variables.tf` / `terraform.tfvars` (drop `mail_recipient` from tfvars); `AGENTS.md`; root `package.json` (`varlock` + `@varlock/proton-pass-plugin` dev deps); `.gitignore` (keep ignoring `.env*`, confirm `.env.schema` is *not* ignored).
+- **Modify:** the three apps' `package.json` scripts; `scripts/apply-infra.sh`; `scripts/deploy-website.sh`; `infra/variables.tf` / `terraform.tfvars` (drop `mail_recipient` from tfvars); `AGENTS.md`; root `package.json` (`varlock` + `@varlock/proton-pass-plugin` dev deps); root `mise.toml` (add `terraform` + `scaleway`); `.gitignore` (keep ignoring `.env*`, confirm `.env.schema` is *not* ignored).
 - **Delete (after values are in Proton Pass):** `apps/mail-service/.env`, `apps/website/.env.example`, `apps/mail-service/.env.example`.
 
 ## Testing

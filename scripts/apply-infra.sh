@@ -17,7 +17,9 @@ if [[ -z "${VARLOCK_INJECTED:-}" ]]; then
     exit 1
   fi
   cd "$INFRA_DIR"
-  exec "$VARLOCK" run -- env VARLOCK_INJECTED=1 bash "$SCRIPT_PATH" "$@"
+  # --inject vars (individual env vars, no __VARLOCK_ENV blob) keeps nested `varlock run`
+  # invocations (e.g. wrapped build scripts) resolving their own schema cleanly.
+  exec "$VARLOCK" run --inject vars -- env VARLOCK_INJECTED=1 bash "$SCRIPT_PATH" "$@"
 fi
 
 # --- below runs with secrets injected by varlock ---

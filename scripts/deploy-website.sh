@@ -13,7 +13,9 @@ VARLOCK="$ROOT_DIR/node_modules/.bin/varlock"
 # varlock loads infra/.env.schema from the infra directory (the cwd at exec time).
 if [[ -z "${VARLOCK_INJECTED:-}" ]]; then
   cd "$INFRA_DIR"
-  exec "$VARLOCK" run -- env VARLOCK_INJECTED=1 bash "$SCRIPT_PATH" "$@"
+  # --inject vars (no __VARLOCK_ENV blob) so the website build's own `varlock run`
+  # resolves apps/website/.env.schema fresh and honors the PUBLIC_MAIL_ENDPOINT we set below.
+  exec "$VARLOCK" run --inject vars -- env VARLOCK_INJECTED=1 bash "$SCRIPT_PATH" "$@"
 fi
 
 # --- below runs with secrets injected by varlock ---

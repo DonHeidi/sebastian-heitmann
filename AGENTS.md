@@ -18,6 +18,8 @@ docs/                 # Shared project documentation
 ## Tech Stack
 
 - **Runtime/Package Manager:** Bun (managed via mise) with workspaces
+- **Toolchain:** mise pins `bun`, `terraform`, and `scaleway` (the `scw` CLI) — run `mise install`
+- **Secrets:** [varlock](https://varlock.dev) (`.env.schema` per workspace) + [Proton Pass](https://protonpass.github.io/pass-cli/) via `@varlock/proton-pass-plugin`
 - **Website:** Astro 6, SCSS, TypeScript
 - **Mail Service:** TypeScript, Scaleway Transactional Email API
 - **Job Directory:** TanStack Start (React 19, Vite, prerender), SQLite (better-sqlite3)
@@ -26,8 +28,10 @@ docs/                 # Shared project documentation
 ## Commands
 
 ```bash
-bun install                          # Install all workspace dependencies
-./scripts/apply-infra.sh             # Build mail-service and apply Terraform from infra/terraform.tfvars
+mise install                         # Install pinned toolchain (bun, terraform, scw)
+bun install                          # Install all workspace dependencies (incl. varlock + proton-pass plugin)
+# One-time: install & authenticate pass-cli, create the Proton Pass vault (see Proton Pass vault setup)
+./scripts/apply-infra.sh             # Build mail-service and apply Terraform (secrets via varlock + Proton Pass)
 ./scripts/deploy-website.sh          # Build website and upload dist/ to Scaleway Object Storage
 
 # Website
@@ -131,18 +135,40 @@ The `@<project-id>` suffix is required to target the `sebastian-heitmann-dev` pr
 
 ### Environment Separation
 
-- `infra/terraform.tfvars` is the source of truth for infrastructure inputs such as `mail_sender`, `mail_recipient`, `allowed_origins`, and `tem_domain`
-- `apps/mail-service/.env` is for local function development only; production function environment variables are injected by Terraform
-- `apps/website/.env` is for local website builds; production website deploys derive `PUBLIC_MAIL_ENDPOINT` from Terraform output
+Config is managed by **varlock** — each workspace has a committed `.env.schema` (the single source of truth for its config shape). Non-secret values are committed defaults; sensitive values resolve at runtime from **Proton Pass** via the `protonPass(pass://…)` resolver. Nothing sensitive is written to disk: every command that needs config runs behind `varlock run --` (already wired into the relevant `package.json` scripts and the deploy scripts).
+
+- `infra/terraform.tfvars` holds only **non-secret** infra inputs (`mail_sender`, `allowed_origins`, `tem_domain`, `region`). `mail_recipient` is sensitive (PII) and resolves from Proton Pass as `TF_VAR_mail_recipient`.
+- `infra/.env.schema` supplies the deploy credentials (`SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, `SCW_DEFAULT_ORGANIZATION_ID`) from Proton Pass, so deploys need **no** `~/.config/scw/config.yaml` and work on any machine with vault access.
+- `TEM_SECRET_KEY` is **not** in Proton Pass — Terraform self-generates it (`scaleway_iam_api_key`) and injects it into the function at apply time.
+- `PUBLIC_MAIL_ENDPOINT` has no committed default (infra must be applied first); the website deploy supplies it from `terraform output`.
+
+See `docs/superpowers/specs/2026-06-12-varlock-proton-pass-design.md` for the full design.
+
+### Proton Pass vault setup
+
+One-time, on each machine that develops or deploys:
+
+1. `mise install` (bun, terraform, scw) and `bun install` (adds `varlock` + `@varlock/proton-pass-plugin`).
+2. Install `pass-cli` (`curl -fsSL https://proton.me/download/pass-cli/install.sh | bash`) and authenticate (`pass-cli login`), or use a personal access token scoped to the vault.
+3. Create a Proton Pass vault named **`sebastian-heitmann`** with these items and **exact** field names (the plugin extracts the last `pass://` path segment from `pass-cli item view --output json`):
+
+   | Item | Field(s) |
+   |------|----------|
+   | `scaleway` | `access-key`, `secret-key`, `org-id` |
+   | `job-directory` | `api-token` |
+   | `mail` | `recipient` |
+
+After setup, `bun run dev` in any app and the deploy scripts resolve secrets automatically. Migrate the existing `apps/mail-service/.env` values into the vault, then delete that file.
 
 ### Deployment
 
-Order matters: function must deploy before website build (endpoint baked in at build time).
+Order matters: function must deploy before website build (endpoint baked in at build time). Prerequisite: `mise install`, `bun install`, and an authenticated `pass-cli` session (see above).
 
 ```bash
 # 1. Copy and fill in infra/terraform.tfvars from infra/terraform.tfvars.example
+#    (mail_recipient is NOT set there — it comes from Proton Pass)
 
-# 2. Apply infrastructure
+# 2. Apply infrastructure (varlock injects SCW creds + TF_VAR_mail_recipient from Proton Pass)
 ./scripts/apply-infra.sh -auto-approve
 
 # 3. Build and deploy website
@@ -162,8 +188,10 @@ Scaleway serverless function that receives contact form submissions and sends em
 | `TEM_SECRET_KEY` | Scaleway API secret key (managed by Terraform IAM) |
 | `TEM_PROJECT_ID` | Scaleway project ID (auto-filled by Terraform) |
 | `TEM_REGION` | TEM API region (default: `fr-par`) |
-| `MAIL_RECIPIENT` | Email address to receive contact form messages |
+| `MAIL_RECIPIENT` | Email address to receive contact form messages (local: from Proton Pass `mail/recipient`; prod: Terraform) |
 | `MAIL_SENDER` | Sender email address (verified domain: `contact.sebastian-heitmann.dev`) |
+
+Locally, these resolve from `apps/mail-service/.env.schema` via `varlock run` (see Environment Separation). In production they are injected by Terraform.
 
 ---
 

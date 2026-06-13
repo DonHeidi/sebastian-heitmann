@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "bun build src/handler.ts --outdir dist --target node && cd dist && zip handler.zip handler.js",
-    "dev": "bun run --watch src/handler.ts"
+    "dev": "varlock run -- bun run --watch src/handler.ts"
   },
   "dependencies": {},
   "devDependencies": {

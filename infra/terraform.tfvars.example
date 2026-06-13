@@ -1,5 +1,6 @@
-region         = "nl-ams"
-tem_domain     = "contact.sebastian-heitmann.dev"
-mail_recipient = "you@example.com"
-mail_sender    = "contact@contact.sebastian-heitmann.dev"
+# mail_recipient is NOT set here — it is sensitive (PII) and resolves from Proton Pass
+# as TF_VAR_mail_recipient, injected by `varlock run` in scripts/apply-infra.sh.
+region          = "nl-ams"
+tem_domain      = "contact.sebastian-heitmann.dev"
+mail_sender     = "contact@contact.sebastian-heitmann.dev"
 allowed_origins = "https://www.sebastian-heitmann.dev,https://sebastian-heitmann.dev"

@@ -2,29 +2,31 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_PATH="$ROOT_DIR/scripts/deploy-website.sh"
 INFRA_DIR="$ROOT_DIR/infra"
 WEBSITE_DIR="$ROOT_DIR/apps/website"
-SCW_CONFIG="${HOME}/.config/scw/config.yaml"
 PROJECT_NAME="sebastian-heitmann-dev"
+VARLOCK="$ROOT_DIR/node_modules/.bin/varlock"
 
-if [[ ! -f "$SCW_CONFIG" ]]; then
-  echo "Missing Scaleway CLI config at $SCW_CONFIG." >&2
-  exit 1
+# Re-exec under `varlock run` so Scaleway credentials (SCW_ACCESS_KEY, SCW_SECRET_KEY,
+# SCW_DEFAULT_ORGANIZATION_ID) come from Proton Pass — no ~/.config/scw/config.yaml needed.
+# varlock loads infra/.env.schema from the infra directory (the cwd at exec time).
+if [[ -z "${VARLOCK_INJECTED:-}" ]]; then
+  cd "$INFRA_DIR"
+  exec "$VARLOCK" run -- env VARLOCK_INJECTED=1 bash "$SCRIPT_PATH" "$@"
 fi
 
-SCW_ACCESS_KEY="$(grep access_key "$SCW_CONFIG" | awk '{print $2}')"
-SCW_SECRET_KEY="$(grep secret_key "$SCW_CONFIG" | awk '{print $2}')"
+# --- below runs with secrets injected by varlock ---
 
+# The scw CLI authenticates from the SCW_* env vars varlock provides.
 PROJECT_ID=$(scw account project list -o json | jq -r --arg n "$PROJECT_NAME" '.[] | select(.name == $n) | .id')
 if [[ -z "$PROJECT_ID" ]]; then
-  echo "Could not resolve Scaleway project '$PROJECT_NAME' via scw CLI. Check ~/.config/scw/config.yaml." >&2
+  echo "Could not resolve Scaleway project '$PROJECT_NAME' via scw CLI." >&2
   exit 1
 fi
 
-if [[ -z "${AWS_ACCESS_KEY_ID:-}" || -z "${AWS_SECRET_ACCESS_KEY:-}" ]]; then
-  export AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}"
-  export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
-fi
+export AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}"
+export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
 
 FUNCTION_ENDPOINT="$(cd "$INFRA_DIR" && terraform output -raw function_endpoint)"
 
@@ -43,8 +45,6 @@ while IFS= read -r -d '' file; do
   fi
 done < <(find dist/_astro -maxdepth 1 -type f -print0)
 
-AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}" \
-AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY" \
 aws s3 cp dist/ s3://sebastian-heitmann-website/ \
   --acl public-read \
   --endpoint-url https://s3.nl-ams.scw.cloud \

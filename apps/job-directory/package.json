@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite dev",
+    "dev": "varlock run -- vite dev",
     "build": "vite build",
     "preview": "vite preview"
   },

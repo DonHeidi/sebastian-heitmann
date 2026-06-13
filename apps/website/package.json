@@ -4,8 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "varlock run -- astro dev",
+    "build": "varlock run -- astro build",
     "preview": "astro preview"
   },
   "devDependencies": {

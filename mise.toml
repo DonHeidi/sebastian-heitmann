@@ -1,2 +1,6 @@
 [tools]
 bun = "latest"
+# Pinned exact for reproducible deploys across machines. terraform must stay >= 1.10
+# for S3-native state locking (use_lockfile). scaleway provides the `scw` binary.
+terraform = "1.14.7"
+scaleway = "2.53.0"

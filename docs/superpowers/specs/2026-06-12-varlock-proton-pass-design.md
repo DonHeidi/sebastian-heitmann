@@ -36,7 +36,7 @@ Single vault, **grouped by service boundary** (one item per service, related fie
 
 ```
 Vault: sebastian-heitmann
-├── item "scaleway"      → fields: access-key, secret-key, org-id, project-id
+├── item "scaleway"      → fields: access-key, secret-key, org-id
 ├── item "job-directory" → field:  api-token
 └── item "mail"          → field:  recipient
 ```
@@ -99,17 +99,29 @@ JOB_DIRECTORY_DB=./data/jobs.db
 SCW_ACCESS_KEY=protonPass(pass://sebastian-heitmann/scaleway/access-key)
 # @sensitive @required
 SCW_SECRET_KEY=protonPass(pass://sebastian-heitmann/scaleway/secret-key)
+# @required
+SCW_DEFAULT_ORGANIZATION_ID=protonPass(pass://sebastian-heitmann/scaleway/org-id)
 # @sensitive @type=email
 TF_VAR_mail_recipient=protonPass(pass://sebastian-heitmann/mail/recipient)
 ```
 
-> **Implementation note:** confirm the exact `@plugin`/`@initProtonPass` header form against the installed plugin version, and that local resolution reuses the authenticated `pass-cli` session without requiring `@initProtonPass()` credentials. The `org-id`/`project-id` Scaleway fields are exported as `SCW_DEFAULT_ORGANIZATION_ID`/`SCW_DEFAULT_PROJECT_ID` only if a deploy path needs them (verify during implementation; `apply-infra.sh` resolves the project ID via `scw account project list`).
+`SCW_DEFAULT_ORGANIZATION_ID` is supplied so the `scw` CLI authenticates purely from env (see Deployment portability) — its `scw account project list` lookup then needs no `~/.config/scw/config.yaml`. The project ID itself stays dynamically resolved via that lookup, so no `project-id` field is required in Proton Pass.
+
+> **Implementation note:** confirm the exact `@plugin`/`@initProtonPass` header form against the installed plugin version, and that local resolution reuses the authenticated `pass-cli` session without requiring `@initProtonPass()` credentials.
 
 ## Delivery: the `varlock run` wrapper
 
 - **package.json scripts** gain a `varlock run --` prefix, e.g. `apps/website` `"dev": "varlock run -- astro dev"`, `"build": "varlock run -- astro build"`; equivalents for `mail-service` and `job-directory`.
 - **`scripts/apply-infra.sh`**: remove the `SCW_ACCESS_KEY`/`SCW_SECRET_KEY` presence check and the "source `apps/mail-service/.env`" guidance. Run Terraform as `cd "$INFRA_DIR" && varlock run -- terraform apply "$@"`. The `AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}"` derivation stays in bash (varlock supplies the `SCW_*` halves into the child env; the `scw account project list` lookup for `PROJECT_ID` is unchanged). `mail_recipient` reaches Terraform as `TF_VAR_mail_recipient` and is removed from `terraform.tfvars`.
 - **`scripts/deploy-website.sh`**: replace the `grep`/`awk` over `~/.config/scw/config.yaml` with `varlock run` supplying `SCW_ACCESS_KEY`/`SCW_SECRET_KEY`; the `AWS_*` derivation and `terraform output` steps are unchanged.
+
+## Deployment portability
+
+**Goal:** any machine with the toolchain and an authenticated `pass-cli` session (vault access) can deploy — no machine-local Scaleway config required.
+
+Both scripts run their Scaleway-touching commands under `varlock run`, which injects `SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, and `SCW_DEFAULT_ORGANIZATION_ID` into the environment. The `scw` CLI reads these env vars natively, so `scw account project list` resolves the project ID without `~/.config/scw/config.yaml`. From there the existing `AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}"` derivation (Terraform state backend auth) is unchanged.
+
+**Per-machine prerequisites (not secrets):** `bun`, `terraform` (≥ 1.10), `scw` CLI, `pass-cli`, `bun install` (for `@varlock/proton-pass-plugin`), and a repo checkout. The only auth step is `pass-cli` login with a personal access token scoped to the `sebastian-heitmann` vault.
 
 ## Cleanup baked into this work
 

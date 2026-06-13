@@ -6,6 +6,8 @@ abstract: "Many companies will buy AI tools, train employees, and still fail to 
 type: "article"
 tags: ["AI Adoption", "Leadership", "Operating Model", "AI Strategy", "Digitalisation", "Organisational Change"]
 author: "sebastian-heitmann"
+headerImage: "../../assets/articles/ai-adoption-not-tooling-heading.webp"
+headerDetailImage: "../../assets/articles/ai-adoption-not-tooling-detail.webp"
 publishedAt: 2026-05-23
 authorship: "ai-assisted"
 draft: false

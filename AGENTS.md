@@ -31,6 +31,7 @@ bun install                          # Install all workspace dependencies (incl.
 # One-time: install & authenticate pass-cli, create the Proton Pass vault (see Proton Pass vault setup)
 ./scripts/apply-infra.sh             # Build mail-service and apply Terraform (secrets via varlock + Proton Pass)
 ./scripts/deploy-website.sh          # Build website and upload dist/ to Scaleway Object Storage
+./scripts/scw <args...>              # Run the Scaleway CLI with creds from Proton Pass (no ~/.config/scw needed)
 
 # Website
 cd apps/website
@@ -136,7 +137,7 @@ The `@<project-id>` suffix is required to target the `sebastian-heitmann-dev` pr
 Config is managed by **varlock** — each workspace has a committed `.env.schema` (the single source of truth for its config shape). Non-secret values are committed defaults; sensitive values resolve at runtime from **Proton Pass** via the `protonPass(pass://…)` resolver. Nothing sensitive is written to disk: every command that needs config runs behind `varlock run --` (already wired into the relevant `package.json` scripts and the deploy scripts).
 
 - `infra/terraform.tfvars` holds only **non-secret** infra inputs (`mail_sender`, `allowed_origins`, `tem_domain`, `region`). `mail_recipient` is sensitive (PII) and resolves from Proton Pass as `TF_VAR_mail_recipient`.
-- `infra/.env.schema` supplies the deploy credentials (`SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, `SCW_DEFAULT_ORGANIZATION_ID`) from Proton Pass, so deploys need **no** `~/.config/scw/config.yaml` and work on any machine with vault access.
+- `infra/.env.schema` supplies the deploy credentials (`SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, `SCW_DEFAULT_ORGANIZATION_ID`) from Proton Pass, so deploys need **no** `~/.config/scw/config.yaml` and work on any machine with vault access. There is no `config.yaml` — run ad-hoc Scaleway commands via `./scripts/scw <args>`, which injects the creds from Proton Pass (region-specific commands may need a `--region` flag).
 - `TEM_SECRET_KEY` is **not** in Proton Pass — Terraform self-generates it (`scaleway_iam_api_key`) and injects it into the function at apply time.
 - `PUBLIC_MAIL_ENDPOINT` has no committed default (infra must be applied first); the website deploy supplies it from `terraform output`.
 

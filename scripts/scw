@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Run the Scaleway CLI with credentials resolved from Proton Pass via varlock —
+# no ~/.config/scw/config.yaml required. Usage: ./scripts/scw <scw args...>
+# e.g. ./scripts/scw account project list
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+exec "$ROOT_DIR/node_modules/.bin/varlock" run --path "$ROOT_DIR/infra" -- scw "$@"

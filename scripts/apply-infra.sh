@@ -40,4 +40,7 @@ cd "$MAIL_SERVICE_DIR"
 bun run build
 
 cd "$INFRA_DIR"
+# Initialize the remote backend + providers (idempotent; required on a fresh checkout
+# where .terraform/ does not exist). AWS_* backend auth is already exported above.
+terraform init -input=false
 terraform apply "$@"

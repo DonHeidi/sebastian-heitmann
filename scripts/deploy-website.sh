@@ -30,6 +30,8 @@ fi
 export AWS_ACCESS_KEY_ID="${SCW_ACCESS_KEY}@${PROJECT_ID}"
 export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
 
+# Initialize the remote backend + providers (idempotent; required on a fresh checkout).
+( cd "$INFRA_DIR" && terraform init -input=false >/dev/null )
 FUNCTION_ENDPOINT="$(cd "$INFRA_DIR" && terraform output -raw function_endpoint)"
 
 cd "$WEBSITE_DIR"

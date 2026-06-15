@@ -4,3 +4,5 @@ bun = "latest"
 # for S3-native state locking (use_lockfile). scaleway provides the `scw` binary.
 terraform = "1.14.7"
 scaleway = "2.53.0"
+aws = "2.35.4"       # AWS CLI — uploads the built site to Object Storage (s3 cp) in deploy-website.sh
+jq = "1.8.1"         # JSON parsing in the deploy scripts

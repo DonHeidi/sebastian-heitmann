@@ -9,8 +9,7 @@ Bun workspaces monorepo containing the personal portfolio website and supporting
 ```
 apps/
 ├── website/          # Astro 6 portfolio site
-├── mail-service/     # Scaleway serverless contact form handler
-└── job-directory/    # TanStack Start job listing app (SQLite + prerender)
+└── mail-service/     # Scaleway serverless contact form handler
 infra/                # Terraform — Scaleway project, function, object storage, CDN
 docs/                 # Shared project documentation
 ```
@@ -22,7 +21,6 @@ docs/                 # Shared project documentation
 - **Secrets:** [varlock](https://varlock.dev) (`.env.schema` per workspace) + [Proton Pass](https://protonpass.github.io/pass-cli/) via `@varlock/proton-pass-plugin`
 - **Website:** Astro 6, SCSS, TypeScript
 - **Mail Service:** TypeScript, Scaleway Transactional Email API
-- **Job Directory:** TanStack Start (React 19, Vite, prerender), SQLite (better-sqlite3)
 - **Infrastructure:** Terraform (Scaleway provider ~> 2.0)
 
 ## Commands
@@ -155,7 +153,6 @@ One-time, on each machine that develops or deploys:
    | Item | Field(s) |
    |------|----------|
    | `scaleway` | `access-key`, `secret-key`, `org-id` |
-   | `job-directory` | `api-token` |
    | `mail` | `recipient` |
 
 After setup, `bun run dev` in any app and the deploy scripts resolve secrets automatically. Migrate the existing `apps/mail-service/.env` values into the vault, then delete that file.

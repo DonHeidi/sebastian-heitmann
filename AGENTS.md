@@ -26,7 +26,8 @@ docs/                 # Shared project documentation
 ## Commands
 
 ```bash
-mise install                         # Install pinned toolchain (bun, terraform, scw)
+mise install                         # Install pinned toolchain (bun, terraform, scw, aws, jq)
+sudo apt install zip                 # System dep for the mail-service build (Debian/Ubuntu/WSL; preinstalled on macOS)
 bun install                          # Install all workspace dependencies (incl. varlock + proton-pass plugin)
 # One-time: install & authenticate pass-cli, create the Proton Pass vault (see Proton Pass vault setup)
 ./scripts/apply-infra.sh             # Build mail-service and apply Terraform (secrets via varlock + Proton Pass)
@@ -147,7 +148,7 @@ See `docs/superpowers/specs/2026-06-12-varlock-proton-pass-design.md` for the fu
 
 One-time, on each machine that develops or deploys:
 
-1. `mise install` (bun, terraform, scw) and `bun install` (adds `varlock` + `@varlock/proton-pass-plugin`).
+1. Install `mise` and system `zip` (`sudo apt install zip` on Debian/Ubuntu/WSL; preinstalled on macOS), then run `mise install` (bun, terraform, scw, aws, jq) and `bun install` (adds `varlock` + `@varlock/proton-pass-plugin`).
 2. Install `pass-cli` (`curl -fsSL https://proton.me/download/pass-cli/install.sh | bash`) and authenticate (`pass-cli login`), or use a personal access token scoped to the vault.
 3. Create a Proton Pass vault named **`sebastian-heitmann`** with these items and **exact** field names (the plugin extracts the last `pass://` path segment from `pass-cli item view --output json`):
 

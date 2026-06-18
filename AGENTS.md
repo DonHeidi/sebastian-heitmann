@@ -136,7 +136,7 @@ The `@<project-id>` suffix is required to target the `sebastian-heitmann-dev` pr
 
 Config is managed by **varlock** — each workspace has a committed `.env.schema` (the single source of truth for its config shape). Non-secret values are committed defaults; sensitive values resolve at runtime from **Proton Pass** via the `protonPass(pass://…)` resolver. Nothing sensitive is written to disk: every command that needs config runs behind `varlock run --` (already wired into the relevant `package.json` scripts and the deploy scripts).
 
-- `infra/terraform.tfvars` holds only **non-secret** infra inputs (`mail_sender`, `allowed_origins`, `tem_domain`, `region`). `mail_recipient` is sensitive (PII) and resolves from Proton Pass as `TF_VAR_mail_recipient`.
+- Non-secret infra inputs (`mail_sender`, `allowed_origins`, `tem_domain`, `region`) live as **defaults in `infra/variables.tf`** — no `terraform.tfvars` is needed (single-environment, non-secret). `mail_recipient` is sensitive (PII) and resolves from Proton Pass as `TF_VAR_mail_recipient`. (Add a `terraform.tfvars` only if you need per-machine overrides; it stays gitignored.)
 - `infra/.env.schema` supplies the deploy credentials (`SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, `SCW_DEFAULT_ORGANIZATION_ID`) from Proton Pass, so deploys need **no** `~/.config/scw/config.yaml` and work on any machine with vault access. There is no `config.yaml` — run ad-hoc Scaleway commands via `./scripts/scw <args>`, which injects the creds from Proton Pass (region-specific commands may need a `--region` flag).
 - `TEM_SECRET_KEY` is **not** in Proton Pass — Terraform self-generates it (`scaleway_iam_api_key`) and injects it into the function at apply time.
 - `PUBLIC_MAIL_ENDPOINT` has no committed default (infra must be applied first); the website deploy supplies it from `terraform output`.
@@ -163,13 +163,11 @@ After setup, `bun run dev` in any app and the deploy scripts resolve secrets aut
 Order matters: function must deploy before website build (endpoint baked in at build time). Prerequisite: `mise install`, `bun install`, and an authenticated `pass-cli` session (see above).
 
 ```bash
-# 1. Copy and fill in infra/terraform.tfvars from infra/terraform.tfvars.example
-#    (mail_recipient is NOT set there — it comes from Proton Pass)
-
-# 2. Apply infrastructure (varlock injects SCW creds + TF_VAR_mail_recipient from Proton Pass)
+# 1. Apply infrastructure (varlock injects SCW creds + TF_VAR_mail_recipient from Proton Pass;
+#    non-secret inputs come from defaults in infra/variables.tf — no terraform.tfvars needed)
 ./scripts/apply-infra.sh -auto-approve
 
-# 3. Build and deploy website
+# 2. Build and deploy website
 ./scripts/deploy-website.sh
 ```
 

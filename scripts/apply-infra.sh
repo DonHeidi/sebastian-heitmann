@@ -12,10 +12,6 @@ VARLOCK="$ROOT_DIR/node_modules/.bin/varlock"
 # SCW_DEFAULT_ORGANIZATION_ID, TF_VAR_mail_recipient) are injected into the environment.
 # varlock loads infra/.env.schema from the infra directory (the cwd at exec time).
 if [[ -z "${VARLOCK_INJECTED:-}" ]]; then
-  if [[ ! -f "$INFRA_DIR/terraform.tfvars" ]]; then
-    echo "Missing infra/terraform.tfvars. Copy infra/terraform.tfvars.example and fill in real values." >&2
-    exit 1
-  fi
   cd "$INFRA_DIR"
   # --inject vars (individual env vars, no __VARLOCK_ENV blob) keeps nested `varlock run`
   # invocations (e.g. wrapped build scripts) resolving their own schema cleanly.

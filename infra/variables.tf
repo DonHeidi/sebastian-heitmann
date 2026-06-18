@@ -30,6 +30,7 @@ variable "mail_recipient" {
 variable "mail_sender" {
   description = "Verified sender email address in Scaleway TEM"
   type        = string
+  default     = "contact@contact.sebastian-heitmann.dev"
 
   validation {
     condition     = can(regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", var.mail_sender)) && endswith(var.mail_sender, "@${var.tem_domain}")

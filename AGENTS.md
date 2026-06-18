@@ -140,7 +140,7 @@ Config is managed by **varlock** — each workspace has a committed `.env.schema
 - Non-secret infra inputs (`mail_sender`, `allowed_origins`, `tem_domain`, `region`) live as **defaults in `infra/variables.tf`** — no `terraform.tfvars` is needed (single-environment, non-secret). `mail_recipient` is sensitive (PII) and resolves from Proton Pass as `TF_VAR_mail_recipient`. (Add a `terraform.tfvars` only if you need per-machine overrides; it stays gitignored.)
 - `infra/.env.schema` supplies the deploy credentials (`SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, `SCW_DEFAULT_ORGANIZATION_ID`) from Proton Pass, so deploys need **no** `~/.config/scw/config.yaml` and work on any machine with vault access. There is no `config.yaml` — run ad-hoc Scaleway commands via `./scripts/scw <args>`, which injects the creds from Proton Pass (region-specific commands may need a `--region` flag).
 - `TEM_SECRET_KEY` is **not** in Proton Pass — Terraform self-generates it (`scaleway_iam_api_key`) and injects it into the function at apply time.
-- `PUBLIC_MAIL_ENDPOINT` has no committed default (infra must be applied first); the website deploy supplies it from `terraform output`.
+- `PUBLIC_MAIL_ENDPOINT` is **optional for local dev** — `bun run dev` runs without it and the contact form is simply inactive locally. `scripts/deploy-website.sh` supplies the real value from `terraform output` at build time (and aborts if it can't resolve it).
 
 See `docs/superpowers/specs/2026-06-12-varlock-proton-pass-design.md` for the full design.
 

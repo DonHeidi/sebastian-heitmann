@@ -33,6 +33,10 @@ export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
 # Initialize the remote backend + providers (idempotent; required on a fresh checkout).
 ( cd "$INFRA_DIR" && terraform init -input=false >/dev/null )
 FUNCTION_ENDPOINT="$(cd "$INFRA_DIR" && terraform output -raw function_endpoint)"
+if [[ -z "$FUNCTION_ENDPOINT" ]]; then
+  echo "Could not resolve function_endpoint from 'terraform output' — has the infrastructure been applied (./scripts/apply-infra.sh)?" >&2
+  exit 1
+fi
 
 cd "$WEBSITE_DIR"
 PUBLIC_MAIL_ENDPOINT="https://${FUNCTION_ENDPOINT}" bun run build

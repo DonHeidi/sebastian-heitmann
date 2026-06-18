@@ -23,6 +23,26 @@ docs/                 # Shared project documentation
 - **Mail Service:** TypeScript, Scaleway Transactional Email API
 - **Infrastructure:** Terraform (Scaleway provider ~> 2.0)
 
+## Prerequisites
+
+The deploy/infra toolchain is managed by [mise](https://mise.jdx.dev) (`mise.toml`):
+`bun`, `terraform` (≥ 1.10, needed for the S3 backend's `use_lockfile`), `aws-cli`
+(S3 upload), and `scaleway-cli` (provides `scw`). Install everything with:
+
+```bash
+mise install                         # Installs bun, terraform, aws-cli, scaleway-cli
+```
+
+Then authenticate Scaleway once — this writes `~/.config/scw/config.yaml`, which both
+deploy scripts read for the access/secret key:
+
+```bash
+scw init                             # Paste your Scaleway API access key + secret (from console → IAM → API keys)
+```
+
+`jq` is also required (system package, not managed by mise). Credentials are never stored
+in the repo; without a valid `~/.config/scw/config.yaml` the deploy scripts exit early.
+
 ## Commands
 
 ```bash

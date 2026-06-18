@@ -35,9 +35,12 @@ That covers browsing the site locally. The contact form needs the mail service r
 
 ## Deployment
 
-Deploys target my own Scaleway project:
+Deploys target my own Scaleway project. The toolchain (Terraform, AWS CLI, Scaleway CLI) is managed by [mise](https://mise.jdx.dev); install it and authenticate Scaleway once:
 
 ```bash
+mise install                  # bun, terraform, aws-cli, scaleway-cli
+scw init                      # writes ~/.config/scw/config.yaml (Scaleway API key + secret)
+
 ./scripts/apply-infra.sh      # Provision/update infrastructure (Terraform)
 ./scripts/deploy-website.sh   # Build website and upload to Scaleway Object Storage
 ```

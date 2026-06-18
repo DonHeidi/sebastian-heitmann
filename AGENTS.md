@@ -17,7 +17,7 @@ docs/                 # Shared project documentation
 ## Tech Stack
 
 - **Runtime/Package Manager:** Bun (managed via mise) with workspaces
-- **Toolchain:** mise pins `bun`, `terraform`, and `scaleway` (the `scw` CLI) — run `mise install`
+- **Toolchain:** mise pins `bun`, `terraform`, `scaleway` (the `scw` CLI), `aws`, and `jq` — run `mise install`. The mail-service build also needs system **`zip`** (preinstalled on macOS; `sudo apt install zip` on Debian/Ubuntu/WSL).
 - **Secrets:** [varlock](https://varlock.dev) (`.env.schema` per workspace) + [Proton Pass](https://protonpass.github.io/pass-cli/) via `@varlock/proton-pass-plugin`
 - **Website:** Astro 6, SCSS, TypeScript
 - **Mail Service:** TypeScript, Scaleway Transactional Email API

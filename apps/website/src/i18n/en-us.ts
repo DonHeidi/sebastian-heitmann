@@ -195,6 +195,7 @@ export const enUs: Strings = {
           'Mobile app for Pool Position GmbH \u2014 porting core web app features to mobile \u2014 TypeScript, React Native, AWS, Pulumi',
           'Digitalization project manager (Oct 2025\u2013Mar 2026) \u2014 advisory and delivery for a rental service',
           'Data & Analytics market consultations \u2014 one-hour analyses for market research and strategy firms',
+          'Authored and published an open-source AI Agent Skill for online writing \u2014 github.com/DonHeidi/online-writing-skills',
           'Personal sabbatical and medical rehabilitation from Jun 2023 to Aug 2024',
         ],
       },
@@ -283,7 +284,7 @@ export const enUs: Strings = {
     skillGroups: [
       {
         label: 'Technologies',
-        skills: ['TypeScript', 'TailwindCSS', 'Python', 'PostgreSQL', 'Next.js', 'React', 'Astro', 'TanStack Start', 'Vue', 'Vert.x', 'Drizzle ORM', 'Git', 'GitHub / GitHub Actions', 'Pulumi', 'AWS', 'Docker', 'Podman', 'Terraform'],
+        skills: ['TypeScript', 'TailwindCSS', 'Python', 'PostgreSQL', 'Next.js', 'React', 'Astro', 'TanStack Start', 'Vue', 'Vert.x', 'Drizzle ORM', 'Git', 'GitHub / GitHub Actions', 'Pulumi', 'AWS', 'Docker', 'Podman', 'Terraform', 'Agentic AI Skills'],
       },
       {
         label: 'Project Management',

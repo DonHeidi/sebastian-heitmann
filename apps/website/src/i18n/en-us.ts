@@ -191,7 +191,7 @@ export const enUs: Strings = {
         location: 'Hamburg, DE',
         description: 'Consulting, development, and project management for mid-sized companies and startups.',
         highlights: [
-          'Automated lead generation software for local SMBs [internal product] \u2014 TypeScript (Bun), TanStack Start, TailwindCSS, SQLite, PostgreSQL',
+          'Built an internal prototype of an AI-assisted lead generation application for local SMBs: ingests public company data, extracts structured business information with AI, and qualifies leads through a multi-step pipeline with ICP targeting, enrichment provenance, and GDPR-aware PII handling.',
           'Mobile app for Pool Position GmbH \u2014 porting core web app features to mobile \u2014 TypeScript, React Native, AWS, Pulumi',
           'Digitalization project manager (Oct 2025\u2013Mar 2026) \u2014 advisory and delivery for a rental service',
           'Data & Analytics market consultations \u2014 one-hour analyses for market research and strategy firms',

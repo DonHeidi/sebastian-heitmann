@@ -181,7 +181,7 @@ export const enUs: Strings = {
       address: 'Kastanienallee 24 · 21255 Tostedt',
       contact: 'me@sebastian-heitmann.dev · sebastian-heitmann.dev',
     },
-    summary: 'Fractional CTO with 15 years across software architecture, project delivery, and team leadership. I combine deep technical expertise with executive-level communication to turn stalled initiatives into shipped products.',
+    summary: 'Fractional CTO with 15 years across software architecture, project delivery, and team leadership. I combine deep technical expertise with communication and advisory to turn ideas into shipped products.',
     experienceLabel: 'Experience',
     experience: [
       {

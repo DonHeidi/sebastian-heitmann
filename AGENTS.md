@@ -69,7 +69,7 @@ bun run build                        # Bundle for deployment
 
 ## Website (`apps/website/`)
 
-Astro-based personal portfolio/fractional CTO landing page. Precision Swiss design with light/dark mode and multi-locale support (en-us, en-gb, de-de).
+Astro-based personal portfolio/fractional CTO landing page. Precision Swiss design with light/dark mode and multi-locale support (en-us, de-de).
 
 ### Website Structure
 
@@ -92,14 +92,13 @@ apps/website/
 | Locale | URL | Default |
 |--------|-----|---------|
 | en-us | `/` (no prefix) | Yes |
-| en-gb | `/en-gb/` | No |
 | de-de | `/de-de/` | No |
 
 - UI strings in `src/i18n/{locale}.ts` — typed with shared `Strings` interface
 - Components receive string sections as props
 - Case studies in `src/content/cases/{locale}/`
 - First-visit redirect detects `navigator.language`, redirects once (localStorage)
-- Language picker: inline segmented control (US/GB/DE)
+- Language picker: inline segmented control (US/DE)
 
 ### Fonts
 

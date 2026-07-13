@@ -1,7 +1,7 @@
 ---
 import { getEntry, render, type CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
-import AuthorCard from './author-card.astro';
+import { Image, getImage } from 'astro:assets';
+import { AuthorCard } from './author-card';
 import ArticleCta from './article-cta.astro';
 import { getStrings } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
@@ -19,6 +19,9 @@ const locale = (Astro.currentLocale ?? 'en-us') as Locale;
 const s = getStrings(locale);
 
 const authorEntry = await getEntry('authors', entry.data.author);
+const authorAvatarSrc = authorEntry
+  ? (await getImage({ src: authorEntry.data.avatar, width: 72, height: 72, format: 'webp' })).src
+  : undefined;
 
 const dateLocale = locale === 'de-de' ? 'de-DE' : 'en-US';
 const publishedDate = entry.data.publishedAt.toLocaleDateString(dateLocale, {
@@ -100,7 +103,7 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
             name={authorEntry.data.name}
             role={authorEntry.data.role}
             description={authorEntry.data.description}
-            avatar={authorEntry.data.avatar}
+            avatarSrc={authorAvatarSrc!}
             email={authorEntry.data.email}
             socials={authorEntry.data.socials}
           />
@@ -157,7 +160,7 @@ const currentSlug = entry.id.replace(/^de-de\//, '');
             name={authorEntry.data.name}
             role={authorEntry.data.role}
             description={authorEntry.data.description}
-            avatar={authorEntry.data.avatar}
+            avatarSrc={authorAvatarSrc!}
             email={authorEntry.data.email}
             socials={authorEntry.data.socials}
           />

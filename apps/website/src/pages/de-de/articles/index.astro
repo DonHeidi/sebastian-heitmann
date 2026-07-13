@@ -1,8 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
 import Navigation from '../../../components/navigation.astro';
-import ArticleCard from '../../../components/article-card.astro';
+import { ArticleCard } from '../../../components/article-card';
 import Footer from '../../../components/footer.astro';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
 import type { Locale } from '../../../i18n/utils';
@@ -25,6 +26,21 @@ const sorted = articles.sort((a, b) =>
 );
 const editorialArticles = sorted.filter((article) => article.data.type !== 'service-description');
 const serviceDescriptions = sorted.filter((article) => article.data.type === 'service-description');
+
+const editorialImageSrcs = await Promise.all(
+  editorialArticles.map(async (article) =>
+    article.data.headerImage
+      ? (await getImage({ src: article.data.headerImage, width: 600, height: 340, format: 'webp' })).src
+      : undefined
+  )
+);
+const serviceImageSrcs = await Promise.all(
+  serviceDescriptions.map(async (article) =>
+    article.data.headerImage
+      ? (await getImage({ src: article.data.headerImage, width: 600, height: 340, format: 'webp' })).src
+      : undefined
+  )
+);
 ---
 
 <Layout
@@ -59,7 +75,7 @@ const serviceDescriptions = sorted.filter((article) => article.data.type === 'se
                 tags={article.data.tags}
                 publishedAt={article.data.publishedAt}
                 slug={slug}
-                headerImage={article.data.headerImage}
+                imageSrc={editorialImageSrcs[i]}
                 locale={locale}
               />
             </div>
@@ -88,7 +104,7 @@ const serviceDescriptions = sorted.filter((article) => article.data.type === 'se
                   tags={article.data.tags}
                   publishedAt={article.data.publishedAt}
                   slug={slug}
-                  headerImage={article.data.headerImage}
+                  imageSrc={serviceImageSrcs[i]}
                   locale={locale}
                 />
               </div>

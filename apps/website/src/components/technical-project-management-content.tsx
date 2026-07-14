@@ -74,7 +74,7 @@ export function TechnicalProjectManagementContent({ content }: TechnicalProjectM
       </section>
 
       {/* 2. Definition — LIGHT band (first section of the band) */}
-      <section className="light reveal bg-background text-foreground">
+      <section className="light v8-grain reveal bg-background text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionFirst}`}>
           <Eyebrow>{content.definition.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
@@ -114,7 +114,7 @@ export function TechnicalProjectManagementContent({ content }: TechnicalProjectM
       </section>
 
       {/* 3. Situations — LIGHT band */}
-      <section id="situations" className="light reveal bg-background text-foreground">
+      <section id="situations" className="light v8-grain reveal bg-background text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
           <Eyebrow>{content.situations.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
@@ -144,7 +144,7 @@ export function TechnicalProjectManagementContent({ content }: TechnicalProjectM
       </section>
 
       {/* 4. Approach — LIGHT band */}
-      <section className="light reveal bg-background text-foreground">
+      <section className="light v8-grain reveal bg-background text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
           <Eyebrow>{content.approach.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
@@ -170,13 +170,13 @@ export function TechnicalProjectManagementContent({ content }: TechnicalProjectM
 
       {/* 4b. Pull-quote break — always accent-colored, independent of banding */}
       <div className="reveal flex items-center justify-center bg-primary px-6 py-[60px] text-center md:px-20 md:py-20">
-        <p className="max-w-[900px] font-display text-[clamp(32px,4vw,56px)] leading-[1.15] tracking-[-0.01em] text-[#F2F0EB] italic">
+        <p className="max-w-[900px] font-display text-[clamp(32px,4vw,56px)] leading-[1.15] tracking-[-0.01em] text-primary-foreground italic">
           {content.approach.headline}
         </p>
       </div>
 
       {/* 5. Services — DARK band (first section of the band) */}
-      <section className="dark reveal bg-background text-foreground">
+      <section className="dark v8-grain reveal bg-background text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionFirst}`}>
           <Eyebrow>{content.services.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
@@ -205,7 +205,7 @@ export function TechnicalProjectManagementContent({ content }: TechnicalProjectM
       </section>
 
       {/* 6. Comparison — DARK band */}
-      <section className="dark reveal bg-background text-foreground">
+      <section className="dark v8-grain reveal bg-background text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
           <Eyebrow>{content.comparison.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
@@ -261,7 +261,7 @@ export function TechnicalProjectManagementContent({ content }: TechnicalProjectM
       </section>
 
       {/* 7. Scope — DARK band */}
-      <section className="dark reveal bg-background text-foreground">
+      <section className="dark v8-grain reveal bg-background text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
           <Eyebrow>{content.scope.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
@@ -311,7 +311,7 @@ export function TechnicalProjectManagementContent({ content }: TechnicalProjectM
       </section>
 
       {/* 8. FAQ — LIGHT band (first section of the band) */}
-      <section className="light reveal bg-background text-foreground">
+      <section className="light v8-grain reveal bg-background text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionFirst}`}>
           <Eyebrow>{content.faq.eyebrow}</Eyebrow>
           <div>

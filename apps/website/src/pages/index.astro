@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import { Navigation } from '../components/navigation';
 import { ThemeToggle } from '../components/theme-toggle';
@@ -15,7 +16,7 @@ import offisLogo from '../assets/logos/offis.svg';
 import { CapabilitiesSection } from '../components/capabilities-section';
 import { SituationsSection } from '../components/situations-section';
 import { ProofSection } from '../components/proof-section';
-import FeaturedArticlesSection from '../components/featured-articles-section.astro';
+import { FeaturedArticlesSection, type FeaturedArticleItem } from '../components/featured-articles-section';
 import { ContactSection } from '../components/contact-section';
 import { ContactForm } from '../components/contact-form';
 import Footer from '../components/footer.astro';
@@ -52,15 +53,26 @@ const allPublished = await getCollection('articles', ({ id, data }) =>
 );
 const totalArticleCount = allPublished.length;
 
-const featured = allPublished
+const featuredEntries = allPublished
     .filter((entry) => entry.data.displayFrontpage)
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
-    .slice(0, 3)
-    .map((entry) => ({
-        entry,
-        slug: entry.id,
+    .slice(0, 3);
+
+const featured: FeaturedArticleItem[] = await Promise.all(
+    featuredEntries.map(async (entry) => ({
+        title: entry.data.title,
+        abstract: entry.data.abstract,
         categoryLabel: s.categories[entry.data.category],
-    }));
+        tags: entry.data.tags,
+        publishedAt: entry.data.publishedAt,
+        slug: entry.id,
+        imageSrc: entry.data.headerImage
+            ? (await getImage({ src: entry.data.headerImage, width: 600, height: 340, format: 'webp' })).src
+            : undefined,
+    }))
+);
+
+const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
 ---
 <Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true} showBackdrop={true}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
@@ -72,7 +84,7 @@ const featured = allPublished
         <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} webDevLink={{ label: 'Web development for local businesses', href: '/web-development' }} tpmLink={{ label: 'Technical project management', href: '/technical-project-management' }} />
-        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} totalCount={totalArticleCount} />
+        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} viewAllHref={featuredArticlesViewAllHref} totalCount={totalArticleCount} />
         <ContactSection contact={s.contact}>
             <ContactForm client:visible strings={s.contact} endpoint={mailEndpoint} />
         </ContactSection>

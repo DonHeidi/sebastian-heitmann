@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Navigation } from '../components/navigation';
 import { ThemeToggle } from '../components/theme-toggle';
-import TechnicalProjectManagementContent from '../components/technical-project-management-content.astro';
+import { TechnicalProjectManagementContent } from '../components/technical-project-management-content';
 import { ContactSection } from '../components/contact-section';
 import { ContactForm } from '../components/contact-form';
 import { Footer } from '../components/footer';
@@ -32,7 +32,7 @@ const alternates = [
         <ThemeToggle client:load labels={s.nav.themeToggle} />
     </Navigation>
     <main>
-        <TechnicalProjectManagementContent content={s.technicalProjectManagement} locale={locale} />
+        <TechnicalProjectManagementContent content={s.technicalProjectManagement} />
         <ContactSection contact={contact}>
             <ContactForm client:visible strings={contact} endpoint={mailEndpoint} />
         </ContactSection>

@@ -19,7 +19,7 @@ import { ProofSection } from '../components/proof-section';
 import { FeaturedArticlesSection, type FeaturedArticleItem } from '../components/featured-articles-section';
 import { ContactSection } from '../components/contact-section';
 import { ContactForm } from '../components/contact-form';
-import Footer from '../components/footer.astro';
+import { Footer } from '../components/footer';
 import { getStrings, getHreflangAlternates } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
 
@@ -89,5 +89,5 @@ const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
             <ContactForm client:visible strings={s.contact} endpoint={mailEndpoint} />
         </ContactSection>
     </main>
-    <Footer footer={s.footer} />
+    <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>

@@ -2,10 +2,11 @@
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Navigation } from '../../components/navigation';
 import { ThemeToggle } from '../../components/theme-toggle';
 import { ArticleCard } from '../../components/article-card';
-import Footer from '../../components/footer.astro';
+import { Footer } from '../../components/footer';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 
@@ -89,7 +90,7 @@ const editorialImageSrcs = await Promise.all(
     </div>
   </main>
 
-  <Footer footer={s.footer} />
+  <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>
 
 <style lang="scss">

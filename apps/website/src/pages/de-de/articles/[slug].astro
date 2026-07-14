@@ -2,9 +2,10 @@
 import { getCollection, getEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Navigation } from '../../../components/navigation';
 import { ThemeToggle } from '../../../components/theme-toggle';
-import Footer from '../../../components/footer.astro';
+import { Footer } from '../../../components/footer';
 import ArticleView from '../../../components/article-view.astro';
 import { getStrings } from '../../../i18n/utils';
 import type { Locale } from '../../../i18n/utils';
@@ -120,5 +121,5 @@ if (entry.data.series) {
     <ThemeToggle client:load labels={s.nav.themeToggle} />
   </Navigation>
   <ArticleView entry={entry} seriesParts={seriesParts} />
-  <Footer footer={s.footer} />
+  <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>

@@ -1,12 +1,12 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Navigation } from '../../../components/navigation';
 import { ThemeToggle } from '../../../components/theme-toggle';
 import { Footer } from '../../../components/footer';
-import ArticleView from '../../../components/article-view.astro';
+import { ArticleView } from '../../../components/article-view';
 import { getStrings } from '../../../i18n/utils';
 import type { Locale } from '../../../i18n/utils';
 
@@ -29,6 +29,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+const { Content } = await render(entry);
 
 const locale = (Astro.currentLocale ?? 'de-de') as Locale;
 const s = getStrings(locale);
@@ -36,6 +37,31 @@ const s = getStrings(locale);
 const authorEntry = await getEntry('authors', entry.data.author);
 const publishedISO = entry.data.publishedAt.toISOString();
 const modifiedISO = entry.data.updatedAt?.toISOString();
+
+const dateLocale = locale === 'de-de' ? 'de-DE' : 'en-US';
+const publishedDate = entry.data.publishedAt.toLocaleDateString(dateLocale, {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const wordCount = entry.body
+  ? entry.body.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolean).length
+  : 0;
+const readingMinutes = Math.max(1, Math.round(wordCount / 200));
+const currentSlug = entry.id.replace(/^de-de\//, '');
+
+const authorAvatarSrc = authorEntry
+  ? (await getImage({ src: authorEntry.data.avatar, width: 72, height: 72, format: 'webp' })).src
+  : undefined;
+
+const articleHeroImage = entry.data.headerImage
+  ? await getImage({ src: entry.data.headerImage, width: 1200, height: 480, format: 'webp' })
+  : undefined;
+
+const articleDetailImage = entry.data.headerDetailImage
+  ? await getImage({ src: entry.data.headerDetailImage, width: 200, height: 200, format: 'webp' })
+  : undefined;
 
 const siteOrigin = 'https://www.sebastian-heitmann.dev';
 const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
@@ -120,6 +146,38 @@ if (entry.data.series) {
   <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
     <ThemeToggle client:load labels={s.nav.themeToggle} />
   </Navigation>
-  <ArticleView entry={entry} seriesParts={seriesParts} />
+  <ArticleView
+    strings={s.article}
+    locale={locale}
+    categoryLabel={s.categories[entry.data.category]}
+    title={entry.data.title}
+    subline={entry.data.subline}
+    series={entry.data.series}
+    seriesParts={seriesParts}
+    currentSlug={currentSlug}
+    publishedDate={publishedDate}
+    publishedISO={publishedISO}
+    readingMinutes={readingMinutes}
+    heroImage={articleHeroImage ? { src: articleHeroImage.src, width: 1200, height: 480 } : undefined}
+    detailImage={articleDetailImage ? { src: articleDetailImage.src, width: 200, height: 200 } : undefined}
+    authorship={entry.data.authorship}
+    aiTranslated={entry.data.aiTranslated}
+    author={
+      authorEntry
+        ? {
+            name: authorEntry.data.name,
+            role: authorEntry.data.role,
+            description: authorEntry.data.description,
+            avatarSrc: authorAvatarSrc!,
+            email: authorEntry.data.email,
+            socials: authorEntry.data.socials,
+          }
+        : undefined
+    }
+    tags={entry.data.tags}
+    backToAllHref={getRelativeLocaleUrl(locale, 'articles')}
+  >
+    <Content />
+  </ArticleView>
   <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>

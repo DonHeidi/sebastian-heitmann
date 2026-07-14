@@ -42,7 +42,7 @@ export function Hero({ hero, photoSrc, photoWidth, photoHeight }: HeroProps) {
             <span className="font-mono text-[10px] leading-none tracking-[0.12em] text-muted-foreground uppercase">
               {hero.status.label}
             </span>
-            <span className="font-mono text-[13px] leading-[1.4] text-[var(--v8-accent-status)]">
+            <span className="font-mono text-[13px] leading-[1.4] text-success">
               {hero.status.value}
             </span>
           </div>

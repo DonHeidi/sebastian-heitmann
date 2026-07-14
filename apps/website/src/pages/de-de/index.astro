@@ -1,9 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import { Navigation } from '../../components/navigation';
 import { ThemeToggle } from '../../components/theme-toggle';
-import Hero from '../../components/hero.astro';
+import { Hero } from '../../components/hero';
+import picture from '../../assets/fb.jpg';
 import LogoSection from '../../components/logo-section.astro';
 import CapabilitiesSection from '../../components/capabilities-section.astro';
 import SituationsSection from '../../components/situations-section.astro';
@@ -19,6 +21,8 @@ const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates();
 const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
+
+const heroPhoto = await getImage({ src: picture, width: 160, height: 160 });
 
 const allPublished = await getCollection('articles', ({ data }) => !data.draft);
 const dePublished = allPublished.filter(({ id }) => id.startsWith('de-de/'));
@@ -47,7 +51,7 @@ const featured = [
         <ThemeToggle client:load labels={s.nav.themeToggle} />
     </Navigation>
     <main>
-        <Hero hero={s.hero} />
+        <Hero hero={s.hero} photoSrc={heroPhoto.src} photoWidth={Number(heroPhoto.attributes.width)} photoHeight={Number(heroPhoto.attributes.height)} />
         <LogoSection logos={s.logos} />
         <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />

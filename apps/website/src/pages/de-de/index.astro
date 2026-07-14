@@ -9,7 +9,8 @@ import CapabilitiesSection from '../../components/capabilities-section.astro';
 import SituationsSection from '../../components/situations-section.astro';
 import ProofSection from '../../components/proof-section.astro';
 import FeaturedArticlesSection from '../../components/featured-articles-section.astro';
-import ContactSection from '../../components/contact-section.astro';
+import { ContactSection } from '../../components/contact-section';
+import { ContactForm } from '../../components/contact-form';
 import Footer from '../../components/footer.astro';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
@@ -17,6 +18,7 @@ import type { Locale } from '../../i18n/utils';
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates();
+const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
 
 const allPublished = await getCollection('articles', ({ data }) => !data.draft);
 const dePublished = allPublished.filter(({ id }) => id.startsWith('de-de/'));
@@ -51,7 +53,9 @@ const featured = [
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} webDevLink={{ label: 'Webentwicklung für lokale Unternehmen', href: '/de-de/web-entwicklung' }} tpmLink={{ label: 'Technisches Projektmanagement', href: '/de-de/technisches-projektmanagement' }} />
         <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} totalCount={totalArticleCount} />
-        <ContactSection contact={s.contact} />
+        <ContactSection contact={s.contact}>
+            <ContactForm client:visible strings={s.contact} endpoint={mailEndpoint} />
+        </ContactSection>
     </main>
     <Footer footer={s.footer} />
 </Layout>

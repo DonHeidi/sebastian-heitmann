@@ -2,7 +2,8 @@
 import { getCollection, getEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
-import Navigation from '../../../components/navigation.astro';
+import { Navigation } from '../../../components/navigation';
+import { ThemeToggle } from '../../../components/theme-toggle';
 import Footer from '../../../components/footer.astro';
 import ArticleView from '../../../components/article-view.astro';
 import { getStrings } from '../../../i18n/utils';
@@ -115,7 +116,9 @@ if (entry.data.series) {
   {entry.data.tags?.map((tag) => (
     <meta slot="head" property="article:tag" content={tag} />
   ))}
-  <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+  <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+    <ThemeToggle client:load labels={s.nav.themeToggle} />
+  </Navigation>
   <ArticleView entry={entry} seriesParts={seriesParts} />
   <Footer footer={s.footer} />
 </Layout>

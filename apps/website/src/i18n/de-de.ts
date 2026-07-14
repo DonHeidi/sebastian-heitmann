@@ -10,6 +10,11 @@ export const deDe: Strings = {
     logoDot: '.dev',
     cvLabel: 'Lebenslauf',
     cta: 'Kontakt',
+    themeToggle: {
+      system: 'Systemmodus',
+      light: 'Heller Modus',
+      dark: 'Dunkler Modus',
+    },
   },
   hero: {
     firstName: 'Sebastian',

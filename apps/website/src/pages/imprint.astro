@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/navigation.astro';
+import { Navigation } from '../components/navigation';
+import { ThemeToggle } from '../components/theme-toggle';
 import Footer from '../components/footer.astro';
 import { getStrings, getHreflangAlternates } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
@@ -10,7 +11,9 @@ const s = getStrings(locale);
 const alternates = getHreflangAlternates();
 ---
 <Layout locale={locale} title="Imprint — Sebastian Heitmann" description="Legal notice and contact information." alternates={alternates}>
-    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
     <main class="legal">
         <div class="legal-inner">
             <h1 class="legal-title">Imprint</h1>

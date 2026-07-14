@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/navigation.astro';
+import { Navigation } from '../components/navigation';
+import { ThemeToggle } from '../components/theme-toggle';
 import WebProjectsContent from '../components/web-projects-content.astro';
 import ContactSection from '../components/contact-section.astro';
 import Footer from '../components/footer.astro';
@@ -23,7 +24,9 @@ const alternates = [
     description={s.webProjects.meta.description}
     alternates={alternates}
 >
-    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
     <main>
         <WebProjectsContent content={s.webProjects} locale={locale} />
         <ContactSection contact={{ ...s.contact, headline: s.webProjects.contact.headline, intro: s.webProjects.contact.intro }} />

@@ -1,7 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/navigation.astro';
+import { Navigation } from '../../components/navigation';
+import { ThemeToggle } from '../../components/theme-toggle';
 import Hero from '../../components/hero.astro';
 import LogoSection from '../../components/logo-section.astro';
 import CapabilitiesSection from '../../components/capabilities-section.astro';
@@ -40,7 +41,9 @@ const featured = [
     }));
 ---
 <Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} showBackdrop={true}>
-    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
     <main>
         <Hero hero={s.hero} />
         <LogoSection logos={s.logos} />

@@ -2,7 +2,8 @@
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/navigation.astro';
+import { Navigation } from '../../components/navigation';
+import { ThemeToggle } from '../../components/theme-toggle';
 import { ArticleCard } from '../../components/article-card';
 import Footer from '../../components/footer.astro';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
@@ -36,7 +37,9 @@ const editorialImageSrcs = await Promise.all(
   description={s.meta.description}
   alternates={alternates}
 >
-  <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+  <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+    <ThemeToggle client:load labels={s.nav.themeToggle} />
+  </Navigation>
 
   <main class="articles-page">
     <header class="articles-page__header">

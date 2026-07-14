@@ -8,6 +8,11 @@ export interface Strings {
     logoDot: string;
     cvLabel: string;
     cta: string;
+    themeToggle: {
+      system: string;
+      light: string;
+      dark: string;
+    };
   };
   hero: {
     firstName: string;

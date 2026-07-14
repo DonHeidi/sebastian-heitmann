@@ -9,10 +9,7 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@iconify-json/mdi": "^1.2.3",
-    "@iconify-json/simple-icons": "^1.2.32",
-    "@types/bun": "latest",
-    "astro-icon": "^1.1.5"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -32,7 +29,6 @@
     "radix-ui": "^1.6.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "sass": "^1.86.3",
     "sharp": "^0.34.5",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.2"

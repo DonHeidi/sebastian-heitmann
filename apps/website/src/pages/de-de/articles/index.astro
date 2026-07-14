@@ -122,57 +122,57 @@ const serviceImageSrcs = await Promise.all(
   <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>
 
-<style lang="scss">
+<style>
   .articles-page {
     max-width: 1440px;
     margin: 0 auto;
     padding: 160px 80px 120px;
+  }
 
-    &__header {
-      margin-bottom: 64px;
-    }
+  .articles-page__header {
+    margin-bottom: 64px;
+  }
 
-    &__title {
-      font-family: var(--v8-font-display);
-      font-size: clamp(48px, 6vw, 80px);
-      font-weight: 400;
-      line-height: 1.0;
-      color: var(--v8-text);
-      margin-bottom: 48px;
-    }
+  .articles-page__title {
+    font-family: var(--v8-font-display);
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--v8-text);
+    margin-bottom: 48px;
+  }
 
-    &__rule {
-      width: 48px;
-      height: 2px;
-      background-color: var(--v8-accent);
-    }
+  .articles-page__rule {
+    width: 48px;
+    height: 2px;
+    background-color: var(--v8-accent);
+  }
 
-    &__section {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
+  .articles-page__section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 
-      & + & {
-        margin-top: 72px;
-        padding-top: 72px;
-        border-top: 1px solid var(--v8-border);
-      }
-    }
+  .articles-page__section + .articles-page__section {
+    margin-top: 72px;
+    padding-top: 72px;
+    border-top: 1px solid var(--v8-border);
+  }
 
-    &__section-title {
-      font-family: var(--v8-font-mono);
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--v8-text-muted);
-    }
+  .articles-page__section-title {
+    font-family: var(--v8-font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--v8-text-muted);
+  }
 
-    &__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 24px;
-    }
+  .articles-page__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
   }
 
   @media (max-width: 1024px) {
@@ -184,10 +184,10 @@ const serviceImageSrcs = await Promise.all(
   @media (max-width: 768px) {
     .articles-page {
       padding: 100px 24px 60px;
+    }
 
-      &__grid {
-        grid-template-columns: 1fr;
-      }
+    .articles-page__grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

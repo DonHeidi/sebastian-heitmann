@@ -346,7 +346,7 @@ export function WebProjectsContent({ content, homeUrl }: WebProjectsContentProps
       </section>
 
       {/* 8. Consulting bridge — DARK band, always dark (bg-surface-alt, not bg-background) */}
-      <section className="dark bg-surface-alt text-foreground">
+      <section className="dark reveal bg-surface-alt text-foreground">
         <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
           <Eyebrow>{content.consulting.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">

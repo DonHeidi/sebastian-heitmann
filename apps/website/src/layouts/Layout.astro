@@ -145,8 +145,15 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
 </script>
 
 <style lang="scss" is:global>
-    *, *::before, *::after { box-sizing: border-box; }
-    * { margin: 0; }
+    /* Layered so Tailwind utilities (@layer utilities) can override the reset.
+       Left unlayered, these universal rules outrank every margin utility
+       (unlayered author styles beat layered ones), silently zeroing all
+       margin classes (mt-2, mb-8, ...) in ported TSX components. Tailwind's
+       preflight (@layer base, via global.css) applies the same reset anyway. */
+    @layer base {
+        *, *::before, *::after { box-sizing: border-box; }
+        * { margin: 0; }
+    }
 
     html {
         scrollbar-gutter: stable;

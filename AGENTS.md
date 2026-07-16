@@ -26,11 +26,11 @@ docs/                 # Shared project documentation
 ## Prerequisites
 
 The deploy/infra toolchain is managed by [mise](https://mise.jdx.dev) (`mise.toml`):
-`bun`, `terraform` (≥ 1.10, needed for the S3 backend's `use_lockfile`), `aws-cli`
-(S3 upload), and `scaleway-cli` (provides `scw`). Install everything with:
+`bun`, `terraform` (≥ 1.10, needed for the S3 backend's `use_lockfile`), `rclone`
+(website upload), and `scaleway-cli` (provides `scw`). Install everything with:
 
 ```bash
-mise install                         # Installs bun, terraform, aws-cli, scaleway-cli
+mise install                         # Installs bun, terraform, rclone, scaleway-cli
 ```
 
 Then authenticate Scaleway once — this writes `~/.config/scw/config.yaml`, which both

@@ -44,7 +44,7 @@ function LogoGroup({ names, assetsByName }: { names: string[]; assetsByName: Map
                 }
               />
             ) : (
-              <span className="font-display text-lg whitespace-nowrap text-white/70">{name}</span>
+              <span className="font-display text-lg whitespace-nowrap text-text-secondary">{name}</span>
             )}
           </span>
         );
@@ -57,19 +57,19 @@ export function LogoSection({ logos, logoAssets }: LogoSectionProps) {
   const assetsByName = new Map(logoAssets.map((asset) => [asset.name, asset]));
 
   return (
-    <section className="max-w-none bg-[#0C0C0C] px-6 min-[1081px]:px-12 min-[1281px]:px-20">
+    <section className="dark max-w-none bg-background text-foreground px-6 min-[1081px]:px-12 min-[1281px]:px-20">
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-7 py-8 min-[1081px]:flex-row min-[1081px]:justify-center min-[1081px]:gap-8 min-[1281px]:gap-12">
         <div className="flex flex-col items-center gap-4 min-[1081px]:flex-row min-[1081px]:gap-6">
-          <span className="shrink-0 font-mono text-[10px] tracking-[0.12em] whitespace-nowrap text-white/50 uppercase">
+          <span className="shrink-0 font-mono text-[10px] tracking-[0.12em] whitespace-nowrap text-muted-foreground uppercase">
             {logos.workingWithLabel}
           </span>
           <LogoGroup names={logos.workingWith} assetsByName={assetsByName} />
         </div>
 
-        <div className="h-px w-10 shrink-0 bg-white/15 min-[1081px]:h-7 min-[1081px]:w-px" />
+        <div className="h-px w-10 shrink-0 bg-[var(--v8-glass-border)] min-[1081px]:h-7 min-[1081px]:w-px" />
 
         <div className="flex flex-col items-center gap-4 min-[1081px]:flex-row min-[1081px]:gap-6">
-          <span className="shrink-0 font-mono text-[10px] tracking-[0.12em] whitespace-nowrap text-white/50 uppercase">
+          <span className="shrink-0 font-mono text-[10px] tracking-[0.12em] whitespace-nowrap text-muted-foreground uppercase">
             {logos.previouslyAtLabel}
           </span>
           <LogoGroup names={logos.previouslyAt} assetsByName={assetsByName} />

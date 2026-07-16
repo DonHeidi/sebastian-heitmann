@@ -7,9 +7,14 @@
 
 `scripts/deploy-website.sh` currently uploads every file in `dist/` on every deploy
 (`aws s3 cp --recursive`) and never deletes anything from the bucket. Replace the
-upload step with checksum-exact incremental sync so that deploys are faster, cheaper,
-CDN cache entries for unchanged objects stay warm, and stale objects (old hashed
-chunks, removed pages) are removed from the bucket.
+upload step with checksum-exact incremental sync so that deploys are faster and
+cheaper, and stale objects (old hashed chunks, removed pages) are removed from the
+bucket.
+
+Note on the CDN: Edge Services caches independently, in front of the bucket, per its
+own TTL rules — upload behavior neither purges nor warms it. The only cache-adjacent
+benefit is incidental: unchanged objects keep their `Last-Modified`, so CDN origin
+revalidations can still answer 304 instead of a full re-fetch.
 
 ## Decisions
 
@@ -19,7 +24,7 @@ chunks, removed pages) are removed from the bucket.
 | Tooling | Pin `rclone` in `mise.toml` (latest), alongside the existing aws/scw/terraform pins |
 | Configuration | No rclone config file — env-var remote (`RCLONE_CONFIG_SCW_*`) populated from the same varlock/Proton Pass credentials the script already uses; endpoint `https://s3.nl-ams.scw.cloud` |
 | Upload ordering | Two-phase: **(1)** `rclone copy` of assets (`_astro/`, `fonts/`, images — everything except `*.html`) first, **(2)** `rclone sync --checksum` of the full tree second (uploads remaining HTML, performs deletions). A visitor mid-deploy never receives HTML referencing a not-yet-uploaded asset |
-| Deletion | Plain `sync` deletion, **no `--backup-dir`** — bucket content is fully regenerable from git + `bun run build`; the brief window where stale-cached HTML can 404 on a deleted chunk is accepted (low traffic, short Edge TTLs) |
+| Deletion | Plain `sync` deletion, **no `--backup-dir`** — bucket content is fully regenerable from git + `bun run build`. Residual risk: HTML still cached at the CDN may reference a deleted chunk; whether that chunk still resolves depends on the CDN's own independent cache state, and the possible 404 window is accepted (low traffic, regenerable content) |
 | Object ACL | `--s3-acl public-read` on both phases (Scaleway objects are private by default; preserves current behavior) |
 | Content-Type | rclone's extension-based MIME inference (equivalent to current `aws s3 cp` behavior) |
 | Kept from current script | The image-orphan prune and the island-chunk-graph assertion run unchanged, BEFORE any upload (this work builds on the fixed script from PR #9) |

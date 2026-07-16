@@ -68,7 +68,26 @@ while IFS= read -r -d '' js; do
   done < <(grep -oE 'from"\./[A-Za-z0-9._-]+\.js"' "$js" | sed 's|from"\./||; s|"$||')
 done < <(find dist/_astro -maxdepth 1 -type f -name '*.js' -print0)
 
-aws s3 cp dist/ s3://sebastian-heitmann-website/ \
-  --acl public-read \
-  --endpoint-url https://s3.nl-ams.scw.cloud \
-  --recursive
+# Incremental upload via rclone (checksum-exact, MD5 vs S3 ETag).
+# Phase 1: assets first so no live HTML ever references a missing file.
+# Phase 2: HTML + deletions of stale objects (bucket is fully regenerable from git).
+# Credentials mirror the aws CLI wiring above exactly (same ACCESS_KEY@PROJECT_ID suffix).
+export RCLONE_CONFIG_SCW_TYPE=s3
+export RCLONE_CONFIG_SCW_PROVIDER=Scaleway
+export RCLONE_CONFIG_SCW_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+export RCLONE_CONFIG_SCW_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+export RCLONE_CONFIG_SCW_ENDPOINT="https://s3.nl-ams.scw.cloud"
+export RCLONE_CONFIG_SCW_ACL=public-read
+
+# --s3-acl passed explicitly too (belt and braces): the RCLONE_CONFIG_SCW_ACL env var
+# name couldn't be confirmed against the real bucket (only --dry-run is permitted
+# there), so both destination-touching commands also carry the flag directly.
+rclone copy dist/ scw:sebastian-heitmann-website \
+  --checksum --exclude '*.html' --fast-list --transfers 8 -v \
+  --s3-acl public-read
+
+rclone sync dist/ scw:sebastian-heitmann-website \
+  --checksum --fast-list --transfers 8 -v \
+  --s3-acl public-read
+
+rclone check dist/ scw:sebastian-heitmann-website --checksum --fast-list

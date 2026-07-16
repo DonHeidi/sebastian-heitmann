@@ -1,15 +1,21 @@
-# Incremental Website Deploys via rclone — Design
+# Incremental Website Deploys via rclone + Sitemap lastmod — Design
 
 **Date:** 2026-07-16
 **Status:** Approved design, pending implementation plan
 
 ## Purpose
 
-`scripts/deploy-website.sh` currently uploads every file in `dist/` on every deploy
-(`aws s3 cp --recursive`) and never deletes anything from the bucket. Replace the
-upload step with checksum-exact incremental sync so that deploys are faster and
-cheaper, and stale objects (old hashed chunks, removed pages) are removed from the
-bucket.
+Two related delivery improvements:
+
+1. `scripts/deploy-website.sh` currently uploads every file in `dist/` on every deploy
+   (`aws s3 cp --recursive`) and never deletes anything from the bucket. Replace the
+   upload step with checksum-exact incremental sync so that deploys are faster and
+   cheaper, and stale objects (old hashed chunks, removed pages) are removed from the
+   bucket.
+2. The generated sitemap is a bare URL list (`sitemap()` with no options — zero
+   `<lastmod>` entries), so search engines get no signal when existing content
+   changes. Emit accurate per-URL `<lastmod>` values so crawlers can prioritize
+   changed pages.
 
 Note on the CDN: Edge Services caches independently, in front of the bucket, per its
 own TTL rules — upload behavior neither purges nor warms it. The only cache-adjacent
@@ -29,6 +35,10 @@ revalidations can still answer 304 instead of a full re-fetch.
 | Content-Type | rclone's extension-based MIME inference (equivalent to current `aws s3 cp` behavior) |
 | Kept from current script | The image-orphan prune and the island-chunk-graph assertion run unchanged, BEFORE any upload (this work builds on the fixed script from PR #9) |
 | aws CLI | No longer needed by this script; stays in `mise.toml` for now (other tooling may use it) — removal is out of scope |
+| Sitemap lastmod | Per-URL via `@astrojs/sitemap`'s `serialize` hook — never the global `lastmod` option (it stamps every URL with build time; Google ignores lastmod once it's demonstrably inaccurate). `changefreq`/`priority` are not emitted (ignored by Google) |
+| lastmod source: articles | Frontmatter `updatedDate ?? pubDate` — the same values the article pages already surface as JSON-LD `dateModified`, so sitemap and structured data agree |
+| lastmod source: other pages | Last git commit date of the page's source file (`git log -1 --format=%cI -- <file>`), resolved at build time in the serialize hook. A page's lastmod moves only when its source actually changed. Fallback when git metadata is unavailable (e.g. shallow/exported build env): omit lastmod for that URL rather than emit a wrong date |
+| lastmod mapping | The serialize hook maps sitemap URL → source file (page route or article content file, both locales). Component-only refactors that change rendered output without touching the page file are accepted as NOT bumping lastmod — copy lives in page files / i18n files / content collections, and i18n or shared-component edits can be included in the mapping if desired at implementation |
 
 ## Sketch
 
@@ -54,15 +64,24 @@ rclone sync dist/ scw:sebastian-heitmann-website \
 
 - `rclone check dist/ scw:… --checksum` after deploy reports zero differences.
 - Second consecutive deploy with no source changes uploads **zero** files (idempotence).
+  Note this requires the sitemap itself to be byte-stable across identical builds —
+  verified as part of the lastmod work (git dates are deterministic; no build
+  timestamps may leak into the sitemap).
 - A single-file copy edit re-uploads only that HTML + sitemap.
 - Stale-object deletion observed once (e.g. old hashed chunk disappears from bucket).
-- Site renders after deploy (spot-check via CDN URL), correct Content-Type on HTML/CSS/JS/woff2, objects publicly readable.
+- Site renders after deploy (spot-check via CDN URL), correct Content-Type on
+  HTML/CSS/JS/woff2, objects publicly readable.
+- Sitemap: every article URL carries `<lastmod>` matching its frontmatter date; a page
+  edited in git gets a bumped lastmod on next build while all other URLs keep theirs;
+  sitemap validates (well-formed XML, W3C datetime format).
 
 ## Out of scope
 
 - Removing the aws CLI from `mise.toml`.
 - CDN cache purging / Edge Services API integration.
 - Any change to build, prune, or chunk-assertion logic.
+- **IndexNow ping** (Bing/Yandex push notification of changed URLs, derivable from
+  rclone's upload log) — natural follow-up once incremental deploy exists; not now.
 
 ## Branch/PR strategy
 

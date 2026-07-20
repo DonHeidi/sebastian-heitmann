@@ -8,9 +8,10 @@ type Props = {
     locale?: Locale;
     webDevLink?: { label: string; href: string };
     tpmLink?: { label: string; href: string };
+    aiLink?: { label: string; href: string };
 };
 
-const { proof, locale, webDevLink, tpmLink } = Astro.props;
+const { proof, locale, webDevLink, tpmLink, aiLink } = Astro.props;
 ---
 
 <section class="proof" id="proof">
@@ -54,6 +55,12 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
                         {i === 0 && tpmLink && (
                             <a class="engagement-link" href={tpmLink.href}>
                                 <span>{tpmLink.label}</span>
+                                <span class="engagement-link__arrow">&rarr;</span>
+                            </a>
+                        )}
+                        {e.featured && aiLink && (
+                            <a class="engagement-link" href={aiLink.href}>
+                                <span>{aiLink.label}</span>
                                 <span class="engagement-link__arrow">&rarr;</span>
                             </a>
                         )}
@@ -318,6 +325,12 @@ const { proof, locale, webDevLink, tpmLink } = Astro.props;
             }
 
             &:hover &__arrow { transform: translateX(3px); }
+        }
+
+        &-link + &-link {
+            margin-top: 0;
+            padding-top: 12px;
+            border-top: none;
         }
     }
 

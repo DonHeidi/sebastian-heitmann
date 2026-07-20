@@ -38,10 +38,11 @@ export function ProofSection({ proof, webDevLink, tpmLink }: ProofSectionProps) 
 
         <div className="flex flex-col gap-3">
           {proof.cases.map((c, i) => (
+            /* `reveal` lives on a wrapper (like featured-articles) so the card's
+               `transition-colors` utility can't outrank the reveal transition */
+            <div key={c.tag} className="reveal" style={{ transitionDelay: `${i * 0.08}s` }}>
             <article
-              key={c.tag}
-              className="reveal grid grid-cols-1 items-baseline gap-3 border border-[var(--v8-glass-border)] bg-[var(--v8-glass-bg)] py-6 px-5 shadow-[0_1px_0_var(--v8-glass-highlight)_inset,0_24px_60px_-36px_rgba(0,0,0,0.25)] backdrop-blur-[12px] backdrop-saturate-[1.4] transition-colors hover:border-muted-foreground md:grid-cols-[200px_1fr_auto] md:gap-8 md:py-7 md:px-6 lg:grid-cols-[280px_1fr_auto] lg:gap-12 lg:py-9 lg:px-8"
-              style={{ transitionDelay: `${i * 0.08}s` }}
+              className="grid grid-cols-1 items-baseline gap-3 border border-[var(--v8-glass-border)] bg-[var(--v8-glass-bg)] py-6 px-5 shadow-[0_1px_0_var(--v8-glass-highlight)_inset,0_24px_60px_-36px_rgba(0,0,0,0.25)] backdrop-blur-[12px] backdrop-saturate-[1.4] transition-colors hover:border-muted-foreground md:py-7 md:px-6 lg:grid-cols-[280px_1fr_auto] lg:gap-12 lg:py-9 lg:px-8"
             >
               <div className="flex flex-col gap-1">
                 <span className="font-display text-[44px] leading-none tracking-[-0.02em] text-[var(--v8-metric-color)] lg:text-[56px]">
@@ -54,10 +55,11 @@ export function ProofSection({ proof, webDevLink, tpmLink }: ProofSectionProps) 
               <p className="max-w-[520px] font-sans text-lg leading-[1.7] font-light text-text-tertiary">
                 {c.description}
               </p>
-              <span className="justify-self-start font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase md:justify-self-end">
+              <span className="justify-self-start font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase lg:justify-self-end">
                 {c.tag}
               </span>
             </article>
+            </div>
           ))}
         </div>
 

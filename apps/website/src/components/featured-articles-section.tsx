@@ -52,7 +52,7 @@ export function FeaturedArticlesSection({
           </a>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
+        <div className="grid grid-cols-1 gap-6 md:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
           {articles.map((article, i) => (
             <div key={article.slug} className="reveal" style={{ transitionDelay: `${Math.min(i * 80, 240)}ms` }}>
               <ArticleCard

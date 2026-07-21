@@ -81,7 +81,7 @@ const featured: FeaturedArticleItem[] = await Promise.all(
 
 const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
 ---
-<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} showBackdrop={true}>
+<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} showBackdrop={false}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
         <ThemeToggle client:load labels={s.nav.themeToggle} />
     </Navigation>

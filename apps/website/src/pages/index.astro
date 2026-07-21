@@ -85,7 +85,7 @@ const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} webDevLink={{ label: 'Web development for local businesses', href: '/web-development' }} tpmLink={{ label: 'Technical project management', href: '/technical-project-management' }} />
         <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} viewAllHref={featuredArticlesViewAllHref} totalCount={totalArticleCount} />
-        <ContactSection contact={s.contact}>
+        <ContactSection contact={s.contact} showBackdropMoment={true}>
             <ContactForm client:visible strings={s.contact} endpoint={mailEndpoint} />
         </ContactSection>
     </main>

@@ -1,4 +1,5 @@
 import { SiBluesky, SiGithub } from '@icons-pack/react-simple-icons';
+import { HeroPrintMoment } from './backdrop/hero-print-moment';
 import { LinkedInIcon } from './social-icons';
 import type { Strings } from '@/i18n/types';
 
@@ -11,7 +12,8 @@ export interface HeroProps {
 
 export function Hero({ hero, photoSrc, photoWidth, photoHeight }: HeroProps) {
   return (
-    <section className="mx-auto flex min-h-auto max-w-[1440px] items-center px-6 pt-10 pb-[60px] md:px-12 md:pt-[60px] md:pb-20 lg:min-h-[calc(100vh-80px)] lg:px-20 lg:pt-20 lg:pb-[120px]">
+    <section className="relative isolate mx-auto flex min-h-auto max-w-[1440px] items-center px-6 pt-10 pb-[60px] md:px-12 md:pt-[60px] md:pb-20 lg:min-h-[calc(100vh-80px)] lg:px-20 lg:pt-20 lg:pb-[120px]">
+      <HeroPrintMoment />
       <div className="grid w-full grid-cols-1 items-start gap-12 md:grid-cols-[180px_1fr] md:gap-12 lg:grid-cols-[220px_1fr] lg:gap-20">
         <aside className="order-1 flex flex-row flex-wrap gap-6 border-t border-border pt-6 md:order-none md:flex-col md:gap-5">
           <div className="flex flex-col gap-[2px]">

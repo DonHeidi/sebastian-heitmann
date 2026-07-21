@@ -739,6 +739,7 @@ export const deDe: Strings = {
       headline: 'KI-gestützte Produkte und Prozesse entwickeln',
       subline: 'KI schafft erst dann einen belastbaren Nutzen, wenn sie in einen funktionierenden Prozess eingebunden ist.',
       cta: 'Vorhaben besprechen',
+      flow: ['Eingehende Vorgänge', 'KI + Automatisierung', 'Menschliche Entscheidung', 'Ihre Systeme'],
     },
     approach: {
       eyebrow: 'Ansatz',
@@ -815,6 +816,7 @@ export const deDe: Strings = {
           ],
           price: 'ab 10.990 € netto',
           priceNote: 'Die Umsetzung innerhalb von vier Wochen setzt voraus, dass der Anwendungsfall ausreichend klar begrenzt ist, notwendige Daten und Zugänge verfügbar sind und Entscheidungen während der Entwicklung kurzfristig getroffen werden können.',
+          featured: true,
         },
         {
           name: 'Individuelles KI-System',

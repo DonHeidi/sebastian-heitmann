@@ -15,6 +15,14 @@ const contactUrl = '#contact';
         <span class="ap-eyebrow">{content.hero.eyebrow}</span>
         <h1 class="ap-hero__headline">{content.hero.headline}</h1>
         <p class="ap-hero__subline">{content.hero.subline}</p>
+        <div class="ap-flow" role="list">
+            {content.hero.flow.map((label, i) => (
+                <Fragment>
+                    {i > 0 && <span class="ap-flow__link" aria-hidden="true"></span>}
+                    <span class="ap-flow__node" role="listitem">{label}</span>
+                </Fragment>
+            ))}
+        </div>
         <a class="ap-cta-link" href={contactUrl}>
             <span class="ap-cta-link__text">{content.hero.cta}</span>
             <span class="ap-cta-link__arrow">&rarr;</span>
@@ -45,7 +53,9 @@ const contactUrl = '#contact';
     <h2 class="ap-headline">{content.offerings.headline}</h2>
     <div class="ap-offerings">
         {content.offerings.items.map((o, i) => (
-            <article class="ap-offering">
+            <article class:list={['ap-offering', { 'ap-offering--featured': o.featured }]}>
+                <span class="ap-offering__corner ap-offering__corner--tl" aria-hidden="true"></span>
+                <span class="ap-offering__corner ap-offering__corner--br" aria-hidden="true"></span>
                 <div class="ap-offering__head">
                     <span class="ap-offering__num">{String(i + 1).padStart(2, '0')}</span>
                     <div class="ap-offering__title-group">
@@ -93,21 +103,25 @@ const contactUrl = '#contact';
         <div class="ap-rule"></div>
     </div>
     <h2 class="ap-headline">{content.example.headline}</h2>
-    <p class="ap-lead">{content.example.intro}</p>
-    <ul class="ap-tags">
-        {content.example.components.map(item => (
-            <li class="ap-tags__item">{item}</li>
-        ))}
-    </ul>
-    <div class="ap-body">
-        {content.example.body.map(p => (
-            <p>{p}</p>
-        ))}
+    <div class="ap-system">
+        <span class="ap-offering__corner ap-offering__corner--tl" aria-hidden="true"></span>
+        <span class="ap-offering__corner ap-offering__corner--br" aria-hidden="true"></span>
+        <p class="ap-system__intro">{content.example.intro}</p>
+        <ul class="ap-system__components">
+            {content.example.components.map(item => (
+                <li class="ap-system__component">{item}</li>
+            ))}
+        </ul>
+        <div class="ap-system__body">
+            {content.example.body.map(p => (
+                <p>{p}</p>
+            ))}
+        </div>
+        <a class="ap-cta-link" href={content.example.linkHref} target="_blank" rel="noopener noreferrer">
+            <span class="ap-cta-link__text">{content.example.linkLabel}</span>
+            <span class="ap-cta-link__arrow">&rarr;</span>
+        </a>
     </div>
-    <a class="ap-cta-link" href={content.example.linkHref} target="_blank" rel="noopener noreferrer">
-        <span class="ap-cta-link__text">{content.example.linkLabel}</span>
-        <span class="ap-cta-link__arrow">&rarr;</span>
-    </a>
 </section>
 
 <!-- 5. Use cases -->
@@ -165,6 +179,10 @@ const contactUrl = '#contact';
 <!-- 8. CTA bridge -->
 <section class="ap-section ap-cta reveal">
     <div class="ap-cta__inner">
+        <span class="ap-cta__corner ap-cta__corner--tl" aria-hidden="true"></span>
+        <span class="ap-cta__corner ap-cta__corner--tr" aria-hidden="true"></span>
+        <span class="ap-cta__corner ap-cta__corner--bl" aria-hidden="true"></span>
+        <span class="ap-cta__corner ap-cta__corner--br" aria-hidden="true"></span>
         <h2 class="ap-headline">{content.cta.headline}</h2>
         <p class="ap-lead">{content.cta.body}</p>
         <ul class="ap-list ap-list--compact">
@@ -202,8 +220,12 @@ const contactUrl = '#contact';
 
     .ap-rule {
         flex: 1;
-        height: 1px;
-        background: var(--v8-border);
+        height: 8px;
+        background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+        background-size: 6px 8px;
+        background-repeat: repeat-x;
+        background-position: 0 50%;
+        opacity: 0.85;
     }
 
     .ap-headline {
@@ -297,14 +319,11 @@ const contactUrl = '#contact';
     }
 
     /* ------------------------------------------------
-       1. Hero
+       1. Hero + workflow strip
        ------------------------------------------------ */
     .ap-hero {
         width: 100%;
         padding: 160px 80px 80px;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
 
         &__content {
             max-width: 1440px;
@@ -341,6 +360,40 @@ const contactUrl = '#contact';
         }
     }
 
+    .ap-flow {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+
+        &__node {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-text-secondary);
+            padding: 10px 16px;
+            background: var(--v8-glass-bg);
+            backdrop-filter: blur(12px) saturate(1.4);
+            -webkit-backdrop-filter: blur(12px) saturate(1.4);
+            border: 1px solid var(--v8-glass-border);
+            box-shadow: 0 1px 0 var(--v8-glass-highlight) inset;
+            white-space: nowrap;
+        }
+
+        &__link {
+            width: 28px;
+            height: 8px;
+            flex-shrink: 0;
+            background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+            background-size: 6px 8px;
+            background-repeat: repeat-x;
+            background-position: 0 50%;
+            opacity: 0.85;
+        }
+    }
+
     /* ------------------------------------------------
        3. Offerings
        ------------------------------------------------ */
@@ -351,6 +404,7 @@ const contactUrl = '#contact';
     }
 
     .ap-offering {
+        position: relative;
         background: var(--v8-glass-bg);
         backdrop-filter: blur(12px) saturate(1.4);
         -webkit-backdrop-filter: blur(12px) saturate(1.4);
@@ -359,10 +413,43 @@ const contactUrl = '#contact';
             0 1px 0 var(--v8-glass-highlight) inset,
             0 24px 60px -36px rgba(0, 0, 0, 0.25);
         padding: 44px 40px;
-        transition: border-color 0.2s ease;
+        transition: border-color 0.3s ease;
 
         &:hover {
             border-color: var(--v8-text-muted);
+        }
+
+        &__corner {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            color: var(--v8-text-faint);
+
+            &--tl {
+                top: 8px;
+                left: 8px;
+                border-top: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--br {
+                bottom: 8px;
+                right: 8px;
+                border-bottom: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
+        }
+
+        &--featured {
+            border-color: var(--v8-border-accent);
+
+            .ap-offering__corner {
+                color: var(--v8-accent);
+            }
+
+            &:hover {
+                border-color: var(--v8-accent);
+            }
         }
 
         &__head {
@@ -493,7 +580,85 @@ const contactUrl = '#contact';
     }
 
     /* ------------------------------------------------
-       4 & 7. Tag grids (example components, evolution)
+       4. Job Directory system card
+       ------------------------------------------------ */
+    .ap-system {
+        position: relative;
+        background: var(--v8-glass-bg);
+        backdrop-filter: blur(12px) saturate(1.4);
+        -webkit-backdrop-filter: blur(12px) saturate(1.4);
+        border: 1px solid var(--v8-glass-border);
+        box-shadow:
+            0 1px 0 var(--v8-glass-highlight) inset,
+            0 24px 60px -36px rgba(0, 0, 0, 0.25);
+        padding: 44px 40px;
+        display: flex;
+        flex-direction: column;
+
+        &__intro {
+            font-family: var(--v8-font-body);
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 640px;
+            margin: 0 0 32px;
+        }
+
+        &__components {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 36px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 48px;
+        }
+
+        &__component {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            line-height: 1.5;
+            color: var(--v8-text-secondary);
+            padding: 10px 0 10px 22px;
+            border-bottom: 1px solid var(--v8-border);
+            position: relative;
+            transition: color 0.2s ease;
+
+            &::before {
+                content: '\2731'; /* heavy asterisk — the --v8-asterisk mark */
+                position: absolute;
+                left: 0;
+                top: 10px;
+                font-size: 10px;
+                color: var(--v8-accent);
+            }
+
+            &:hover {
+                color: var(--v8-text);
+            }
+        }
+
+        &__body {
+            max-width: 640px;
+
+            p {
+                font-family: var(--v8-font-body);
+                font-size: 16px;
+                font-weight: 300;
+                line-height: 1.65;
+                color: var(--v8-text-secondary);
+                margin: 0 0 16px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       7. Tag grid (evolution)
        ------------------------------------------------ */
     .ap-tags {
         list-style: none;
@@ -574,25 +739,48 @@ const contactUrl = '#contact';
     }
 
     /* ------------------------------------------------
-       6. Process steps
+       6. Process steps — dotted spine
        ------------------------------------------------ */
     .ap-steps {
         list-style: none;
-        padding: 0;
+        padding: 0 0 0 36px;
         margin: 0;
+        position: relative;
         display: flex;
         flex-direction: column;
+        gap: 8px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 16px;
+            bottom: 16px;
+            width: 8px;
+            background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+            background-size: 8px 6px;
+            background-repeat: repeat-y;
+            background-position: 50% 0;
+            opacity: 0.85;
+        }
     }
 
     .ap-step {
         display: grid;
-        grid-template-columns: 64px 1fr;
+        grid-template-columns: 48px 1fr;
         gap: 24px;
-        padding: 28px 0;
-        border-bottom: 1px solid var(--v8-border);
+        padding: 20px 0;
+        position: relative;
 
-        &:first-child {
-            border-top: 1px solid var(--v8-border);
+        &::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 27px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--v8-accent);
         }
 
         &__num {
@@ -625,20 +813,60 @@ const contactUrl = '#contact';
     }
 
     /* ------------------------------------------------
-       8. CTA bridge
+       8. CTA bridge — corner-framed glass panel
        ------------------------------------------------ */
     .ap-cta {
         padding-bottom: 40px;
 
         &__inner {
-            border: 1px solid var(--v8-border-accent, var(--v8-border));
-            padding: 56px 48px;
+            position: relative;
+            background: var(--v8-glass-bg);
+            backdrop-filter: blur(12px) saturate(1.4);
+            -webkit-backdrop-filter: blur(12px) saturate(1.4);
+            border: 1px solid var(--v8-glass-border);
+            box-shadow:
+                0 1px 0 var(--v8-glass-highlight) inset,
+                0 24px 60px -36px rgba(0, 0, 0, 0.25);
+            padding: 64px 56px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
 
             .ap-list {
                 align-self: stretch;
+            }
+        }
+
+        &__corner {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            color: var(--v8-text-faint);
+            pointer-events: none;
+
+            &--tl {
+                top: 12px;
+                left: 12px;
+                border-top: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--tr {
+                top: 12px;
+                right: 12px;
+                border-top: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
+            &--bl {
+                bottom: 12px;
+                left: 12px;
+                border-bottom: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--br {
+                bottom: 12px;
+                right: 12px;
+                border-bottom: 1px solid currentColor;
+                border-right: 1px solid currentColor;
             }
         }
     }
@@ -658,6 +886,10 @@ const contactUrl = '#contact';
         .ap-split {
             gap: 32px;
         }
+
+        .ap-system__components {
+            grid-template-columns: 1fr;
+        }
     }
 
     @media (max-width: 768px) {
@@ -667,6 +899,19 @@ const contactUrl = '#contact';
 
         .ap-hero {
             padding: 120px 24px 40px;
+        }
+
+        .ap-flow {
+            gap: 8px;
+
+            &__link {
+                width: 16px;
+            }
+
+            &__node {
+                padding: 8px 12px;
+                white-space: normal;
+            }
         }
 
         .ap-offering {
@@ -692,13 +937,25 @@ const contactUrl = '#contact';
             gap: 40px;
         }
 
+        .ap-system {
+            padding: 28px 24px;
+        }
+
+        .ap-steps {
+            padding-left: 28px;
+        }
+
         .ap-step {
-            grid-template-columns: 40px 1fr;
+            grid-template-columns: 36px 1fr;
             gap: 16px;
+
+            &::before {
+                left: -25px;
+            }
         }
 
         .ap-cta__inner {
-            padding: 36px 24px;
+            padding: 40px 24px;
         }
 
         .ap-list__item {

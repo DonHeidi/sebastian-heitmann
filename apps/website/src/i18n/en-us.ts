@@ -739,6 +739,7 @@ export const enUs: Strings = {
       headline: 'Building AI-powered products and processes',
       subline: 'AI only creates dependable value once it is embedded in a working process.',
       cta: 'Discuss your initiative',
+      flow: ['Incoming work', 'AI + automation', 'Human decision', 'Your systems'],
     },
     approach: {
       eyebrow: 'Approach',
@@ -815,6 +816,7 @@ export const enUs: Strings = {
           ],
           price: 'From \u20ac10,990 net',
           priceNote: 'Delivery within four weeks requires that the use case is sufficiently bounded, the necessary data and access are available, and decisions can be made quickly during development.',
+          featured: true,
         },
         {
           name: 'Custom AI System',

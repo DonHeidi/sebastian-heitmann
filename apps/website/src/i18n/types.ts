@@ -312,7 +312,7 @@ export interface Strings {
   };
   aiProcessAutomation: {
     meta: { title: string; description: string };
-    hero: { eyebrow: string; headline: string; subline: string; cta: string };
+    hero: { eyebrow: string; headline: string; subline: string; cta: string; flow: string[] };
     approach: { eyebrow: string; headline: string; body: string[] };
     offerings: {
       eyebrow: string;
@@ -328,6 +328,7 @@ export interface Strings {
         outcomes?: string[];
         price: string;
         priceNote?: string;
+        featured?: boolean;
       }>;
     };
     example: {

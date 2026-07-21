@@ -83,131 +83,7 @@
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Page backdrop — decorative dot/grid layers behind sections.         */
-/* Ported from the old global `<style lang="scss" is:global>` block in */
-/* Layout.astro (pre-migration). The SCSS `_zone`/`spot`/`stripe-h`/    */
-/* `stripe-v` functions and `masked` mixin generated these gradients;  */
-/* per the conversion rules ("truly unportable decorative CSS ...      */
-/* stays as plain CSS"), the computed `mask-image` gradient lists below */
-/* are transplanted verbatim from the pre-cleanup built CSS             */
-/* (dist/_astro/Layout.*.css, saved at                                  */
-/* .screenshots/task15/backdrop-before.css) rather than hand-derived —  */
-/* re-deriving twelve/sixteen radial-gradient stops by hand risks       */
-/* transcription drift from the shipped visual. Shape sizes stay in     */
-/* fixed px (silhouettes consistent across viewports); positions stay   */
-/* in % (each cloud tracks the section it sits behind). Lives in        */
-/* `@layer components`: only `.page-backdrop` and its `is:global` class */
-/* names apply here, with no co-occurring Tailwind utility classes on   */
-/* the same elements (Layout.astro renders bare                        */
-/* `class="page-backdrop"` / `__dots` / `__grid`), so there is nothing  */
-/* for the unlayered-beats-layered rule to defeat.                      */
-/* ------------------------------------------------------------------ */
 @layer components {
-  .page-backdrop {
-    position: absolute;
-    inset: 0;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    overflow: hidden;
-  }
-
-  .page-backdrop > .page-backdrop__dots,
-  .page-backdrop > .page-backdrop__grid {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(100%, 1440px);
-  }
-
-  .page-backdrop__dots {
-    background-image: radial-gradient(circle, var(--v8-dot-color) 1px, transparent 1.5px);
-    background-size: 18px 18px;
-    -webkit-mask-image:
-      radial-gradient(ellipse 160px 400px at 70% 14%, black 0%, transparent 70%),
-      radial-gradient(ellipse 90px 520px at 75% 15%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 64% 11%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 78% 18%, black 0%, transparent 70%),
-      radial-gradient(ellipse 190px 460px at 56% 47%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 580px at 51% 49%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 62% 44%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 50% 52%, black 0%, transparent 70%),
-      radial-gradient(ellipse 100px 640px at 84% 80%, black 0%, transparent 70%),
-      radial-gradient(ellipse 150px 350px at 80% 78%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 86% 73%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 78% 84%, black 0%, transparent 70%);
-    mask-image:
-      radial-gradient(ellipse 160px 400px at 70% 14%, black 0%, transparent 70%),
-      radial-gradient(ellipse 90px 520px at 75% 15%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 64% 11%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 78% 18%, black 0%, transparent 70%),
-      radial-gradient(ellipse 190px 460px at 56% 47%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 580px at 51% 49%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 62% 44%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 50% 52%, black 0%, transparent 70%),
-      radial-gradient(ellipse 100px 640px at 84% 80%, black 0%, transparent 70%),
-      radial-gradient(ellipse 150px 350px at 80% 78%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 86% 73%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 78% 84%, black 0%, transparent 70%);
-  }
-
-  .page-backdrop__grid {
-    background-image:
-      /* major: 200px (5cm) */
-      linear-gradient(to right, var(--v8-grid-major) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-major) 1px, transparent 1px),
-      /* medium: 40px (1cm) */
-      linear-gradient(to right, var(--v8-grid-medium) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
-      /* fine: 8px (1mm) */
-      linear-gradient(to right, var(--v8-grid-fine) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
-    background-size:
-      200px 200px,
-      200px 200px,
-      40px 40px,
-      40px 40px,
-      8px 8px,
-      8px 8px;
-    -webkit-mask-image:
-      radial-gradient(ellipse 175px 1900px at 26% 16%, black 0%, transparent 70%),
-      radial-gradient(ellipse 390px 520px at 38% 30%, black 0%, transparent 70%),
-      radial-gradient(ellipse 230px 230px at 72% 38%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 640px at 72% 44%, black 0%, transparent 70%),
-      radial-gradient(ellipse 200px 230px at 26% 56%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 700px at 26% 56%, black 0%, transparent 70%),
-      radial-gradient(ellipse 200px 520px at 67% 65%, black 0%, transparent 70%),
-      radial-gradient(ellipse 90px 640px at 75% 67%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 75px at 60% 62%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 70% 73%, black 0%, transparent 70%),
-      radial-gradient(ellipse 230px 580px at 50% 77%, black 0%, transparent 70%),
-      radial-gradient(ellipse 100px 700px at 42% 79%, black 0%, transparent 70%),
-      radial-gradient(ellipse 85px 85px at 59% 81%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 56% 73%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 75px at 56% 90%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 75px at 56% 96%, black 0%, transparent 70%);
-    mask-image:
-      radial-gradient(ellipse 175px 1900px at 26% 16%, black 0%, transparent 70%),
-      radial-gradient(ellipse 390px 520px at 38% 30%, black 0%, transparent 70%),
-      radial-gradient(ellipse 230px 230px at 72% 38%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 640px at 72% 44%, black 0%, transparent 70%),
-      radial-gradient(ellipse 200px 230px at 26% 56%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 700px at 26% 56%, black 0%, transparent 70%),
-      radial-gradient(ellipse 200px 520px at 67% 65%, black 0%, transparent 70%),
-      radial-gradient(ellipse 90px 640px at 75% 67%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 75px at 60% 62%, black 0%, transparent 70%),
-      radial-gradient(ellipse 60px 60px at 70% 73%, black 0%, transparent 70%),
-      radial-gradient(ellipse 230px 580px at 50% 77%, black 0%, transparent 70%),
-      radial-gradient(ellipse 100px 700px at 42% 79%, black 0%, transparent 70%),
-      radial-gradient(ellipse 85px 85px at 59% 81%, black 0%, transparent 70%),
-      radial-gradient(ellipse 45px 45px at 56% 73%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 75px at 56% 90%, black 0%, transparent 70%),
-      radial-gradient(ellipse 75px 75px at 56% 96%, black 0%, transparent 70%);
-  }
-
   /* ------------------------------------------------------------------ */
   /* Reveal-on-scroll utility, paired with the IntersectionObserver in   */
   /* Layout.astro's untouched <script> tag. No co-occurring opacity/     */
@@ -238,8 +114,8 @@
 /* Backdrop composition vocabulary (`.bd-*`) for the home-page         */
 /* backdrop moments — see                                              */
 /* docs/superpowers/specs/2026-07-20-backdrop-composition-design.md.   */
-/* Unlike `.page-backdrop`, these classes DO co-occur with Tailwind    */
-/* utilities on the same elements. That is safe because the utilities  */
+/* These classes DO co-occur with Tailwind utilities on the same       */
+/* elements. That is safe because the utilities                        */
 /* set only geometry (position/size/display) and never the properties  */
 /* declared here, so utilities-beats-components layering cannot bite.  */
 /* ------------------------------------------------------------------ */

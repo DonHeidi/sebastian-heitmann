@@ -235,6 +235,63 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Backdrop composition vocabulary (`.bd-*`) for the home-page         */
+/* backdrop moments — see                                              */
+/* docs/superpowers/specs/2026-07-20-backdrop-composition-design.md.   */
+/* Unlike `.page-backdrop`, these classes DO co-occur with Tailwind    */
+/* utilities on the same elements. That is safe because the utilities  */
+/* set only geometry (position/size/display) and never the properties  */
+/* declared here, so utilities-beats-components layering cannot bite.  */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .bd-dots {
+    background-image: radial-gradient(circle, var(--v8-dot-color) 1px, transparent 1.5px);
+    background-size: 18px 18px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 75%);
+  }
+
+  .bd-grid-fine {
+    background-image:
+      linear-gradient(to right, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to right, var(--v8-grid-fine) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
+    background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+    mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 0%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 0%, transparent 78%);
+  }
+
+  /* full 5cm/1cm/1mm engineering grid, faded toward its top-left —    */
+  /* used as the hero anchor, cropped by the section's bottom-right    */
+  .bd-grid-full {
+    background-image:
+      linear-gradient(to right, var(--v8-grid-major) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-major) 1px, transparent 1px),
+      linear-gradient(to right, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to right, var(--v8-grid-fine) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
+    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+    mask-image: radial-gradient(ellipse 115% 115% at 100% 100%, black 42%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 115% 115% at 100% 100%, black 42%, transparent 78%);
+  }
+
+  .bd-stroke-mid   { stroke: var(--v8-text); stroke-width: 1; opacity: 0.16; }
+  .bd-stroke-faint { stroke: var(--v8-text); stroke-width: 1; opacity: 0.09; }
+  .bd-fill-faint   { fill: var(--v8-text); opacity: 0.12; }
+  .bd-node         { stroke: var(--v8-text); stroke-width: 1; fill: none; opacity: 0.2; }
+  .bd-accent-fill  { fill: var(--v8-accent); opacity: 0.85; }
+  .bd-dim-label {
+    fill: var(--v8-text);
+    opacity: 0.35;
+    font-family: var(--v8-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Grain overlay for banded sections.                                  */
 /* Ported verbatim from the old `@mixin grain($opacity)` (Astro/SCSS,   */
 /* technical-project-management-content.astro, pre-migration) — the    */

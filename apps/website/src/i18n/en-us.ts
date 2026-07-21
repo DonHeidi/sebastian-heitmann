@@ -752,6 +752,11 @@ export const enUs: Strings = {
     offerings: {
       eyebrow: 'Offerings',
       headline: 'Three ways to start',
+      details: {
+        eyebrow: 'In Detail',
+        headline: 'Scope and outcomes',
+        linkLabel: 'Scope & outcome',
+      },
       items: [
         {
           name: 'AI Prototype',

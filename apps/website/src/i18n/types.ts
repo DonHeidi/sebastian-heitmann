@@ -317,6 +317,7 @@ export interface Strings {
     offerings: {
       eyebrow: string;
       headline: string;
+      details: { eyebrow: string; headline: string; linkLabel: string };
       items: Array<{
         name: string;
         tagline: string;

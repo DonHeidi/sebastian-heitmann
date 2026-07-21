@@ -69,26 +69,52 @@ const contactUrl = '#contact';
                         <p>{p}</p>
                     ))}
                 </div>
-                <div class="ap-offering__block ap-offering__block--scope">
-                    <h4 class="ap-offering__label">{o.scopeLabel}</h4>
-                    <ul class="ap-offering__list">
-                        {o.scope.map(item => (
-                            <li class="ap-offering__item">{item}</li>
-                        ))}
-                    </ul>
+                <a class="ap-offering__link" href={`#offering-details-${i + 1}`}>
+                    <span>{content.offerings.details.linkLabel}</span>
+                    <span class="ap-offering__link-arrow">&darr;</span>
+                </a>
+            </article>
+        ))}
+    </div>
+</section>
+
+<!-- 3b. Offering details -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.offerings.details.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.offerings.details.headline}</h2>
+    <div class="ap-details">
+        {content.offerings.items.map((o, i) => (
+            <article class="ap-detail" id={`offering-details-${i + 1}`}>
+                <div class="ap-detail__head">
+                    <span class="ap-detail__num">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="ap-detail__name">{o.name}</h3>
+                    <span class="ap-detail__price">{o.price}</span>
                 </div>
-                <div class="ap-offering__block ap-offering__block--outcome">
-                    <h4 class="ap-offering__label">{o.outcomeLabel}</h4>
-                    <p class="ap-offering__outcome-intro">{o.outcomeIntro}</p>
-                    {o.outcomes && (
-                        <ul class="ap-offering__list">
-                            {o.outcomes.map(item => (
-                                <li class="ap-offering__item">{item}</li>
+                <div class="ap-detail__grid">
+                    <div class="ap-detail__col">
+                        <h4 class="ap-detail__label">{o.scopeLabel}</h4>
+                        <ul class="ap-detail__list">
+                            {o.scope.map(item => (
+                                <li class="ap-detail__item">{item}</li>
                             ))}
                         </ul>
-                    )}
+                    </div>
+                    <div class="ap-detail__col">
+                        <h4 class="ap-detail__label">{o.outcomeLabel}</h4>
+                        <p class="ap-detail__outcome-intro">{o.outcomeIntro}</p>
+                        {o.outcomes && (
+                            <ul class="ap-detail__list">
+                                {o.outcomes.map(item => (
+                                    <li class="ap-detail__item">{item}</li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 </div>
-                <p class="ap-offering__price-note">{o.priceNote ?? ''}</p>
+                {o.priceNote && <p class="ap-detail__price-note">{o.priceNote}</p>}
             </article>
         ))}
     </div>
@@ -401,7 +427,7 @@ const contactUrl = '#contact';
     .ap-offering {
         position: relative;
         display: grid;
-        grid-row: span 6;
+        grid-row: span 4;
         grid-template-rows: subgrid;
         background: var(--v8-glass-bg);
         backdrop-filter: blur(12px) saturate(1.4);
@@ -506,7 +532,91 @@ const contactUrl = '#contact';
             }
         }
 
-        &__block {
+        &__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            align-self: end;
+            justify-self: start;
+            text-decoration: none;
+            padding-top: 16px;
+            border-top: 1px solid var(--v8-border);
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-accent);
+            transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+            &:hover {
+                gap: 16px;
+            }
+        }
+
+        &__link-arrow {
+            font-size: 13px;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        &__link:hover &__link-arrow {
+            transform: translateY(3px);
+        }
+    }
+
+    /* ------------------------------------------------
+       3b. Offering details
+       ------------------------------------------------ */
+    .ap-details {
+        display: flex;
+        flex-direction: column;
+        gap: 72px;
+    }
+
+    .ap-detail {
+        scroll-margin-top: 100px;
+
+        &__head {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--v8-border);
+            margin-bottom: 28px;
+        }
+
+        &__num {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            color: var(--v8-accent);
+        }
+
+        &__name {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(22px, 2.4vw, 28px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--v8-text);
+            margin: 0;
+        }
+
+        &__price {
+            font-family: var(--v8-font-mono);
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            color: var(--v8-accent);
+            text-align: right;
+            margin-left: auto;
+        }
+
+        &__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+
+        &__col {
             display: flex;
             flex-direction: column;
         }
@@ -556,7 +666,8 @@ const contactUrl = '#contact';
             font-weight: 300;
             line-height: 1.6;
             color: var(--v8-text-muted);
-            margin: 0;
+            max-width: 640px;
+            margin: 28px 0 0;
         }
     }
 
@@ -871,41 +982,12 @@ const contactUrl = '#contact';
         }
 
         .ap-offering {
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto;
-            grid-template-areas:
-                'meta meta'
-                'title title'
-                'desc desc'
-                'scope outcome'
-                'note note';
-            column-gap: 48px;
-            row-gap: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
             padding: 36px 32px;
 
-            &__meta {
-                grid-area: meta;
-            }
-
-            &__title-group {
-                grid-area: title;
-            }
-
             &__desc {
-                grid-area: desc;
-                max-width: 640px;
-            }
-
-            &__block--scope {
-                grid-area: scope;
-            }
-
-            &__block--outcome {
-                grid-area: outcome;
-            }
-
-            &__price-note {
-                grid-area: note;
                 max-width: 640px;
             }
         }
@@ -938,15 +1020,18 @@ const contactUrl = '#contact';
         }
 
         .ap-offering {
-            grid-template-columns: 1fr;
-            grid-template-areas:
-                'meta'
-                'title'
-                'desc'
-                'scope'
-                'outcome'
-                'note';
             padding: 28px 24px;
+            gap: 20px;
+        }
+
+        .ap-detail__grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .ap-detail__head {
+            flex-wrap: wrap;
+            gap: 12px 20px;
         }
 
         .ap-system {

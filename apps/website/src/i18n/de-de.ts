@@ -752,6 +752,11 @@ export const deDe: Strings = {
     offerings: {
       eyebrow: 'Angebote',
       headline: 'Drei Wege zum Einstieg',
+      details: {
+        eyebrow: 'Im Detail',
+        headline: 'Leistungsumfang und Ergebnisse',
+        linkLabel: 'Leistungsumfang & Ergebnis',
+      },
       items: [
         {
           name: 'KI-Prototyp',

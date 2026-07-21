@@ -7,7 +7,13 @@ export interface CapabilitiesSectionProps {
 
 export function CapabilitiesSection({ capabilities }: CapabilitiesSectionProps) {
   return (
-    <section className="reveal mx-auto max-w-[1440px] px-6 py-10 md:px-12 md:py-[60px] lg:px-20 lg:py-20">
+    <section className="relative isolate reveal mx-auto max-w-[1440px] px-6 py-10 md:px-12 md:py-[60px] lg:px-20 lg:py-20">
+      {/* quiet-field seam patch: lives in THIS section, not the situations band below,
+          because -z-10 only paints behind its own section's content — a patch hosted
+          below and bled upward would paint on top of these cards */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="bd-dots absolute bottom-[-150px] left-[6%] h-[300px] w-[280px]" />
+      </div>
       <div className="mb-10 flex items-center gap-6 pb-8 md:mb-0">
         <span className="shrink-0 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
           {capabilities.eyebrow}

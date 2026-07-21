@@ -22,6 +22,11 @@ export function ProofSection({ proof, webDevLink, tpmLink }: ProofSectionProps) 
       className="relative isolate mx-auto max-w-[1440px] py-[60px] px-6 md:px-12 md:py-20 lg:border-t lg:border-border lg:px-20 lg:py-[120px]"
     >
       <ProofSchematicMoment />
+      {/* quiet-field seam patch for the writing seam below: hosted here, not in the
+          writing section, so -z-10 puts it behind content instead of over these cards */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="bd-grid-fine absolute bottom-[-80px] left-[8%] h-[300px] w-[280px] md:w-[430px]" />
+      </div>
       {CORNERS.map((c) => (
         <span
           key={c.key}

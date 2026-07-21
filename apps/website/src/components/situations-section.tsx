@@ -7,7 +7,10 @@ export interface SituationsSectionProps {
 
 export function SituationsSection({ situations }: SituationsSectionProps) {
   return (
-    <section className="reveal mt-16 bg-surface-alt py-10 px-6 md:px-12 lg:px-20 lg:py-20">
+    <section className="reveal relative isolate mt-16 bg-surface-alt py-10 px-6 md:px-12 lg:px-20 lg:py-20">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="bd-dots absolute top-[-320px] left-[6%] h-[300px] w-[280px]" />
+      </div>
       <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
         <div className="flex items-center gap-6">
           <span className="shrink-0 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">

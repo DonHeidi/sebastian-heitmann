@@ -31,7 +31,10 @@ export function FeaturedArticlesSection({
   if (articles.length === 0) return null;
 
   return (
-    <section id="writing" className="mx-auto max-w-[1440px] border-t border-border py-12 px-6 md:px-12 lg:py-[120px] lg:px-20">
+    <section id="writing" className="relative isolate mx-auto max-w-[1440px] border-t border-border py-12 px-6 md:px-12 lg:py-[120px] lg:px-20">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="bd-grid-fine absolute top-[-150px] left-[8%] h-[300px] w-[430px]" />
+      </div>
       <div className="flex flex-col gap-12">
         <div className="reveal flex items-center gap-6">
           <span className="shrink-0 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">

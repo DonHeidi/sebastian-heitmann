@@ -1,4 +1,5 @@
 import { DotRule } from './dot-rule';
+import { ProofSchematicMoment } from './backdrop/proof-schematic-moment';
 import type { Strings } from '@/i18n/types';
 
 export interface ProofSectionProps {
@@ -18,8 +19,9 @@ export function ProofSection({ proof, webDevLink, tpmLink }: ProofSectionProps) 
   return (
     <section
       id="proof"
-      className="relative mx-auto max-w-[1440px] py-[60px] px-6 md:px-12 md:py-20 lg:border-t lg:border-border lg:px-20 lg:py-[120px]"
+      className="relative isolate mx-auto max-w-[1440px] py-[60px] px-6 md:px-12 md:py-20 lg:border-t lg:border-border lg:px-20 lg:py-[120px]"
     >
+      <ProofSchematicMoment />
       {CORNERS.map((c) => (
         <span
           key={c.key}

@@ -364,7 +364,6 @@ export interface Strings {
       body: string;
       bullets: string[];
       closing: string;
-      button: string;
     };
     contact: {
       headline: string;

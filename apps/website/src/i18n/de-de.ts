@@ -937,11 +937,10 @@ export const deDe: Strings = {
         'welches Ergebnis Sie erreichen möchten',
       ],
       closing: 'Anschließend können wir einordnen, ob ein Prototyp, ein produktiver erster Release oder eine individuelle Systementwicklung der sinnvollste Einstieg ist.',
-      button: 'Vorhaben besprechen',
     },
     contact: {
-      headline: 'Ein konkretes Vorhaben besprechen',
-      intro: 'Beschreiben Sie Ihren Prozess in wenigen Sätzen. Ich melde mich innerhalb eines Werktags mit einer ehrlichen Einschätzung zum sinnvollsten Einstieg.',
+      headline: 'Erzählen Sie mir von Ihrem Prozess.',
+      intro: 'Beschreiben Sie ihn in wenigen Sätzen. Ich melde mich innerhalb eines Werktags mit einer ehrlichen Einschätzung zum sinnvollsten Einstieg.',
     },
   },
 };

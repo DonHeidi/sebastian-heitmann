@@ -937,11 +937,10 @@ export const enUs: Strings = {
         'what outcome you want to reach',
       ],
       closing: 'We can then determine whether a prototype, a production-ready first release, or a custom system development is the most sensible way to start.',
-      button: 'Discuss your initiative',
     },
     contact: {
-      headline: 'Discuss a concrete initiative',
-      intro: 'Describe your process in a few sentences. I will get back to you within one business day with a candid view on the most sensible way to start.',
+      headline: 'Tell me about your process.',
+      intro: 'Describe it in a few sentences. I will get back to you within one business day with a candid view on the most sensible way to start.',
     },
   },
 };

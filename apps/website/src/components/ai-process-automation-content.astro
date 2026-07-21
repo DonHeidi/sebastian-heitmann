@@ -56,13 +56,13 @@ const contactUrl = '#contact';
             <article class:list={['ap-offering', { 'ap-offering--featured': o.featured }]}>
                 <span class="ap-offering__corner ap-offering__corner--tl" aria-hidden="true"></span>
                 <span class="ap-offering__corner ap-offering__corner--br" aria-hidden="true"></span>
-                <div class="ap-offering__head">
+                <div class="ap-offering__meta">
                     <span class="ap-offering__num">{String(i + 1).padStart(2, '0')}</span>
-                    <div class="ap-offering__title-group">
-                        <h3 class="ap-offering__name">{o.name}</h3>
-                        <p class="ap-offering__tagline">{o.tagline}</p>
-                    </div>
                     <span class="ap-offering__price">{o.price}</span>
+                </div>
+                <div class="ap-offering__title-group">
+                    <h3 class="ap-offering__name">{o.name}</h3>
+                    <p class="ap-offering__tagline">{o.tagline}</p>
                 </div>
                 <div class="ap-offering__desc">
                     {o.description.map(p => (
@@ -189,10 +189,6 @@ const contactUrl = '#contact';
             ))}
         </ul>
         <p class="ap-body__closing">{content.cta.closing}</p>
-        <a class="ap-cta-link" href={contactUrl}>
-            <span class="ap-cta-link__text">{content.cta.button}</span>
-            <span class="ap-cta-link__arrow">&rarr;</span>
-        </a>
     </div>
 </section>
 
@@ -405,7 +401,7 @@ const contactUrl = '#contact';
     .ap-offering {
         position: relative;
         display: grid;
-        grid-row: span 5;
+        grid-row: span 6;
         grid-template-rows: subgrid;
         background: var(--v8-glass-bg);
         backdrop-filter: blur(12px) saturate(1.4);
@@ -454,11 +450,11 @@ const contactUrl = '#contact';
             }
         }
 
-        &__head {
+        &__meta {
             display: flex;
-            flex-wrap: wrap;
+            justify-content: space-between;
             align-items: baseline;
-            gap: 12px 24px;
+            gap: 24px;
         }
 
         &__num {
@@ -466,11 +462,6 @@ const contactUrl = '#contact';
             font-size: 10px;
             letter-spacing: 0.14em;
             color: var(--v8-accent);
-        }
-
-        &__title-group {
-            flex-basis: 100%;
-            order: 3;
         }
 
         &__name {
@@ -497,8 +488,7 @@ const contactUrl = '#contact';
             font-size: 14px;
             letter-spacing: 0.04em;
             color: var(--v8-accent);
-            white-space: nowrap;
-            margin-left: auto;
+            text-align: right;
         }
 
         &__desc {
@@ -884,7 +874,8 @@ const contactUrl = '#contact';
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto;
             grid-template-areas:
-                'head head'
+                'meta meta'
+                'title title'
                 'desc desc'
                 'scope outcome'
                 'note note';
@@ -892,8 +883,12 @@ const contactUrl = '#contact';
             row-gap: 28px;
             padding: 36px 32px;
 
-            &__head {
-                grid-area: head;
+            &__meta {
+                grid-area: meta;
+            }
+
+            &__title-group {
+                grid-area: title;
             }
 
             &__desc {
@@ -945,7 +940,8 @@ const contactUrl = '#contact';
         .ap-offering {
             grid-template-columns: 1fr;
             grid-template-areas:
-                'head'
+                'meta'
+                'title'
                 'desc'
                 'scope'
                 'outcome'

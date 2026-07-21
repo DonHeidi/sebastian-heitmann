@@ -106,10 +106,16 @@ Content columns span the full width below `lg`, so moments reduce:
 - **Host sections need `relative isolate`.** `isolate` is load-bearing: without a
   stacking context on the section, a negative-z-index layer paints behind the
   *root*, and any opaque section background (the contact band) hides it entirely.
-- The **quiet-field patches** also live inside sections (situations patch inside the
-  situations section with a negative top offset — that layer must not clip, so it gets
-  `overflow-visible`; writing patch inside the featured-articles section) — no
-  page-level measured container, no resize listeners.
+- The **quiet-field patches** live inside the section *preceding* the seam they mark
+  (dots in capabilities, grid in proof), bottom-anchored and clipped. This is forced by
+  how `-z-10` works: it only paints behind its **own** section's content, so a patch
+  hosted below the seam and bled upward lands *on top of* the previous section's cards
+  and text. Hosting it in the preceding (transparent) section puts it genuinely behind
+  content. Patches must also stay within the viewport width — an unclipped wide patch
+  creates document-level horizontal overflow on phones.
+- Sections whose component is **shared** with non-home pages (`ContactSection`) must
+  gate their moment behind an opt-in prop, or the composition silently ships beyond
+  the home-page scope.
 - Shared vocabulary (dot patch, grid patch, stroke-tier classes) goes in
   `global.css` under `@layer components` as `.bd-*` classes (backdrop namespace),
   documented like the existing `.page-backdrop` block. SVGs are inline JSX per moment.

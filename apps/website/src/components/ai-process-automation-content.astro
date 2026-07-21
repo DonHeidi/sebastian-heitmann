@@ -1,0 +1,1063 @@
+---
+import type { Strings } from '../i18n/types';
+
+type Props = {
+    content: Strings['aiProcessAutomation'];
+};
+
+const { content } = Astro.props;
+const contactUrl = '#contact';
+---
+
+<!-- 1. Hero -->
+<section class="ap-hero reveal">
+    <div class="ap-hero__content">
+        <span class="ap-eyebrow">{content.hero.eyebrow}</span>
+        <h1 class="ap-hero__headline">{content.hero.headline}</h1>
+        <p class="ap-hero__subline">{content.hero.subline}</p>
+        <div class="ap-flow" role="list">
+            {content.hero.flow.map((label, i) => (
+                <Fragment>
+                    {i > 0 && <span class="ap-flow__link" aria-hidden="true"></span>}
+                    <span class="ap-flow__node" role="listitem">{label}</span>
+                </Fragment>
+            ))}
+        </div>
+        <a class="ap-cta-link" href={contactUrl}>
+            <span class="ap-cta-link__text">{content.hero.cta}</span>
+            <span class="ap-cta-link__arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- 2. Approach -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.approach.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.approach.headline}</h2>
+    <div class="ap-body">
+        {content.approach.body.map(p => (
+            <p>{p}</p>
+        ))}
+    </div>
+</section>
+
+<!-- 3. Offerings -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.offerings.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.offerings.headline}</h2>
+    <div class="ap-offerings">
+        {content.offerings.items.map((o, i) => (
+            <article class:list={['ap-offering', { 'ap-offering--featured': o.featured }]}>
+                <span class="ap-offering__corner ap-offering__corner--tl" aria-hidden="true"></span>
+                <span class="ap-offering__corner ap-offering__corner--br" aria-hidden="true"></span>
+                <div class="ap-offering__meta">
+                    <span class="ap-offering__num">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="ap-offering__price">{o.price}</span>
+                </div>
+                <div class="ap-offering__title-group">
+                    <h3 class="ap-offering__name">{o.name}</h3>
+                    <p class="ap-offering__tagline">{o.tagline}</p>
+                </div>
+                <div class="ap-offering__desc">
+                    {o.description.map(p => (
+                        <p>{p}</p>
+                    ))}
+                </div>
+                <a class="ap-offering__link" href={`#offering-details-${i + 1}`}>
+                    <span>{content.offerings.details.linkLabel}</span>
+                    <span class="ap-offering__link-arrow">&darr;</span>
+                </a>
+            </article>
+        ))}
+    </div>
+</section>
+
+<!-- 3b. Offering details -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.offerings.details.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.offerings.details.headline}</h2>
+    <div class="ap-details">
+        {content.offerings.items.map((o, i) => (
+            <article class="ap-detail" id={`offering-details-${i + 1}`}>
+                <div class="ap-detail__head">
+                    <span class="ap-detail__num">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="ap-detail__name">{o.name}</h3>
+                    <span class="ap-detail__price">{o.price}</span>
+                </div>
+                <div class="ap-detail__grid">
+                    <div class="ap-detail__col">
+                        <h4 class="ap-detail__label">{o.scopeLabel}</h4>
+                        <ul class="ap-detail__list">
+                            {o.scope.map(item => (
+                                <li class="ap-detail__item">{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div class="ap-detail__col">
+                        <h4 class="ap-detail__label">{o.outcomeLabel}</h4>
+                        <p class="ap-detail__outcome-intro">{o.outcomeIntro}</p>
+                        {o.outcomes && (
+                            <ul class="ap-detail__list">
+                                {o.outcomes.map(item => (
+                                    <li class="ap-detail__item">{item}</li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+                {o.priceNote && <p class="ap-detail__price-note">{o.priceNote}</p>}
+            </article>
+        ))}
+    </div>
+</section>
+
+<!-- 4. Example: Job Directory -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.example.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.example.headline}</h2>
+    <div class="ap-system">
+        <span class="ap-offering__corner ap-offering__corner--tl" aria-hidden="true"></span>
+        <span class="ap-offering__corner ap-offering__corner--br" aria-hidden="true"></span>
+        <p class="ap-system__intro">{content.example.intro}</p>
+        <ul class="ap-system__components">
+            {content.example.components.map(item => (
+                <li class="ap-system__component">{item}</li>
+            ))}
+        </ul>
+        <div class="ap-system__body">
+            {content.example.body.map(p => (
+                <p>{p}</p>
+            ))}
+        </div>
+        <a class="ap-cta-link" href={content.example.linkHref} target="_blank" rel="noopener noreferrer">
+            <span class="ap-cta-link__text">{content.example.linkLabel}</span>
+            <span class="ap-cta-link__arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- 5. Use cases -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.useCases.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.useCases.headline}</h2>
+    <p class="ap-lead">{content.useCases.intro}</p>
+    <ul class="ap-list">
+        {content.useCases.items.map((item, i) => (
+            <li class="ap-list__item" style={`transition-delay: ${i * 0.06}s`}>{item}</li>
+        ))}
+    </ul>
+    <p class="ap-body__closing">{content.useCases.closing}</p>
+</section>
+
+<!-- 6. Process steps -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.process.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.process.headline}</h2>
+    <ol class="ap-steps">
+        {content.process.steps.map((step, i) => (
+            <li class="ap-step">
+                <span class="ap-step__num">{String(i + 1).padStart(2, '0')}</span>
+                <div class="ap-step__content">
+                    <h3 class="ap-step__title">{step.title}</h3>
+                    <p class="ap-step__desc">{step.description}</p>
+                </div>
+            </li>
+        ))}
+    </ol>
+</section>
+
+<!-- 7. Evolution -->
+<section class="ap-section reveal">
+    <div class="ap-header">
+        <span class="ap-eyebrow">{content.evolution.eyebrow}</span>
+        <div class="ap-rule"></div>
+    </div>
+    <h2 class="ap-headline">{content.evolution.headline}</h2>
+    <p class="ap-lead">{content.evolution.intro}</p>
+    <ul class="ap-tags">
+        {content.evolution.items.map(item => (
+            <li class="ap-tags__item">{item}</li>
+        ))}
+    </ul>
+    <p class="ap-body__closing">{content.evolution.closing}</p>
+</section>
+
+<!-- 8. CTA bridge -->
+<section class="ap-section ap-cta reveal">
+    <div class="ap-cta__inner">
+        <span class="ap-cta__corner ap-cta__corner--tl" aria-hidden="true"></span>
+        <span class="ap-cta__corner ap-cta__corner--tr" aria-hidden="true"></span>
+        <span class="ap-cta__corner ap-cta__corner--bl" aria-hidden="true"></span>
+        <span class="ap-cta__corner ap-cta__corner--br" aria-hidden="true"></span>
+        <h2 class="ap-headline">{content.cta.headline}</h2>
+        <p class="ap-lead">{content.cta.body}</p>
+        <ul class="ap-list ap-list--compact">
+            {content.cta.bullets.map(item => (
+                <li class="ap-list__item">{item}</li>
+            ))}
+        </ul>
+        <p class="ap-body__closing">{content.cta.closing}</p>
+    </div>
+</section>
+
+<style lang="scss">
+    /* ------------------------------------------------
+       Shared atoms
+       ------------------------------------------------ */
+    .ap-eyebrow {
+        font-family: var(--v8-font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--v8-text-muted);
+        flex-shrink: 0;
+    }
+
+    .ap-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding-bottom: 32px;
+    }
+
+    .ap-rule {
+        flex: 1;
+        height: 8px;
+        background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+        background-size: 6px 8px;
+        background-repeat: repeat-x;
+        background-position: 0 50%;
+        opacity: 0.85;
+    }
+
+    .ap-headline {
+        font-family: var(--v8-font-display);
+        font-size: clamp(32px, 4vw, 48px);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--v8-text);
+        margin: 0 0 32px;
+    }
+
+    .ap-lead {
+        font-family: var(--v8-font-body);
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 1.65;
+        color: var(--v8-text-secondary);
+        max-width: 640px;
+        margin: 0 0 32px;
+    }
+
+    .ap-body {
+        max-width: 640px;
+
+        p {
+            font-family: var(--v8-font-body);
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            margin: 0 0 20px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .ap-body__closing {
+        font-family: var(--v8-font-body);
+        font-size: 17px;
+        font-weight: 300;
+        line-height: 1.65;
+        color: var(--v8-text-secondary);
+        max-width: 640px;
+        margin: 40px 0 0;
+    }
+
+    .ap-cta-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--v8-accent);
+        align-self: flex-start;
+        margin-top: 32px;
+        transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+        &:hover {
+            gap: 20px;
+        }
+
+        &__text {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-text);
+        }
+
+        &__arrow {
+            font-size: 16px;
+            color: var(--v8-accent);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        &:hover &__arrow {
+            transform: translateX(4px);
+        }
+    }
+
+    /* ------------------------------------------------
+       Shared section wrapper
+       ------------------------------------------------ */
+    .ap-section {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 80px 80px;
+    }
+
+    /* ------------------------------------------------
+       1. Hero + workflow strip
+       ------------------------------------------------ */
+    .ap-hero {
+        width: 100%;
+        padding: 160px 80px 80px;
+
+        &__content {
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .ap-eyebrow {
+            margin-bottom: 8px;
+        }
+
+        &__headline {
+            font-family: var(--v8-font-display);
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--v8-text);
+            margin: 0;
+        }
+
+        &__subline {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 640px;
+            margin: 0;
+        }
+    }
+
+    .ap-flow {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+
+        &__node {
+            font-family: var(--v8-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-text-secondary);
+            padding: 10px 16px;
+            background: var(--v8-glass-bg);
+            backdrop-filter: blur(12px) saturate(1.4);
+            -webkit-backdrop-filter: blur(12px) saturate(1.4);
+            border: 1px solid var(--v8-glass-border);
+            box-shadow: 0 1px 0 var(--v8-glass-highlight) inset;
+            white-space: nowrap;
+        }
+
+        &__link {
+            width: 28px;
+            height: 8px;
+            flex-shrink: 0;
+            background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+            background-size: 6px 8px;
+            background-repeat: repeat-x;
+            background-position: 0 50%;
+            opacity: 0.85;
+        }
+    }
+
+    /* ------------------------------------------------
+       3. Offerings — side-by-side tiers, subgrid-aligned
+       ------------------------------------------------ */
+    .ap-offerings {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        column-gap: 16px;
+        row-gap: 28px;
+    }
+
+    .ap-offering {
+        position: relative;
+        display: grid;
+        grid-row: span 4;
+        grid-template-rows: subgrid;
+        background: var(--v8-glass-bg);
+        backdrop-filter: blur(12px) saturate(1.4);
+        -webkit-backdrop-filter: blur(12px) saturate(1.4);
+        border: 1px solid var(--v8-glass-border);
+        box-shadow:
+            0 1px 0 var(--v8-glass-highlight) inset,
+            0 24px 60px -36px rgba(0, 0, 0, 0.25);
+        padding: 36px 28px;
+        transition: border-color 0.3s ease;
+
+        &:hover {
+            border-color: var(--v8-text-muted);
+        }
+
+        &__corner {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            color: var(--v8-text-faint);
+
+            &--tl {
+                top: 8px;
+                left: 8px;
+                border-top: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--br {
+                bottom: 8px;
+                right: 8px;
+                border-bottom: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
+        }
+
+        &--featured {
+            border-color: var(--v8-border-accent);
+
+            .ap-offering__corner {
+                color: var(--v8-accent);
+            }
+
+            &:hover {
+                border-color: var(--v8-accent);
+            }
+        }
+
+        &__meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 24px;
+        }
+
+        &__num {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            color: var(--v8-accent);
+        }
+
+        &__name {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(26px, 2.4vw, 32px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--v8-text);
+            margin: 0 0 6px;
+        }
+
+        &__tagline {
+            font-family: var(--v8-font-body);
+            font-style: italic;
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--v8-text-muted);
+            margin: 0;
+        }
+
+        &__price {
+            font-family: var(--v8-font-mono);
+            font-size: 14px;
+            letter-spacing: 0.04em;
+            color: var(--v8-accent);
+            text-align: right;
+        }
+
+        &__desc {
+            p {
+                font-family: var(--v8-font-body);
+                font-size: 16px;
+                font-weight: 300;
+                line-height: 1.65;
+                color: var(--v8-text-secondary);
+                margin: 0 0 16px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        &__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            align-self: end;
+            justify-self: start;
+            text-decoration: none;
+            padding-top: 16px;
+            border-top: 1px solid var(--v8-border);
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--v8-accent);
+            transition: gap 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+            &:hover {
+                gap: 16px;
+            }
+        }
+
+        &__link-arrow {
+            font-size: 13px;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        &__link:hover &__link-arrow {
+            transform: translateY(3px);
+        }
+    }
+
+    /* ------------------------------------------------
+       3b. Offering details
+       ------------------------------------------------ */
+    .ap-details {
+        display: flex;
+        flex-direction: column;
+        gap: 72px;
+    }
+
+    .ap-detail {
+        scroll-margin-top: 100px;
+
+        &__head {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--v8-border);
+            margin-bottom: 28px;
+        }
+
+        &__num {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            color: var(--v8-accent);
+        }
+
+        &__name {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(22px, 2.4vw, 28px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--v8-text);
+            margin: 0;
+        }
+
+        &__price {
+            font-family: var(--v8-font-mono);
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            color: var(--v8-accent);
+            text-align: right;
+            margin-left: auto;
+        }
+
+        &__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+
+        &__col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__label {
+            font-family: var(--v8-font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--v8-text-muted);
+            margin: 0 0 20px;
+        }
+
+        &__list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-secondary);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--v8-border);
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+
+        &__outcome-intro {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-secondary);
+            margin: 0 0 16px;
+        }
+
+        &__price-note {
+            font-family: var(--v8-font-body);
+            font-style: italic;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-muted);
+            max-width: 640px;
+            margin: 28px 0 0;
+        }
+    }
+
+    /* ------------------------------------------------
+       4. Job Directory system card
+       ------------------------------------------------ */
+    .ap-system {
+        position: relative;
+        background: var(--v8-glass-bg);
+        backdrop-filter: blur(12px) saturate(1.4);
+        -webkit-backdrop-filter: blur(12px) saturate(1.4);
+        border: 1px solid var(--v8-glass-border);
+        box-shadow:
+            0 1px 0 var(--v8-glass-highlight) inset,
+            0 24px 60px -36px rgba(0, 0, 0, 0.25);
+        padding: 44px 40px;
+        display: flex;
+        flex-direction: column;
+
+        &__intro {
+            font-family: var(--v8-font-body);
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 640px;
+            margin: 0 0 32px;
+        }
+
+        &__components {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 36px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 48px;
+        }
+
+        &__component {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            line-height: 1.5;
+            color: var(--v8-text-secondary);
+            padding: 10px 0 10px 22px;
+            border-bottom: 1px solid var(--v8-border);
+            position: relative;
+            transition: color 0.2s ease;
+
+            &::before {
+                content: '\2731'; /* heavy asterisk — the --v8-asterisk mark */
+                position: absolute;
+                left: 0;
+                top: 10px;
+                font-size: 10px;
+                color: var(--v8-accent);
+            }
+
+            &:hover {
+                color: var(--v8-text);
+            }
+        }
+
+        &__body {
+            max-width: 640px;
+
+            p {
+                font-family: var(--v8-font-body);
+                font-size: 16px;
+                font-weight: 300;
+                line-height: 1.65;
+                color: var(--v8-text-secondary);
+                margin: 0 0 16px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       7. Tag grid (evolution)
+       ------------------------------------------------ */
+    .ap-tags {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 40px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        max-width: 900px;
+
+        &__item {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            color: var(--v8-text-secondary);
+            padding: 10px 16px;
+            border: 1px solid var(--v8-border);
+            transition: color 0.2s ease, border-color 0.2s ease;
+
+            &:hover {
+                color: var(--v8-text);
+                border-color: var(--v8-text-muted);
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       5. Use case list
+       ------------------------------------------------ */
+    .ap-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+
+        &__item {
+            font-family: var(--v8-font-body);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-tertiary);
+            padding: 24px 0 24px 32px;
+            border-bottom: 1px solid var(--v8-border);
+            position: relative;
+            transition: color 0.3s ease;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--v8-accent);
+                transition: transform 0.3s ease;
+            }
+
+            &:hover {
+                color: var(--v8-text);
+
+                &::before {
+                    transform: translateY(-50%) scale(1.3);
+                }
+            }
+
+            &:first-child {
+                border-top: 1px solid var(--v8-border);
+            }
+        }
+
+        &--compact &__item {
+            font-size: 17px;
+            padding: 16px 0 16px 32px;
+        }
+    }
+
+    /* ------------------------------------------------
+       6. Process steps — dotted spine
+       ------------------------------------------------ */
+    .ap-steps {
+        list-style: none;
+        padding: 0 0 0 36px;
+        margin: 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 16px;
+            bottom: 16px;
+            width: 8px;
+            background-image: radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px);
+            background-size: 8px 6px;
+            background-repeat: repeat-y;
+            background-position: 50% 0;
+            opacity: 0.85;
+        }
+    }
+
+    .ap-step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 24px;
+        padding: 20px 0;
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 27px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--v8-accent);
+        }
+
+        &__num {
+            font-family: var(--v8-font-mono);
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            color: var(--v8-accent);
+            padding-top: 6px;
+        }
+
+        &__title {
+            font-family: var(--v8-font-display);
+            font-style: italic;
+            font-size: clamp(20px, 2.2vw, 26px);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--v8-text);
+            margin: 0 0 8px;
+        }
+
+        &__desc {
+            font-family: var(--v8-font-body);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--v8-text-secondary);
+            max-width: 640px;
+            margin: 0;
+        }
+    }
+
+    /* ------------------------------------------------
+       8. CTA bridge — corner-framed glass panel
+       ------------------------------------------------ */
+    .ap-cta {
+        padding-bottom: 40px;
+
+        &__inner {
+            position: relative;
+            background: var(--v8-glass-bg);
+            backdrop-filter: blur(12px) saturate(1.4);
+            -webkit-backdrop-filter: blur(12px) saturate(1.4);
+            border: 1px solid var(--v8-glass-border);
+            box-shadow:
+                0 1px 0 var(--v8-glass-highlight) inset,
+                0 24px 60px -36px rgba(0, 0, 0, 0.25);
+            padding: 64px 56px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+
+            .ap-list {
+                align-self: stretch;
+            }
+        }
+
+        &__corner {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            color: var(--v8-text-faint);
+            pointer-events: none;
+
+            &--tl {
+                top: 12px;
+                left: 12px;
+                border-top: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--tr {
+                top: 12px;
+                right: 12px;
+                border-top: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
+            &--bl {
+                bottom: 12px;
+                left: 12px;
+                border-bottom: 1px solid currentColor;
+                border-left: 1px solid currentColor;
+            }
+            &--br {
+                bottom: 12px;
+                right: 12px;
+                border-bottom: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+       Responsive
+       ------------------------------------------------ */
+    @media (max-width: 1024px) {
+        .ap-section {
+            padding: 60px 48px;
+        }
+
+        .ap-hero {
+            padding: 140px 48px 60px;
+        }
+
+        .ap-offerings {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .ap-offering {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 36px 32px;
+
+            &__desc {
+                max-width: 640px;
+            }
+        }
+
+        .ap-system__components {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ap-section {
+            padding: 40px 24px;
+        }
+
+        .ap-hero {
+            padding: 120px 24px 40px;
+        }
+
+        .ap-flow {
+            gap: 8px;
+
+            &__link {
+                width: 16px;
+            }
+
+            &__node {
+                padding: 8px 12px;
+                white-space: normal;
+            }
+        }
+
+        .ap-offering {
+            padding: 28px 24px;
+            gap: 20px;
+        }
+
+        .ap-detail__grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .ap-detail__head {
+            flex-wrap: wrap;
+            gap: 12px 20px;
+        }
+
+        .ap-system {
+            padding: 28px 24px;
+        }
+
+        .ap-steps {
+            padding-left: 28px;
+        }
+
+        .ap-step {
+            grid-template-columns: 36px 1fr;
+            gap: 16px;
+
+            &::before {
+                left: -25px;
+            }
+        }
+
+        .ap-cta__inner {
+            padding: 40px 24px;
+        }
+
+        .ap-list__item {
+            font-size: 17px;
+            padding: 18px 0 18px 28px;
+        }
+    }
+</style>

@@ -69,28 +69,26 @@ const contactUrl = '#contact';
                         <p>{p}</p>
                     ))}
                 </div>
-                <div class="ap-split">
-                    <div class="ap-split__col">
-                        <h4 class="ap-split__label">{o.scopeLabel}</h4>
-                        <ul class="ap-split__list">
-                            {o.scope.map(item => (
-                                <li class="ap-split__item">{item}</li>
+                <div class="ap-offering__block ap-offering__block--scope">
+                    <h4 class="ap-offering__label">{o.scopeLabel}</h4>
+                    <ul class="ap-offering__list">
+                        {o.scope.map(item => (
+                            <li class="ap-offering__item">{item}</li>
+                        ))}
+                    </ul>
+                </div>
+                <div class="ap-offering__block ap-offering__block--outcome">
+                    <h4 class="ap-offering__label">{o.outcomeLabel}</h4>
+                    <p class="ap-offering__outcome-intro">{o.outcomeIntro}</p>
+                    {o.outcomes && (
+                        <ul class="ap-offering__list">
+                            {o.outcomes.map(item => (
+                                <li class="ap-offering__item">{item}</li>
                             ))}
                         </ul>
-                    </div>
-                    <div class="ap-split__col">
-                        <h4 class="ap-split__label">{o.outcomeLabel}</h4>
-                        <p class="ap-offering__outcome-intro">{o.outcomeIntro}</p>
-                        {o.outcomes && (
-                            <ul class="ap-split__list">
-                                {o.outcomes.map(item => (
-                                    <li class="ap-split__item">{item}</li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
+                    )}
                 </div>
-                {o.priceNote && <p class="ap-offering__price-note">{o.priceNote}</p>}
+                <p class="ap-offering__price-note">{o.priceNote ?? ''}</p>
             </article>
         ))}
     </div>
@@ -395,16 +393,20 @@ const contactUrl = '#contact';
     }
 
     /* ------------------------------------------------
-       3. Offerings
+       3. Offerings — side-by-side tiers, subgrid-aligned
        ------------------------------------------------ */
     .ap-offerings {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        column-gap: 16px;
+        row-gap: 28px;
     }
 
     .ap-offering {
         position: relative;
+        display: grid;
+        grid-row: span 5;
+        grid-template-rows: subgrid;
         background: var(--v8-glass-bg);
         backdrop-filter: blur(12px) saturate(1.4);
         -webkit-backdrop-filter: blur(12px) saturate(1.4);
@@ -412,7 +414,7 @@ const contactUrl = '#contact';
         box-shadow:
             0 1px 0 var(--v8-glass-highlight) inset,
             0 24px 60px -36px rgba(0, 0, 0, 0.25);
-        padding: 44px 40px;
+        padding: 36px 28px;
         transition: border-color 0.3s ease;
 
         &:hover {
@@ -454,9 +456,9 @@ const contactUrl = '#contact';
 
         &__head {
             display: flex;
+            flex-wrap: wrap;
             align-items: baseline;
-            gap: 24px;
-            margin-bottom: 24px;
+            gap: 12px 24px;
         }
 
         &__num {
@@ -467,13 +469,14 @@ const contactUrl = '#contact';
         }
 
         &__title-group {
-            flex: 1;
+            flex-basis: 100%;
+            order: 3;
         }
 
         &__name {
             font-family: var(--v8-font-display);
             font-style: italic;
-            font-size: clamp(26px, 3vw, 36px);
+            font-size: clamp(26px, 2.4vw, 32px);
             font-weight: 400;
             line-height: 1.1;
             color: var(--v8-text);
@@ -495,12 +498,10 @@ const contactUrl = '#contact';
             letter-spacing: 0.04em;
             color: var(--v8-accent);
             white-space: nowrap;
+            margin-left: auto;
         }
 
         &__desc {
-            max-width: 640px;
-            margin-bottom: 36px;
-
             p {
                 font-family: var(--v8-font-body);
                 font-size: 16px;
@@ -515,36 +516,7 @@ const contactUrl = '#contact';
             }
         }
 
-        &__outcome-intro {
-            font-family: var(--v8-font-body);
-            font-size: 15px;
-            font-weight: 300;
-            line-height: 1.6;
-            color: var(--v8-text-secondary);
-            margin: 0 0 16px;
-        }
-
-        &__price-note {
-            font-family: var(--v8-font-body);
-            font-style: italic;
-            font-size: 14px;
-            font-weight: 300;
-            line-height: 1.6;
-            color: var(--v8-text-muted);
-            max-width: 640px;
-            margin: 32px 0 0;
-        }
-    }
-
-    /* ------------------------------------------------
-       Split columns (offering scope | outcome)
-       ------------------------------------------------ */
-    .ap-split {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 48px;
-
-        &__col {
+        &__block {
             display: flex;
             flex-direction: column;
         }
@@ -576,6 +548,25 @@ const contactUrl = '#contact';
             &:first-child {
                 border-top: 1px solid var(--v8-border);
             }
+        }
+
+        &__outcome-intro {
+            font-family: var(--v8-font-body);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-secondary);
+            margin: 0 0 16px;
+        }
+
+        &__price-note {
+            font-family: var(--v8-font-body);
+            font-style: italic;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--v8-text-muted);
+            margin: 0;
         }
     }
 
@@ -883,8 +874,45 @@ const contactUrl = '#contact';
             padding: 140px 48px 60px;
         }
 
-        .ap-split {
-            gap: 32px;
+        .ap-offerings {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .ap-offering {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+            grid-template-areas:
+                'head head'
+                'desc desc'
+                'scope outcome'
+                'note note';
+            column-gap: 48px;
+            row-gap: 28px;
+            padding: 36px 32px;
+
+            &__head {
+                grid-area: head;
+            }
+
+            &__desc {
+                grid-area: desc;
+                max-width: 640px;
+            }
+
+            &__block--scope {
+                grid-area: scope;
+            }
+
+            &__block--outcome {
+                grid-area: outcome;
+            }
+
+            &__price-note {
+                grid-area: note;
+                max-width: 640px;
+            }
         }
 
         .ap-system__components {
@@ -915,26 +943,14 @@ const contactUrl = '#contact';
         }
 
         .ap-offering {
-            padding: 28px 24px;
-
-            &__head {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            &__title-group {
-                flex-basis: 100%;
-                order: 3;
-            }
-
-            &__price {
-                margin-left: auto;
-            }
-        }
-
-        .ap-split {
             grid-template-columns: 1fr;
-            gap: 40px;
+            grid-template-areas:
+                'head'
+                'desc'
+                'scope'
+                'outcome'
+                'note';
+            padding: 28px 24px;
         }
 
         .ap-system {

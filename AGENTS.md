@@ -225,4 +225,5 @@ Uses conventional commits:
 
 - All components use `--v8-*` CSS custom properties that adapt to light/dark mode
 - Components accept typed string props — no hardcoded user-visible text
-- Scoped SCSS `<style>` blocks per component
+- Components are `.tsx`, styled with Tailwind utilities — there are no `<style>` blocks and no SCSS. Decorative CSS that utilities cannot express (grain overlays, the `.bd-*` backdrop vocabulary, the reveal animation) lives in `src/styles/global.css` under `@layer components`, documented in place
+- Interactive components are React islands, rendered from the calling `.astro` page with a `client:*` directive — a component imported and rendered from inside another `.tsx` never hydrates

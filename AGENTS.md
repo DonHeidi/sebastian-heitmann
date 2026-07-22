@@ -8,7 +8,7 @@ Bun workspaces monorepo containing the personal portfolio website and supporting
 
 ```
 apps/
-├── website/          # Astro 6 portfolio site
+├── website/          # Astro 7 portfolio site
 └── mail-service/     # Scaleway serverless contact form handler
 infra/                # Terraform — Scaleway project, function, object storage, CDN
 docs/                 # Shared project documentation
@@ -19,7 +19,7 @@ docs/                 # Shared project documentation
 - **Runtime/Package Manager:** Bun (managed via mise) with workspaces
 - **Toolchain:** mise pins `bun`, `terraform`, `scaleway` (the `scw` CLI), `aws`, and `jq` — run `mise install`. The mail-service build also needs system **`zip`** (preinstalled on macOS; `sudo apt install zip` on Debian/Ubuntu/WSL).
 - **Secrets:** [varlock](https://varlock.dev) (`.env.schema` per workspace) + [Proton Pass](https://protonpass.github.io/pass-cli/) via `@varlock/proton-pass-plugin`
-- **Website:** Astro 6, SCSS, TypeScript
+- **Website:** Astro 7, Tailwind v4 + shadcn (--v8-asterisk design system), React islands, TypeScript
 - **Mail Service:** TypeScript, Scaleway Transactional Email API
 - **Infrastructure:** Terraform (Scaleway provider ~> 2.0)
 
@@ -159,7 +159,7 @@ Config is managed by **varlock** — each workspace has a committed `.env.schema
 - Non-secret infra inputs (`mail_sender`, `allowed_origins`, `tem_domain`, `region`) live as **defaults in `infra/variables.tf`** — no `terraform.tfvars` is needed (single-environment, non-secret). `mail_recipient` is sensitive (PII) and resolves from Proton Pass as `TF_VAR_mail_recipient`. (Add a `terraform.tfvars` only if you need per-machine overrides; it stays gitignored.)
 - `infra/.env.schema` supplies the deploy credentials (`SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, `SCW_DEFAULT_ORGANIZATION_ID`) from Proton Pass, so deploys need **no** `~/.config/scw/config.yaml` and work on any machine with vault access. There is no `config.yaml` — run ad-hoc Scaleway commands via `./scripts/scw <args>`, which injects the creds from Proton Pass (region-specific commands may need a `--region` flag).
 - `TEM_SECRET_KEY` is **not** in Proton Pass — Terraform self-generates it (`scaleway_iam_api_key`) and injects it into the function at apply time.
-- `PUBLIC_MAIL_ENDPOINT` is **optional for local dev** — `bun run dev` runs without it and the contact form is simply inactive locally. `scripts/deploy-website.sh` supplies the real value from `terraform output` at build time (and aborts if it can't resolve it).
+- `PUBLIC_MAIL_ENDPOINT` is a **committed default** in `apps/website/.env.schema`. It is public by definition (it ships in the HTML of every page with a contact form), so committing it keeps `bun run build` and `./scripts/deploy-website.sh` producing byte-identical output. Terraform stays the source of truth for the value: the deploy script compares `terraform output -raw function_endpoint` against the schema and **aborts on a mismatch** rather than injecting an override. If the function URL changes, update `.env.schema` and commit it before deploying.
 
 See `docs/superpowers/specs/2026-06-12-varlock-proton-pass-design.md` for the full design.
 

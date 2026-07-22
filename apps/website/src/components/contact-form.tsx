@@ -21,8 +21,11 @@ export interface ContactFormProps {
     | 'errorMessage'
   >;
   /** Resolved `import.meta.env.PUBLIC_MAIL_ENDPOINT` from the calling `.astro`
-   *  frontmatter — empty in local dev, where submitting is expected to
-   *  immediately surface the error state (see old contact-section.astro). */
+   *  frontmatter. Committed in apps/website/.env.schema, so it is populated in
+   *  local dev too: submitting there reaches the real function but the CORS
+   *  preflight rejects a localhost origin, so the request never completes and
+   *  no mail is sent. The empty-string guard below still covers the case where
+   *  a local override clears it. */
   endpoint: string;
 }
 

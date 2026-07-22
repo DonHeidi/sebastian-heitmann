@@ -18,7 +18,8 @@ VARLOCK="$ROOT_DIR/node_modules/.bin/varlock"
 if [[ -z "${VARLOCK_INJECTED:-}" ]]; then
   cd "$INFRA_DIR"
   # --inject vars (no __VARLOCK_ENV blob) so the website build's own `varlock run`
-  # resolves apps/website/.env.schema fresh and honors the PUBLIC_MAIL_ENDPOINT we set below.
+  # resolves apps/website/.env.schema fresh rather than inheriting this one's
+  # infra-scoped config.
   exec "$VARLOCK" run --inject vars -- env VARLOCK_INJECTED=1 bash "$SCRIPT_PATH" "$@"
 fi
 
@@ -49,12 +50,18 @@ cd "$WEBSITE_DIR"
 # truth for the value, so verify the two agree and abort on drift rather than
 # injecting — an injected override would silently make the deployed artifact
 # differ from what a plain build produces.
-SCHEMA_ENDPOINT="$(sed -n 's/^PUBLIC_MAIL_ENDPOINT=//p' .env.schema)"
-if [[ "$SCHEMA_ENDPOINT" != "https://${FUNCTION_ENDPOINT}" ]]; then
+#
+# Resolve through varlock rather than reading .env.schema textually: varlock
+# layers .env / .env.local / .env.*.local over the schema, so a stray local
+# override would otherwise sail past a file-text check and get baked into the
+# deployed bundle. This asks for exactly the value the build below will use.
+RESOLVED_ENDPOINT="$("$VARLOCK" run -- printenv PUBLIC_MAIL_ENDPOINT)"
+if [[ "$RESOLVED_ENDPOINT" != "https://${FUNCTION_ENDPOINT}" ]]; then
   echo "PUBLIC_MAIL_ENDPOINT drift — refusing to deploy." >&2
   echo "  terraform output: https://${FUNCTION_ENDPOINT}" >&2
-  echo "  .env.schema:      ${SCHEMA_ENDPOINT:-<unset>}" >&2
-  echo "Update apps/website/.env.schema to match terraform, commit it, then redeploy." >&2
+  echo "  build would use:  ${RESOLVED_ENDPOINT:-<unset>}" >&2
+  echo "Reconcile apps/website/.env.schema with terraform (and remove any local" >&2
+  echo ".env override), commit, then redeploy." >&2
   exit 1
 fi
 

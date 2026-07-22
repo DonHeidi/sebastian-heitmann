@@ -1,47 +1,93 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/navigation.astro';
-import Hero from '../components/hero.astro';
-import LogoSection from '../components/logo-section.astro';
-import CapabilitiesSection from '../components/capabilities-section.astro';
-import SituationsSection from '../components/situations-section.astro';
-import ProofSection from '../components/proof-section.astro';
-import FeaturedArticlesSection from '../components/featured-articles-section.astro';
-import ContactSection from '../components/contact-section.astro';
-import Footer from '../components/footer.astro';
+import { Navigation } from '../components/navigation';
+import { ThemeToggle } from '../components/theme-toggle';
+import { Hero } from '../components/hero';
+import picture from '../assets/fb.jpg';
+import { LogoSection, type LogoAsset } from '../components/logo-section';
+import poolPositionLogo from '../assets/logos/pool-position.png';
+import jvmLogo from '../assets/logos/jvm.svg';
+import synvertLogo from '../assets/logos/synvert.png';
+import grannySmithLogo from '../assets/logos/granny-smith.jpg';
+import offisLogo from '../assets/logos/offis.svg';
+import { CapabilitiesSection } from '../components/capabilities-section';
+import { SituationsSection } from '../components/situations-section';
+import { ProofSection } from '../components/proof-section';
+import { FeaturedArticlesSection, type FeaturedArticleItem } from '../components/featured-articles-section';
+import { ContactSection } from '../components/contact-section';
+import { ContactForm } from '../components/contact-form';
+import { Footer } from '../components/footer';
 import { getStrings, getHreflangAlternates } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
 
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates();
+const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
+
+const heroPhoto = await getImage({ src: picture, width: 160, height: 160 });
+
+// Per-logo config to compensate for varying whitespace baked into source images:
+// height = render height (taller = more internal whitespace to compensate for),
+// spacing = vertical margin (px) in the mobile stacked layout — less for logos
+// with built-in whitespace, more for tightly cropped logos.
+const logoConfig: Array<{ name: string; src: ImageMetadata; height: number; spacing: number; noInvert?: boolean }> = [
+    { name: 'Pool Position GmbH', src: poolPositionLogo, height: 70, spacing: 0 },
+    { name: 'Jung von Matt', src: jvmLogo, height: 24, spacing: 14 },
+    { name: 'synvert', src: synvertLogo, height: 31, spacing: 10 },
+    { name: 'Granny & Smith', src: grannySmithLogo, height: 53, spacing: 0, noInvert: true },
+    { name: 'OFFIS', src: offisLogo, height: 48, spacing: 4 },
+];
+const logoAssets: LogoAsset[] = await Promise.all(
+    logoConfig.map(async ({ name, src, height, spacing, noInvert }) => {
+        const image = await getImage({ src, height });
+        return { name, src: image.src, width: Number(image.attributes.width), height, spacing, noInvert };
+    })
+);
 
 const allPublished = await getCollection('articles', ({ id, data }) =>
     !id.startsWith('de-de/') && !data.draft
 );
 const totalArticleCount = allPublished.length;
 
-const featured = allPublished
+const featuredEntries = allPublished
     .filter((entry) => entry.data.displayFrontpage)
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
-    .slice(0, 3)
-    .map((entry) => ({
-        entry,
-        slug: entry.id,
+    .slice(0, 3);
+
+const featured: FeaturedArticleItem[] = await Promise.all(
+    featuredEntries.map(async (entry) => ({
+        title: entry.data.title,
+        abstract: entry.data.abstract,
         categoryLabel: s.categories[entry.data.category],
-    }));
+        tags: entry.data.tags,
+        publishedAt: entry.data.publishedAt,
+        slug: entry.id,
+        imageSrc: entry.data.headerImage
+            ? (await getImage({ src: entry.data.headerImage, width: 600, height: 340, format: 'webp' })).src
+            : undefined,
+    }))
+);
+
+const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
 ---
-<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true} showBackdrop={true}>
-    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true}>
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
     <main>
-        <Hero hero={s.hero} />
-        <LogoSection logos={s.logos} />
+        <Hero hero={s.hero} photoSrc={heroPhoto.src} photoWidth={Number(heroPhoto.attributes.width)} photoHeight={Number(heroPhoto.attributes.height)} />
+        <LogoSection logos={s.logos} logoAssets={logoAssets} />
         <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />
         <ProofSection proof={s.proof} aiLink={{ label: 'AI-powered products & processes', href: '/ai-process-automation' }} webDevLink={{ label: 'Web development for local businesses', href: '/web-development' }} tpmLink={{ label: 'Technical project management', href: '/technical-project-management' }} />
-        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} totalCount={totalArticleCount} />
-        <ContactSection contact={s.contact} />
+        <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} viewAllHref={featuredArticlesViewAllHref} totalCount={totalArticleCount} />
+        <ContactSection contact={s.contact} showBackdropMoment={true}>
+            <ContactForm client:visible strings={s.contact} endpoint={mailEndpoint} />
+        </ContactSection>
     </main>
-    <Footer footer={s.footer} />
+    <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>

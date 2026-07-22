@@ -10,6 +10,11 @@ export const enUs: Strings = {
     logoDot: '.dev',
     cvLabel: 'CV',
     cta: 'Contact',
+    themeToggle: {
+      system: 'System theme',
+      light: 'Light theme',
+      dark: 'Dark theme',
+    },
   },
   hero: {
     firstName: 'Sebastian',

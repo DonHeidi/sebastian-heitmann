@@ -1,14 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/navigation.astro';
-import TechnicalProjectManagementContent from '../../components/technical-project-management-content.astro';
-import ContactSection from '../../components/contact-section.astro';
-import Footer from '../../components/footer.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Navigation } from '../../components/navigation';
+import { ThemeToggle } from '../../components/theme-toggle';
+import { TechnicalProjectManagementContent } from '../../components/technical-project-management-content';
+import { ContactSection } from '../../components/contact-section';
+import { ContactForm } from '../../components/contact-form';
+import { Footer } from '../../components/footer';
 import { getStrings } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
+const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
+const contact = { ...s.contact, headline: s.technicalProjectManagement.contact.headline, intro: s.technicalProjectManagement.contact.intro };
 
 const siteUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://www.sebastian-heitmann.dev').replace(/\/$/, '');
 const alternates = [
@@ -23,10 +28,14 @@ const alternates = [
     description={s.technicalProjectManagement.meta.description}
     alternates={alternates}
 >
-    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
     <main>
-        <TechnicalProjectManagementContent content={s.technicalProjectManagement} locale={locale} />
-        <ContactSection contact={{ ...s.contact, headline: s.technicalProjectManagement.contact.headline, intro: s.technicalProjectManagement.contact.intro }} />
+        <TechnicalProjectManagementContent content={s.technicalProjectManagement} />
+        <ContactSection contact={contact}>
+            <ContactForm client:visible strings={contact} endpoint={mailEndpoint} />
+        </ContactSection>
     </main>
-    <Footer footer={s.footer} />
+    <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>

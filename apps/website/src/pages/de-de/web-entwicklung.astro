@@ -1,14 +1,20 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/navigation.astro';
-import WebProjectsContent from '../../components/web-projects-content.astro';
-import ContactSection from '../../components/contact-section.astro';
-import Footer from '../../components/footer.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Navigation } from '../../components/navigation';
+import { ThemeToggle } from '../../components/theme-toggle';
+import { WebProjectsContent } from '../../components/web-projects-content';
+import { ContactSection } from '../../components/contact-section';
+import { ContactForm } from '../../components/contact-form';
+import { Footer } from '../../components/footer';
 import { getStrings } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
+const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
+const contact = { ...s.contact, headline: s.webProjects.contact.headline, intro: s.webProjects.contact.intro };
+const homeUrl = getRelativeLocaleUrl(locale, '/');
 
 const siteUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://www.sebastian-heitmann.dev').replace(/\/$/, '');
 const alternates = [
@@ -23,10 +29,14 @@ const alternates = [
     description={s.webProjects.meta.description}
     alternates={alternates}
 >
-    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
     <main>
-        <WebProjectsContent content={s.webProjects} locale={locale} />
-        <ContactSection contact={{ ...s.contact, headline: s.webProjects.contact.headline, intro: s.webProjects.contact.intro }} />
+        <WebProjectsContent content={s.webProjects} homeUrl={homeUrl} />
+        <ContactSection contact={contact}>
+            <ContactForm client:visible strings={contact} endpoint={mailEndpoint} />
+        </ContactSection>
     </main>
-    <Footer footer={s.footer} />
+    <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>

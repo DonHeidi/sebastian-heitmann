@@ -1,0 +1,150 @@
+/* ------------------------------------------------------------------ */
+/* --v8-asterisk theme                                                 */
+/* Layer 1: --v8-* core tokens (source of truth)                       */
+/* Layer 2: shadcn contract aliases                                    */
+/* Layer 3: Tailwind v4 @theme inline mapping                          */
+/* Dark/light via .dark/.light classes — on <html> globally, or on     */
+/* any element for section-scoped banding.                             */
+/* ------------------------------------------------------------------ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --v8-font-display: 'Instrument Serif', Georgia, serif;
+  --v8-font-body: 'DM Sans', system-ui, sans-serif;
+  --v8-font-mono: 'IBM Plex Mono', monospace;
+  --radius: 0.375rem;
+}
+
+.dark {
+  --v8-bg: #0C0C0C;
+  --v8-bg-alt: #101010;
+  --v8-bg-surface: #141414;
+  --v8-text: #F2F0EB;
+  --v8-text-secondary: rgba(242, 240, 235, 0.75);
+  --v8-text-tertiary: rgba(242, 240, 235, 0.68);
+  --v8-text-muted: rgba(242, 240, 235, 0.65);
+  --v8-text-dim: rgba(242, 240, 235, 0.62);
+  --v8-text-faint: rgba(242, 240, 235, 0.45);
+  --v8-accent: #FF3B00;
+  --v8-border: rgba(242, 240, 235, 0.08);
+  --v8-border-accent: rgba(255, 59, 0, 0.3);
+  --v8-success: #00DC82;
+  --v8-success-soft: rgba(0, 220, 130, 0.09);
+  --v8-warning: #FFB224;
+  --v8-warning-soft: rgba(255, 178, 36, 0.09);
+  --v8-destructive: #FF5449;
+  --v8-destructive-soft: rgba(255, 84, 73, 0.09);
+  --v8-metric-color: var(--v8-text);
+  --v8-metric-label-color: var(--v8-text-muted);
+  --v8-photo-filter: saturate(0) contrast(1.1) brightness(0.9);
+  --v8-photo-filter-hover: saturate(0.8) contrast(1.05);
+  --v8-glass-bg: rgba(18, 18, 18, 0.4);
+  --v8-glass-border: rgba(242, 240, 235, 0.12);
+  --v8-glass-highlight: rgba(242, 240, 235, 0.08);
+  --v8-dot-color: rgba(168, 176, 192, 0.5);
+  --v8-grid-fine: rgba(168, 176, 192, 0.05);
+  --v8-grid-medium: rgba(168, 176, 192, 0.10);
+  --v8-grid-major: rgba(168, 176, 192, 0.20);
+}
+
+.light {
+  --v8-bg: #FAF7F0;
+  --v8-bg-alt: #F0EBE0;
+  --v8-bg-surface: #F5F0E6;
+  --v8-text: #141413;
+  --v8-text-secondary: rgba(20, 20, 19, 0.75);
+  --v8-text-tertiary: rgba(20, 20, 19, 0.65);
+  --v8-text-muted: rgba(20, 20, 19, 0.6);
+  --v8-text-dim: rgba(20, 20, 19, 0.6);
+  --v8-text-faint: rgba(20, 20, 19, 0.4);
+  --v8-accent: #B82A00;
+  --v8-border: rgba(20, 20, 19, 0.16);
+  --v8-border-accent: rgba(184, 42, 0, 0.35);
+  --v8-success: #1A7A52;
+  --v8-success-soft: rgba(26, 122, 82, 0.10);
+  --v8-warning: #93600A;
+  --v8-warning-soft: rgba(147, 96, 10, 0.10);
+  --v8-destructive: #B3261E;
+  --v8-destructive-soft: rgba(179, 38, 30, 0.08);
+  --v8-metric-color: #B82A00;
+  --v8-metric-label-color: rgba(20, 20, 19, 0.6);
+  --v8-photo-filter: saturate(0.85) contrast(1.08);
+  --v8-photo-filter-hover: saturate(1) contrast(1);
+  --v8-glass-bg: rgba(255, 252, 245, 0.32);
+  --v8-glass-border: rgba(20, 20, 19, 0.18);
+  --v8-glass-highlight: rgba(255, 255, 255, 0.85);
+  --v8-dot-color: rgba(60, 70, 40, 0.55);
+  --v8-grid-fine: rgba(60, 70, 40, 0.08);
+  --v8-grid-medium: rgba(60, 70, 40, 0.16);
+  --v8-grid-major: rgba(60, 70, 40, 0.28);
+}
+
+/* Layer 2: shadcn contract. References flip automatically with .dark/.light. */
+:root, .dark, .light {
+  --background: var(--v8-bg);
+  --foreground: var(--v8-text);
+  --card: var(--v8-bg-surface);
+  --card-foreground: var(--v8-text);
+  --popover: var(--v8-bg-surface);
+  --popover-foreground: var(--v8-text);
+  --primary: var(--v8-accent);
+  --primary-foreground: #FFF7F2;
+  --secondary: var(--v8-bg-alt);
+  --secondary-foreground: var(--v8-text);
+  --muted: var(--v8-bg-alt);
+  --muted-foreground: var(--v8-text-muted);
+  --accent: var(--v8-bg-surface);
+  --accent-foreground: var(--v8-text);
+  --destructive: var(--v8-destructive);
+  --destructive-foreground: #FFF7F2;
+  --success: var(--v8-success);
+  --success-soft: var(--v8-success-soft);
+  --warning: var(--v8-warning);
+  --warning-soft: var(--v8-warning-soft);
+  --border: var(--v8-border);
+  --input: var(--v8-border);
+  --ring: var(--v8-accent);
+}
+
+/* Layer 3: Tailwind utilities. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-soft: var(--v8-destructive-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-border-accent: var(--v8-border-accent);
+  --color-surface: var(--v8-bg-surface);
+  --color-surface-alt: var(--v8-bg-alt);
+  --color-text-secondary: var(--v8-text-secondary);
+  --color-text-tertiary: var(--v8-text-tertiary);
+  --color-text-dim: var(--v8-text-dim);
+  --color-text-faint: var(--v8-text-faint);
+  --font-display: var(--v8-font-display);
+  --font-sans: var(--v8-font-body);
+  --font-mono: var(--v8-font-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}

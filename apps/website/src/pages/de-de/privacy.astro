@@ -1,7 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/navigation.astro';
-import Footer from '../../components/footer.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Navigation } from '../../components/navigation';
+import { ThemeToggle } from '../../components/theme-toggle';
+import { Footer } from '../../components/footer';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 
@@ -10,7 +12,9 @@ const s = getStrings(locale);
 const alternates = getHreflangAlternates();
 ---
 <Layout locale={locale} title="Datenschutz — Sebastian Heitmann" description="Datenschutzerkl&auml;rung und Informationen zum Schutz personenbezogener Daten." alternates={alternates}>
-    <Navigation nav={s.nav} languagePicker={s.languagePicker} />
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
     <main class="legal">
         <div class="legal-inner">
             <h1 class="legal-title">Datenschutz</h1>
@@ -62,65 +66,65 @@ const alternates = getHreflangAlternates();
             </section>
         </div>
     </main>
-    <Footer footer={s.footer} />
+    <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
 </Layout>
 
-<style lang="scss">
+<style>
     .legal {
         padding: 160px 80px 120px;
         max-width: 1440px;
         margin: 0 auto;
+    }
 
-        &-inner {
-            max-width: 640px;
-        }
+    .legal-inner {
+        max-width: 640px;
+    }
 
-        &-title {
-            font-family: var(--v8-font-display);
-            font-size: clamp(40px, 5vw, 64px);
-            line-height: 1.05;
-            color: var(--v8-text);
-            margin-bottom: 24px;
-        }
+    .legal-title {
+        font-family: var(--v8-font-display);
+        font-size: clamp(40px, 5vw, 64px);
+        line-height: 1.05;
+        color: var(--v8-text);
+        margin-bottom: 24px;
+    }
 
-        &-rule {
-            width: 48px;
-            height: 2px;
-            background: var(--v8-accent);
-            margin-bottom: 64px;
-        }
+    .legal-rule {
+        width: 48px;
+        height: 2px;
+        background: var(--v8-accent);
+        margin-bottom: 64px;
+    }
 
-        &-section {
-            margin-bottom: 48px;
+    .legal-section {
+        margin-bottom: 48px;
+    }
 
-            p {
-                font-family: var(--v8-font-body);
-                font-size: 16px;
-                font-weight: 300;
-                line-height: 1.8;
-                color: var(--v8-text-tertiary);
-            }
+    .legal-section p {
+        font-family: var(--v8-font-body);
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 1.8;
+        color: var(--v8-text-tertiary);
+    }
 
-            a {
-                color: var(--v8-accent);
-                text-decoration: none;
-                border-bottom: 1px solid transparent;
-                transition: border-color 0.2s;
+    .legal-section a {
+        color: var(--v8-accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+    }
 
-                &:hover {
-                    border-bottom-color: var(--v8-accent);
-                }
-            }
-        }
+    .legal-section a:hover {
+        border-bottom-color: var(--v8-accent);
+    }
 
-        &-heading {
-            font-family: var(--v8-font-mono);
-            font-size: 10px;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--v8-text-muted);
-            margin-bottom: 16px;
-        }
+    .legal-heading {
+        font-family: var(--v8-font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--v8-text-muted);
+        margin-bottom: 16px;
     }
 
     @media (max-width: 768px) {

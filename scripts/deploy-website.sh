@@ -43,7 +43,22 @@ if [[ -z "$FUNCTION_ENDPOINT" ]]; then
 fi
 
 cd "$WEBSITE_DIR"
-PUBLIC_MAIL_ENDPOINT="https://${FUNCTION_ENDPOINT}" bun run build
+
+# The endpoint is committed in apps/website/.env.schema so that `bun run build`
+# and this script produce byte-identical output. Terraform stays the source of
+# truth for the value, so verify the two agree and abort on drift rather than
+# injecting — an injected override would silently make the deployed artifact
+# differ from what a plain build produces.
+SCHEMA_ENDPOINT="$(sed -n 's/^PUBLIC_MAIL_ENDPOINT=//p' .env.schema)"
+if [[ "$SCHEMA_ENDPOINT" != "https://${FUNCTION_ENDPOINT}" ]]; then
+  echo "PUBLIC_MAIL_ENDPOINT drift — refusing to deploy." >&2
+  echo "  terraform output: https://${FUNCTION_ENDPOINT}" >&2
+  echo "  .env.schema:      ${SCHEMA_ENDPOINT:-<unset>}" >&2
+  echo "Update apps/website/.env.schema to match terraform, commit it, then redeploy." >&2
+  exit 1
+fi
+
+bun run build
 
 # Astro's content-collection image() schema imports each source asset via Vite,
 # which emits the originals to dist/_astro/ even when only transformed variants

@@ -83,7 +83,7 @@ const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
         <LogoSection logos={s.logos} logoAssets={logoAssets} />
         <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />
-        <ProofSection proof={s.proof} webDevLink={{ label: 'Web development for local businesses', href: '/web-development' }} tpmLink={{ label: 'Technical project management', href: '/technical-project-management' }} />
+        <ProofSection proof={s.proof} aiLink={{ label: 'AI-powered products & processes', href: '/ai-process-automation' }} webDevLink={{ label: 'Web development for local businesses', href: '/web-development' }} tpmLink={{ label: 'Technical project management', href: '/technical-project-management' }} />
         <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} viewAllHref={featuredArticlesViewAllHref} totalCount={totalArticleCount} />
         <ContactSection contact={s.contact} showBackdropMoment={true}>
             <ContactForm client:visible strings={s.contact} endpoint={mailEndpoint} />

@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Navigation } from '../../components/navigation';
+import { ThemeToggle } from '../../components/theme-toggle';
+import { AiProcessAutomationContent } from '../../components/ai-process-automation-content';
+import { ContactSection } from '../../components/contact-section';
+import { ContactForm } from '../../components/contact-form';
+import { Footer } from '../../components/footer';
+import { getStrings } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+
+const locale = Astro.currentLocale as Locale;
+const s = getStrings(locale);
+const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
+const contact = { ...s.contact, headline: s.aiProcessAutomation.contact.headline, intro: s.aiProcessAutomation.contact.intro };
+
+const siteUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://www.sebastian-heitmann.dev').replace(/\/$/, '');
+const alternates = [
+    { hreflang: 'en', href: `${siteUrl}/ai-process-automation` },
+    { hreflang: 'de-DE', href: `${siteUrl}/de-de/ki-prozess-automation` },
+    { hreflang: 'x-default', href: `${siteUrl}/ai-process-automation` },
+];
+---
+<Layout
+    locale={locale}
+    title={s.aiProcessAutomation.meta.title}
+    description={s.aiProcessAutomation.meta.description}
+    alternates={alternates}
+>
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle client:load labels={s.nav.themeToggle} />
+    </Navigation>
+    <main>
+        <AiProcessAutomationContent content={s.aiProcessAutomation} />
+        <ContactSection contact={contact}>
+            <ContactForm client:visible strings={contact} endpoint={mailEndpoint} />
+        </ContactSection>
+    </main>
+    <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
+</Layout>

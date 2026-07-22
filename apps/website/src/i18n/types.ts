@@ -315,4 +315,65 @@ export interface Strings {
       intro: string;
     };
   };
+  aiProcessAutomation: {
+    meta: { title: string; description: string };
+    hero: { eyebrow: string; headline: string; subline: string; cta: string; flow: string[] };
+    approach: { eyebrow: string; headline: string; body: string[] };
+    offerings: {
+      eyebrow: string;
+      headline: string;
+      details: { eyebrow: string; headline: string; linkLabel: string };
+      items: Array<{
+        name: string;
+        tagline: string;
+        description: string[];
+        scopeLabel: string;
+        scope: string[];
+        outcomeLabel: string;
+        outcomeIntro: string;
+        outcomes?: string[];
+        price: string;
+        priceNote?: string;
+        featured?: boolean;
+      }>;
+    };
+    example: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      components: string[];
+      body: string[];
+      linkLabel: string;
+      linkHref: string;
+    };
+    useCases: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      items: string[];
+      closing: string;
+    };
+    process: {
+      eyebrow: string;
+      headline: string;
+      steps: Array<{ title: string; description: string }>;
+    };
+    evolution: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      items: string[];
+      closing: string;
+    };
+    cta: {
+      headline: string;
+      body: string;
+      bullets: string[];
+      closing: string;
+    };
+    contact: {
+      headline: string;
+      intro: string;
+    };
+  };
 }

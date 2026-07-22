@@ -33,6 +33,14 @@ const routeMap: Record<string, Record<string, string>> = {
     'en-us': '/technical-project-management',
     'de-de': '/technisches-projektmanagement',
   },
+  '/ai-process-automation': {
+    'en-us': '/ai-process-automation',
+    'de-de': '/ki-prozess-automation',
+  },
+  '/ki-prozess-automation': {
+    'en-us': '/ai-process-automation',
+    'de-de': '/ki-prozess-automation',
+  },
 };
 
 function getPagePathForLocale(rawPagePath: string, loc: Locale): string {

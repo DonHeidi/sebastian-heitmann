@@ -2,7 +2,11 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SCRIPT_PATH="$ROOT_DIR/scripts/apply-infra.sh"
+# Must resolve to THIS file, never a fixed name: the re-exec below would otherwise
+# hand control to scripts/apply-infra.sh whichever file was actually invoked, so a
+# copy or wrapper (a plan-only variant, say) silently runs the original's real
+# `terraform apply` instead of its own.
+SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 INFRA_DIR="$ROOT_DIR/infra"
 MAIL_SERVICE_DIR="$ROOT_DIR/apps/mail-service"
 PROJECT_NAME="sebastian-heitmann-dev"

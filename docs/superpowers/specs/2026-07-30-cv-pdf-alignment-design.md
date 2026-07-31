@@ -69,23 +69,35 @@ interface CvLink {
 
 interface CvHighlight {
   lead: string;                 // rendered bold
-  leadLink?: CvLink;            // link inside the lead — rendered as "lead (link):"
+  leadLink?: CvLink;            // link inside the bold lead, in parentheses
+  leadNote?: string;            // plain (non-bold) parenthetical after the lead
+  omitColon?: boolean;          // suppress the colon; a few entries read as one sentence
   text: string;                 // body copy
   link?: CvLink;                // trailing link in the body
   tech?: string[];              // mono run, joined with " · "
 }
 ```
 
-This covers every highlight in the source data:
+Render order: **`lead`** ` (leadLink)` ` (leadNote)` `:` ` text` ` link` ` tech` — with
+`leadLink` inside the bold run and `leadNote` outside it, matching the PDF.
+
+This covers all four highlight forms in the source data:
 
 | Source form | Fields used |
 |---|---|
-| `<strong>lead</strong> text <span class="tech">…</span>` | `lead`, `text`, `tech` |
-| `<strong>Job Directory (<a>www.job-directory.eu</a>):</strong> text <span class="tech">…</span>` | `lead`, `leadLink`, `text`, `tech` |
-| `<strong>lead:</strong> published at <a>…</a>` | `lead`, `text`, `link` |
+| `<strong>lead:</strong> text <span class="tech">…</span>` | `lead`, `text`, `tech` |
+| `<strong>lead</strong> (Apr 2026 – present): text <span class="tech">…</span>` | `lead`, `leadNote`, `text`, `tech` |
+| `<strong>Job Directory (<a>www.job-directory.eu</a>):</strong> text` | `lead`, `leadLink`, `text`, `tech` |
+| `<strong>lead</strong> and coordination with…` (no colon) | `lead`, `omitColon`, `text` |
 
 The component renders the colon, parentheses and middot separators, so no locale string
 contains punctuation-as-markup.
+
+The last two forms were missed in the first draft of this spec and found while writing the
+implementation plan. `leadNote` is distinct from `leadLink` because the PDF renders the
+date parenthetical in plain weight but the Job Directory URL in bold. `omitColon` exists
+because EN `Client relationship management` and DE `Kundenbetreuung` genuinely differ:
+the German entry takes a colon, the English one does not.
 
 ### Other `Strings['cv']` changes
 

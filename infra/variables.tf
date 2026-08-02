@@ -31,12 +31,14 @@ variable "m365_dkim_cnames" {
     authentication settings → DKIM), copy the two CNAME values it shows, and
     commit them here as the default (repo convention: committed defaults, no
     tfvars). Empty map = records not created (DKIM not yet enabled in M365).
-    Example:
-      { selector1 = "selector1-sebastian-heitmann-dev._domainkey.<tenant>.onmicrosoft.com"
-        selector2 = "selector2-sebastian-heitmann-dev._domainkey.<tenant>.onmicrosoft.com" }
+    Values below were provisioned 2026-08-02 via New-DkimSigningConfig
+    (2048-bit keys, created disabled; enable in M365 once these resolve).
   EOT
   type        = map(string)
-  default     = {}
+  default = {
+    selector1 = "selector1-sebastianheitmann-dev02c._domainkey.NETORGFT9959061.n-v1.dkim.mail.microsoft"
+    selector2 = "selector2-sebastianheitmann-dev02c._domainkey.NETORGFT9959061.n-v1.dkim.mail.microsoft"
+  }
 
   validation {
     condition     = alltrue([for k, v in var.m365_dkim_cnames : contains(["selector1", "selector2"], k)])

@@ -8,6 +8,11 @@ output "function_endpoint" {
   value       = scaleway_function.contact_handler.domain_name
 }
 
+output "apex_redirect_endpoint" {
+  description = "Native URL of the apex → www redirect function (the apex ALIAS record targets this host)"
+  value       = scaleway_function.apex_redirect.domain_name
+}
+
 output "bucket_endpoint" {
   description = "Object Storage website endpoint"
   value       = scaleway_object_bucket_website_configuration.website.website_endpoint

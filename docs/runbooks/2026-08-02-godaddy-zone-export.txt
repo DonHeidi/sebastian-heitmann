@@ -1,0 +1,51 @@
+; Domain: sebastian-heitmann.dev
+; Exported (y-m-d hh:mm:ss): 2026-08-02 02:12:09
+;
+; Authoritative GoDaddy zone export, taken before the DNS cutover to Scaleway.
+; This is the rollback baseline for docs/runbooks/2026-08-02-apex-dns-cutover.md.
+
+$ORIGIN sebastian-heitmann.dev.
+
+; SOA Record
+@    3600     IN     SOA    ns39.domaincontrol.com.    dns.jomax.net. (
+                    2026041400
+                    28800
+                    7200
+                    604800
+                    3600
+                    )
+
+; A Record
+@    3600     IN     A    15.197.225.128
+@    3600     IN     A    3.33.251.168
+
+; TXT Record
+@    3600     IN     TXT    "google-site-verification=m-jIF1hAu_xIehyXmlrKne0iDKkVH_KNOOfzwroiiWY"
+@    3600     IN     TXT    "NETORGFT9253916.onmicrosoft.com"
+@    3600     IN     TXT    "NETORGFT9959061.onmicrosoft.com"
+@    3600     IN     TXT    "v=spf1 include:secureserver.net -all"
+contact    3600     IN     TXT    "v=spf1 include:_spf.tem.scaleway.com -all"
+e4c697f5-26ab-40d2-8064-dc25be1484d6._domainkey.contact    3600     IN     TXT    "v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwI2w8K4rwd6fgSAG+XDvG51xfh7TyPhnepDD77UOroZZ+DKmSbIEaXbeKp1e0OSQQuxKAa0kjLpA4ysvCf1KBf3sGUhdyF29hoOkb7IkRnK/MmMhol4KsF0migf4lIgSiYou9aDkgND6rSUFinbbJxNWRRTSzBifSu0ysR4LBIcw+Nsc0OZ2dN1"    "8wutThb/WHhy2wlMdj8kInbbTtRhzzSr/NqZIqjkJ3KL9kzlWV8flmvvNt4dJb1KnR6tG/bq1XNr7zw0cZC0TAUQt7so5B9n/SKwDDKL44t+NF1rMm7Y2OnevXjgKPsFuZMLikk7yAc9aMsQxnJTnnUA7gq/vpQIDAQAB"
+_dmarc.contact    3600     IN     TXT    "v=DMARC1; p=none"
+
+; CNAME Record
+autodiscover    3600     IN     CNAME    autodiscover.outlook.com.
+core    3600     IN     CNAME    core.sebastian-heitmann.dev.
+email    3600     IN     CNAME    email.secureserver.net.
+lyncdiscover    3600     IN     CNAME    webdir.online.lync.com.
+msoid    3600     IN     CNAME    clientconfig.microsoftonline-p.net.
+sip    3600     IN     CNAME    sipdir.online.lync.com.
+www    3600     IN     CNAME    cca87f11-b109-4ca3-83b6-a6aaf89dcadc.svc.edge.scw.cloud.
+_domainconnect    3600     IN     CNAME    _domainconnect.gd.domaincontrol.com.
+
+; SRV Record
+_sip._tls.@    3600     IN     SRV    100    1    443    sipdir.online.lync.com.
+_sipfederationtls._tcp.@    3600     IN     SRV    100    1    5061    sipfed.online.lync.com.
+
+; NS Record
+@    3600     IN     NS    ns39.domaincontrol.com.
+@    3600     IN     NS    ns40.domaincontrol.com.
+
+; MX Record
+@    3600     IN     MX    0    sebastianheitmann-dev02c.mail.protection.outlook.com.
+contact    3600     IN     MX    10    blackhole.tem.scaleway.com.

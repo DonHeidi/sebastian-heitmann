@@ -10,6 +10,18 @@ variable "tem_region" {
   default     = "fr-par"
 }
 
+variable "domain" {
+  description = "Root domain of the website. Registered at GoDaddy; DNS hosted at Scaleway (see infra/dns.tf)"
+  type        = string
+  default     = "sebastian-heitmann.dev"
+}
+
+variable "bind_apex_domain" {
+  description = "Bind the apex hostname to the redirect function (provisions its managed cert). Keep false until the nameserver cutover to Scaleway DNS is live — cert issuance needs the apex resolving to the function first. See docs/runbooks/2026-08-02-apex-dns-cutover.md"
+  type        = bool
+  default     = false
+}
+
 variable "tem_domain" {
   description = "Transactional Email sender domain managed in the Scaleway project"
   type        = string

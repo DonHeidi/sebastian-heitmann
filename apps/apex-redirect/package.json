@@ -1,0 +1,11 @@
+{
+  "name": "apex-redirect",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "handler.mjs",
+  "scripts": {
+    "test": "bun test",
+    "build": "mkdir -p dist && rm -f dist/handler.zip && zip -j -q dist/handler.zip handler.mjs package.json"
+  }
+}

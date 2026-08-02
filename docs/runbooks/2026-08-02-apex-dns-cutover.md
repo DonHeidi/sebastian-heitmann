@@ -168,5 +168,11 @@ deleted) — the old apex-forwarding + all mail records come back with the NS.
   Scaleway; leave them as the rollback path for a few weeks, then optionally clean up.
 - All future record changes go through `infra/dns.tf` — the GoDaddy DNS editor no
   longer has any effect.
-- Follow-ups worth considering: apex DMARC record; raising record TTLs from the
+- Apex DMARC is now published (`p=none`, reports to the contact mailbox). To
+  complete the mail-authentication story: enable DKIM for the domain in the
+  M365 Defender portal, paste the two tenant-specific CNAME targets into
+  `m365_dkim_cnames` in `infra/variables.tf`, apply, then press "Enable" in the
+  portal once the CNAMEs resolve. After a few clean weeks of DMARC reports,
+  tighten the policy to `p=quarantine`, later `p=reject`.
+- Other follow-up worth considering: raising the apex/www TTLs from the
   cutover-friendly 300 s.

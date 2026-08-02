@@ -109,6 +109,32 @@ resource "scaleway_domain_record" "lyncdiscover" {
   ttl      = 3600
 }
 
+# DMARC policy for the root domain (new post-cutover, not in the GoDaddy zone).
+# p=none changes nothing about delivery yet: it only asks receivers to send
+# aggregate reports to the mailbox, so legitimate mail flows can be confirmed
+# before tightening to p=quarantine / p=reject. Tighten only after M365 DKIM
+# (m365_dkim_cnames) is enabled and the reports look clean for a few weeks.
+resource "scaleway_domain_record" "dmarc" {
+  dns_zone = var.domain
+  name     = "_dmarc"
+  type     = "TXT"
+  data     = "v=DMARC1; p=none; rua=mailto:${var.mail_recipient}"
+  ttl      = 3600
+}
+
+# Microsoft 365 DKIM signing for the root domain. Created only once the
+# tenant-specific targets are filled in (see variables.tf) — M365 must have
+# DKIM enabled first or the CNAMEs point at nothing.
+resource "scaleway_domain_record" "m365_dkim" {
+  for_each = var.m365_dkim_cnames
+
+  dns_zone = var.domain
+  name     = "${each.key}._domainkey"
+  type     = "CNAME"
+  data     = "${trimsuffix(each.value, ".")}."
+  ttl      = 3600
+}
+
 # Legacy Microsoft 365 sign-in helper (pre-2020 tenants; harmless to keep).
 resource "scaleway_domain_record" "msoid" {
   dns_zone = var.domain

@@ -22,6 +22,28 @@ variable "bind_apex_domain" {
   default     = true
 }
 
+variable "m365_dkim_cnames" {
+  description = <<-EOT
+    Microsoft 365 DKIM CNAME targets for the root domain, keyed by selector
+    (selector1/selector2). The targets are tenant-specific: enable DKIM for
+    sebastian-heitmann.dev in the Defender portal (security.microsoft.com →
+    Email & collaboration → Policies & rules → Threat policies → Email
+    authentication settings → DKIM), copy the two CNAME values it shows, and
+    commit them here as the default (repo convention: committed defaults, no
+    tfvars). Empty map = records not created (DKIM not yet enabled in M365).
+    Example:
+      { selector1 = "selector1-sebastian-heitmann-dev._domainkey.<tenant>.onmicrosoft.com"
+        selector2 = "selector2-sebastian-heitmann-dev._domainkey.<tenant>.onmicrosoft.com" }
+  EOT
+  type        = map(string)
+  default     = {}
+
+  validation {
+    condition     = alltrue([for k, v in var.m365_dkim_cnames : contains(["selector1", "selector2"], k)])
+    error_message = "m365_dkim_cnames keys must be selector1 and/or selector2."
+  }
+}
+
 variable "tem_domain" {
   description = "Transactional Email sender domain managed in the Scaleway project"
   type        = string

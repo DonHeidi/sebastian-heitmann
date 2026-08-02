@@ -17,9 +17,9 @@ variable "domain" {
 }
 
 variable "bind_apex_domain" {
-  description = "Bind the apex hostname to the redirect function (provisions its managed cert). Keep false until the nameserver cutover to Scaleway DNS is live — cert issuance needs the apex resolving to the function first. See docs/runbooks/2026-08-02-apex-dns-cutover.md"
+  description = "Bind the apex hostname to the redirect function (provisions its managed cert). Was false during the DNS cutover — cert issuance needs the apex resolving to the function first, which required the NS delegation to Scaleway to be live. See docs/runbooks/2026-08-02-apex-dns-cutover.md"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "tem_domain" {

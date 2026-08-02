@@ -10,6 +10,42 @@ variable "tem_region" {
   default     = "fr-par"
 }
 
+variable "domain" {
+  description = "Root domain of the website. Registered at GoDaddy; DNS hosted at Scaleway (see infra/dns.tf)"
+  type        = string
+  default     = "sebastian-heitmann.dev"
+}
+
+variable "bind_apex_domain" {
+  description = "Bind the apex hostname to the redirect function (provisions its managed cert). Was false during the DNS cutover — cert issuance needs the apex resolving to the function first, which required the NS delegation to Scaleway to be live. See docs/runbooks/2026-08-02-apex-dns-cutover.md"
+  type        = bool
+  default     = true
+}
+
+variable "m365_dkim_cnames" {
+  description = <<-EOT
+    Microsoft 365 DKIM CNAME targets for the root domain, keyed by selector
+    (selector1/selector2). The targets are tenant-specific: enable DKIM for
+    sebastian-heitmann.dev in the Defender portal (security.microsoft.com →
+    Email & collaboration → Policies & rules → Threat policies → Email
+    authentication settings → DKIM), copy the two CNAME values it shows, and
+    commit them here as the default (repo convention: committed defaults, no
+    tfvars). Empty map = records not created (DKIM not yet enabled in M365).
+    Values below were provisioned 2026-08-02 via New-DkimSigningConfig
+    (2048-bit keys, created disabled; enable in M365 once these resolve).
+  EOT
+  type        = map(string)
+  default = {
+    selector1 = "selector1-sebastianheitmann-dev02c._domainkey.NETORGFT9959061.n-v1.dkim.mail.microsoft"
+    selector2 = "selector2-sebastianheitmann-dev02c._domainkey.NETORGFT9959061.n-v1.dkim.mail.microsoft"
+  }
+
+  validation {
+    condition     = alltrue([for k, v in var.m365_dkim_cnames : contains(["selector1", "selector2"], k)])
+    error_message = "m365_dkim_cnames keys must be selector1 and/or selector2."
+  }
+}
+
 variable "tem_domain" {
   description = "Transactional Email sender domain managed in the Scaleway project"
   type        = string

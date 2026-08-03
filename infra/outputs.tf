@@ -62,3 +62,18 @@ output "tem_dns_mx_value" {
   description = "MX record value to publish for the TEM domain blackhole"
   value       = scaleway_tem_domain.mail.mx_config
 }
+
+output "rocks_cdn_pipeline_id" {
+  description = "Edge Services pipeline ID for the .rocks site"
+  value       = scaleway_edge_services_pipeline.rocks.id
+}
+
+output "rocks_bucket_endpoint" {
+  description = "Object Storage website endpoint for the .rocks bucket"
+  value       = scaleway_object_bucket_website_configuration.rocks.website_endpoint
+}
+
+output "rocks_apex_redirect_endpoint" {
+  description = "Native URL of the .rocks apex → www redirect function (the apex ALIAS record targets this host)"
+  value       = scaleway_function.apex_redirect_rocks.domain_name
+}

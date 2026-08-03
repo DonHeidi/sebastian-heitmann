@@ -37,7 +37,7 @@ resource "scaleway_function" "contact_handler" {
   timeout      = 30
   memory_limit = 256
   zip_file     = "${path.module}/../apps/mail-service/dist/handler.zip"
-  zip_hash     = filesha256("${path.module}/../apps/mail-service/dist/handler.zip")
+  zip_hash     = fileexists("${path.module}/../apps/mail-service/dist/handler.zip") ? filesha256("${path.module}/../apps/mail-service/dist/handler.zip") : null
 
   environment_variables = {
     MAIL_SENDER     = var.mail_sender

@@ -87,3 +87,21 @@ variable "allowed_origins" {
     error_message = "allowed_origins must be a comma-separated list of http(s) origins."
   }
 }
+
+variable "rocks_domain" {
+  description = "Root domain of the portfolio site. Registered at GoDaddy; DNS hosted at Scaleway (see infra/rocks-dns.tf)"
+  type        = string
+  default     = "sebastian-heitmann.rocks"
+}
+
+variable "bind_rocks_apex_domain" {
+  description = "Bind the .rocks apex hostname to its redirect function (provisions its managed cert). Keep false until the NS delegation for sebastian-heitmann.rocks is live at Scaleway — cert issuance needs the apex resolving to the function first. See the rocks DNS onboarding runbook."
+  type        = bool
+  default     = false
+}
+
+variable "rocks_scaleway_challenge" {
+  description = "TXT value of the _scaleway-challenge record for the .rocks external-domain onboarding. Empty until the domain is registered via POST /domain/v2beta1/external-domains (the API returns the token); then commit the value here (repo convention: committed defaults, no tfvars)."
+  type        = string
+  default     = ""
+}

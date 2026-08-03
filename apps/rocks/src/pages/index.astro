@@ -16,7 +16,7 @@ const t = getStrings(locale);
 
 const entries = (await getCollection('cases'))
   .filter((e) => e.id.startsWith(`${locale}/`) && !e.data.draft)
-  .sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || b.data.startDate.valueOf() - a.data.startDate.valueOf());
 const caseStudies = entries.filter((e) => e.data.kind === 'case-study');
 const projects = entries.filter((e) => e.data.kind === 'project');
 const caseHref = (e: (typeof entries)[number]) =>

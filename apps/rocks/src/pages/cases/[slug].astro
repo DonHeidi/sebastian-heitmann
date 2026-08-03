@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import { Navigation } from '../../components/navigation';
@@ -58,6 +59,15 @@ const period = `${formatDate(entry.data.startDate)} — ${entry.data.endDate ? f
         <dd class="mt-1 text-sm text-foreground">{entry.data.stack.join(' · ')}</dd>
       </div>
     </dl>
+    {entry.data.cover && (
+      <Image
+        src={entry.data.cover}
+        alt={entry.data.title}
+        class="mt-10 w-full border border-border"
+        widths={[768, 1440]}
+        sizes="(max-width: 840px) 100vw, 840px"
+      />
+    )}
     <article class="case-prose mt-10">
       <Content />
     </article>

@@ -240,6 +240,23 @@
     font-family: var(--v8-font-mono);
     font-size: 0.85em;
   }
+
+  /* Zine-style asterisk bullets, replacing the default disc marker. */
+  .case-prose ul {
+    list-style: none;
+    padding-left: 1.4rem;
+  }
+  .case-prose ul li {
+    position: relative;
+  }
+  .case-prose ul li::before {
+    content: '*';
+    position: absolute;
+    left: -1.4rem;
+    top: 0.05em;
+    font-family: var(--v8-font-mono);
+    color: var(--v8-accent);
+  }
 }
 
 @layer components {
@@ -271,6 +288,28 @@
     }
     .v8-spin-hover:hover {
       animation: v8-rotate 1.2s linear infinite;
+    }
+  }
+
+  /* Pixel rocker headbang: two-frame swap via visibility (robustly
+     animatable, unlike display), motion-safe. Static = frame 1. */
+  .v8-frame-2 {
+    visibility: hidden;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes v8-frame-a {
+      0%, 49.9% { visibility: visible; }
+      50%, 100% { visibility: hidden; }
+    }
+    @keyframes v8-frame-b {
+      0%, 49.9% { visibility: hidden; }
+      50%, 100% { visibility: visible; }
+    }
+    .v8-headbang .v8-frame-1 {
+      animation: v8-frame-a 0.8s steps(1) infinite;
+    }
+    .v8-headbang .v8-frame-2 {
+      animation: v8-frame-b 0.8s steps(1) infinite;
     }
   }
 }

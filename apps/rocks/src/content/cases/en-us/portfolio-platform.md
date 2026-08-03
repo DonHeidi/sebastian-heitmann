@@ -20,6 +20,12 @@ sebastian-heitmann.dev is a bilingual (English/German) static site built with As
 
 Everything around the site is code. Terraform manages the project, bucket, CDN pipeline, DNS zone, a serverless contact-form function, and the transactional-email domain. Secrets never touch disk: a varlock schema per workspace resolves them from Proton Pass at runtime. Deploys are two idempotent scripts.
 
+## Setlist: stack highlights
+
+- Astro islands for interactivity, Tailwind v4 for the precision-Swiss design system
+- Terraform-managed Scaleway platform: CDN, serverless functions, DNS, transactional email
+- varlock + Proton Pass for secrets, so nothing sensitive ever touches disk
+
 ## Outcome
 
 A site whose entire platform can be rebuilt from a clean machine with three commands, and whose DNS — including live Microsoft 365 mail records — moved registrar-free from GoDaddy to Scaleway with a documented, reversible runbook.

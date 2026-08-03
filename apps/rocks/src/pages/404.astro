@@ -1,17 +1,27 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getStrings } from '../i18n/utils';
+import { AsteriskMark } from '../components/asterisk-mark';
+import { GraffitiWord } from '../components/graffiti-word';
+import { PixelRocker } from '../components/pixel-rocker';
 
 const locale = 'en-us';
 const t = getStrings(locale);
 ---
 
 <Layout locale={locale} title={t.meta.notFoundTitle} description={t.notFound.body}>
-  <main class="mx-auto flex min-h-[70vh] max-w-[1440px] flex-col items-start justify-center px-6 md:px-20">
-    <h1 class="font-[family-name:var(--v8-font-display)] text-7xl text-foreground">{t.notFound.heading}</h1>
-    <p class="mt-4 text-muted-foreground">{t.notFound.body}</p>
-    <a href="/" class="mt-8 border border-border px-4 py-2 font-mono text-[10px] tracking-[0.1em] text-foreground uppercase no-underline transition-colors hover:border-primary hover:text-primary">
-      {t.notFound.backHome}
-    </a>
+  <main class="relative mx-auto flex min-h-[80vh] max-w-[1440px] flex-col items-start justify-center overflow-hidden px-6 md:px-20">
+    <div aria-hidden="true" class="pointer-events-none absolute -right-20 top-1/2 -z-10 -translate-y-1/2 opacity-80">
+      <AsteriskMark size={480} misregister />
+    </div>
+    <h1 class="sr-only">{t.notFound.heading}</h1>
+    <GraffitiWord word="no-encore" height={140} className="max-w-full" />
+    <p class="mt-6 text-muted-foreground">{t.notFound.body}</p>
+    <div class="mt-10 flex items-end gap-6">
+      <a href="/" class="border border-dashed border-border px-5 py-3 font-mono text-[10px] tracking-[0.12em] text-foreground uppercase no-underline transition-colors hover:border-primary hover:text-primary">
+        {t.notFound.backHome}
+      </a>
+      <PixelRocker size={80} animated />
+    </div>
   </main>
 </Layout>

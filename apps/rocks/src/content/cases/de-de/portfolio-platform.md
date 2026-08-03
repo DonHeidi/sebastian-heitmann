@@ -20,6 +20,12 @@ sebastian-heitmann.dev ist eine zweisprachige (Englisch/Deutsch) statische Websi
 
 Alles um die Website herum ist Code. Terraform verwaltet Projekt, Bucket, CDN-Pipeline, DNS-Zone, eine Serverless Function für das Kontaktformular und die Transaktions-E-Mail-Domain. Secrets landen nie auf der Platte: Ein varlock-Schema pro Workspace löst sie zur Laufzeit aus Proton Pass auf. Deploys sind zwei idempotente Skripte.
 
+## Setlist: Stack-Highlights
+
+- Astro Islands für Interaktivität, Tailwind v4 für das Precision-Swiss-Designsystem
+- Terraform-verwaltete Scaleway-Plattform: CDN, Serverless Functions, DNS, Transaktions-E-Mail
+- varlock + Proton Pass für Secrets, sodass nichts Sensibles je auf der Platte landet
+
 ## Ergebnis
 
 Eine Website, deren gesamte Plattform sich mit drei Befehlen von einer frischen Maschine wiederherstellen lässt — und deren DNS inklusive produktiver Microsoft-365-Mail-Records ohne Registrar-Wechsel dokumentiert und reversibel von GoDaddy zu Scaleway umgezogen ist.

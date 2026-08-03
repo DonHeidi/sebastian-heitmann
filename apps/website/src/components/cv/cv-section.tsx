@@ -95,7 +95,9 @@ export function CvSection({ cv }: CvSectionProps) {
       </div>
 
       {/* Skills & Expertise — languages and soft skills live INSIDE this section */}
-      <SectionLabel>{cv.skillsLabel}</SectionLabel>
+      <div className="cv-skills-break">
+        <SectionLabel>{cv.skillsLabel}</SectionLabel>
+      </div>
       <div className="cv-skills reveal flex flex-col gap-6">
         {cv.skillGroups.map((group) => (
           <CvRow key={group.label} side={<GroupLabel>{group.label}</GroupLabel>}>

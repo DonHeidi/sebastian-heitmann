@@ -1,6 +1,7 @@
-@page { size: A4; margin: 0; }
+@page { size: A4; margin: 11.5mm 16mm; }
 
 @media print {
+  /* --- palette: unchanged from the previous stylesheet --- */
   html {
     --v8-bg: #fff !important;
     --v8-bg-alt: #f5f5f2 !important;
@@ -24,207 +25,87 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  nav, footer { display: none !important; }
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-  main {
-    display: block !important;
-    width: 100% !important;
-  }
 
-  /* Page shell */
+  nav, footer, .cv-download { display: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  main { display: block !important; width: 100% !important; }
+
+  /* --- page shell --- */
   .cv {
-    padding: 14mm 16mm !important;
+    padding: 0 !important;
     max-width: none !important;
     width: 100% !important;
     display: block !important;
+    font-size: 9.8px !important;
   }
-  .cv-download { display: none !important; }
-  .cv-header {
-    margin-bottom: 20px !important;
-    max-width: none !important;
-    width: 100% !important;
-  }
-  .cv-header__top { display: block !important; }
-  .cv-headline {
-    font-family: var(--v8-font-mono) !important;
-    font-size: 10px !important;
-    font-weight: 400 !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
-    color: rgba(0,0,0,0.72) !important;
-    line-height: 1.2 !important;
-    margin-bottom: 4px !important;
-  }
-  .cv-print-identity {
-    display: block !important;
-    margin-bottom: 10px !important;
-  }
-  .cv-print-name {
-    font-family: var(--v8-font-display) !important;
-    font-size: 22px !important;
-    line-height: 1.1 !important;
-    color: #111 !important;
-    margin: 0 0 6px 0 !important;
-  }
-  .cv-print-address,
-  .cv-print-contact {
-    font-family: var(--v8-font-mono) !important;
-    font-size: 9px !important;
-    line-height: 1.5 !important;
-    letter-spacing: 0.04em !important;
-    color: rgba(0,0,0,0.72) !important;
-    margin: 0 !important;
-  }
-  .cv-rule { width: 32px !important; margin-bottom: 8px !important; }
+
+  /* --- header --- */
+  .cv-header { margin-bottom: 8px !important; }
+  .cv-eyebrow { font-size: 7.5px !important; letter-spacing: 0.28em !important; margin-bottom: 5px !important; }
+  .cv-name { font-size: 29px !important; line-height: 1.1 !important; margin-bottom: 7px !important; }
+  .cv-contact { font-size: 8px !important; letter-spacing: 0.06em !important; line-height: 1.55 !important; margin-top: 0 !important; }
   .cv-summary {
-    font-size: 10px !important;
-    line-height: 1.5 !important;
+    font-size: 10.3px !important;
+    line-height: 1.48 !important;
+    margin-top: 0 !important;
+    padding-top: 9px !important;
     max-width: none !important;
   }
 
-  /* Section headers */
-  .cv-section-header { margin-bottom: 10px !important; }
-  .cv-section-label { font-size: 8px !important; }
-  .cv-section-line {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    background: rgba(0,0,0,0.15) !important;
-  }
+  /* --- section labels --- */
+  .cv-section-header { margin: 8px 0 6.5px !important; gap: 12px !important; }
+  .cv-section-label { font-size: 7.5px !important; letter-spacing: 0.28em !important; }
 
-  /* Experience */
-  .cv-experience { margin-bottom: 16px !important; width: 100% !important; }
-  .cv-timeline { width: 100% !important; }
-  .cv-entry,
-  .cv-entry:first-child {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-    padding-bottom: 10px !important;
-    margin-bottom: 6px !important;
-    border: none !important;
-    border-image: none !important;
+  /* --- the row primitive --- */
+  .cv-row {
+    grid-template-columns: 26mm 1fr !important;
+    column-gap: 6mm !important;
+    break-inside: avoid !important;
   }
-  .cv-entry__aside {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 8px !important;
-    width: 100% !important;
-    text-align: left !important;
-    padding: 0 !important;
-    margin-bottom: 2px !important;
-  }
-  .cv-entry__marker,
-  .cv-entry__dot,
-  .cv-entry__stem { display: none !important; }
-  .cv-entry__period { font-size: 8px !important; }
-  .cv-entry__location { font-size: 7px !important; }
-  .cv-entry__body {
-    padding: 0 !important;
-    width: 100% !important;
-    border: none !important;
-    border-image: none !important;
-  }
-  .cv-entry__role { font-size: 13px !important; margin-bottom: 1px !important; }
-  .cv-entry__company { font-size: 8px !important; margin-bottom: 3px !important; }
-  .cv-entry__description {
-    font-size: 9px !important;
-    line-height: 1.45 !important;
-    margin-bottom: 3px !important;
-    max-width: none !important;
-  }
+  .cv-row__side { flex-direction: column !important; padding-top: 2.5px !important; gap: 1px !important; }
+  .cv-row__period { font-size: 7.8px !important; letter-spacing: 0.05em !important; line-height: 1.55 !important; }
+  .cv-row__loc { font-size: 7.8px !important; line-height: 1.55 !important; }
+  .cv-group-label { font-size: 6.8px !important; letter-spacing: 0.14em !important; }
+
+  /* --- experience --- */
+  .cv-experience { gap: 5.5px !important; }
+  .cv-entry__role { font-size: 14px !important; line-height: 1.2 !important; }
+  .cv-entry__company { font-size: 7.5px !important; letter-spacing: 0.14em !important; margin: 1.5px 0 4px !important; }
+  .cv-entry__description { font-size: 9.3px !important; margin-bottom: 1.5px !important; max-width: none !important; }
   .cv-entry__highlights { gap: 1px !important; max-width: none !important; }
-  .cv-entry__highlights li {
-    font-size: 8px !important;
-    line-height: 1.35 !important;
-    padding-left: 10px !important;
-  }
-  .cv-entry__highlights li::before { top: 5px !important; width: 4px !important; }
+  .cv-highlight { font-size: 8.8px !important; line-height: 1.31 !important; padding-left: 11px !important; hyphens: auto; }
+  .cv-highlight::before { top: 5px !important; }
+  .cv-highlight__tech { font-size: 7.2px !important; letter-spacing: 0.03em !important; }
 
-  /* Earlier positions */
-  .cv-earlier {
-    padding-left: 0 !important;
-    padding-top: 8px !important;
-    gap: 3px !important;
-    width: 100% !important;
-    border: none !important;
-  }
-  .cv-earlier__label { font-size: 8px !important; margin-bottom: 0 !important; }
-  .cv-earlier__row { flex-wrap: wrap !important; gap: 2px 8px !important; }
-  .cv-earlier__period { font-size: 7.5px !important; }
-  .cv-earlier__role { font-size: 8.5px !important; }
-  .cv-earlier__company { font-size: 7px !important; }
+  /* --- earlier positions, community rows --- */
+  .cv-earlier { gap: 2px !important; }
+  .cv-earlier__role, .cv-community__role { font-size: 9.3px !important; }
+  .cv-earlier__company, .cv-community__org { font-size: 7.5px !important; letter-spacing: 0.08em !important; }
+  .cv-community { gap: 4.5px !important; }
 
-  /* Bento grid */
-  .bento {
-    width: 100% !important;
-    break-before: page !important;
-    padding: 14mm 16mm !important;
-  }
-  .bento-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    grid-template-areas:
-      "tech      tech      pm"
-      "arch      lang      soft"
-      "edu       cert      cert"
-      "edu       comm      comm"
-      "interests comm      comm" !important;
-    gap: 1px !important;
-    width: 100% !important;
-    background: rgba(0,0,0,0.2) !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .bento-cell {
-    padding: 8px 10px !important;
-    gap: 5px !important;
-    background: #fff !important;
-    border: none !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .bento-cell__label { font-size: 7px !important; }
-  .bento-tags { gap: 3px !important; }
-  .bento-tag {
-    font-size: 8px !important;
-    padding: 2px 6px !important;
-    border-color: rgba(0,0,0,0.15) !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+  /* --- skills --- */
+  .cv-skills { gap: 9px !important; }
+  .cv-tags { gap: 4.5px !important; }
+  .cv-tag { font-size: 7.8px !important; padding: 3px 7px !important; letter-spacing: 0.04em !important; }
+  .cv-lang__name { font-size: 12.5px !important; line-height: 1.25 !important; }
+  .cv-lang__level { font-size: 6.8px !important; letter-spacing: 0.16em !important; }
+  .cv-langs { gap: 30px !important; }
+  .cv-plain-list { font-size: 9.3px !important; }
 
-  .bento-langs { gap: 6px !important; }
-  .bento-lang__name { font-size: 12px !important; }
-  .bento-lang__level { font-size: 7.5px !important; }
+  /* --- education, certifications --- */
+  .cv-education { gap: 8px !important; }
+  .cv-edu__degree { font-size: 12.5px !important; line-height: 1.25 !important; }
+  .cv-edu__institution { font-size: 7px !important; letter-spacing: 0.14em !important; }
+  .cv-edu__desc { font-size: 8.3px !important; }
+  .cv-certifications { gap: 7px !important; }
+  .cv-cert__name { font-size: 9.8px !important; }
+  .cv-cert__issuer { font-size: 7.5px !important; letter-spacing: 0.06em !important; }
 
-  .bento-edu-list { gap: 8px !important; }
-  .bento-edu { padding-bottom: 6px !important; }
-  .bento-edu__period { font-size: 7.5px !important; }
-  .bento-edu__degree { font-size: 11px !important; }
-  .bento-edu__institution { font-size: 7.5px !important; }
-  .bento-edu__desc { font-size: 8px !important; margin-top: 1px !important; }
+  /* --- activities --- */
+  .cv-activity { font-size: 8.8px !important; line-height: 1.45 !important; padding-left: 11px !important; }
+  .cv-activity::before { top: 5px !important; }
 
-  .bento-cert-focus { padding-bottom: 6px !important; gap: 4px !important; }
-  .bento-cert-focus__label { font-size: 7px !important; }
-  .bento-cert-list { gap: 6px !important; }
-  .bento-cert__name { font-size: 9px !important; }
-  .bento-cert__meta { font-size: 7.5px !important; }
-
-  .bento-community { gap: 6px !important; }
-  .bento-community__activities { padding-bottom: 6px !important; gap: 2px !important; }
-  .bento-community__activities li {
-    font-size: 8.5px !important;
-    line-height: 1.4 !important;
-    padding-left: 10px !important;
-  }
-  .bento-community__activities li::before { top: 5px !important; width: 4px !important; }
-  .bento-community__roles { gap: 4px !important; }
-  .bento-community__role-name { font-size: 8.5px !important; }
-  .bento-community__role-meta { font-size: 7px !important; }
-
-  .cv-entry, .bento-cell { break-inside: avoid; }
+  /* Skills starts page 2, matching the source PDF. The selector targets the
+     section label that directly precedes the skills block. */
+  .cv-skills-break { break-before: page !important; }
 }

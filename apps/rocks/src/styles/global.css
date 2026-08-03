@@ -205,3 +205,39 @@
 .dark.v8-grain::after {
   opacity: 0.15;
 }
+
+@layer components {
+  /* Typography for rendered case-study markdown (`<Content />`). Utilities
+     can't reach into rendered markdown, so this is the one sanctioned place
+     for element selectors. */
+  .case-prose h2 {
+    font-family: var(--v8-font-display);
+    font-size: 1.75rem;
+    color: var(--v8-text);
+    margin-top: 2.5rem;
+  }
+  .case-prose p {
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: var(--v8-text-secondary);
+  }
+  .case-prose ul,
+  .case-prose ol {
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+    color: var(--v8-text-secondary);
+  }
+  .case-prose li {
+    margin-top: 0.375rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+  .case-prose a {
+    color: var(--v8-accent);
+  }
+  .case-prose code {
+    font-family: var(--v8-font-mono);
+    font-size: 0.85em;
+  }
+}

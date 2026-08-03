@@ -1,0 +1,75 @@
+---
+import { getCollection, render } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Layout from '../../../layouts/Layout.astro';
+import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
+import { Navigation } from '../../../components/navigation';
+import { Footer } from '../../../components/footer';
+import { ThemeToggle } from '../../../components/theme-toggle';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('cases');
+  return entries
+    .filter((e) => e.id.startsWith('de-de/') && e.data.kind === 'case-study' && !e.data.draft)
+    .map((entry) => ({
+      params: { slug: entry.id.split('/').slice(1).join('/') },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const locale = 'de-de';
+const t = getStrings(locale);
+const slug = entry.id.split('/').slice(1).join('/');
+const { Content } = await render(entry);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('de-DE', { year: 'numeric', month: 'short' });
+const period = `${formatDate(entry.data.startDate)} — ${entry.data.endDate ? formatDate(entry.data.endDate) : t.cases.ongoing}`;
+---
+
+<Layout
+  locale={locale}
+  title={`${entry.data.title} — ${t.meta.title}`}
+  description={entry.data.summary}
+  alternates={getHreflangAlternates(`/cases/${slug}/`)}
+  ogType="article"
+>
+  <Navigation nav={t.nav} languagePicker={t.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+    <ThemeToggle client:load labels={t.themeToggle} />
+  </Navigation>
+  <main class="mx-auto max-w-[840px] px-6 py-12 md:py-20">
+    <a href={getRelativeLocaleUrl(locale, '/')} class="font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase no-underline transition-colors hover:text-foreground">
+      ← {t.cases.backToOverview}
+    </a>
+    <h1 class="mt-6 font-[family-name:var(--v8-font-display)] text-4xl leading-[1.1] text-foreground md:text-5xl">{entry.data.title}</h1>
+    <p class="mt-4 text-base leading-relaxed text-muted-foreground">{entry.data.summary}</p>
+    <dl class="mt-8 grid gap-2 border-y border-border py-5 md:grid-cols-3">
+      <div>
+        <dt class="font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase">{t.cases.roleLabel}</dt>
+        <dd class="mt-1 text-sm text-foreground">{entry.data.role}</dd>
+      </div>
+      <div>
+        <dt class="font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase">{t.cases.periodLabel}</dt>
+        <dd class="mt-1 text-sm text-foreground">{period}</dd>
+      </div>
+      <div>
+        <dt class="font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase">{t.cases.stackLabel}</dt>
+        <dd class="mt-1 text-sm text-foreground">{entry.data.stack.join(' · ')}</dd>
+      </div>
+    </dl>
+    <article class="case-prose mt-10">
+      <Content />
+    </article>
+    {entry.data.links.length > 0 && (
+      <div class="mt-10 flex flex-wrap gap-3">
+        {entry.data.links.map((link) => (
+          <a href={link.url} target="_blank" rel="noopener noreferrer" class="border border-border px-4 py-2 font-mono text-[10px] tracking-[0.1em] text-foreground uppercase no-underline transition-colors hover:border-primary hover:text-primary">
+            {link.label} ↗
+          </a>
+        ))}
+      </div>
+    )}
+  </main>
+  <Footer footer={t.footer} />
+</Layout>

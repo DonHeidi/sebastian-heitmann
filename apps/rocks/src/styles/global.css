@@ -1,0 +1,207 @@
+@import 'tailwindcss';
+@import './v8-fonts.css';
+@import './v8-theme.css';
+
+/* ------------------------------------------------------------------ */
+/* Reset / base layer.                                                 */
+/* Ported verbatim from the old global `<style lang="scss" is:global>`  */
+/* block in Layout.astro (pre-migration) plus the page-scoped `body`    */
+/* color/background block from the same file (Astro-scoped, but body   */
+/* is only ever rendered via Layout.astro, so folding it in unscoped is */
+/* equivalent). All of it lives in `@layer base` — unlayered author CSS */
+/* outranks every Tailwind utility (@layer utilities), which would      */
+/* silently defeat ported TSX components' margin/spacing classes.       */
+/* ------------------------------------------------------------------ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  * {
+    margin: 0;
+  }
+
+  html {
+    scrollbar-gutter: stable;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      interpolate-size: allow-keywords;
+    }
+  }
+
+  body {
+    background-color: var(--v8-bg);
+    color: var(--v8-text);
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  img,
+  picture,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+  }
+  svg {
+    display: block;
+  }
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------ */
+  /* Reveal-on-scroll utility, paired with the IntersectionObserver in   */
+  /* Layout.astro's untouched <script> tag. No co-occurring opacity/     */
+  /* transform Tailwind utility classes exist on any `.reveal` element   */
+  /* in the codebase, so `@layer components` does not get outranked.     */
+  /* ------------------------------------------------------------------ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Backdrop composition vocabulary (`.bd-*`) for the home-page         */
+/* backdrop moments — see                                              */
+/* docs/superpowers/specs/2026-07-20-backdrop-composition-design.md.   */
+/* These classes DO co-occur with Tailwind utilities on the same       */
+/* elements. That is safe because the utilities                        */
+/* set only geometry (position/size/display) and never the properties  */
+/* declared here, so utilities-beats-components layering cannot bite.  */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .bd-dots {
+    background-image: radial-gradient(circle, var(--v8-dot-color) 1px, transparent 1.5px);
+    background-size: 18px 18px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 75%);
+  }
+
+  .bd-grid-fine {
+    background-image:
+      linear-gradient(to right, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to right, var(--v8-grid-fine) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
+    background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+    mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 0%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 0%, transparent 78%);
+  }
+
+  /* full 5cm/1cm/1mm engineering grid, faded toward its top-left —    */
+  /* used as the hero anchor, cropped by the section's bottom-right    */
+  .bd-grid-full {
+    background-image:
+      linear-gradient(to right, var(--v8-grid-major) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-major) 1px, transparent 1px),
+      linear-gradient(to right, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
+      linear-gradient(to right, var(--v8-grid-fine) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
+    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+    mask-image: radial-gradient(ellipse 115% 115% at 100% 100%, black 42%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 115% 115% at 100% 100%, black 42%, transparent 78%);
+  }
+
+  .bd-stroke-mid   { stroke: var(--v8-text); stroke-width: 1; opacity: 0.16; }
+  .bd-stroke-faint { stroke: var(--v8-text); stroke-width: 1; opacity: 0.09; }
+  .bd-fill-faint   { fill: var(--v8-text); opacity: 0.12; }
+  .bd-node         { stroke: var(--v8-text); stroke-width: 1; fill: none; opacity: 0.2; }
+  .bd-accent-fill  { fill: var(--v8-accent); opacity: 0.85; }
+  .bd-dim-label {
+    fill: var(--v8-text);
+    opacity: 0.35;
+    font-family: var(--v8-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Grain overlay for banded sections.                                  */
+/* Ported verbatim from the old `@mixin grain($opacity)` (Astro/SCSS,   */
+/* technical-project-management-content.astro, pre-migration) — the    */
+/* feTurbulence noise texture is unportable to Tailwind utilities, so   */
+/* it lives here as plain CSS per the conversion rules. Apply           */
+/* `v8-grain` alongside `.light`/`.dark` on a banded section; the       */
+/* section becomes the positioning/stacking context for the overlay    */
+/* and its direct content wrapper is lifted above it.                  */
+/* ------------------------------------------------------------------ */
+.v8-grain {
+  position: relative;
+  z-index: 0;
+}
+
+.v8-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+.v8-grain > * {
+  position: relative;
+  z-index: 1;
+}
+
+.light.v8-grain::after {
+  opacity: 0.12;
+}
+
+.dark.v8-grain::after {
+  opacity: 0.15;
+}

@@ -121,29 +121,32 @@ REFRESH_FLAGS=()
 if [[ "${1:-}" == "--refresh-cache-metadata" ]]; then
   REFRESH_FLAGS=(--ignore-times)
 fi
+# Expanded below as ${REFRESH_FLAGS[@]+"${REFRESH_FLAGS[@]}"}: on bash < 4.4
+# (macOS system bash is 3.2) expanding an empty array under `set -u` aborts
+# with "unbound variable" — this idiom expands to nothing instead.
 
 # --s3-acl passed explicitly too (belt and braces): the RCLONE_CONFIG_SCW_ACL env var
 # name couldn't be confirmed against the real bucket (only --dry-run is permitted
 # there), so all destination-touching commands also carry the flag directly.
 rclone copy dist/ scw:sebastian-heitmann-website \
   --checksum --include '_astro/**' --fast-list --transfers 8 -v \
-  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --s3-acl public-read ${REFRESH_FLAGS[@]+"${REFRESH_FLAGS[@]}"} \
   --header-upload 'Cache-Control: public, max-age=31536000, immutable'
 
 rclone copy dist/ scw:sebastian-heitmann-website \
   --checksum --include 'fonts/**' --fast-list --transfers 8 -v \
-  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --s3-acl public-read ${REFRESH_FLAGS[@]+"${REFRESH_FLAGS[@]}"} \
   --header-upload 'Cache-Control: public, max-age=31536000, immutable'
 
 rclone copy dist/ scw:sebastian-heitmann-website \
   --checksum --exclude '_astro/**' --exclude 'fonts/**' --exclude '*.html' \
   --fast-list --transfers 8 -v \
-  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --s3-acl public-read ${REFRESH_FLAGS[@]+"${REFRESH_FLAGS[@]}"} \
   --header-upload 'Cache-Control: public, max-age=3600'
 
 rclone copy dist/ scw:sebastian-heitmann-website \
   --checksum --include '*.html' --fast-list --transfers 8 -v \
-  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --s3-acl public-read ${REFRESH_FLAGS[@]+"${REFRESH_FLAGS[@]}"} \
   --header-upload 'Cache-Control: no-cache'
 
 # Deletion-only pass: the four copies above are exhaustive and just ran over the

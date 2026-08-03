@@ -30,8 +30,12 @@ export function HeroStageMoment({ annotations }: HeroStageMomentProps) {
       </svg>
       {/* the rock element: big misregistered asterisk, bleeding off the right edge */}
       <div className="absolute -right-16 top-16 opacity-90 md:-right-10 md:top-10">
-        <AsteriskMark size={280} misregister spin className="md:hidden" />
-        <AsteriskMark size={420} misregister spin className="hidden md:block" />
+        <div className="md:hidden">
+          <AsteriskMark size={280} misregister spin />
+        </div>
+        <div className="hidden md:block">
+          <AsteriskMark size={420} misregister spin />
+        </div>
       </div>
     </div>
   );

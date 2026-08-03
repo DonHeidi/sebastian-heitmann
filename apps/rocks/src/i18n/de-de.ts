@@ -18,6 +18,11 @@ export const deDe: Strings = {
     heading: 'Arbeit, die live geht.',
     intro: 'Ich baue Produkte und Plattformen von Anfang bis Ende: Architektur, Code, Infrastruktur und den Lieferprozess drumherum. Hier: ausgewählte Fallstudien und Projekte.',
   },
+  themeToggle: {
+    system: 'System',
+    light: 'Hell',
+    dark: 'Dunkel',
+  },
   cases: {
     sectionTitle: 'Fallstudien',
     readCase: 'Fallstudie lesen',

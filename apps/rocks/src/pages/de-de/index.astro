@@ -1,17 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import Layout from '../layouts/Layout.astro';
-import { getStrings, getHreflangAlternates } from '../i18n/utils';
-import { Navigation } from '../components/navigation';
-import { Footer } from '../components/footer';
-import { ThemeToggle } from '../components/theme-toggle';
-import { Hero } from '../components/hero';
-import { CaseCard } from '../components/case-card';
-import { TeaserCard } from '../components/teaser-card';
-import { blogTeasers } from '../data/blog-teasers';
+import Layout from '../../layouts/Layout.astro';
+import { getStrings, getHreflangAlternates } from '../../i18n/utils';
+import { Navigation } from '../../components/navigation';
+import { Footer } from '../../components/footer';
+import { ThemeToggle } from '../../components/theme-toggle';
+import { Hero } from '../../components/hero';
+import { CaseCard } from '../../components/case-card';
+import { TeaserCard } from '../../components/teaser-card';
+import { blogTeasers } from '../../data/blog-teasers';
 
-const locale = 'en-us';
+const locale = 'de-de';
 const t = getStrings(locale);
 
 const entries = (await getCollection('cases'))
@@ -28,7 +28,6 @@ const caseHref = (e: (typeof entries)[number]) =>
   title={t.meta.title}
   description={t.meta.description}
   alternates={getHreflangAlternates('/')}
-  includeRedirectScript={true}
 >
   <Navigation nav={t.nav} languagePicker={t.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
     <ThemeToggle client:load labels={t.themeToggle} />

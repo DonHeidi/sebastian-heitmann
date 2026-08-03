@@ -16,6 +16,11 @@ export interface Strings {
     heading: string;
     intro: string;
   };
+  themeToggle: {
+    system: string;
+    light: string;
+    dark: string;
+  };
   cases: {
     sectionTitle: string;
     readCase: string;

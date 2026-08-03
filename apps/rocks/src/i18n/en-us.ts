@@ -18,6 +18,11 @@ export const enUs: Strings = {
     heading: 'Work that ships.',
     intro: 'I build products and platforms end to end: architecture, code, infrastructure, and the delivery process around them. These are selected case studies and projects.',
   },
+  themeToggle: {
+    system: 'System',
+    light: 'Light',
+    dark: 'Dark',
+  },
   cases: {
     sectionTitle: 'Case studies',
     readCase: 'Read case study',

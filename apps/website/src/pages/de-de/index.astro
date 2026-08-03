@@ -25,7 +25,7 @@ import type { Locale } from '../../i18n/utils';
 
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
-const alternates = getHreflangAlternates();
+const alternates = getHreflangAlternates('/');
 const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
 
 const heroPhoto = await getImage({ src: picture, width: 160, height: 160 });

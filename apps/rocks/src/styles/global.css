@@ -241,3 +241,36 @@
     font-size: 0.85em;
   }
 }
+
+@layer components {
+  /* v2 punk print/motion utilities. Misregistration = off-register zine
+     printing: an accent ghost behind the ink original. Text version needs
+     data-text="<same text>" on the element. All motion is motion-safe. */
+  .misregister-text {
+    position: relative;
+    display: inline-block;
+  }
+  .misregister-text::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    color: var(--v8-accent);
+    opacity: 0.9;
+    z-index: -1;
+  }
+
+  @keyframes v8-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .v8-spin-slow {
+      animation: v8-rotate 60s linear infinite;
+    }
+    .v8-spin-hover:hover {
+      animation: v8-rotate 1.2s linear infinite;
+    }
+  }
+}

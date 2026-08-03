@@ -171,8 +171,8 @@ The `@<project-id>` suffix is required to target the `sebastian-heitmann-dev` pr
 
 ### Scaleway Gotchas
 
-- **The deploy credentials are organization-wide, not project-scoped.** `infra/.env.schema` supplies `SCW_DEFAULT_ORGANIZATION_ID` and no project id, so `./scripts/scw <cmd> list` enumerates **every project in the org** (currently `sebastian-heitmann.dev`, `sebastian-heitmann-dev`, `job-directory`) — and mutating commands will happily act on another project's resources. Always pass `--project-id` on ad-hoc commands, or check the `project_id` field in the output before acting on a resource. Real incident: `edge-services pipeline list` returns two pipelines, and the second (`landing-apex`) belongs to `job-directory`, not this site — it was purged repeatedly in the belief that both served this domain. Terraform is unaffected: it is pinned to the `sebastian-heitmann-dev` project.
-- Only **one** Edge Services pipeline belongs to this repo — `sebastian-heitmann-website`, serving `www.sebastian-heitmann.dev` (`infra/cdn.tf`). Resolve its id by name rather than hardcoding one, so a cache purge cannot land on another project's pipeline:
+- **The deploy credentials are organization-wide, not project-scoped.** `infra/.env.schema` supplies `SCW_DEFAULT_ORGANIZATION_ID` and no project id, so `./scripts/scw <cmd> list` enumerates **every project in the org** (currently `sebastian-heitmann.dev`, `sebastian-heitmann-dev`, `job-directory`), and mutating commands will happily act on another project's resources. Always pass `--project-id` on ad-hoc commands, or check the `project_id` field in the output before acting on a resource. Real incident: `edge-services pipeline list` returned two pipelines, and the second (`landing-apex`) belongs to `job-directory`, not this site: it was purged repeatedly in the belief that both served this domain. Post-apply of the rocks pipeline, the same list call returns three pipelines total: `landing-apex` still belongs to `job-directory` and is still off-limits. Terraform is unaffected: it is pinned to the `sebastian-heitmann-dev` project.
+- **Two** Edge Services pipelines belong to this repo: `sebastian-heitmann-website`, serving `www.sebastian-heitmann.dev` (`infra/cdn.tf`), and `sebastian-heitmann-rocks`, serving `www.sebastian-heitmann.rocks` (`infra/rocks-cdn.tf`). Always resolve the target pipeline by name rather than hardcoding an id, so a cache purge cannot land on another project's pipeline (or the wrong one of these two):
 
   ```bash
   ./scripts/scw edge-services purge-request create all=true \
@@ -180,7 +180,9 @@ The `@<project-id>` suffix is required to target the `sebastian-heitmann-dev` pr
       | jq -r '.[] | select(.name=="sebastian-heitmann-website") | .id')"
   ```
 
-  (`terraform output -raw cdn_pipeline_id` also holds it, but only works with the S3-backend credentials the deploy script exports — it fails silently otherwise.)
+  The same pattern applies to the rocks pipeline, swapping in `select(.name=="sebastian-heitmann-rocks")`.
+
+  (`terraform output -raw cdn_pipeline_id` also holds the website pipeline's id, but only works with the S3-backend credentials the deploy script exports, failing silently otherwise.)
 - TEM API is only available in `fr-par`, function hosts in `nl-ams`
 - `SCW_*` env vars are reserved in Scaleway Functions — use `TEM_*` prefix instead
 - S3 API requires `ACCESS_KEY@PROJECT_ID` format to target non-default projects — the `PROJECT_ID` is the Terraform-managed project, not the default org project from `~/.config/scw/config.yaml`

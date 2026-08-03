@@ -2,8 +2,8 @@ import type { Strings } from './types';
 
 export const deDe: Strings = {
   meta: {
-    title: 'Sebastian Heitmann \u2014 Fractional CTO',
-    description: 'Fractional CTO. Architektur, Entwicklung, Teams.',
+    title: 'Sebastian Heitmann \u2014 Technology Consultant',
+    description: 'Technology Consultant. Architektur, Entwicklung, Teams.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -24,9 +24,9 @@ export const deDe: Strings = {
     cta: 'Nachricht senden',
     ctaNote: 'Direkt in mein Postfach. Kein Funnel. Ich lese jede Nachricht.',
     photoAlt: 'Sebastian Heitmann',
-    role: { label: 'Rolle', value: 'Fractional CTO' },
+    role: { label: 'Rolle', value: 'Technology Consultant' },
     focus: { label: 'Fokus', value: 'Architektur, Entwicklung, Teams' },
-    experience: { label: 'Erfahrung', value: '15 Jahre' },
+    experience: { label: 'Erfahrung', value: '10+ Jahre' },
     projects: { label: 'Projekte', value: '20+ umgesetzt' },
     status: { label: 'Status', value: 'Verf\u00FCgbar' },
   },
@@ -178,7 +178,7 @@ export const deDe: Strings = {
   cv: {
     meta: {
       title: 'Lebenslauf \u2014 Sebastian Heitmann',
-      description: 'Lebenslauf. 15 Jahre Architektur, Entwicklung und Team-F\u00FChrung.',
+      description: 'Lebenslauf. 10+ Jahre Architektur, Entwicklung und Team-F\u00FChrung.',
     },
     headline: 'Lebenslauf',
     print: {
@@ -186,12 +186,12 @@ export const deDe: Strings = {
       address: 'Kastanienallee 24 \u00B7 21255 Tostedt',
       contact: 'me@sebastian-heitmann.dev \u00B7 sebastian-heitmann.dev',
     },
-    summary: 'Fractional CTO mit 15 Jahren Erfahrung in Software-Architektur, Entwicklung und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation und Beratung, um Ideen in ausgelieferte Produkte zu verwandeln.',
+    summary: 'Technology Consultant mit 10+ Jahren Erfahrung in Software-Architektur, Entwicklung und Team-F\u00FChrung. Ich verbinde tiefe technische Expertise mit Kommunikation und Beratung, um Ideen in ausgelieferte Produkte zu verwandeln.',
     experienceLabel: 'Berufserfahrung',
     experience: [
       {
         period: 'Jun 2023 \u2014 Heute',
-        role: 'Fractional CTO',
+        role: 'Technology Consultant',
         company: 'Selbstst\u00E4ndig',
         location: 'Hamburg, DE',
         description: 'Beratung, Entwicklung und Projektmanagement f\u00FCr mittelst\u00E4ndische Unternehmen und Startups.',
@@ -374,7 +374,7 @@ export const deDe: Strings = {
     hero: {
       eyebrow: 'Webprojekte',
       headline: 'Ein Webauftritt, der arbeitet — nicht nur existiert.',
-      subline: 'Professionelle Webpräsenz für lokale Unternehmen und Mittelstand. Konzeptionell durchdacht, technisch sauber, effizient umgesetzt — durch einen erfahrenen Fractional CTO, nicht durch eine Template-Agentur.',
+      subline: 'Professionelle Webpräsenz für lokale Unternehmen und Mittelstand. Konzeptionell durchdacht, technisch sauber, effizient umgesetzt — durch einen erfahrenen Technology Consultant, nicht durch eine Template-Agentur.',
       cta: 'Projekt besprechen',
     },
     problem: {
@@ -391,7 +391,7 @@ export const deDe: Strings = {
       eyebrow: 'Ansatz',
       headline: 'Kein Template-Geschäft. Ein durchdachtes Webprojekt.',
       body: [
-        'Ich bin kein Webdesigner und keine Agentur. Ich bin Fractional CTO — und Webprojekte für lokale Unternehmen sind ein fokussiertes Angebot innerhalb meiner Arbeit. Der Unterschied: Jedes Projekt bekommt konzeptionelle Sorgfalt und technische Tiefe, die man normalerweise nur bei deutlich größeren Budgets findet.',
+        'Ich bin kein Webdesigner und keine Agentur. Ich bin Technology Consultant — und Webprojekte für lokale Unternehmen sind ein fokussiertes Angebot innerhalb meiner Arbeit. Der Unterschied: Jedes Projekt bekommt konzeptionelle Sorgfalt und technische Tiefe, die man normalerweise nur bei deutlich größeren Budgets findet.',
         'Das bedeutet konkret: Bevor eine einzige Zeile Code geschrieben wird, klären wir gemeinsam, was Ihre Website leisten soll. Wen sie ansprechen soll. Was ein Besucher tun soll, wenn er dort landet. Erst wenn Struktur und Botschaft stehen, wird gebaut — schnell, sauber und mit Technologie, die keine laufende Wartung erzwingt.',
         'KI-gestützte Workflows beschleunigen dabei den gesamten Prozess — von der Strukturierung der Inhalte bis zur technischen Umsetzung. Das Ergebnis: kürzere Lieferzeiten und niedrigere Kosten, ohne Abstriche bei Qualität oder Sorgfalt.',
       ],

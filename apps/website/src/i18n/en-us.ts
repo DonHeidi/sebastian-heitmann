@@ -2,8 +2,8 @@ import type { Strings } from './types';
 
 export const enUs: Strings = {
   meta: {
-    title: 'Sebastian Heitmann \u2014 Fractional CTO',
-    description: 'Fractional CTO. Architecture, Delivery, Teams.',
+    title: 'Sebastian Heitmann \u2014 Technology Consultant',
+    description: 'Technology Consultant. Architecture, Delivery, Teams.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -24,9 +24,9 @@ export const enUs: Strings = {
     cta: 'Send a Message',
     ctaNote: 'Direct to my inbox. No funnel. I read every message.',
     photoAlt: 'Sebastian Heitmann',
-    role: { label: 'Role', value: 'Fractional CTO' },
+    role: { label: 'Role', value: 'Technology Consultant' },
     focus: { label: 'Focus', value: 'Architecture, Delivery, Teams' },
-    experience: { label: 'Experience', value: '15 years' },
+    experience: { label: 'Experience', value: '10+ years' },
     projects: { label: 'Projects', value: '20+ delivered' },
     status: { label: 'Status', value: 'Available' },
   },
@@ -178,7 +178,7 @@ export const enUs: Strings = {
   cv: {
     meta: {
       title: 'CV \u2014 Sebastian Heitmann',
-      description: 'Curriculum Vitae. 15 years of architecture, delivery, and team leadership.',
+      description: 'Curriculum Vitae. 10+ years of architecture, delivery, and team leadership.',
     },
     headline: 'Curriculum Vitae',
     print: {
@@ -186,12 +186,12 @@ export const enUs: Strings = {
       address: 'Kastanienallee 24 · 21255 Tostedt',
       contact: 'me@sebastian-heitmann.dev · sebastian-heitmann.dev',
     },
-    summary: 'Fractional CTO with 15 years across software architecture, project delivery, and team leadership. I combine deep technical expertise with communication and advisory to turn ideas into shipped products.',
+    summary: 'Technology consultant with 10+ years across software architecture, project delivery, and team leadership. I combine deep technical expertise with communication and advisory to turn ideas into shipped products.',
     experienceLabel: 'Experience',
     experience: [
       {
         period: 'Jun 2023 \u2014 Present',
-        role: 'Fractional CTO',
+        role: 'Technology Consultant',
         company: 'Self-Employed',
         location: 'Hamburg, DE',
         description: 'Consulting, development, and project management for mid-sized companies and startups.',
@@ -374,7 +374,7 @@ export const enUs: Strings = {
     hero: {
       eyebrow: 'Web Projects',
       headline: 'A web presence that works — not just exists.',
-      subline: 'Professional web presence for local businesses and SMBs. Conceptually strong, technically solid, efficiently executed — by an experienced fractional CTO, not a template agency.',
+      subline: 'Professional web presence for local businesses and SMBs. Conceptually strong, technically solid, efficiently executed — by an experienced technology consultant, not a template agency.',
       cta: 'Discuss your project',
     },
     problem: {
@@ -391,7 +391,7 @@ export const enUs: Strings = {
       eyebrow: 'Approach',
       headline: 'Not a template business. A thought-through web project.',
       body: [
-        'I\u2019m not a web designer and not an agency. I\u2019m a fractional CTO — and web projects for local businesses are a focused offering within my work. The difference: every project gets the conceptual care and technical depth you\u2019d normally only find at significantly larger budgets.',
+        'I\u2019m not a web designer and not an agency. I\u2019m a technology consultant — and web projects for local businesses are a focused offering within my work. The difference: every project gets the conceptual care and technical depth you\u2019d normally only find at significantly larger budgets.',
         'Concretely: before a single line of code is written, we work out together what your website should accomplish. Who it should address. What a visitor should do when they land there. Only once the structure and messaging are clear does the build begin — fast, clean, and with technology that doesn\u2019t force ongoing maintenance.',
         'AI-supported workflows accelerate the entire process — from content structuring to technical implementation. The result: shorter delivery times and lower costs, without cutting corners on quality or care.',
       ],

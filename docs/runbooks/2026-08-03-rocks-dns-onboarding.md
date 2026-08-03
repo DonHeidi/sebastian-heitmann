@@ -126,7 +126,7 @@ hasn't been delegated yet) and compare against `infra/rocks-dns.tf`:
 dig @ns0.dom.scw.cloud www.sebastian-heitmann.rocks CNAME +short
 dig @ns0.dom.scw.cloud sebastian-heitmann.rocks A +short      # apex ALIAS resolution
 dig @ns0.dom.scw.cloud _scaleway-challenge.sebastian-heitmann.rocks TXT +short
-dig @ns0.dom.scw.cloud sebastian-heitmann.rocks MX +short     # null MX: ". 0"
+dig @ns0.dom.scw.cloud sebastian-heitmann.rocks MX +short     # null MX: "0 ."
 dig @ns0.dom.scw.cloud sebastian-heitmann.rocks TXT +short    # SPF: "v=spf1 -all"
 dig @ns0.dom.scw.cloud _dmarc.sebastian-heitmann.rocks TXT +short  # "v=DMARC1; p=reject;"
 ```

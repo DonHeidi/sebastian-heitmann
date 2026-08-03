@@ -13,8 +13,12 @@ export interface Strings {
   };
   hero: {
     kicker: string;
-    heading: string;
-    intro: string;
+    headingParts: { misregistered: string; rest: string };
+    intro: { before: string; struck: string; replacement: string; after: string };
+  };
+  annotations: {
+    setlist: string;
+    est: string;
   };
   themeToggle: {
     system: string;
@@ -23,6 +27,8 @@ export interface Strings {
   };
   cases: {
     sectionTitle: string;
+    stampCaseStudy: string;
+    stampProject: string;
     readCase: string;
     roleLabel: string;
     stackLabel: string;

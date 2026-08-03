@@ -15,8 +15,17 @@ export const deDe: Strings = {
   },
   hero: {
     kicker: 'Portfolio',
-    heading: 'Arbeit, die live geht.',
-    intro: 'Ich baue Produkte und Plattformen von Anfang bis Ende: Architektur, Code, Infrastruktur und den Lieferprozess drumherum. Hier: ausgewählte Fallstudien und Projekte.',
+    headingParts: { misregistered: 'Laut', rest: ', wo es zählt.' },
+    intro: {
+      before: 'Alles hier ist live gegangen. ',
+      struck: 'Portfolio',
+      replacement: 'Setlist',
+      after: ' unten: komplett selbst gebaut, in Produktion feinjustiert.',
+    },
+  },
+  annotations: {
+    setlist: 'SETLIST: FALLSTUDIEN',
+    est: 'EST. 1440 PX',
   },
   themeToggle: {
     system: 'System',
@@ -24,7 +33,9 @@ export const deDe: Strings = {
     dark: 'Dunkel',
   },
   cases: {
-    sectionTitle: 'Fallstudien',
+    sectionTitle: 'Setlist: Fallstudien',
+    stampCaseStudy: 'FALLSTUDIE',
+    stampProject: 'PROJEKT',
     readCase: 'Fallstudie lesen',
     roleLabel: 'Rolle',
     stackLabel: 'Stack',
@@ -37,7 +48,7 @@ export const deDe: Strings = {
     sectionTitle: 'Projekte',
   },
   teasers: {
-    sectionTitle: 'Texte',
+    sectionTitle: 'Aus der .dev Presse',
     intro: 'Längere Texte erscheinen auf sebastian-heitmann.dev. Eine Auswahl:',
     readOn: 'Auf sebastian-heitmann.dev lesen',
   },
@@ -48,8 +59,8 @@ export const deDe: Strings = {
     contactLabel: 'Kontakt',
   },
   notFound: {
-    heading: '404',
-    body: 'Diese Seite existiert nicht.',
-    backHome: 'Zurück zum Anfang',
+    heading: 'KEINE ZUGABE.',
+    body: 'Diese Seite hat es nie auf die Setlist geschafft.',
+    backHome: 'Zurück zur Show',
   },
 };

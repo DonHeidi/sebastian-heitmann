@@ -15,8 +15,17 @@ export const enUs: Strings = {
   },
   hero: {
     kicker: 'Portfolio',
-    heading: 'Work that ships.',
-    intro: 'I build products and platforms end to end: architecture, code, infrastructure, and the delivery process around them. These are selected case studies and projects.',
+    headingParts: { misregistered: 'Loud', rest: ' where it counts.' },
+    intro: {
+      before: 'Everything here shipped. The ',
+      struck: 'portfolio',
+      replacement: 'setlist',
+      after: ' below: built end to end, tuned in production.',
+    },
+  },
+  annotations: {
+    setlist: 'SETLIST: CASES',
+    est: 'EST. 1440 PX',
   },
   themeToggle: {
     system: 'System',
@@ -24,7 +33,9 @@ export const enUs: Strings = {
     dark: 'Dark',
   },
   cases: {
-    sectionTitle: 'Case studies',
+    sectionTitle: 'Setlist: Cases',
+    stampCaseStudy: 'CASE STUDY',
+    stampProject: 'PROJECT',
     readCase: 'Read case study',
     roleLabel: 'Role',
     stackLabel: 'Stack',
@@ -37,7 +48,7 @@ export const enUs: Strings = {
     sectionTitle: 'Projects',
   },
   teasers: {
-    sectionTitle: 'Writing',
+    sectionTitle: 'From the .dev Press',
     intro: 'Longer-form thinking lives on sebastian-heitmann.dev. A few picks:',
     readOn: 'Read on sebastian-heitmann.dev',
   },
@@ -48,8 +59,8 @@ export const enUs: Strings = {
     contactLabel: 'Contact',
   },
   notFound: {
-    heading: '404',
-    body: 'This page does not exist.',
-    backHome: 'Back to the start',
+    heading: 'NO ENCORE.',
+    body: 'This page never made the setlist.',
+    backHome: 'Back to the show',
   },
 };

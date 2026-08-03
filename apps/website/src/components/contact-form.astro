@@ -1,0 +1,148 @@
+---
+/**
+ * Vanilla replacement for the former React ContactForm island — the site ships
+ * no React to the client. Markup and classes are lifted verbatim from the
+ * shadcn Input/Textarea/Label/Button render so the form stays pixel-identical;
+ * the submit flow lives in the colocated script below.
+ */
+import type { Strings } from '@/i18n/types';
+
+interface Props {
+  strings: Pick<
+    Strings['contact'],
+    | 'nameLabel'
+    | 'emailLabel'
+    | 'contextLabel'
+    | 'contextPlaceholder'
+    | 'messageLabel'
+    | 'submitLabel'
+    | 'sendingLabel'
+    | 'successMessage'
+    | 'errorMessage'
+  >;
+  /** Resolved `import.meta.env.PUBLIC_MAIL_ENDPOINT` from the calling `.astro`
+   *  frontmatter. Committed in apps/website/.env.schema, so it is populated in
+   *  local dev too: submitting there reaches the real function but the CORS
+   *  preflight rejects a localhost origin, so the request never completes and
+   *  no mail is sent. The empty-endpoint guard in the script still covers the
+   *  case where a local override clears it. */
+  endpoint: string;
+}
+const { strings, endpoint } = Astro.props;
+
+// Underline-input look shared by all fields, replacing the old `.form-input`
+// SCSS (transparent background, bottom border only, no radius/padding-x).
+const fieldClasses =
+  'border-0 border-b border-input rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary';
+const labelClasses =
+  'flex items-center gap-2 font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground';
+const inputClasses = `h-9 w-full min-w-0 bg-transparent py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 focus-visible:ring-ring/50 ${fieldClasses}`;
+const textareaClasses = `flex field-sizing-content w-full bg-transparent py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 ${fieldClasses} min-h-[100px] resize-y`;
+---
+
+<form
+  data-contact-form
+  data-endpoint={endpoint}
+  data-submit-label={strings.submitLabel}
+  data-sending-label={strings.sendingLabel}
+  data-success-message={strings.successMessage}
+  data-error-message={strings.errorMessage}
+  class="flex flex-col gap-6"
+>
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div class="flex flex-col gap-1.5">
+      <label data-slot="label" class={labelClasses} for="cf-name">{strings.nameLabel}</label>
+      <input id="cf-name" data-slot="input" name="name" type="text" required autocomplete="name" class={inputClasses} />
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label data-slot="label" class={labelClasses} for="cf-email">{strings.emailLabel}</label>
+      <input id="cf-email" data-slot="input" name="email" type="email" required autocomplete="email" class={inputClasses} />
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label data-slot="label" class={labelClasses} for="cf-context">{strings.contextLabel}</label>
+    <input id="cf-context" data-slot="input" name="context" type="text" placeholder={strings.contextPlaceholder} class={inputClasses} />
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label data-slot="label" class={labelClasses} for="cf-message">{strings.messageLabel}</label>
+    <textarea id="cf-message" data-slot="textarea" name="message" rows="4" required class={textareaClasses}></textarea>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-6">
+    <button
+      type="submit"
+      data-slot="button"
+      data-variant="ghost"
+      data-size="default"
+      class="group inline-flex items-center justify-center font-medium whitespace-nowrap outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 h-auto min-w-0 shrink-0 gap-3 self-start rounded-none border-0 border-b border-primary px-0 py-4 font-mono text-xs tracking-[0.08em] text-foreground uppercase transition-[gap] duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:gap-5 hover:bg-transparent"
+    >
+      <span data-submit-label>{strings.submitLabel}</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right size-4 text-primary transition-transform duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+    </button>
+    <p data-status aria-live="polite" class="sr-only"></p>
+  </div>
+</form>
+
+<script>
+  type Status = 'idle' | 'sending' | 'success' | 'error';
+
+  const STATUS_CLASSES: Record<'success' | 'error', string> = {
+    success: 'font-mono text-[11px] tracking-[0.02em] text-success',
+    error: 'font-mono text-[11px] tracking-[0.02em] text-destructive',
+  };
+
+  document.querySelectorAll<HTMLFormElement>('form[data-contact-form]').forEach((form) => {
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const label = form.querySelector<HTMLSpanElement>('[data-submit-label]');
+    const statusEl = form.querySelector<HTMLParagraphElement>('[data-status]');
+    if (!button || !label || !statusEl) return;
+    const d = form.dataset;
+
+    function setStatus(status: Status) {
+      button!.disabled = status === 'sending';
+      label!.textContent = status === 'sending' ? (d.sendingLabel ?? '') : (d.submitLabel ?? '');
+      statusEl!.className =
+        status === 'success' ? STATUS_CLASSES.success : status === 'error' ? STATUS_CLASSES.error : 'sr-only';
+      statusEl!.textContent =
+        status === 'success' ? (d.successMessage ?? '') : status === 'error' ? (d.errorMessage ?? '') : '';
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!d.endpoint) {
+        setStatus('error');
+        return;
+      }
+
+      setStatus('sending');
+
+      const formData = new FormData(form);
+      const payload: Record<string, string> = {
+        name: String(formData.get('name') ?? ''),
+        email: String(formData.get('email') ?? ''),
+        message: String(formData.get('message') ?? ''),
+      };
+      const context = String(formData.get('context') ?? '');
+      if (context) payload.context = context;
+
+      try {
+        const res = await fetch(d.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          setStatus('success');
+          form.reset();
+        } else {
+          setStatus('error');
+        }
+      } catch {
+        setStatus('error');
+      }
+    });
+  });
+</script>

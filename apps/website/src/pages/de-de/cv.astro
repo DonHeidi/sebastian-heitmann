@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Navigation } from '../../components/navigation';
-import { ThemeToggle } from '../../components/theme-toggle';
+import ThemeToggle from '@/components/theme-toggle.astro';
 import { CvSection } from '../../components/cv/cv-section';
 import { Footer } from '../../components/footer';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
@@ -15,7 +15,7 @@ const alternates = getHreflangAlternates('/cv');
 ---
 <Layout locale={locale} title={s.cv.meta.title} description={s.cv.meta.description} alternates={alternates}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
-        <ThemeToggle client:load labels={s.nav.themeToggle} />
+        <ThemeToggle labels={s.nav.themeToggle} />
     </Navigation>
     <main>
         <CvSection cv={s.cv} />

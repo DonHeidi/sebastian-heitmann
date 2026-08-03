@@ -1,0 +1,147 @@
+---
+/**
+ * Vanilla replacement for the former React ThemeToggle island — the site ships
+ * no React to the client (design goal; the v8-asterisk React components are for
+ * other projects). Markup and classes are lifted verbatim from the shadcn
+ * ToggleGroup render so the control stays pixel-identical; behavior lives in
+ * the colocated script below, following the APG radio-group pattern.
+ */
+interface Props {
+  labels: { system: string; light: string; dark: string };
+}
+const { labels } = Astro.props;
+
+const itemClasses =
+  "inline-flex items-center justify-center gap-2 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 bg-transparent w-auto shrink-0 focus:z-10 focus-visible:z-10 data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none h-auto min-w-0 rounded-none px-2 py-1.5 text-muted-foreground hover:bg-transparent hover:text-primary data-[state=on]:bg-surface data-[state=on]:text-primary";
+const dividedItemClasses = `${itemClasses} border-l border-border`;
+---
+
+<!-- Static render selects 'system': the stored preference can't be known until
+     the script runs, matching the anti-FOUC script in Layout.astro which also
+     can't paint an "active button" state. Reconciled on load below. -->
+<div
+  data-theme-toggle
+  role="radiogroup"
+  aria-label="Theme"
+  data-slot="toggle-group"
+  data-spacing="0"
+  style="--gap:0"
+  class="group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-none border border-border bg-transparent p-0 shadow-none"
+>
+  <button
+    type="button"
+    role="radio"
+    data-value="system"
+    aria-checked="true"
+    data-state="on"
+    tabindex="0"
+    aria-label={labels.system}
+    data-slot="toggle-group-item"
+    data-spacing="0"
+    class={itemClasses}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor size-3.5" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+  </button>
+  <button
+    type="button"
+    role="radio"
+    data-value="light"
+    aria-checked="false"
+    data-state="off"
+    tabindex="-1"
+    aria-label={labels.light}
+    data-slot="toggle-group-item"
+    data-spacing="0"
+    class={dividedItemClasses}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun size-3.5" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+  </button>
+  <button
+    type="button"
+    role="radio"
+    data-value="dark"
+    aria-checked="false"
+    data-state="off"
+    tabindex="-1"
+    aria-label={labels.dark}
+    data-slot="toggle-group-item"
+    data-spacing="0"
+    class={dividedItemClasses}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon size-3.5" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+  </button>
+</div>
+
+<script>
+  type Mode = 'system' | 'light' | 'dark';
+  const MODES: Mode[] = ['system', 'light', 'dark'];
+
+  // Mirrors the old React applyTheme exactly: the anti-FOUC inline script in
+  // Layout.astro only ever ADDS 'dark'/'light' to <html> and never removes
+  // anything itself, so this is the only place classes get removed.
+  function applyTheme(mode: Mode) {
+    const html = document.documentElement;
+    html.classList.remove('dark', 'light');
+    if (mode === 'dark' || mode === 'light') {
+      html.classList.add(mode);
+    } else {
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      html.classList.add(systemDark ? 'dark' : 'light');
+    }
+  }
+
+  // Storage contract (unchanged from the React island and the original
+  // navigation.astro script): the key is 'theme', the stored value can
+  // literally be 'system' (written on every selection, never removed), and
+  // absence falls back to 'system'.
+  function storedMode(): Mode {
+    return (localStorage.getItem('theme') as Mode | null) || 'system';
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((root) => {
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('button[data-value]'));
+
+    function render(mode: Mode) {
+      for (const b of buttons) {
+        const on = b.dataset.value === mode;
+        b.dataset.state = on ? 'on' : 'off';
+        b.setAttribute('aria-checked', String(on));
+        b.tabIndex = on ? 0 : -1;
+      }
+    }
+
+    function select(mode: Mode, moveFocus = false) {
+      localStorage.setItem('theme', mode);
+      applyTheme(mode);
+      render(mode);
+      if (moveFocus) buttons.find((b) => b.dataset.value === mode)?.focus();
+    }
+
+    for (const b of buttons) {
+      b.addEventListener('click', () => select(b.dataset.value as Mode));
+      // APG radio-group keyboard pattern: arrows move focus AND select
+      // (selection follows focus), Home/End jump to the extremes.
+      b.addEventListener('keydown', (e) => {
+        const i = MODES.indexOf(b.dataset.value as Mode);
+        let next: number | null = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (i + 1) % MODES.length;
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (i + MODES.length - 1) % MODES.length;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = MODES.length - 1;
+        if (next !== null) {
+          e.preventDefault();
+          select(MODES[next], true);
+        }
+      });
+    }
+
+    render(storedMode());
+  });
+
+  // Keep <html> in sync with OS theme changes while in system mode.
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', () => {
+      if (storedMode() === 'system') applyTheme('system');
+    });
+</script>

@@ -89,26 +89,28 @@ done < <(find dist/_astro -maxdepth 1 -type f \
 # kept = referenced by URL in emitted HTML/CSS/JS/XML, or imported via a
 # quoted relative path ("./chunk.js", static or dynamic import) from another
 # kept JS, transitively. Unreachable JS cannot be loaded by anything.
-declare -A KEEP_JS=()
-JS_QUEUE=()
-while IFS= read -r name; do
-  KEEP_JS["$name"]=1
-  JS_QUEUE+=("$name")
-done < <(grep -oE '_astro/[A-Za-z0-9._-]+\.js' <<< "$REFERENCED" | sed 's|_astro/||' | sort -u)
-while ((${#JS_QUEUE[@]})); do
-  cur="${JS_QUEUE[0]}"
-  JS_QUEUE=("${JS_QUEUE[@]:1}")
-  [ -f "dist/_astro/$cur" ] || continue
-  while IFS= read -r dep; do
-    if [ -n "$dep" ] && [ -z "${KEEP_JS[$dep]:-}" ]; then
-      KEEP_JS["$dep"]=1
-      JS_QUEUE+=("$dep")
-    fi
-  done < <(grep -oE '"\./[A-Za-z0-9._-]+\.js"' "dist/_astro/$cur" | sed 's|"\./||; s|"$||')
+# Newline-delimited string set, not `declare -A`: macOS system bash is 3.2,
+# which has no associative arrays.
+# `|| true`: grep exits 1 when NO JS is URL-referenced (the normal state for
+# this site) — under set -e that would abort the deploy instead of meaning
+# "empty seed set, prune every JS file".
+KEEP_JS="$(grep -oE '_astro/[A-Za-z0-9._-]+\.js' <<< "$REFERENCED" | sed 's|_astro/||' | sort -u || true)"
+KEEP_JS_GREW=1
+while [ "$KEEP_JS_GREW" -eq 1 ]; do
+  KEEP_JS_GREW=0
+  while IFS= read -r cur; do
+    { [ -n "$cur" ] && [ -f "dist/_astro/$cur" ]; } || continue
+    while IFS= read -r dep; do
+      if [ -n "$dep" ] && ! grep -qxF "$dep" <<< "$KEEP_JS"; then
+        KEEP_JS="$KEEP_JS"$'\n'"$dep"
+        KEEP_JS_GREW=1
+      fi
+    done < <(grep -oE '"\./[A-Za-z0-9._-]+\.js"' "dist/_astro/$cur" | sed 's|"\./||; s|"$||')
+  done <<< "$KEEP_JS"
 done
 while IFS= read -r -d '' js; do
   rel="$(basename "$js")"
-  if [ -z "${KEEP_JS[$rel]:-}" ]; then
+  if ! grep -qxF "$rel" <<< "$KEEP_JS"; then
     echo "Pruning unreachable JS: _astro/$rel"
     rm -f "$js"
   fi

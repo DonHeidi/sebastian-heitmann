@@ -110,7 +110,7 @@ A runbook at `docs/runbooks/<date>-rocks-dns-onboarding.md` (dated the day the c
 
 New `scripts/deploy-rocks.sh`, a trimmed copy of `deploy-website.sh`:
 
-- Build `apps/rocks` with a plain `bun run build`: the app has no secrets and no baked-in endpoint. The script's upload and purge steps use the deploy credentials from `infra/.env.schema` via varlock, exactly like `deploy-website.sh`
+- Build `apps/rocks` with a plain `bun run build`: the app has no secrets and no baked-in endpoint. The script's upload steps use the deploy credentials from `infra/.env.schema` via varlock, exactly like `deploy-website.sh`
 - Prune orphaned `dist/_astro/` assets (same cross-referencing logic)
 - rclone-upload to the `sebastian-heitmann-rocks` bucket, objects `public-read`
 - No automatic purge step, matching `deploy-website.sh`: Scaleway Edge purge has proven unreliable in this repo's operational history (purges report success without evicting), so the durable mitigation is no-cache HTML rather than purging on deploy. Purging stays a manual, by-name operation, documented in AGENTS.md

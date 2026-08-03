@@ -1,0 +1,117 @@
+---
+import '../styles/global.css';
+import { localeConfig } from '../i18n/utils';
+import type { Locale } from '../i18n/utils';
+
+type Props = {
+  locale: Locale;
+  title: string;
+  description: string;
+  alternates?: Array<{ hreflang: string; href: string }>;
+  includeRedirectScript?: boolean;
+  ogType?: string;
+  canonical?: string;
+};
+
+const {
+  locale,
+  title,
+  description,
+  alternates = [],
+  includeRedirectScript = false,
+  ogType = 'website',
+  canonical,
+} = Astro.props;
+const htmlLang = localeConfig[locale].htmlLang;
+const siteOrigin = 'https://www.sebastian-heitmann.rocks';
+const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
+---
+
+<html lang={htmlLang}>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+        <link rel="apple-touch-icon" href="/favicon.svg">
+        <meta name="theme-color" content="#0C0C0C">
+        <title>{title}</title>
+        <meta name="description" content={description}>
+        <link rel="canonical" href={canonicalUrl}>
+        <meta property="og:type" content={ogType}>
+        <meta property="og:title" content={title}>
+        <meta property="og:description" content={description}>
+        <meta property="og:url" content={canonicalUrl}>
+        <meta property="og:locale" content={locale === 'de-de' ? 'de_DE' : 'en_US'}>
+        <meta property="og:locale:alternate" content={locale === 'de-de' ? 'en_US' : 'de_DE'}>
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content={title}>
+        <meta name="twitter:description" content={description}>
+        <link rel="preload" href="/fonts/InstrumentSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/DMSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+        {alternates.map(alt => (
+            <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+        ))}
+        <script type="application/ld+json" set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Sebastian Heitmann",
+            "jobTitle": "Technology Consultant",
+            "description": description,
+            "url": "https://www.sebastian-heitmann.rocks",
+            "sameAs": [
+                "https://www.sebastian-heitmann.dev",
+                "https://www.linkedin.com/in/sebastian-heitmann/",
+                "https://github.com/DonHeidi"
+            ],
+            "knowsLanguage": ["de", "en"]
+        })} />
+        <script is:inline>
+            (function() {
+                var stored = localStorage.getItem('theme');
+                if (stored === 'dark' || stored === 'light') {
+                    document.documentElement.classList.add(stored);
+                } else {
+                    document.documentElement.classList.add(
+                        window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+                    );
+                }
+            })();
+        </script>
+        <slot name="head" />
+        {includeRedirectScript && (
+            <script is:inline>
+                (function() {
+                    if (localStorage.getItem('locale')) return;
+                    var lang = (navigator.language || '').toLowerCase();
+                    var target;
+                    if (lang.startsWith('de')) target = 'de-de';
+                    if (target) {
+                        localStorage.setItem('locale', target);
+                        window.location.replace('/' + target + '/');
+                    } else {
+                        localStorage.setItem('locale', 'en-us');
+                    }
+                })();
+            </script>
+        )}
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+</script>

@@ -95,8 +95,16 @@ while IFS= read -r -d '' js; do
 done < <(find dist/_astro -maxdepth 1 -type f -name '*.js' -print0)
 
 # Incremental upload via rclone (checksum-exact, MD5 vs S3 ETag).
-# Phase 1: assets first so no live HTML ever references a missing file.
-# Phase 2: HTML + deletions of stale objects (bucket is fully regenerable from git).
+# Cache-Control is per-object S3 metadata set at upload time, so each path class
+# uploads in its own phase carrying the strongest policy it can safely hold:
+#   _astro/**  — content-hashed by the build; a URL never changes content → immutable
+#   fonts/**   — copied verbatim from public/, never hashed → immutable by
+#                convention: a changed font MUST ship under a new filename
+#   *.html     — entry points mapping URLs to hashed assets → always revalidate
+#                (cheap 304 via ETag; deploys become visible immediately)
+#   the rest   — unhashed occasionals (favicon, sitemaps, images/, videos/) → 1 hour
+# Phase order: assets before HTML so no live page ever references a missing file;
+# the trailing sync only deletes stale objects (bucket is fully regenerable from git).
 # Credentials mirror the aws CLI wiring above exactly (same ACCESS_KEY@PROJECT_ID suffix).
 export RCLONE_CONFIG_SCW_TYPE=s3
 export RCLONE_CONFIG_SCW_PROVIDER=Scaleway
@@ -105,13 +113,42 @@ export RCLONE_CONFIG_SCW_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
 export RCLONE_CONFIG_SCW_ENDPOINT="https://s3.nl-ams.scw.cloud"
 export RCLONE_CONFIG_SCW_ACL=public-read
 
+# rclone skips checksum-identical files, and skipped files keep their existing
+# metadata — a Cache-Control policy change never reaches already-uploaded objects
+# on its own. `--refresh-cache-metadata` forces every object to upload once so the
+# new headers land everywhere; run it once after changing a policy above.
+REFRESH_FLAGS=()
+if [[ "${1:-}" == "--refresh-cache-metadata" ]]; then
+  REFRESH_FLAGS=(--ignore-times)
+fi
+
 # --s3-acl passed explicitly too (belt and braces): the RCLONE_CONFIG_SCW_ACL env var
 # name couldn't be confirmed against the real bucket (only --dry-run is permitted
-# there), so both destination-touching commands also carry the flag directly.
+# there), so all destination-touching commands also carry the flag directly.
 rclone copy dist/ scw:sebastian-heitmann-website \
-  --checksum --exclude '*.html' --fast-list --transfers 8 -v \
-  --s3-acl public-read
+  --checksum --include '_astro/**' --fast-list --transfers 8 -v \
+  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --header-upload 'Cache-Control: public, max-age=31536000, immutable'
 
+rclone copy dist/ scw:sebastian-heitmann-website \
+  --checksum --include 'fonts/**' --fast-list --transfers 8 -v \
+  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --header-upload 'Cache-Control: public, max-age=31536000, immutable'
+
+rclone copy dist/ scw:sebastian-heitmann-website \
+  --checksum --exclude '_astro/**' --exclude 'fonts/**' --exclude '*.html' \
+  --fast-list --transfers 8 -v \
+  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --header-upload 'Cache-Control: public, max-age=3600'
+
+rclone copy dist/ scw:sebastian-heitmann-website \
+  --checksum --include '*.html' --fast-list --transfers 8 -v \
+  --s3-acl public-read "${REFRESH_FLAGS[@]}" \
+  --header-upload 'Cache-Control: no-cache'
+
+# Deletion-only pass: the four copies above are exhaustive and just ran over the
+# same dist/, so every checksum matches and nothing transfers — carrying no
+# --header-upload here is deliberate (a transfer would strip Cache-Control).
 rclone sync dist/ scw:sebastian-heitmann-website \
   --checksum --fast-list --transfers 8 -v \
   --s3-acl public-read

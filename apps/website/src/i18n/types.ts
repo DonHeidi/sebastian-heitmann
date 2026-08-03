@@ -144,7 +144,7 @@ export interface Strings {
       description: string;
     };
     headline: string;
-    print: {
+    identity: {
       name: string;
       address: string;
       contact: string;
@@ -154,17 +154,17 @@ export interface Strings {
     experience: Array<{
       period: string;
       role: string;
-      company: string;
+      /** Absent on the sabbatical entry, which has no employer. */
+      company?: string;
       location: string;
       description: string;
-      highlights: string[];
+      highlights?: CvHighlight[];
     }>;
     earlierExperienceLabel: string;
     earlierExperience: Array<{
       period: string;
       role: string;
       company: string;
-      location: string;
     }>;
     skillsLabel: string;
     skillGroups: Array<{
@@ -186,8 +186,6 @@ export interface Strings {
     softSkillsLabel: string;
     softSkills: string[];
     certificationsLabel: string;
-    currentFocusLabel: string;
-    currentFocus: string[];
     certifications: Array<{
       name: string;
       issuer: string;
@@ -200,6 +198,8 @@ export interface Strings {
       role: string;
       organization: string;
     }>;
+    /** Left as "Mentoring & Talks" in both locales, matching the print CV. */
+    communityActivitiesLabel: string;
     interestsLabel: string;
     interests: string[];
     downloadLabel: string;

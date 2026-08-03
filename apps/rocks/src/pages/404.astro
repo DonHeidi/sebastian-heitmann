@@ -15,7 +15,7 @@ const t = getStrings(locale);
       <AsteriskMark size={480} misregister />
     </div>
     <h1 class="sr-only">{t.notFound.heading}</h1>
-    <GraffitiWord word="no-encore" height={140} className="max-w-full" />
+    <GraffitiWord word={locale === 'de-de' ? 'keine-zugabe' : 'no-encore'} height={140} className="max-w-full" />
     <p class="mt-6 text-muted-foreground">{t.notFound.body}</p>
     <div class="mt-10 flex items-end gap-6">
       <a href="/" class="border border-dashed border-border px-5 py-3 font-mono text-[10px] tracking-[0.12em] text-foreground uppercase no-underline transition-colors hover:border-primary hover:text-primary">

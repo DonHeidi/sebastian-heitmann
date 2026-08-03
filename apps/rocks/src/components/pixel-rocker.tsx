@@ -10,50 +10,60 @@ export interface PixelRockerProps {
 }
 
 // Legend: . empty, H hair, S skin, J jacket, A accent asterisk pixel,
-// G guitar, B boots. Frame 1: head up, shoulder-length hair, mid-strum,
-// guitar staircasing diagonally across the torso. Frame 2: head thrown
-// forward and down, hair whipping wide with the headbang. Shoulders-down
-// (rows 6-19) are identical between frames so only the head/hair swaps.
+// G guitar, B boots. Rows 8-19 (torso, guitar, legs, boots) are identical
+// between frames; only the head/hair/arm (rows 0-7) swap during the loop.
+//
+// Frame 1: calm strum pose. Hair is asymmetric — short-cropped on the
+// left, a ragged strand hanging past the right shoulder — so it reads as
+// hair, not a helmet dome. The guitar has a real instrument silhouette —
+// a small headstock cluster, a thin neck, a hand bridge, and a bold body
+// blob — held out in the open margin to the left of the torso (rather
+// than crossing it) so the shape reads at full contrast against the page
+// background instead of blending into the jacket or fusing with a limb.
+//
+// Frame 2: head thrown down and forward, hair whipping wide to the left
+// with the headbang; the right arm is thrown straight up (fist), clearly
+// outside the head/hair silhouette, to sell the headbang energy.
 const FRAME1 = [
   '......HHHH......',
   '.....HHHHHH.....',
-  '....HHSSSSHH....',
-  '....HHSSSSHH....',
-  '.....SSSSSS.....',
-  '....HHSSSSHH....',
+  '.....HHSSSH.....',
+  '......SSSSHH....',
+  '......SSSSHH....',
+  '.....JJJJJJHH...',
+  '....JJJJJJJJHH..',
+  '...JJJJJJJJJJH..',
+  '....JJJJJJJJ....',
+  'GG..JJJAAJJJ....',
+  'GGG.JJJJJJJJ....',
+  '.GGSJJJJJJJJ....',
+  '.GGGJJJJJJJJ....',
+  'GGGGJJJJJJJJ....',
+  'GGG.JJJJJJJJ....',
   '....JJJJJJJJ....',
   '....JJJJJJJJ....',
-  '....JJJAAJJJ....',
-  '...JJJJJJJJJJ...',
-  '..GGGJJJJJJJJ...',
-  '...GGGGJJJJJJ...',
-  '....JGGGGJJJ....',
-  '.....JJGGGG.....',
-  '.........GGGG...',
-  '.....JJ..JJ.....',
-  '.....JJ..JJ.....',
   '.....JJ..JJ.....',
   '....BBB..BBB....',
   '....BBB..BBB....',
 ];
 const FRAME2 = [
   '................',
-  '....HHHHHHHH....',
-  '...HHHHHHHHHH...',
-  '..HHHSSSSSSHHH..',
-  '.HHHSSSSSSSSHHH.',
-  '..HHHSSSSSSHHH..',
-  '....JJJJJJJJ....',
-  '....JJJJJJJJ....',
-  '....JJJAAJJJ....',
+  '............S...',
+  '..HHHHHHHH..S...',
+  '.HHHHHHHHHH.S...',
+  'HHHSSSSSSSHHS...',
+  '.HHHSSSSSSHH....',
+  '....JJJJJJJJS...',
   '...JJJJJJJJJJ...',
-  '..GGGJJJJJJJJ...',
-  '...GGGGJJJJJJ...',
-  '....JGGGGJJJ....',
-  '.....JJGGGG.....',
-  '.........GGGG...',
-  '.....JJ..JJ.....',
-  '.....JJ..JJ.....',
+  '....JJJJJJJJ....',
+  'GG..JJJAAJJJ....',
+  'GGG.JJJJJJJJ....',
+  '.GGSJJJJJJJJ....',
+  '.GGGJJJJJJJJ....',
+  'GGGGJJJJJJJJ....',
+  'GGG.JJJJJJJJ....',
+  '....JJJJJJJJ....',
+  '....JJJJJJJJ....',
   '.....JJ..JJ.....',
   '....BBB..BBB....',
   '....BBB..BBB....',
@@ -62,14 +72,15 @@ const FRAME2 = [
 // Jacket uses the faintest text tint rather than --v8-bg-surface: the
 // surface color is nearly indistinguishable from --v8-bg in dark mode,
 // which made the torso vanish against the page background. The guitar
-// uses the full-strength text color (matching hair/boots) so its
-// diagonal stripe reads clearly against the darker jacket.
+// uses the same mid-tone as skin — bright enough to separate from the
+// jacket, but deliberately not full white, so it can't fuse with the
+// white boots directly below it into one shape.
 const COLOR: Record<string, string> = {
   H: 'var(--v8-text)',
   S: 'var(--v8-text-secondary)',
   J: 'var(--v8-text-faint)',
   A: 'var(--v8-accent)',
-  G: 'var(--v8-text)',
+  G: 'var(--v8-text-secondary)',
   B: 'var(--v8-text)',
 };
 

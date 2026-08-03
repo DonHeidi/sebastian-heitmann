@@ -7,7 +7,7 @@ import { WebProjectsContent } from '../../components/web-projects-content';
 import { ContactSection } from '../../components/contact-section';
 import { ContactForm } from '../../components/contact-form';
 import { Footer } from '../../components/footer';
-import { getStrings } from '../../i18n/utils';
+import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 
 const locale = Astro.currentLocale as Locale;
@@ -16,12 +16,7 @@ const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
 const contact = { ...s.contact, headline: s.webProjects.contact.headline, intro: s.webProjects.contact.intro };
 const homeUrl = getRelativeLocaleUrl(locale, '/');
 
-const siteUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://www.sebastian-heitmann.dev').replace(/\/$/, '');
-const alternates = [
-    { hreflang: 'en', href: `${siteUrl}/web-development` },
-    { hreflang: 'de-DE', href: `${siteUrl}/de-de/web-entwicklung` },
-    { hreflang: 'x-default', href: `${siteUrl}/web-development` },
-];
+const alternates = getHreflangAlternates('/web-development', '/de-de/web-entwicklung');
 ---
 <Layout
     locale={locale}

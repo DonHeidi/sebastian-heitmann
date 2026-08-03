@@ -12,7 +12,7 @@ import type { Locale } from '../../i18n/utils';
 
 const locale = (Astro.currentLocale ?? 'en-us') as Locale;
 const s = getStrings(locale);
-const alternates = getHreflangAlternates();
+const alternates = getHreflangAlternates('/articles');
 
 const articles = await getCollection('articles', ({ id, data }) =>
   !id.startsWith('de-de/') && !data.draft

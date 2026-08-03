@@ -21,11 +21,26 @@ export const localeConfig: Record<Locale, { flag: string; label: string; htmlLan
   'de-de': { flag: '🇩🇪', label: 'DE', htmlLang: 'de-DE' },
 };
 
-export function getHreflangAlternates() {
-  const siteUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://sebastian-heitmann.dev').replace(/\/$/, '');
+export function siteOrigin(): string {
+  return (import.meta.env.PUBLIC_SITE_URL || 'https://www.sebastian-heitmann.dev').replace(/\/$/, '');
+}
+
+// Absolute URL with a trailing slash — hreflang/canonical targets must match the
+// canonical (trailing-slash) form exactly, or Google crawls a 301 per reference.
+export function absoluteUrl(path: string): string {
+  const withSlash = path.endsWith('/') ? path : `${path}/`;
+  return `${siteOrigin()}${withSlash}`;
+}
+
+// Hreflang pair for a page. `dePath` defaults to the /de-de/-prefixed mirror of
+// `enPath`; pass it explicitly for localized slugs (e.g. /web-development ↔
+// /de-de/web-entwicklung). x-default points at the English page (site default).
+export function getHreflangAlternates(enPath: string, dePath?: string) {
+  const en = absoluteUrl(enPath);
+  const de = absoluteUrl(dePath ?? `/de-de${enPath === '/' ? '/' : enPath}`);
   return [
-    { hreflang: 'en', href: `${siteUrl}/` },
-    { hreflang: 'de-DE', href: `${siteUrl}/de-de/` },
-    { hreflang: 'x-default', href: `${siteUrl}/` },
+    { hreflang: 'en', href: en },
+    { hreflang: 'de-DE', href: de },
+    { hreflang: 'x-default', href: en },
   ];
 }

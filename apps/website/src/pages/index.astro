@@ -4,7 +4,7 @@ import { getImage } from 'astro:assets';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import { Navigation } from '../components/navigation';
-import { ThemeToggle } from '../components/theme-toggle';
+import ThemeToggle from '@/components/theme-toggle.astro';
 import { Hero } from '../components/hero';
 import picture from '../assets/fb.jpg';
 import { LogoSection, type LogoAsset } from '../components/logo-section';
@@ -18,7 +18,7 @@ import { SituationsSection } from '../components/situations-section';
 import { ProofSection } from '../components/proof-section';
 import { FeaturedArticlesSection, type FeaturedArticleItem } from '../components/featured-articles-section';
 import { ContactSection } from '../components/contact-section';
-import { ContactForm } from '../components/contact-form';
+import ContactForm from '@/components/contact-form.astro';
 import { Footer } from '../components/footer';
 import { getStrings, getHreflangAlternates } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
@@ -76,7 +76,7 @@ const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
 ---
 <Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
-        <ThemeToggle client:load labels={s.nav.themeToggle} />
+        <ThemeToggle labels={s.nav.themeToggle} />
     </Navigation>
     <main>
         <Hero hero={s.hero} photoSrc={heroPhoto.src} photoWidth={Number(heroPhoto.attributes.width)} photoHeight={Number(heroPhoto.attributes.height)} />
@@ -86,7 +86,7 @@ const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
         <ProofSection proof={s.proof} aiLink={{ label: 'AI-powered products & processes', href: '/ai-process-automation' }} webDevLink={{ label: 'Web development for local businesses', href: '/web-development' }} tpmLink={{ label: 'Technical project management', href: '/technical-project-management' }} />
         <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} viewAllHref={featuredArticlesViewAllHref} totalCount={totalArticleCount} />
         <ContactSection contact={s.contact} showBackdropMoment={true}>
-            <ContactForm client:visible strings={s.contact} endpoint={mailEndpoint} />
+            <ContactForm strings={s.contact} endpoint={mailEndpoint} />
         </ContactSection>
     </main>
     <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />

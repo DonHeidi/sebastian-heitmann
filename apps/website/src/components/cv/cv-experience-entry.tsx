@@ -8,9 +8,9 @@ export interface CvExperienceEntryProps {
 export function CvExperienceEntry({ entry }: CvExperienceEntryProps) {
   return (
     <div className="cv-entry">
-      <h3 className="cv-entry__role font-display text-[22px] leading-[1.2] tracking-[-0.01em] text-foreground md:text-[24px]">
+      <h2 className="cv-entry__role font-display text-[22px] leading-[1.2] tracking-[-0.01em] text-foreground md:text-[24px]">
         {entry.role}
-      </h3>
+      </h2>
       {entry.company ? (
         <span className="cv-entry__company mt-0.5 mb-2 block font-mono text-[11px] tracking-[0.14em] text-primary uppercase">
           {entry.company}

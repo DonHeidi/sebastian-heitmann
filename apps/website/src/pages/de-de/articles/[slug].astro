@@ -4,7 +4,7 @@ import { getImage } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Navigation } from '../../../components/navigation';
-import { ThemeToggle } from '../../../components/theme-toggle';
+import ThemeToggle from '@/components/theme-toggle.astro';
 import { Footer } from '../../../components/footer';
 import { ArticleView } from '../../../components/article-view';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
@@ -152,7 +152,7 @@ if (entry.data.series) {
     <meta slot="head" property="article:tag" content={tag} />
   ))}
   <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
-    <ThemeToggle client:load labels={s.nav.themeToggle} />
+    <ThemeToggle labels={s.nav.themeToggle} />
   </Navigation>
   <ArticleView
     strings={s.article}

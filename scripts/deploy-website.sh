@@ -70,9 +70,9 @@ bun run build
 # Astro's content-collection image() schema imports each source asset via Vite,
 # which emits the originals to dist/_astro/ even when only transformed variants
 # (webp/jpg) are referenced. Prune any IMAGE in dist/_astro/ that isn't
-# referenced by any emitted HTML/CSS/JS. Only images are ever true orphans:
-# JS/CSS chunks reference each other via bare relative paths ("./chunk.js")
-# that this grep cannot see, so they must never be pruned.
+# referenced by any emitted HTML/CSS/JS. Images are pruned by URL reference
+# alone; JS needs the reachability closure below because chunks can reference
+# each other via bare relative paths ("./chunk.js") this grep cannot see.
 REFERENCED="$(grep -rhoE '_astro/[A-Za-z0-9._-]+' dist --include='*.html' --include='*.css' --include='*.js' --include='*.xml' | sort -u)"
 while IFS= read -r -d '' file; do
   rel="${file#dist/}"
@@ -82,6 +82,37 @@ while IFS= read -r -d '' file; do
 done < <(find dist/_astro -maxdepth 1 -type f \
   \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.webp' \
      -o -name '*.gif' -o -name '*.avif' -o -name '*.svg' \) -print0)
+
+# The @astrojs/react integration emits its client hydration entrypoint even
+# when no page hydrates an island (this site ships none — React is build-time
+# only, see AGENTS.md). Prune any JS in dist/_astro/ that is unreachable:
+# kept = referenced by URL in emitted HTML/CSS/JS/XML, or imported via a
+# quoted relative path ("./chunk.js", static or dynamic import) from another
+# kept JS, transitively. Unreachable JS cannot be loaded by anything.
+declare -A KEEP_JS=()
+JS_QUEUE=()
+while IFS= read -r name; do
+  KEEP_JS["$name"]=1
+  JS_QUEUE+=("$name")
+done < <(grep -oE '_astro/[A-Za-z0-9._-]+\.js' <<< "$REFERENCED" | sed 's|_astro/||' | sort -u)
+while ((${#JS_QUEUE[@]})); do
+  cur="${JS_QUEUE[0]}"
+  JS_QUEUE=("${JS_QUEUE[@]:1}")
+  [ -f "dist/_astro/$cur" ] || continue
+  while IFS= read -r dep; do
+    if [ -n "$dep" ] && [ -z "${KEEP_JS[$dep]:-}" ]; then
+      KEEP_JS["$dep"]=1
+      JS_QUEUE+=("$dep")
+    fi
+  done < <(grep -oE '"\./[A-Za-z0-9._-]+\.js"' "dist/_astro/$cur" | sed 's|"\./||; s|"$||')
+done
+while IFS= read -r -d '' js; do
+  rel="$(basename "$js")"
+  if [ -z "${KEEP_JS[$rel]:-}" ]; then
+    echo "Pruning unreachable JS: _astro/$rel"
+    rm -f "$js"
+  fi
+done < <(find dist/_astro -maxdepth 1 -type f -name '*.js' -print0)
 
 # Safety net: every bare relative chunk import inside surviving JS must resolve.
 # Aborts the deploy instead of shipping a site with a broken module graph.

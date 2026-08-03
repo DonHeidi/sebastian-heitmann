@@ -31,9 +31,9 @@ export function CapabilitiesSection({ capabilities }: CapabilitiesSectionProps) 
               <span className="font-mono text-[10px] tracking-[0.14em] text-primary">
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <h3 className="font-display text-[clamp(22px,2.4vw,30px)] leading-[1.1] tracking-[-0.01em] text-foreground italic">
+              <h2 className="font-display text-[clamp(22px,2.4vw,30px)] leading-[1.1] tracking-[-0.01em] text-foreground italic">
                 {cat.title}
-              </h3>
+              </h2>
             </div>
             <ul className="flex flex-col gap-0 p-0 list-none">
               {cat.items.map((item) => (

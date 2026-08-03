@@ -11,12 +11,10 @@ export interface NavigationProps {
   /** Raw `Astro.url.pathname` — still locale-prefixed; stripped internally. */
   currentPath: string;
   /**
-   * The theme toggle, rendered by the calling .astro file with its own
-   * `client:load` directive. Astro can only hydrate islands it renders
-   * directly — a <ThemeToggle> imported and rendered from inside this (static)
-   * component would never become interactive. So the .astro page renders
-   * `<Navigation ...><ThemeToggle client:load .../></Navigation>` and this
-   * component just places the already-processed island via `children`.
+   * The theme toggle (theme-toggle.astro), rendered by the calling .astro
+   * page. A React component cannot render an .astro component, so the page
+   * renders `<Navigation ...><ThemeToggle .../></Navigation>` and this
+   * component places the already-rendered static HTML via `children`.
    */
   children?: ReactNode;
 }

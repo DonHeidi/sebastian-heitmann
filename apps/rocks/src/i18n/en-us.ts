@@ -45,7 +45,7 @@ export const enUs: Strings = {
     backToOverview: 'Back to overview',
   },
   projects: {
-    sectionTitle: 'Projects',
+    sectionTitle: 'Side Projects',
   },
   teasers: {
     sectionTitle: 'From the .dev Press',

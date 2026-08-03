@@ -45,7 +45,7 @@ export const deDe: Strings = {
     backToOverview: 'Zurück zur Übersicht',
   },
   projects: {
-    sectionTitle: 'Projekte',
+    sectionTitle: 'Side Projects',
   },
   teasers: {
     sectionTitle: 'Aus der .dev Presse',

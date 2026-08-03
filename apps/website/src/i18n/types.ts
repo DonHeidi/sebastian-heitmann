@@ -1,3 +1,25 @@
+export interface CvLink {
+  label: string;
+  href: string;
+}
+
+export interface CvHighlight {
+  /** Bold lead-in. */
+  lead: string;
+  /** Link rendered inside the bold lead, in parentheses. */
+  leadLink?: CvLink;
+  /** Plain (non-bold) parenthetical after the lead, e.g. a date range. */
+  leadNote?: string;
+  /** Suppress the colon between lead and text — a few entries read as one sentence. */
+  omitColon?: boolean;
+  /** Body copy. */
+  text: string;
+  /** Trailing link in the body. */
+  link?: CvLink;
+  /** Mono tech run, joined with " · ". */
+  tech?: string[];
+}
+
 export interface Strings {
   meta: {
     title: string;

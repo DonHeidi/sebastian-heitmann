@@ -204,6 +204,22 @@ Order matters: function must deploy before website build (endpoint baked in at b
 ./scripts/deploy-website.sh
 ```
 
+#### Cache-Control policy
+
+The deploy script sets `Cache-Control` as per-object metadata at upload time (the
+Edge Services cache stage adds no browser-facing headers of its own):
+
+| Path | Policy |
+|------|--------|
+| `_astro/**` | `public, max-age=31536000, immutable` (content-hashed filenames) |
+| `fonts/**` | `public, max-age=31536000, immutable` — **a changed font must ship under a new filename** (files in `public/` are never hashed) |
+| `*.html` | `no-cache` (browsers and CDN revalidate via ETag; deploys visible immediately) |
+| everything else | `public, max-age=3600` |
+
+rclone skips checksum-identical files and skipped files keep their old metadata, so
+after **changing** a policy run `./scripts/deploy-website.sh --refresh-cache-metadata`
+once — it forces every object to re-upload so the new headers land everywhere.
+
 ---
 
 ## Mail Service (`apps/mail-service/`)

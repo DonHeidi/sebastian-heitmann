@@ -558,7 +558,14 @@ And in `global.css` (same v2 utilities block):
 
 **Iterate visually:** render him at 80px on the 404 via the dev server, screenshot, and adjust the pixel maps until the figure clearly reads as a long-haired guitarist mid-headbang. The maps above are a starting sketch, not sacred. Both frames must keep the accent asterisk pixels and stay recognizably the same figure.
 
-- [ ] **Step 2: 404 rewrite** (`404.astro`):
+- [ ] **Step 2: 404 rewrite** (`404.astro`) — AMENDED by spec v2.1: the heading uses the graffiti wordmark, not `.misregister-text`. Replace the `<h1>` in the template below with:
+
+```astro
+<h1 class="sr-only">{t.notFound.heading}</h1>
+<GraffitiWord word={locale === 'de-de' ? 'keine-zugabe' : 'no-encore'} height={140} className="max-w-full" />
+```
+
+(import `GraffitiWord` from `../components/graffiti-word`; Task 9 defines it; run Task 9 before this task). Original template follows, with that one substitution applied:
 
 ```astro
 ---
@@ -645,8 +652,60 @@ const t = getStrings(locale);
 **Files:** none (fixes only, committed as `fix(rocks): …`).
 
 - [ ] **Step 1:** Dev server up; screenshot matrix: pages `/`, `/de-de/`, `/cases/portfolio-platform/`, `/de-de/cases/portfolio-platform/`, `/404` × widths 1440/1024/768/375 × themes dark/light (40 shots) into the SDD workspace screenshots dir.
-- [ ] **Step 2:** Specific checks beyond the matrix: (a) reduced-motion: emulate `prefers-reduced-motion: reduce` and confirm hero mark static + rocker static frame; (b) misregistered heading legible at 375 in light theme; (c) backdrop art never overlaps interactive elements (click a nav link with the moment present); (d) favicon renders in a browser tab in both themes.
+- [ ] **Step 2:** Specific checks beyond the matrix: (a) reduced-motion: emulate `prefers-reduced-motion: reduce` and confirm hero mark static + rocker static frame; (b) graffiti wordmarks (hero + 404) legible and un-clipped at 375 in BOTH themes; (c) backdrop art never overlaps interactive elements (click a nav link with the moment present); (d) favicon renders in a browser tab in both themes; (e) hero image (if integrated by then) loads as webp/avif variants, keeps aspect ratio at all widths, and reads as a deliberate framed panel in light theme.
 - [ ] **Step 3:** Fix every defect, re-screenshot, commit fixes.
+
+---
+
+### Task 9: Graffiti wordmarks + hero heading rework (spec v2.1)
+
+**Files:**
+- Create: `apps/rocks/src/components/graffiti-word.tsx`
+- Modify: `apps/rocks/src/components/hero.tsx` (heading treatment swap)
+
+**Interfaces:**
+- Consumes: `Strings['hero']` (unchanged shape).
+- Produces: `GraffitiWord({ word, height, className = '' })` — `word: 'loud' | 'laut' | 'no-encore' | 'keine-zugabe'`, `height: number` (px; width scales per word's aspect), `className?: string`. Renders `aria-hidden` SVG artwork (callers provide the accessible text themselves).
+
+- [ ] **Step 1: Write `graffiti-word.tsx`** — hand-drawn lettering artwork, NOT a font. One component; per-word SVG groups in a `WORDS` record: `{ viewBox: string; art: JSX.Element }`. Drawing rules (the craft is the deliverable; iterate visually until it convinces):
+  - Chunky uneven block caps in the spirit of the hand-painted Green Day logo: each letter a single filled path with an irregular outline (8-14 jitter vertices per edge, ±2-4 units on a ~100-unit letter height), letters varying ±4% in height, per-letter rotation ±3°, baseline shifting ±3 units, tight overlapping spacing
+  - Fill `var(--v8-accent)`; add 10-20 speckle dots/flecks per word (tiny irregular polygons, same fill, opacity 0.5-0.9) scattered just outside letter edges
+  - No SVG filters (crisp at any scale, no filter-rendering variance); pure paths
+  - Words: `loud` ("Loud"), `laut` ("Laut"), `no-encore` ("NO ENCORE."), `keine-zugabe` ("KEINE ZUGABE.")
+  - `shape-rendering: geometricPrecision`; component root `<span aria-hidden="true">` sized by `height`
+- [ ] **Step 2: Rework the hero heading in `hero.tsx`** — replace the `.misregister-text` span with the wordmark inline in the heading; keep the serif for the rest and the accessible name intact:
+
+```tsx
+<h1 className="reveal mt-4 max-w-[14ch] font-[family-name:var(--v8-font-display)] text-[clamp(3.5rem,9vw,7.5rem)] leading-[0.95] text-foreground">
+  <span className="sr-only">{hero.headingParts.misregistered}</span>
+  <GraffitiWord
+    word={hero.headingParts.misregistered.toLowerCase() === 'laut' ? 'laut' : 'loud'}
+    height={110}
+    className="mr-3 inline-block align-[-0.12em] md:h-[unset]"
+  />
+  {hero.headingParts.rest}
+</h1>
+```
+
+  Scale the wordmark against the clamped serif size during visual iteration (it should read as the same headline, painted over): adjust `height`/alignment values freely; the code above is the starting point, the screenshot is the acceptance test.
+- [ ] **Step 3: Visual iteration** — dev server; screenshot `/` and `/de-de/` at 1440/768/375, both themes, plus an isolated render of all four words (temp scratch page allowed, deleted before commit). Acceptance: reads as hand-painted lettering (not vector-clean, not a font), legible at 375, sits on one visual baseline with the serif remainder.
+- [ ] **Step 4: Build + commit** — `git commit -am "feat(rocks): hand-drawn graffiti wordmarks for display words"`
+
+---
+
+### Task 10: Hero image integration (blocked until the file exists)
+
+**Files:**
+- Consume: the image Sebastian drops in `apps/rocks/src/assets/` (any name; flaming keyboard-rocker artwork)
+- Modify: `apps/rocks/src/components/hero.tsx`, both index pages if wiring changes, `apps/rocks/src/components/backdrop/hero-stage-moment.tsx` (asterisk demotes to supporting role)
+
+**Interfaces:**
+- Consumes: `<Image>` from `astro:assets` ONLY (repo gotcha: never `ImageMetadata.src`).
+
+- [ ] **Step 1:** Verify the file exists (`ls apps/rocks/src/assets/`); if absent, this task stays blocked — do not substitute a placeholder image.
+- [ ] **Step 2:** Hero layout becomes two-zone at `md:`: text left, artwork right — the image as a bordered panel (`border border-border`), roughly 40% width at `md+`, full-width below the text on mobile. The image is the likely LCP, so pass `loading="eager"` and `fetchpriority="high"`: `<Image src={art} loading="eager" fetchpriority="high" widths={[480, 768, 1080]} sizes="(max-width: 768px) 100vw, 40vw" />`, with `alt` from a new `hero.artAlt` string added to `Strings` (both locales; short factual description, e.g. 'Helmeted figure playing a keyboard like a guitar, engulfed in flames' / German equivalent). In light theme it stays a dark framed panel by design.
+- [ ] **Step 3:** Demote the backdrop asterisk: in `hero-stage-moment.tsx`, drop the misregistered giant to a single ~220px mark positioned so it doesn't fight the image (visual iteration decides: overlapping the panel's top-left corner is the starting idea).
+- [ ] **Step 4:** Visual iteration (1440/768/375 × themes), build, commit — `git commit -am "feat(rocks): flaming rocker hero artwork"`
 
 ---
 

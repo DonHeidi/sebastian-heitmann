@@ -113,7 +113,7 @@ New `scripts/deploy-rocks.sh`, a trimmed copy of `deploy-website.sh`:
 - Build `apps/rocks` with a plain `bun run build`: the app has no secrets and no baked-in endpoint. The script's upload and purge steps use the deploy credentials from `infra/.env.schema` via varlock, exactly like `deploy-website.sh`
 - Prune orphaned `dist/_astro/` assets (same cross-referencing logic)
 - rclone-upload to the `sebastian-heitmann-rocks` bucket, objects `public-read`
-- Purge the Edge Services pipeline, resolved **by name** (`sebastian-heitmann-rocks`), never by hardcoded id (per the multi-project gotcha in AGENTS.md)
+- No automatic purge step, matching `deploy-website.sh`: Scaleway Edge purge has proven unreliable in this repo's operational history (purges report success without evicting), so the durable mitigation is no-cache HTML rather than purging on deploy. Purging stays a manual, by-name operation, documented in AGENTS.md
 - The `.dev` script's mail-endpoint consistency check is dropped: no contact form here
 
 Deploy order for first launch: Terraform apply first (pipeline id feeds the `www` CNAME), then website deploy. There is no build-time endpoint dependency, so subsequent site deploys are independent of Terraform.

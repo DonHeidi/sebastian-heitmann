@@ -1,11 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getStrings } from '../i18n/utils';
+import type { Locale } from '../i18n/utils';
 import { AsteriskMark } from '../components/asterisk-mark';
 import { GraffitiWord } from '../components/graffiti-word';
 import { PixelRocker } from '../components/pixel-rocker';
 
-const locale = 'en-us';
+// Hosting only serves this single static 404, so the DE strings/wordmark below are
+// unreachable until per-locale 404s are wired up — the artwork ships ready regardless.
+const locale: Locale = 'en-us';
 const t = getStrings(locale);
 ---
 

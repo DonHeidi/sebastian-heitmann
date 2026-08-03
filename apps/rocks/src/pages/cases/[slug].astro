@@ -26,7 +26,7 @@ const slug = entry.id.split('/').slice(1).join('/');
 const { Content } = await render(entry);
 
 const formatDate = (d: Date) =>
-  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', timeZone: 'UTC' });
 const period = `${formatDate(entry.data.startDate)} — ${entry.data.endDate ? formatDate(entry.data.endDate) : t.cases.ongoing}`;
 ---
 
@@ -48,7 +48,7 @@ const period = `${formatDate(entry.data.startDate)} — ${entry.data.endDate ? f
     <h1 class="mt-6 font-[family-name:var(--v8-font-display)] text-4xl leading-[1.1] text-foreground md:text-5xl">{entry.data.title}</h1>
     <p class="mt-4 text-base leading-relaxed text-muted-foreground">{entry.data.summary}</p>
     <span class="mt-8 inline-block rotate-2 border border-border px-2 py-1 font-mono text-[9px] tracking-[0.14em] text-muted-foreground uppercase">
-      {t.cases.stampCaseStudy} {entry.data.startDate.getFullYear()}
+      {t.cases.stampCaseStudy} {entry.data.startDate.getUTCFullYear()}
     </span>
     <dl class="mt-3 grid gap-2 border border-border bg-surface p-5 md:grid-cols-3">
       <div>

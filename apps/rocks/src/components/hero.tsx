@@ -3,9 +3,10 @@ import { GraffitiWord } from './graffiti-word';
 
 export interface HeroProps {
   hero: Strings['hero'];
+  word: 'loud' | 'laut';
 }
 
-export function Hero({ hero }: HeroProps) {
+export function Hero({ hero, word }: HeroProps) {
   // Keep leading punctuation (de: ", wo …") glued to the wordmark so a line
   // break can never orphan it at the start of the next line.
   const rest = hero.headingParts.rest;
@@ -17,7 +18,7 @@ export function Hero({ hero }: HeroProps) {
         <span className="sr-only">{hero.headingParts.misregistered}</span>
         <span className="whitespace-nowrap">
           <GraffitiWord
-            word={hero.headingParts.misregistered.toLowerCase() === 'laut' ? 'laut' : 'loud'}
+            word={word}
             height={110}
             className="inline-block h-[1.02em]! align-[-0.13em]"
           />

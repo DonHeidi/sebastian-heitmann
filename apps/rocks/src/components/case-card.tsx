@@ -29,7 +29,7 @@ export function CaseCard({ data, href, strings, index }: CaseCardProps) {
         </span>
         <span className="rotate-2 border border-border px-2 py-1 font-mono text-[9px] tracking-[0.14em] text-muted-foreground uppercase">
           {data.kind === 'case-study' ? strings.stampCaseStudy : strings.stampProject}{' '}
-          {data.startDate.getFullYear()}
+          {data.startDate.getUTCFullYear()}
         </span>
       </div>
       <h3 className="mt-4 font-[family-name:var(--v8-font-display)] text-3xl text-foreground">{data.title}</h3>

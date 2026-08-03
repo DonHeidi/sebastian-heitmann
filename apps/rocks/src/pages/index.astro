@@ -10,6 +10,7 @@ import { Hero } from '../components/hero';
 import { HeroStageMoment } from '../components/backdrop/hero-stage-moment';
 import { CaseCard } from '../components/case-card';
 import { TeaserCard } from '../components/teaser-card';
+import { AsteriskMark } from '../components/asterisk-mark';
 import { blogTeasers } from '../data/blog-teasers';
 
 const locale = 'en-us';
@@ -40,25 +41,34 @@ const caseHref = (e: (typeof entries)[number]) =>
       <Hero hero={t.hero} />
     </div>
     <section class="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="cases">
-      <h2 class="reveal font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">{t.cases.sectionTitle}</h2>
+      <h2 class="reveal flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
+        <AsteriskMark size={12} tone="accent" className="v8-spin-hover" />
+        {t.cases.sectionTitle}
+      </h2>
       <div class="mt-8 grid gap-6 md:grid-cols-2">
-        {caseStudies.map((e) => (
-          <CaseCard data={e.data} href={caseHref(e)} strings={t.cases} />
+        {caseStudies.map((e, i) => (
+          <CaseCard data={e.data} href={caseHref(e)} strings={t.cases} index={i} />
         ))}
       </div>
     </section>
     {projects.length > 0 && (
       <section class="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="projects">
-        <h2 class="reveal font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">{t.projects.sectionTitle}</h2>
+        <h2 class="reveal flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
+          <AsteriskMark size={12} tone="accent" className="v8-spin-hover" />
+          {t.projects.sectionTitle}
+        </h2>
         <div class="mt-8 grid gap-6 md:grid-cols-3">
-          {projects.map((e) => (
-            <CaseCard data={e.data} href={caseHref(e)} strings={t.cases} />
+          {projects.map((e, i) => (
+            <CaseCard data={e.data} href={caseHref(e)} strings={t.cases} index={i} />
           ))}
         </div>
       </section>
     )}
     <section class="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="writing">
-      <h2 class="reveal font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">{t.teasers.sectionTitle}</h2>
+      <h2 class="reveal flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
+        <AsteriskMark size={12} tone="accent" className="v8-spin-hover" />
+        {t.teasers.sectionTitle}
+      </h2>
       <p class="reveal mt-3 max-w-[58ch] text-sm text-muted-foreground">{t.teasers.intro}</p>
       <div class="mt-8 grid gap-6 md:grid-cols-3">
         {blogTeasers[locale].map((teaser) => (

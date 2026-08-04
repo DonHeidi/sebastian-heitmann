@@ -392,3 +392,25 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **Wrinkle morphism:** overlay the theme-matched wrinkle texture across the whole hero poster (above the artwork, below or above the scrim — iterate), blend mode `overlay`/`soft-light`/`multiply` at tuned opacity, `background-size: cover` (small sources upscale; acceptable for a soft texture) or tiled if cover looks stretched. The poster should read subtly crumpled/physical, NOT grunge-dirty; text legibility must not degrade in any theme/state. Textures load lazily (decorative, below nothing) via CSS background or an aria-hidden img.
 - [ ] **Spec amendment:** the v3 spec's "no aged-paper/grunge textures" line gets an owner-decision amendment sentence sanctioning the poster wrinkle (docs/superpowers/specs/2026-08-04-rocks-v3-neo-retro-design.md, Out of Scope section).
 - [ ] Visual iteration at 1440/1024/768/375 × themes × locales × duotone/revealed states; `bun run build` clean (no raw source images in dist beyond known orphans); commits: `feat(rocks): theme-native hero artwork` and `feat(rocks): wrinkle morphism on the poster` (spec edit may ride the second).
+
+---
+
+### Task 15: Real paper tear on the poster's bottom edge (owner feedback 2026-08-04)
+
+**Owner directive:** "The roughed up edge on the bottom doesn't look good. It should look more like a tear."
+
+- [ ] Rework the hero's bottom edge from the current jittered clip into something that reads as an actual ripped sheet: large-scale asymmetric tear path (amplitude roughly 12-28px with a few deep V-rips, low-frequency waviness underneath, fine jitter only as seasoning — uniform sawtooth is the failure mode), PLUS a visible torn-fiber edge: a thin light line hugging the tear path (exposed paper fiber; in light theme a subtle shadow below it sells depth, in dark theme the light fiber line itself does). Implementation stays CSS/SVG (clip-path + an edge element following the same generated path); keep the wrinkle overlay and all hero content unaffected; no layout shift.
+- [ ] Iterate with close-up screenshots of the tear zone at 1440 + 375, both themes, until it reads "someone ripped this poster off the wall", then full-hero sanity shots.
+- [ ] `bun run build` clean; commit `fix(rocks): make the poster's bottom edge read as a real tear`.
+
+---
+
+### Task 16: Case teasers as album covers (owner feedback 2026-08-04)
+
+**Owner directive:** "make the teaser for the case study square and add the copy onto the image to make it look like a single or album cover art."
+
+- [ ] Rework `CaseCard` into a square (aspect-square) album-cover tile: the cover art fills the whole card (duotone + hover full-color reveal, clean edges); the copy composites ONTO the artwork like a sleeve: setlist number (`01 /`) top-left and the rotated stamp top-right in mono, the title in Anton uppercase over a bottom gradient scrim, summary/role/stack REMOVED from the tile (the detail page owns them; an album cover carries title and label marks, not liner notes). The whole tile links to the detail page (kind case-study) or the external link (kind project).
+- [ ] Entries WITHOUT cover art get a generated sleeve: solid `--v8-bg-surface` ground with a big rough `AsteriskMark` (tone faint, misregister) and the same overlaid copy — so the grid stays coherent as content grows.
+- [ ] Grid: squares likely want 3 columns at `lg` (2 at md, 1 below); iterate visually. Both locale pages parallel. Accessibility: the tile link's accessible name is the title; overlaid text must stay AA-legible over every cover in both themes and both duotone/revealed states (scrim strength per tile, not per artwork).
+- [ ] Visual iteration incl. the seed entry's sparks-crew cover + at least one placeholder-sleeve mock (temporarily unset cover on a copy? No: verify the placeholder path with a temporary draft entry deleted before commit, or by temporarily removing the cover in the dev server only); screenshots at 1440/768/375 × themes × locales.
+- [ ] `bun run build` clean; commit `feat(rocks): album-cover case tiles`.

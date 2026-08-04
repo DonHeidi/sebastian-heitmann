@@ -119,63 +119,6 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Backdrop composition vocabulary (`.bd-*`) for the home-page         */
-/* backdrop moments — see                                              */
-/* docs/superpowers/specs/2026-07-20-backdrop-composition-design.md.   */
-/* These classes DO co-occur with Tailwind utilities on the same       */
-/* elements. That is safe because the utilities                        */
-/* set only geometry (position/size/display) and never the properties  */
-/* declared here, so utilities-beats-components layering cannot bite.  */
-/* ------------------------------------------------------------------ */
-@layer components {
-  .bd-dots {
-    background-image: radial-gradient(circle, var(--v8-dot-color) 1px, transparent 1.5px);
-    background-size: 18px 18px;
-    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 75%);
-  }
-
-  .bd-grid-fine {
-    background-image:
-      linear-gradient(to right, var(--v8-grid-medium) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
-      linear-gradient(to right, var(--v8-grid-fine) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
-    background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
-    mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 0%, transparent 78%);
-    -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 0%, transparent 78%);
-  }
-
-  /* full 5cm/1cm/1mm engineering grid, faded toward its top-left —    */
-  /* used as the hero anchor, cropped by the section's bottom-right    */
-  .bd-grid-full {
-    background-image:
-      linear-gradient(to right, var(--v8-grid-major) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-major) 1px, transparent 1px),
-      linear-gradient(to right, var(--v8-grid-medium) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-medium) 1px, transparent 1px),
-      linear-gradient(to right, var(--v8-grid-fine) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--v8-grid-fine) 1px, transparent 1px);
-    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px, 8px 8px, 8px 8px;
-    mask-image: radial-gradient(ellipse 115% 115% at 100% 100%, black 42%, transparent 78%);
-    -webkit-mask-image: radial-gradient(ellipse 115% 115% at 100% 100%, black 42%, transparent 78%);
-  }
-
-  .bd-stroke-mid   { stroke: var(--v8-text); stroke-width: 1; opacity: 0.16; }
-  .bd-stroke-faint { stroke: var(--v8-text); stroke-width: 1; opacity: 0.09; }
-  .bd-fill-faint   { fill: var(--v8-text); opacity: 0.12; }
-  .bd-node         { stroke: var(--v8-text); stroke-width: 1; fill: none; opacity: 0.2; }
-  .bd-accent-fill  { fill: var(--v8-accent); opacity: 0.85; }
-  .bd-dim-label {
-    fill: var(--v8-text);
-    opacity: 0.35;
-    font-family: var(--v8-font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-  }
-}
-
-/* ------------------------------------------------------------------ */
 /* Grain overlay for banded sections.                                  */
 /* Ported verbatim from the old `@mixin grain($opacity)` (Astro/SCSS,   */
 /* technical-project-management-content.astro, pre-migration) — the    */
@@ -230,7 +173,6 @@
     line-height: 1.75;
     color: var(--v8-text-secondary);
   }
-  .case-prose ul,
   .case-prose ol {
     margin-top: 1rem;
     padding-left: 1.25rem;
@@ -252,7 +194,9 @@
   /* Zine-style asterisk bullets, replacing the default disc marker. */
   .case-prose ul {
     list-style: none;
+    margin-top: 1rem;
     padding-left: 1.4rem;
+    color: var(--v8-text-secondary);
   }
   .case-prose ul li {
     position: relative;
@@ -268,23 +212,7 @@
 }
 
 @layer components {
-  /* v2 punk print/motion utilities. Misregistration = off-register zine
-     printing: an accent ghost behind the ink original. Text version needs
-     data-text="<same text>" on the element. All motion is motion-safe. */
-  .misregister-text {
-    position: relative;
-    display: inline-block;
-  }
-  .misregister-text::before {
-    content: attr(data-text);
-    position: absolute;
-    left: 3px;
-    top: 3px;
-    color: var(--v8-accent);
-    opacity: 0.9;
-    z-index: -1;
-  }
-
+  /* v2 punk print/motion utilities. All motion is motion-safe. */
   @keyframes v8-rotate {
     to {
       transform: rotate(360deg);
@@ -322,10 +250,8 @@
   }
 
   /* Hover-scoped variant of the frame swap: static (frame 1) until hovered,
-     then headbangs. Used by the footer rocker cameo. */
-  .v8-headbang-hover .v8-frame-2 {
-    visibility: hidden;
-  }
+     then headbangs. Used by the footer rocker cameo. The global .v8-frame-2
+     rule above already hides frame 2 by default. */
   @media (prefers-reduced-motion: no-preference) {
     .v8-headbang-hover:hover .v8-frame-1 {
       animation: v8-frame-a 0.8s steps(1) infinite;

@@ -24,10 +24,6 @@ export const deDe: Strings = {
     },
     artAlt: 'Behelmte Figur, die ein Keyboard wie eine Gitarre spielt, in Flammen gehüllt',
   },
-  annotations: {
-    setlist: 'SETLIST: FALLSTUDIEN',
-    est: 'EST. 1440 PX',
-  },
   themeToggle: {
     system: 'System',
     light: 'Hell',

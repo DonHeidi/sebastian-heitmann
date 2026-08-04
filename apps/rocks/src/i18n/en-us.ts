@@ -24,10 +24,6 @@ export const enUs: Strings = {
     },
     artAlt: 'Helmeted figure playing a keyboard like a guitar, engulfed in flames',
   },
-  annotations: {
-    setlist: 'SETLIST: CASES',
-    est: 'EST. 1440 PX',
-  },
   themeToggle: {
     system: 'System',
     light: 'Light',

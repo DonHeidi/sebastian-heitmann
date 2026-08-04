@@ -17,10 +17,6 @@ export interface Strings {
     intro: { before: string; struck: string; replacement: string; after: string };
     artAlt: string;
   };
-  annotations: {
-    setlist: string;
-    est: string;
-  };
   themeToggle: {
     system: string;
     light: string;

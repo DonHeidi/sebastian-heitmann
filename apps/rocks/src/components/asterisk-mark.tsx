@@ -17,7 +17,7 @@ const TONE: Record<NonNullable<AsteriskMarkProps['tone']>, string> = {
   faint: 'var(--v8-border)',
 };
 
-// Rough hand-set spokes in the paint register of the GraffitiWord marks: each of the
+// Rough hand-set spokes in a hand-painted paint-register style: each of the
 // six spokes (60° apart, uneven lengths 44/36/42/38/45/37) is a filled irregular
 // polygon — wobbled long edges, width swelling along the shaft, blunt slanted tips —
 // plus a scatter of tiny paint flecks. Path data is baked once at module load from a

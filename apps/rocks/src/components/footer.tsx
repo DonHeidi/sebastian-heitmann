@@ -39,7 +39,7 @@ export function Footer({ footer }: FooterProps) {
           <a href="https://bsky.app/profile/e2e-developer.bsky.social" target="_blank" rel="noopener noreferrer" aria-label="Bluesky" className="flex items-center text-muted-foreground no-underline transition-colors hover:text-foreground">
             <SiBluesky size={14} color="currentColor" />
           </a>
-          <span className="v8-spin-hover">
+          <span className="v8-headbang-hover">
             <PixelRocker size={22} />
           </span>
         </div>

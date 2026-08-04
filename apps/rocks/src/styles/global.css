@@ -312,4 +312,18 @@
       animation: v8-frame-b 0.8s steps(1) infinite;
     }
   }
+
+  /* Hover-scoped variant of the frame swap: static (frame 1) until hovered,
+     then headbangs. Used by the footer rocker cameo. */
+  .v8-headbang-hover .v8-frame-2 {
+    visibility: hidden;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .v8-headbang-hover:hover .v8-frame-1 {
+      animation: v8-frame-a 0.8s steps(1) infinite;
+    }
+    .v8-headbang-hover:hover .v8-frame-2 {
+      animation: v8-frame-b 0.8s steps(1) infinite;
+    }
+  }
 }

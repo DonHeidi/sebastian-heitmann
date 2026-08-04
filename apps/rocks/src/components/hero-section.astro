@@ -5,7 +5,9 @@
 // so the image wiring lives in exactly one place. The masthead names are brand
 // literals (the site owner's name), not locale copy, so they are passed here
 // rather than through i18n.
+import { Image } from 'astro:assets';
 import artwork from '../assets/guitar-player.png';
+import artworkLight from '../assets/guitar-player-light.png';
 import DuotonePanel from './duotone-panel.astro';
 import { Hero } from './hero';
 import type { Strings } from '../i18n/types';
@@ -16,6 +18,12 @@ interface Props {
 }
 
 const { hero, credits } = Astro.props;
+
+// Both artworks share the same 1024×1536 frame and near-identical composition
+// (helmet top-center, keyboard-guitar diagonal), so the crop tuning below —
+// derived for the dark artwork in task 10 — applies to both. Keep in sync.
+const cropClass =
+  'object-[50%_14%] max-lg:scale-140 max-lg:object-[50%_8%] max-lg:[transform-origin:50%_-85%]';
 ---
 
 <Hero hero={hero} credits={credits} nameFirst="Sebastian" nameLast="Heitmann">
@@ -51,7 +59,30 @@ const { hero, credits } = Astro.props;
     widths={[480, 768, 1080, 1440, 1920]}
     sizes="100vw"
     eager
-    class="absolute inset-0"
-    imgClass="object-[50%_14%] max-lg:scale-140 max-lg:object-[50%_8%] max-lg:[transform-origin:50%_-85%]"
+    class="absolute inset-0 hidden dark:block"
+    imgClass={cropClass}
   />
+  {/* Light-theme counterpart (owner-supplied): white/orange on near-white, i.e.
+      already palette-native — it renders RAW, not through the duotone pipeline.
+      Duotoning it would map its near-white background to solid accent and turn
+      the whole light poster orange; raw, the near-white ground melts into the
+      cream `--v8-bg` under the scrim and the orange flames carry the accent.
+      Consequence (documented call): the hover color-reveal only exists where
+      duotone does, so the light hero has no reveal state — raw *is* its full
+      color. Loading: the dark artwork stays the eager/high-priority LCP (the
+      poster's primary art direction); this one is lazy. `display: none` + lazy
+      means dark-theme visitors never fetch it, while light-theme visitors get
+      it promptly (it's in-viewport at the top of the page) at the cost of a
+      slightly later art paint plus the unused eager dark download — the
+      accepted tradeoff over double-eager-loading both for everyone. */}
+  <div slot="art" class="absolute inset-0 dark:hidden">
+    <Image
+      src={artworkLight}
+      alt={hero.artAlt}
+      widths={[480, 768, 1080, 1440, 1920]}
+      sizes="100vw"
+      loading="lazy"
+      class={`h-full w-full object-cover ${cropClass}`}
+    />
+  </div>
 </Hero>

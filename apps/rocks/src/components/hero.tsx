@@ -112,6 +112,24 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
             aria-hidden="true"
             className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[var(--v8-bg)]/90 via-[var(--v8-bg)]/40 to-transparent"
           />
+          {/* Light-only scrim reinforcement (task 14): the raw light artwork
+              is far busier and brighter through the tagline and intro zones
+              than the mostly-black dark artwork the band alphas above were
+              tuned against, so the light theme gets an extra cream wash over
+              the same two band geometries. Additive `dark:hidden` layers
+              rather than reworked base utilities on purpose: stacking a layer
+              can only strengthen a scrim, so the protected
+              `min-[1024px]:max-[1363px]` band can't be weakened by variant
+              -ordering surprises between `dark:` and the arbitrary
+              breakpoint variants. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-[46%] bg-gradient-to-b from-[var(--v8-bg)]/35 via-[var(--v8-bg)]/40 to-transparent dark:hidden"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[var(--v8-bg)]/45 via-[var(--v8-bg)]/45 to-transparent dark:hidden"
+          />
         </div>
       )}
       {/* Content stack: kicker + masthead + tagline anchor the TOP of the

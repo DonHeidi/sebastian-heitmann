@@ -320,6 +320,21 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 
 ---
 
+### Task 10: Masthead to the top of the poster (owner feedback 2026-08-04)
+
+**Owner directive:** "Sebastian Heitmann to the top" — the lockup anchors the TOP of the full-bleed poster (reference: the AC/DC bill, logo on top, artwork below it), instead of the current vertically-centered stack.
+
+**Files:**
+- Modify: `apps/rocks/src/components/hero.tsx` (stack alignment; scrim re-weighting if needed)
+
+**Composition:** kicker + masthead + tagline bar move to the top of the poster block (top padding roughly nav-clearance + `2-3rem`; iterate); the artwork's focal area (helmet/guitar) then owns the middle/lower poster — adjust `object-position` if the lockup now covers the figure's head; the intro moves to the BOTTOM of the poster (above the torn edge, over the bottom gradient) or tucks under the tagline if bottom placement reads worse — judgment call, note it. Re-weight the scrim to protect the top band (top-heavy gradient) since the radial center wash no longer sits behind the text.
+
+- [ ] **Step 1:** Rework the stack alignment + scrim weighting.
+- [ ] **Step 2:** Visual iteration at 1440/1024/768/375 × themes × locales × both duotone/revealed states: lockup crisp at the top, figure not decapitated by the text band, intro legible at its new position, tear intact, no hover layout shift.
+- [ ] **Step 3:** `bun run build` clean; commit `feat(rocks): anchor the masthead to the top of the poster`.
+
+---
+
 ### Task 7: Final verification, push, PR update
 
 - [ ] **Step 1:** `cd apps/rocks && rm -rf dist && bun run build` — clean; no raw PNGs in dist; `dist/fonts/Anton-Regular.woff2` present.

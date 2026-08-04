@@ -61,7 +61,7 @@ Frozen except: `hero.headingParts` replaced by `hero.tagline` as above. Everythi
 
 ## Out of Scope
 
-- No aged-paper/grunge textures, no halftone dot simulation (duotone only)
+- No aged-paper/grunge textures, no halftone dot simulation (duotone only). Amended 2026-08-04, owner decision: a subtle theme-matched wrinkle texture over the hero poster is sanctioned ("we can add a bit of morphism by adding a wrinkle to the poster") — physical crumpled-print morphism, not aged-paper grunge, which stays out of scope elsewhere.
 - No tour-date table for cases (owner decision)
 - No changes to `.dev`, infra, deploy scripts, or content entries
 - No new runtime dependencies (Anton is a static asset)

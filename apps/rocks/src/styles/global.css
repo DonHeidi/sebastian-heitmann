@@ -296,4 +296,31 @@
     mix-blend-mode: normal;
     filter: none;
   }
+
+  /* Wrinkle morphism for the hero poster (spec amendment 2026-08-04): a
+     theme-matched crumpled-paper texture blended over the whole poster block.
+     Subtle physical print, NOT grunge — tuned low opacity, soft blends only.
+     The sources are small (≈720×1280); `cover` upscales them, which is fine
+     for a soft out-of-focus texture. Theme-scoping the `background-image`
+     under `.dark`/`.light` (the theme class is applied pre-paint) means each
+     visitor downloads only the active theme's texture, lazily, when the rule
+     first matches — no JS, no preload cost.
+     Per-theme blends: the light texture's gray creases `multiply` into
+     visible shading on the cream poster; the dark texture is near-black, so
+     `multiply`/`soft-light` would vanish on #0C0C0C — its lighter crease
+     ridges are instead `screen`ed on, reading as sheen catching the folds. */
+  .v8-wrinkle {
+    background-size: cover;
+    background-position: center;
+  }
+  .light .v8-wrinkle {
+    background-image: url('../assets/wrinkle-light.jpg');
+    mix-blend-mode: multiply;
+    opacity: 0.4;
+  }
+  .dark .v8-wrinkle {
+    background-image: url('../assets/wrinkle-dark.jpg');
+    mix-blend-mode: screen;
+    opacity: 0.35;
+  }
 }

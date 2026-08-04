@@ -180,6 +180,25 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
           </p>
         </div>
       </div>
+      {/* Wrinkle morphism (owner directive): a theme-matched crumpled-paper
+          texture over the ENTIRE poster — art, scrim, masthead, billing block —
+          so the whole sheet reads as one physical print rather than text
+          floating over a textured image. It sits ABOVE the content stack
+          (z-20 > z-10) because blending it below the scrim washes it out under
+          the strong top band; at the tuned low opacity it shades the text
+          without degrading legibility (verified per theme in task-14 shots).
+          Same torn clip as the art layer so the texture stops at the rip
+          instead of crumpling the page background below it. Texture choice,
+          blend mode and opacity are theme-scoped in global.css (.v8-wrinkle);
+          pointer-events-none keeps the duotone hover reveal hit-testing
+          intact, and a static overlay cannot shift layout on hover. */}
+      {art && (
+        <div
+          aria-hidden="true"
+          className="v8-wrinkle pointer-events-none absolute inset-0 z-20"
+          style={{ clipPath: 'url(#v8-hero-tear)' }}
+        />
+      )}
     </header>
   );
 }

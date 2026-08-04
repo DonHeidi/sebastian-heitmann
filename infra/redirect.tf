@@ -16,6 +16,11 @@ resource "scaleway_function" "apex_redirect" {
   handler      = "handler.handle"
   privacy      = "public"
   http_option  = "enabled"
+  # Cold starts are mitigated by the keep-warm cron below, NOT by min_scale:
+  # provisioned (min_scale > 0) time bills outside the free tier, at a rate
+  # Scaleway's own sources disagree on (€1.62–€5.51/month for one warm 128 MB
+  # instance as of 2026-08), while cron self-invocations land in the
+  # always-free request/execution tiers.
   min_scale    = 0
   max_scale    = 2
   timeout      = 10
@@ -29,12 +34,27 @@ resource "scaleway_function" "apex_redirect" {
   }
 }
 
+# Keep-warm self-ping: invoke the redirect every 5 minutes so an instance stays
+# resident and the SEO-facing apex 301 (direct type-ins, backlinks to the bare
+# domain, crawlers following them) rarely pays a cold start. Best-effort, not a
+# guarantee — instances can still recycle after deploys; the paid alternative
+# is min_scale = 1 (see comment above). ~8.6k invocations/month against the
+# 1M-request free tier: effectively free. The handler is defensive about
+# non-HTTP events (cron args have no path/query), so the ping is a harmless
+# no-op that returns the 301 object to nobody.
+resource "scaleway_function_cron" "apex_keepwarm" {
+  name        = "apex-keepwarm"
+  function_id = scaleway_function.apex_redirect.id
+  schedule    = "*/5 * * * *"
+  args        = jsonencode({ keepwarm = true })
+}
+
 # Bind the apex custom domain to the redirect function → Scaleway provisions a
 # managed Let's Encrypt cert for it. Gated behind var.bind_apex_domain because
 # cert issuance needs the apex to actually resolve to the function, which only
-# happens AFTER the nameserver cutover to Scaleway DNS (see the runbook in
-# docs/runbooks/2026-08-02-apex-dns-cutover.md). Flip the variable default to
-# true and re-apply once NS delegation is live.
+# became true AFTER the nameserver cutover to Scaleway DNS (see the runbook in
+# docs/runbooks/2026-08-02-apex-dns-cutover.md). The default has been true
+# since the delegation went live; the gate stays for future re-bootstraps.
 resource "scaleway_function_domain" "apex" {
   count = var.bind_apex_domain ? 1 : 0
 

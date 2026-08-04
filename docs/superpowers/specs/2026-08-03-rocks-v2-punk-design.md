@@ -94,6 +94,7 @@ Mid-execution course correction from Sebastian: "I don't want the copy to tell t
 - **Graffiti wordmarks replace clean typographic highlights.** A new `GraffitiWord` asset set: hand-drawn SVG lettering (chunky uneven caps, rough painted edges, speckle, accent color) for the display words `Loud`, `Laut`, `NO ENCORE.`, `KEINE ZUGABE.`. The hero heading renders its highlighted word as the wordmark artwork (serif for the rest); the 404 heading uses its wordmark. The `.misregister-text` utility is retired from headings; the `AsteriskMark` misregister print effect stays (it is texture, not typography).
 - **Hero artwork: Sebastian's flaming keyboard-rocker image** (AI artwork he created; file lands at `apps/rocks/src/assets/`). It anchors the landing hero's right side through `astro:assets` (never `ImageMetadata.src`); the big asterisk moves to a supporting role. In light theme the dark image sits as a framed poster panel (deliberate). Until the file exists in the repo, hero integration is blocked on it and other tasks proceed.
 - Everything else in this spec (setlist cards, stamps, kickers, backdrop kit, pixel rocker, motion rules, tokens) stands.
+- Naming (owner addition, 2026-08-04): the `.rocks` adaptation of the design system is called **v8-wildcard** (v8-asterisk remains the business-site system); naming only, no token or class renames.
 
 ## Verification
 

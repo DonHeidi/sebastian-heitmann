@@ -130,7 +130,8 @@ Instrument Serif (display), DM Sans (body) via Google Fonts; IBM Plex Mono (mono
 
 A second portfolio site (case studies + projects, bilingual en-us/de-de) at
 `sebastian-heitmann.rocks`, built on the same Astro 7 + `--v8-asterisk` design
-system as `apps/website/`. It has no contact form: the contact call to action
+system as `apps/website/`. Its punk adaptation of that system is named
+**v8-wildcard** (naming only — tokens and classes keep their `--v8-*` names). It has no contact form: the contact call to action
 relays to `.dev`. Blog teasers are a curated data file
 (`src/data/blog-teasers.ts`) linking out to `.dev` articles rather than
 hosting posts here. Legal pages (imprint/privacy) also link to `.dev` instead

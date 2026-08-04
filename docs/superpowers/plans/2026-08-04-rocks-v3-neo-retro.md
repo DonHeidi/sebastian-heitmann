@@ -335,6 +335,24 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 
 ---
 
+### Task 11: "Previously at" billing-block credits in the poster (owner feedback 2026-08-04)
+
+**Owner directive:** include the `.dev` site's "Previously at" companies in the poster; he referenced how movie posters present awards. Chosen treatment (controller): the movie-poster **billing block** — the condensed typographic credits strip at a poster's bottom edge — with asterisk separators. Text only, no logos.
+
+**Files:**
+- Modify: `apps/rocks/src/i18n/{types,en-us,de-de}.ts` (new `credits` section — owner-requested content, sanctioned copy addition)
+- Modify: `apps/rocks/src/components/hero.tsx` (credits strip in the poster's bottom zone)
+
+**Strings:** `credits: { label: string; names: string[] }` — en `{ label: 'Previously at', names: ['Jung von Matt', 'synvert', 'Granny & Smith', 'OFFIS'] }`; de `{ label: 'Zuvor bei', names: [same four names] }` (labels/names verbatim from the `.dev` site's `logos` section).
+
+**Treatment:** centered strip at the poster's very bottom (below the intro, above the torn edge), movie-billing-block register: tiny letter-spaced mono eyebrow (the label, uppercase), beneath it one line of the four names in Anton uppercase at small size (roughly `text-sm md:text-base`, tracking wide), separated by small accent `AsteriskMark`s (~10px, wrappers not className for sizing). Wraps to two centered lines at narrow widths without orphaning a separator (separators only BETWEEN names; a flex-wrap row of name+mark pairs with the last mark omitted). Must stay legible over the bottom gradient in both themes and both duotone/revealed states; strengthen the bottom gradient slightly if needed (do not touch the width-scoped top-band fix from the previous task).
+
+- [ ] **Step 1:** Strings + strip implementation.
+- [ ] **Step 2:** Visual iteration at 1440/1024/768/375 × themes × locales × both states: billing-block reads as poster credits, no separator orphans, legible everywhere, tear untouched, no hover layout shift.
+- [ ] **Step 3:** `bun run build` clean; commit `feat(rocks): previously-at billing block in the poster`.
+
+---
+
 ### Task 7: Final verification, push, PR update
 
 - [ ] **Step 1:** `cd apps/rocks && rm -rf dist && bun run build` — clean; no raw PNGs in dist; `dist/fonts/Anton-Regular.woff2` present.

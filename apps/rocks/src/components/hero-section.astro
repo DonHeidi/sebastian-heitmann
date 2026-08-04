@@ -18,13 +18,23 @@ const { hero } = Astro.props;
 ---
 
 <Hero hero={hero} nameFirst="Sebastian" nameLast="Heitmann">
-  {/* The artwork is the likely LCP: eager + high priority (via `eager`). */}
+  {/* The artwork is the likely LCP: eager + high priority (via `eager`). It is
+      the full-bleed poster background: the panel fills the hero block, and the
+      1024×1536 portrait source is cropped with the crop window biased toward
+      the top third (helmet + keyboard-guitar neck) via object-position. Astro
+      clamps generated widths at the 1024px source (it never upscales), so the
+      1440/1920 entries are dropped today and the browser upscales the 1024w
+      candidate on large screens instead — softness the owner accepted, and the
+      duotone treatment hides most of it. The entries stay listed so a larger
+      source master would light them up without a code change. */}
   <DuotonePanel
     slot="art"
     src={artwork}
     alt={hero.artAlt}
-    widths={[480, 768, 1080]}
-    sizes="(max-width: 768px) 100vw, 680px"
+    widths={[480, 768, 1080, 1440, 1920]}
+    sizes="100vw"
     eager
+    class="absolute inset-0"
+    imgClass="object-[50%_22%]"
   />
 </Hero>

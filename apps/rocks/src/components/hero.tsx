@@ -2,13 +2,15 @@ import type { ReactNode } from 'react';
 import type { Strings } from '../i18n/types';
 import { Masthead } from './masthead';
 
-// Torn-poster clip outlines in objectBoundingBox units (0..1), baked once from a
-// seeded generator (irregular vertex spacing, mostly shallow jitter, a few deep
-// rips with sharp companion points) so the edge reads as ripped paper rather
-// than a uniform zigzag. Amplitudes were scaled per axis against each image's
-// aspect ratio so the tear depth is even in *pixels* on every side.
-const PANEL_TEAR =
-  'M0.0069 0.0037L0.1156 0.0023L0.2070 0.0039L0.2829 0.0348L0.3014 0.0034L0.3488 0.0012L0.4199 0.0087L0.4713 0.0106L0.5500 0.0098L0.6441 0.0129L0.6970 0.0014L0.7411 0.0033L0.8382 0.0007L0.9139 0.0058L0.9615 0.0037L0.9901 0.0081L0.9775 0.0509L0.9861 0.0861L0.9773 0.1210L0.9904 0.2120L0.9940 0.2605L0.9316 0.2995L0.9908 0.3321L0.9899 0.3703L0.9827 0.4198L0.9927 0.4481L0.9999 0.5227L0.9203 0.6143L0.9999 0.6433L0.9832 0.6791L0.9935 0.7639L0.9848 0.8363L0.9854 0.9279L0.9967 0.9615L0.9840 0.9976L0.9427 0.9925L0.9108 0.9986L0.8642 0.9966L0.8292 0.9987L0.7565 0.9986L0.6808 0.9992L0.6130 0.9846L0.5500 0.9986L0.4663 0.9496L0.4477 0.9951L0.4064 0.9875L0.3385 0.9938L0.2570 0.9956L0.2046 0.9959L0.1684 0.9987L0.1100 0.9935L0.0385 0.9879L0.0158 0.9938L0.0082 0.9548L0.0129 0.9014L0.0038 0.8392L0.0092 0.7506L0.0201 0.6939L0.0501 0.5944L0.0069 0.5626L0.0030 0.5267L0.0084 0.4676L0.0184 0.4158L0.0226 0.3492L0.0115 0.3009L0.0621 0.2081L0.0071 0.1754L0.0146 0.1388L0.0064 0.0385Z';
+// Torn bottom edge for the full-bleed hero, in objectBoundingBox units (0..1),
+// baked once from a seeded generator (irregular vertex spacing, mostly shallow
+// jitter, a few deep rips with sharp companion points) so the edge reads as
+// ripped paper rather than a uniform zigzag. Only the bottom edge tears: the
+// hero bleeds to the viewport edges on the other three sides, so side tears
+// would be clipped away anyway. Depths are fractions of the hero's height
+// (~0.03 deep, ~0.01 shallow), i.e. roughly 8-30px at typical viewport heights.
+const HERO_BOTTOM_TEAR =
+  'M0 0L1 0L1 0.9874L0.9656 0.9905L0.9292 0.9712L0.9159 0.9964L0.8658 0.9705L0.8564 0.9958L0.8091 0.9885L0.7520 0.9854L0.6927 0.9901L0.6306 0.9897L0.5693 0.9855L0.5107 0.9900L0.4725 0.9879L0.4243 0.9868L0.3753 0.9868L0.3331 0.9881L0.2989 0.9893L0.2625 0.9615L0.2553 0.9975L0.1994 0.9617L0.1891 0.9952L0.1614 0.9954L0.1149 0.9956L0.0719 0.9612L0.0659 0.9949L0.0233 0.9853L0.0000 0.9949L0 0.9875Z';
 
 export interface HeroProps {
   hero: Strings['hero'];
@@ -21,8 +23,9 @@ export interface HeroProps {
 
 /**
  * A torn-edged print: an offset accent echo of the clip shape behind the clipped image.
- * Shared with the About section, which reuses this technique for the torn-edge avatar
- * (moved there from the hero — see `about-section.tsx` for the avatar's clip shape).
+ * Used by the About section's torn-edge avatar (see `about-section.tsx` for the
+ * avatar's clip shape). The hero itself no longer renders one — its art became the
+ * full-bleed background, where an offset echo has no edge to peek out from.
  */
 export function TornPrint({
   clipId,
@@ -52,27 +55,52 @@ export function TornPrint({
 
 export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
   return (
-    <header className="mx-auto max-w-[1440px] px-6 pt-16 pb-12 md:px-20 md:pt-20 md:pb-20">
+    /* `v8-duotone-host` scopes the duotone hover reveal to the whole poster
+       block (the content stack sits above the art, so the wrapper itself never
+       receives :hover — see global.css). The reveal only swaps blend/filter on
+       the image layer, so there is no layout shift on hover. */
+    <header className="v8-duotone-host relative flex min-h-[calc(100svh-6rem)] flex-col overflow-hidden">
       <svg aria-hidden="true" className="absolute h-0 w-0">
         <defs>
-          <clipPath id="v8-torn-panel" clipPathUnits="objectBoundingBox">
-            <path d={PANEL_TEAR} />
+          <clipPath id="v8-hero-tear" clipPathUnits="objectBoundingBox">
+            <path d={HERO_BOTTOM_TEAR} />
           </clipPath>
         </defs>
       </svg>
-      <div className="flex flex-col items-center text-center">
+      {/* Background art: the duotone panel fills the block edge to edge, and the
+          torn clip on this layer (not the header) rips only the art + scrim, so
+          the page background shows through the tear beneath unclipped content. */}
+      {art && (
+        <div className="absolute inset-0" style={{ clipPath: 'url(#v8-hero-tear)' }}>
+          {art}
+          {/* Theme-aware scrim between art and content: a center-weighted
+              radial wash (strongest behind the content stack, fading out so
+              the art stays punchy at the edges) plus top/bottom gradients, so
+              kicker, tagline, and intro hold contrast in both themes and in
+              both duotone and hover-revealed states. The wash is heavier in
+              light mode (base styles) than dark (`dark:` overrides): the
+              mostly-black artwork under a weak cream wash reads as murky gray
+              and sinks the accent kicker below AA, while a stronger wash turns
+              it into a faded print that dark text clears comfortably. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_75%_62%_at_50%_46%,var(--v8-bg)_0%,transparent_78%)] opacity-70 dark:opacity-55"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-3/5 bg-gradient-to-b from-[var(--v8-bg)]/75 to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[var(--v8-bg)]/90 via-[var(--v8-bg)]/40 to-transparent"
+          />
+        </div>
+      )}
+      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-1 flex-col items-center justify-center px-6 py-16 text-center md:px-20 md:py-20">
         <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
         <div className="mt-5">
           <Masthead nameFirst={nameFirst} nameLast={nameLast} tagline={hero.tagline} />
         </div>
-        {/* Artwork is the poster's center stage; capped so the 1024px source stays sharp at 2x. */}
-        {art && (
-          <figure className="reveal mx-auto mt-10 w-full max-w-[680px] md:mt-14 md:-rotate-1">
-            <TornPrint clipId="v8-torn-panel" offset={8}>
-              {art}
-            </TornPrint>
-          </figure>
-        )}
         <p className="reveal mx-auto mt-10 max-w-[58ch] text-base leading-relaxed text-muted-foreground md:mt-14 md:text-lg">
           {hero.intro.before}
           <s className="opacity-60">{hero.intro.struck}</s>{' '}

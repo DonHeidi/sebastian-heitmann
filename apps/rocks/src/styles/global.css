@@ -285,4 +285,15 @@
     mix-blend-mode: normal;
     filter: none;
   }
+
+  /* Host-scoped variant for the full-bleed hero: there the duotone wrapper is
+     a background layer underneath the scrim and content stack, so the pointer
+     never hit-tests the wrapper itself and its own :hover can never fire.
+     `v8-duotone-host` on the hero block re-triggers the reveal from anywhere
+     over the poster instead. */
+  .v8-duotone-host:hover .v8-duotone > img,
+  .v8-duotone-host:focus-within .v8-duotone > img {
+    mix-blend-mode: normal;
+    filter: none;
+  }
 }

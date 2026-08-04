@@ -284,6 +284,21 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 
 ---
 
+### Task 8: Center-stage hero composition (owner feedback 2026-08-04)
+
+**Owner directives:** "I know, the image of the guitar player is not that big but can you make it center stage? Also center the Sebastian Heitmann."
+
+**Files:**
+- Modify: `apps/rocks/src/components/masthead.tsx`, `apps/rocks/src/components/hero.tsx` / `hero-section.astro`, both index pages if wiring changes
+
+**Poster stack (single centered column, in this order):** kicker over-line (centered), masthead (centered: names + asterisk divider centered as a lockup; stacked variant on mobile also centered), tagline bar (centered; keep rules both sides), the guitar-player panel center stage (torn mask + duotone + hover reveal + eager, centered, `max-w` around 600-680px so the 1024px source stays sharp at 2x; full column width below `md`), then the intro paragraph centered beneath it (`max-w-[58ch] mx-auto text-center`, strikethrough intact).
+
+- [ ] **Step 1:** Rework the hero markup to the centered stack; masthead gets a centered variant (`justify-center text-center`); keep all existing treatments (duotone, torn clip, accent echo) intact.
+- [ ] **Step 2:** Visual iteration at 1440/1024/768/375 × both themes × both locales: the composition must read as a poster column (masthead lockup centered above the artwork, no ragged asymmetry), no clipping, panel sharp (not upscaled past ~680px CSS width), tagline rules balanced.
+- [ ] **Step 3:** `bun run build` clean; commit `feat(rocks): center-stage poster hero composition`.
+
+---
+
 ### Task 7: Final verification, push, PR update
 
 - [ ] **Step 1:** `cd apps/rocks && rm -rf dist && bun run build` — clean; no raw PNGs in dist; `dist/fonts/Anton-Regular.woff2` present.

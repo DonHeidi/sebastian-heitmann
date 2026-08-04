@@ -367,3 +367,15 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 
 - [ ] Give the tagline text in `apps/rocks/src/components/masthead.tsx` a HARD shadow (solid offset, zero blur) in the accent ink: `text-shadow: 2px 2px 0 var(--v8-accent)` as the starting value; iterate offset (1.5-3px) for legibility at the tagline's small size, both themes, both duotone/revealed hero states. The shadow echoes the misregistered-print brand language.
 - [ ] Screenshot 1440 + 375, both themes; `bun run build` clean; commit `feat(rocks): hard accent shadow on the tagline`.
+
+---
+
+### Task 13: Cover-art library wired in (owner feedback 2026-08-04)
+
+**Owner directive:** nine cover-art images added to assets for projects/cases; use them; rename them (controller renamed: cover-art-{sparks-crew, red-suits, red-shades, painted-crew, masked-duo, blue-menagerie, goggles-grin, giant-tree, cosmic-soul}.png, all 1024×1024).
+
+- [ ] Commit all nine renamed assets (`git add apps/rocks/src/assets/cover-art-*.png`).
+- [ ] Wire `cover-art-sparks-crew.png` (blue-duotone crew with ember sparks: the closest tonal match to the site's ink-and-accent system) as the `cover` of the `portfolio-platform` case entry in BOTH locale files (`cover: ../../../assets/cover-art-sparks-crew.png` relative from `src/content/cases/<locale>/` — verify the relative path against how Astro content image() resolves; adjust as needed).
+- [ ] This is the FIRST real exercise of the cover pipeline (coverPanel slot on cards + DuotonePanel on detail pages): visually verify the card cover (landing, both locales, both themes, hover reveal) and the detail-page cover panel; fix any latent defects the real data exposes (the path was previously build-verified only).
+- [ ] The remaining eight covers stay as an uncommitted-into-content library (committed as files) for future entries; list them in the report.
+- [ ] `bun run build` clean (no raw PNGs in dist); commit content change as `feat(rocks): sparks-crew cover art for the portfolio-platform case` (assets may share this commit).

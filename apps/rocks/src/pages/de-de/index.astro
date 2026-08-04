@@ -7,6 +7,7 @@ import { Navigation } from '../../components/navigation';
 import { Footer } from '../../components/footer';
 import { ThemeToggle } from '../../components/theme-toggle';
 import HeroSection from '../../components/hero-section.astro';
+import AboutSection from '../../components/about-section.astro';
 import { HeroStageMoment } from '../../components/backdrop/hero-stage-moment';
 import { CaseCard } from '../../components/case-card';
 import { TeaserCard } from '../../components/teaser-card';
@@ -75,6 +76,7 @@ const caseHref = (e: (typeof entries)[number]) =>
         ))}
       </div>
     </section>
+    <AboutSection about={t.about} />
   </main>
   <Footer footer={t.footer} />
 </Layout>

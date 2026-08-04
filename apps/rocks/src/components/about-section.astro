@@ -1,0 +1,30 @@
+---
+// Wires the avatar through astro:assets' <Image> (never ImageMetadata.src — repo
+// gotcha) and slots it into the shared React AboutSection. Both index pages
+// render this once, so the image wiring lives in exactly one place.
+import { Image } from 'astro:assets';
+import portrait from '../assets/avatar.png';
+import { AboutSection } from './about-section';
+import type { Strings } from '../i18n/types';
+
+interface Props {
+  about: Strings['about'];
+}
+
+const { about } = Astro.props;
+---
+
+<AboutSection about={about}>
+  {/* Below the fold: lazy, no fetchpriority boost (contrast with the hero art). */}
+  <Image
+    slot="avatar"
+    src={portrait}
+    alt={about.avatarAlt}
+    width={320}
+    height={320}
+    widths={[160, 320]}
+    sizes="160px"
+    loading="lazy"
+    class="block h-auto w-full"
+  />
+</AboutSection>

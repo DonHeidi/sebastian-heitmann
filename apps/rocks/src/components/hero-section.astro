@@ -1,10 +1,10 @@
 ---
 // Wires the hero artwork through astro:assets' <Image> (never ImageMetadata.src —
 // repo gotcha) and slots it into the shared React Hero. Both index pages render
-// this once, so the image wiring lives in exactly one place.
+// this once, so the image wiring lives in exactly one place. The avatar used to
+// live here too; it now renders in the About section (see about-section.astro).
 import { Image } from 'astro:assets';
 import artwork from '../assets/guitar-player.png';
-import portrait from '../assets/avatar.png';
 import { Hero } from './hero';
 import type { Strings } from '../i18n/types';
 
@@ -26,17 +26,6 @@ const { hero, word } = Astro.props;
     sizes="(max-width: 768px) 100vw, 40vw"
     loading="eager"
     fetchpriority="high"
-    class="block h-auto w-full"
-  />
-  <Image
-    slot="avatar"
-    src={portrait}
-    alt={hero.avatarAlt}
-    width={240}
-    height={240}
-    widths={[120, 240]}
-    sizes="120px"
-    loading="eager"
     class="block h-auto w-full"
   />
 </Hero>

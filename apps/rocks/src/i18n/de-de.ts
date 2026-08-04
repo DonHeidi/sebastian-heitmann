@@ -23,7 +23,6 @@ export const deDe: Strings = {
       after: ' unten: komplett selbst gebaut, in Produktion feinjustiert.',
     },
     artAlt: 'Behelmte Figur, die ein Keyboard wie eine Gitarre spielt, in Flammen gehüllt',
-    avatarAlt: 'Porträt von Sebastian Heitmann',
   },
   annotations: {
     setlist: 'SETLIST: FALLSTUDIEN',
@@ -53,6 +52,11 @@ export const deDe: Strings = {
     sectionTitle: 'Aus der .dev Presse',
     intro: 'Längere Texte erscheinen auf sebastian-heitmann.dev. Eine Auswahl:',
     readOn: 'Auf sebastian-heitmann.dev lesen',
+  },
+  about: {
+    sectionTitle: 'Über mich',
+    body: 'Sebastian Heitmann. Technologieberater, End-to-End-Entwickler: Produkt, Code, Infrastruktur, Delivery. Die Business-Seite lebt auf sebastian-heitmann.dev.',
+    avatarAlt: 'Porträt von Sebastian Heitmann',
   },
   footer: {
     copyright: '© 2026 Sebastian Heitmann',

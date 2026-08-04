@@ -23,7 +23,6 @@ export const enUs: Strings = {
       after: ' below: built end to end, tuned in production.',
     },
     artAlt: 'Helmeted figure playing a keyboard like a guitar, engulfed in flames',
-    avatarAlt: 'Portrait of Sebastian Heitmann',
   },
   annotations: {
     setlist: 'SETLIST: CASES',
@@ -53,6 +52,11 @@ export const enUs: Strings = {
     sectionTitle: 'From the .dev Press',
     intro: 'Longer-form thinking lives on sebastian-heitmann.dev. A few picks:',
     readOn: 'Read on sebastian-heitmann.dev',
+  },
+  about: {
+    sectionTitle: 'About',
+    body: 'Sebastian Heitmann. Technology consultant, end-to-end builder: product, code, infrastructure, delivery. The business side lives at sebastian-heitmann.dev.',
+    avatarAlt: 'Portrait of Sebastian Heitmann',
   },
   footer: {
     copyright: '© 2026 Sebastian Heitmann',

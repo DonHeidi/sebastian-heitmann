@@ -16,7 +16,6 @@ export interface Strings {
     headingParts: { misregistered: string; rest: string };
     intro: { before: string; struck: string; replacement: string; after: string };
     artAlt: string;
-    avatarAlt: string;
   };
   annotations: {
     setlist: string;
@@ -46,6 +45,11 @@ export interface Strings {
     sectionTitle: string;
     intro: string;
     readOn: string;
+  };
+  about: {
+    sectionTitle: string;
+    body: string;
+    avatarAlt: string;
   };
   footer: {
     copyright: string;

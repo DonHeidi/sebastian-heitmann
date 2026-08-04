@@ -52,6 +52,13 @@
     display: block;
     max-width: 100%;
   }
+  /* Astro wraps content slotted into framework components (e.g. the hero's
+     astro:assets images) in these custom elements; make them layout-transparent
+     so the slotted element behaves as a direct child of its styled wrapper. */
+  astro-slot,
+  astro-static-slot {
+    display: contents;
+  }
   svg {
     display: block;
   }

@@ -28,13 +28,23 @@ export function HeroStageMoment({ annotations }: HeroStageMomentProps) {
           <path d="M-21 0H21 M0 -21V21" />
         </g>
       </svg>
-      {/* the rock element: big misregistered asterisk, bleeding off the right edge */}
-      <div className="absolute -right-16 top-16 opacity-90 md:-right-10 md:top-10">
-        <div className="md:hidden">
-          <AsteriskMark size={280} misregister spin />
-        </div>
-        <div className="hidden md:block">
-          <AsteriskMark size={420} misregister spin />
+      {/* supporting mark: single misregistered asterisk. The artwork panel owns the
+          hero's right side now, so at md+ the mark straddles the panel's top-left
+          corner. The inner div mirrors the hero container (max-w + centering), which
+          makes the panel's left edge expressible from the right: the panel column is
+          min(38% of the content box, 420px) wide behind 80px padding, i.e.
+          min(38% + 19px, 500px) from the container edge; backing off 75px leaves
+          roughly two thirds of the mark peeking out from behind the poster.
+          Below md the artwork sits under the text, so the mark tucks behind the
+          heading's top-right corner, bleeding off the edge as before. */}
+      <div className="absolute inset-0 mx-auto max-w-[1440px]">
+        <div className="absolute top-12 -right-14 opacity-90 md:top-16 md:right-[calc(min(38%+19px,500px)-75px)]">
+          <div className="md:hidden">
+            <AsteriskMark size={190} misregister spin />
+          </div>
+          <div className="hidden md:block">
+            <AsteriskMark size={220} misregister spin />
+          </div>
         </div>
       </div>
     </div>

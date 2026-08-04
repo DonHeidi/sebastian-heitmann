@@ -15,6 +15,8 @@ export interface Strings {
     kicker: string;
     headingParts: { misregistered: string; rest: string };
     intro: { before: string; struck: string; replacement: string; after: string };
+    artAlt: string;
+    avatarAlt: string;
   };
   annotations: {
     setlist: string;

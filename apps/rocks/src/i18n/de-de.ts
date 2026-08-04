@@ -22,6 +22,8 @@ export const deDe: Strings = {
       replacement: 'Setlist',
       after: ' unten: komplett selbst gebaut, in Produktion feinjustiert.',
     },
+    artAlt: 'Behelmte Figur, die ein Keyboard wie eine Gitarre spielt, in Flammen gehüllt',
+    avatarAlt: 'Porträt von Sebastian Heitmann',
   },
   annotations: {
     setlist: 'SETLIST: FALLSTUDIEN',

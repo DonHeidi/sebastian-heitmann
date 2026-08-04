@@ -6,7 +6,7 @@ import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import { Navigation } from '../../components/navigation';
 import { Footer } from '../../components/footer';
 import { ThemeToggle } from '../../components/theme-toggle';
-import { Hero } from '../../components/hero';
+import HeroSection from '../../components/hero-section.astro';
 import { HeroStageMoment } from '../../components/backdrop/hero-stage-moment';
 import { CaseCard } from '../../components/case-card';
 import { TeaserCard } from '../../components/teaser-card';
@@ -37,7 +37,7 @@ const caseHref = (e: (typeof entries)[number]) =>
   <main>
     <div class="relative overflow-hidden">
       <HeroStageMoment annotations={t.annotations} />
-      <Hero hero={t.hero} word="laut" />
+      <HeroSection hero={t.hero} word="laut" />
     </div>
     <section class="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="cases">
       <h2 class="reveal flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">

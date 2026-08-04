@@ -22,6 +22,8 @@ export const enUs: Strings = {
       replacement: 'setlist',
       after: ' below: built end to end, tuned in production.',
     },
+    artAlt: 'Helmeted figure playing a keyboard like a guitar, engulfed in flames',
+    avatarAlt: 'Portrait of Sebastian Heitmann',
   },
   annotations: {
     setlist: 'SETLIST: CASES',

@@ -3,15 +3,138 @@ import type { Strings } from '../i18n/types';
 import { AsteriskMark } from './asterisk-mark';
 import { Masthead } from './masthead';
 
-// Torn bottom edge for the full-bleed hero, in objectBoundingBox units (0..1),
-// baked once from a seeded generator (irregular vertex spacing, mostly shallow
-// jitter, a few deep rips with sharp companion points) so the edge reads as
-// ripped paper rather than a uniform zigzag. Only the bottom edge tears: the
-// hero bleeds to the viewport edges on the other three sides, so side tears
-// would be clipped away anyway. Depths are fractions of the hero's height
-// (~0.03 deep, ~0.01 shallow), i.e. roughly 8-30px at typical viewport heights.
-const HERO_BOTTOM_TEAR =
-  'M0 0L1 0L1 0.9874L0.9656 0.9905L0.9292 0.9712L0.9159 0.9964L0.8658 0.9705L0.8564 0.9958L0.8091 0.9885L0.7520 0.9854L0.6927 0.9901L0.6306 0.9897L0.5693 0.9855L0.5107 0.9900L0.4725 0.9879L0.4243 0.9868L0.3753 0.9868L0.3331 0.9881L0.2989 0.9893L0.2625 0.9615L0.2553 0.9975L0.1994 0.9617L0.1891 0.9952L0.1614 0.9954L0.1149 0.9956L0.0719 0.9612L0.0659 0.9949L0.0233 0.9853L0.0000 0.9949L0 0.9875Z';
+// ---------------------------------------------------------------------------
+// Torn bottom edge for the full-bleed hero (task 15). The previous edge was a
+// baked path of uniform small jitter, which read as a rough saw rather than a
+// rip (owner: "should look more like a tear"). What sells a real tear is
+// LOW-frequency drama — long shallow drifts punctuated by a few deep
+// asymmetric V-rips — with fine jitter only as seasoning, plus a visible strip
+// of exposed paper fiber hugging the torn line. The geometry is generated once
+// at module load from a seeded PRNG (deterministic: identical on the server,
+// at hydration, and on every build — no Date.now/Math.random at render), in
+// objectBoundingBox units (0..1 of the hero box) so one path serves every
+// viewport. Only the bottom edge tears: the hero bleeds to the viewport edges
+// on the other three sides, so side tears would be clipped away anyway.
+// ---------------------------------------------------------------------------
+
+/** Tiny seeded PRNG (mulberry32) — deterministic across SSR and hydration. */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), a | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+interface TearEdge {
+  /** Clip path for the whole sheet: straight top/sides, torn bottom. */
+  clip: string;
+  /** The torn line alone, as SVG polyline points — the fiber strokes trace it. */
+  edge: string;
+  /** Per-point slightly lifted echo of the edge: the wispy broken fiber line. */
+  echo: string;
+}
+
+const HERO_TEAR: TearEdge = (() => {
+  const rand = mulberry32(0x524f434b);
+  const TAU = Math.PI * 2;
+  // Resting tear line, as a fraction of hero height. Depths/amplitudes below
+  // are also height fractions: at typical hero heights (~700-900px) the drift
+  // wanders ~±13px and the deep rips bite 14-35px up into the sheet.
+  const BASE = 0.974;
+  // Low-frequency drift: three incommensurate sine waves with seeded phases
+  // give the long shallow wander a real tear has between rips.
+  const p1 = rand();
+  const p2 = rand();
+  const p3 = rand();
+  const drift = (x: number) =>
+    0.01 * Math.sin(TAU * (0.9 * x + p1)) +
+    0.005 * Math.sin(TAU * (2.2 * x + p2)) +
+    0.0022 * Math.sin(TAU * (5.1 * x + p3));
+  const level = (x: number) => BASE + drift(x);
+
+  // Deep asymmetric V-rips: one per horizontal band (so they spread out
+  // without colliding), each with a steep narrow side and a shallow wide flap
+  // side; one "hero" rip gets extra depth and width.
+  const BANDS = 4;
+  const bandW = 0.88 / BANDS;
+  const heroRip = Math.floor(rand() * BANDS);
+  const notches = Array.from({ length: BANDS }, (_, i) => {
+    const xc = 0.06 + bandW * i + bandW * (0.2 + 0.6 * rand());
+    const deep = i === heroRip;
+    const depth = (deep ? 0.03 : 0.018) + 0.014 * rand();
+    const wN = 0.006 + 0.008 * rand();
+    const wW = (deep ? 0.03 : 0.02) + 0.028 * rand();
+    const steepLeft = rand() < 0.5;
+    return {
+      xc,
+      depth,
+      wN,
+      wW,
+      steepLeft,
+      // Little tag of paper left hanging just past some rips.
+      tag: rand() < 0.65,
+      tagW: 0.006 + 0.008 * rand(),
+      tagD: 0.006 + 0.008 * rand(),
+      xl: xc - (steepLeft ? wN : wW),
+      xr: xc + (steepLeft ? wW : wN),
+    };
+  });
+
+  const fmt = (v: number) => Number(v.toFixed(4));
+  const pts: Array<[number, number]> = [];
+  const push = (x: number, y: number) =>
+    pts.push([fmt(Math.min(1, Math.max(0, x))), fmt(Math.min(0.996, Math.max(0.92, y)))]);
+  // Fine jitter is seasoning only: an order of magnitude below the rip depths.
+  const jitter = () => (rand() - 0.5) * 0.004;
+
+  push(0, level(0) + jitter());
+  let x = 0;
+  let ni = 0;
+  while (x < 1) {
+    const n = notches[ni];
+    const nx = x + 0.016 + 0.03 * rand();
+    if (n && nx > n.xl) {
+      const xl = Math.max(n.xl, x + 0.004);
+      push(xl, level(xl));
+      const tipX = n.steepLeft ? xl + n.wN * 0.7 : n.xr - n.wN * 0.7;
+      const tipY = level(n.xc) - n.depth;
+      if (n.steepLeft) {
+        // Steep drop first, then a concave flap easing back up to the right.
+        push(tipX, tipY);
+        push(tipX + n.wW * 0.45, tipY + n.depth * 0.35);
+      } else {
+        // Shallow flap sagging down to the right, then a sharp tip + steep rise.
+        push(xl + n.wW * 0.5, tipY + n.depth * 0.45);
+        push(tipX, tipY);
+      }
+      push(n.xr, level(n.xr));
+      x = n.xr;
+      if (n.tag) {
+        push(x + n.tagW * 0.5, level(x) + n.tagD);
+        x += n.tagW;
+        push(x, level(x));
+      }
+      ni++;
+    } else {
+      x = Math.min(nx, 1);
+      push(x, level(x) + jitter());
+    }
+  }
+  if (pts[pts.length - 1][0] < 1) push(1, level(1) + jitter());
+  pts[pts.length - 1][0] = 1;
+
+  return {
+    clip: `M0 0L1 0${[...pts]
+      .reverse()
+      .map(([px, py]) => `L${px} ${py}`)
+      .join('')}Z`,
+    edge: pts.map(([px, py]) => `${px},${py}`).join(' '),
+    echo: pts.map(([px, py]) => `${px},${fmt(py - (0.0015 + 0.0035 * rand()))}`).join(' '),
+  };
+})();
 
 export interface HeroProps {
   hero: Strings['hero'];
@@ -66,7 +189,7 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
       <svg aria-hidden="true" className="absolute h-0 w-0">
         <defs>
           <clipPath id="v8-hero-tear" clipPathUnits="objectBoundingBox">
-            <path d={HERO_BOTTOM_TEAR} />
+            <path d={HERO_TEAR.clip} />
           </clipPath>
         </defs>
       </svg>
@@ -198,6 +321,67 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
           className="v8-wrinkle pointer-events-none absolute inset-0 z-20"
           style={{ clipPath: 'url(#v8-hero-tear)' }}
         />
+      )}
+      {/* Exposed paper fiber along the tear (task 15): a torn edge is never a
+          clean cut — the rip drags up a thin, slightly irregular strip of
+          lighter fiber. Both strokes trace the SAME generated points as the
+          clip path (an offset echo, not a separate random line), stretched to
+          the hero box by preserveAspectRatio="none" while non-scaling strokes
+          keep the fiber hairline-thin at every viewport. Layers: a soft dark
+          shadow below the lip (light theme only — it sells the sheet lifting
+          off the page; on the near-black dark bg it would be invisible), the
+          main fiber line straddling the edge, and a lifted, dash-broken echo
+          reading as stray fibers. Sits above the wrinkle (z-30) so the texture
+          cannot mute the edge; pointer-events-none keeps the duotone hover
+          hit-testing intact, and none of this affects layout. */}
+      {art && (
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1 1"
+          preserveAspectRatio="none"
+          /* Explicit h/w-full: an absolutely positioned SVG with auto height
+             keeps its intrinsic viewBox ratio instead of stretching to
+             inset-0, which would park the strokes below the hero. */
+          className="pointer-events-none absolute inset-0 z-30 h-full w-full overflow-visible"
+        >
+          {/* Soft shadow: stacked widening/fading strokes rather than a blur
+              filter — CSS filter lengths on SVG children resolve in user units,
+              and one user unit here is the whole hero box, so even blur(1px)
+              diffuses the stroke into invisibility. Three translated strokes
+              approximate the falloff instead. */}
+          {(
+            [
+              [0.004, 3, 'stroke-black/20'],
+              [0.006, 6, 'stroke-black/12'],
+              [0.009, 10, 'stroke-black/8'],
+            ] as const
+          ).map(([dy, width, cls]) => (
+            <polyline
+              key={dy}
+              points={HERO_TEAR.edge}
+              fill="none"
+              vectorEffect="non-scaling-stroke"
+              strokeWidth={width}
+              transform={`translate(0 ${dy})`}
+              className={`${cls} dark:hidden`}
+            />
+          ))}
+          <polyline
+            points={HERO_TEAR.edge}
+            fill="none"
+            vectorEffect="non-scaling-stroke"
+            strokeWidth={2}
+            className="stroke-white dark:stroke-[#EFE8D8]/90"
+          />
+          <polyline
+            points={HERO_TEAR.echo}
+            fill="none"
+            vectorEffect="non-scaling-stroke"
+            strokeWidth={1}
+            strokeDasharray="0.018 0.011 0.032 0.007 0.024 0.014"
+            className="stroke-white/70 dark:stroke-[#EFE8D8]/50"
+          />
+        </svg>
       )}
     </header>
   );

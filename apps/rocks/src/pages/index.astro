@@ -37,7 +37,7 @@ const caseHref = (e: (typeof entries)[number]) =>
     <ThemeToggle client:load labels={t.themeToggle} />
   </Navigation>
   <main>
-    <HeroSection hero={t.hero} />
+    <HeroSection hero={t.hero} credits={t.credits} />
     <section class="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="cases">
       <SectionHeader title={t.cases.sectionTitle} />
       <div class="mt-8 grid gap-6 md:grid-cols-2">

@@ -24,6 +24,10 @@ export const enUs: Strings = {
     },
     artAlt: 'Helmeted figure playing a keyboard like a guitar, engulfed in flames',
   },
+  credits: {
+    label: 'Previously at',
+    names: ['Jung von Matt', 'synvert', 'Granny & Smith', 'OFFIS'],
+  },
   themeToggle: {
     system: 'System',
     light: 'Light',

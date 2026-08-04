@@ -17,6 +17,10 @@ export interface Strings {
     intro: { before: string; struck: string; replacement: string; after: string };
     artAlt: string;
   };
+  credits: {
+    label: string;
+    names: string[];
+  };
   themeToggle: {
     system: string;
     light: string;

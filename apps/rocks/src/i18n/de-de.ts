@@ -24,6 +24,10 @@ export const deDe: Strings = {
     },
     artAlt: 'Behelmte Figur, die ein Keyboard wie eine Gitarre spielt, in Flammen gehüllt',
   },
+  credits: {
+    label: 'Zuvor bei',
+    names: ['Jung von Matt', 'synvert', 'Granny & Smith', 'OFFIS'],
+  },
   themeToggle: {
     system: 'System',
     light: 'Hell',

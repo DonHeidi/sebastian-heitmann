@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Strings } from '../i18n/types';
+import { AsteriskMark } from './asterisk-mark';
 import { Masthead } from './masthead';
 
 // Torn bottom edge for the full-bleed hero, in objectBoundingBox units (0..1),
@@ -14,6 +15,8 @@ const HERO_BOTTOM_TEAR =
 
 export interface HeroProps {
   hero: Strings['hero'];
+  /** Billing-block credits strip ("Previously at") in the poster's bottom zone. */
+  credits: Strings['credits'];
   /** Brand literals passed from the section, not i18n strings. */
   nameFirst: string;
   nameLast: string;
@@ -53,7 +56,7 @@ export function TornPrint({
   );
 }
 
-export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
+export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
   return (
     /* `v8-duotone-host` scopes the duotone hover reveal to the whole poster
        block (the content stack sits above the art, so the wrapper itself never
@@ -129,6 +132,35 @@ export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
           <strong className="font-medium text-foreground">{hero.intro.replacement}</strong>
           {hero.intro.after}
         </p>
+        {/* Movie-poster billing block: the dense, centered credits strip along a
+            poster's bottom edge, translated into the site's system — mono
+            eyebrow label, Anton uppercase names, small accent asterisks as
+            separators (the AC/DC-lightning-bolt divider role, same as the
+            masthead's name divider, just much smaller). The names + separators
+            render as one flex-wrap row of name/mark pairs (each pair kept
+            together so a wrap can only fall *between* pairs), and the mark is
+            only rendered inside a pair when a next name follows — so a line
+            break never strands a lone separator at its start or end. */}
+        <div className="reveal mt-8 flex flex-col items-center gap-3 md:mt-10">
+          <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+            {credits.label}
+          </p>
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-[family-name:var(--v8-font-poster)] text-sm tracking-[0.06em] text-foreground uppercase md:text-base">
+            {credits.names.map((name, index) => (
+              <span key={name} className="flex items-center gap-3">
+                <span>{name}</span>
+                {index < credits.names.length - 1 && (
+                  <span
+                    className="inline-flex h-[10px] w-[10px] shrink-0 items-center justify-center"
+                    aria-hidden="true"
+                  >
+                    <AsteriskMark size={10} tone="accent" />
+                  </span>
+                )}
+              </span>
+            ))}
+          </p>
+        </div>
       </div>
     </header>
   );

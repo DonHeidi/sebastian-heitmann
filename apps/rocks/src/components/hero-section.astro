@@ -12,12 +12,13 @@ import type { Strings } from '../i18n/types';
 
 interface Props {
   hero: Strings['hero'];
+  credits: Strings['credits'];
 }
 
-const { hero } = Astro.props;
+const { hero, credits } = Astro.props;
 ---
 
-<Hero hero={hero} nameFirst="Sebastian" nameLast="Heitmann">
+<Hero hero={hero} credits={credits} nameFirst="Sebastian" nameLast="Heitmann">
   {/* The artwork is the likely LCP: eager + high priority (via `eager`). It is
       the full-bleed poster background: the panel fills the hero block, and the
       1024×1536 portrait source is cropped via object-position. The masthead

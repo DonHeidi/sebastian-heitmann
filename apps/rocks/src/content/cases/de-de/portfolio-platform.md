@@ -4,6 +4,7 @@ summary: 'Eine zweisprachige Astro-Website mit vollständig terraformter Scalewa
 kind: 'case-study'
 role: 'Design, Entwicklung und Betrieb'
 stack: ['Astro', 'TypeScript', 'Tailwind v4', 'Bun', 'Terraform', 'Scaleway']
+cover: ../../../assets/cover-art-sparks-crew.png
 startDate: 2026-05-01
 links:
   - label: 'Live-Website'

@@ -4,6 +4,7 @@ summary: 'A bilingual Astro site with a fully terraformed Scaleway platform behi
 kind: 'case-study'
 role: 'Design, development, and operations'
 stack: ['Astro', 'TypeScript', 'Tailwind v4', 'Bun', 'Terraform', 'Scaleway']
+cover: ../../../assets/cover-art-sparks-crew.png
 startDate: 2026-05-01
 links:
   - label: 'Live site'

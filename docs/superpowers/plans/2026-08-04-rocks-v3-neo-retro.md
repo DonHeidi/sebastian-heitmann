@@ -358,3 +358,12 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **Step 1:** `cd apps/rocks && rm -rf dist && bun run build` — clean; no raw PNGs in dist; `dist/fonts/Anton-Regular.woff2` present.
 - [ ] **Step 2:** `cd apps/apex-redirect && bun test` — 6/6 (regression tripwire).
 - [ ] **Step 3:** Controller pushes (updates PR #15) and posts a PR comment summarizing v3. (The final whole-branch review happens before this step, per the SDD process.)
+
+---
+
+### Task 12: Hard text shadow on the tagline (owner feedback 2026-08-04)
+
+**Owner directive:** "can you add a hard text shadow to Unconventionally Effective?"
+
+- [ ] Give the tagline text in `apps/rocks/src/components/masthead.tsx` a HARD shadow (solid offset, zero blur) in the accent ink: `text-shadow: 2px 2px 0 var(--v8-accent)` as the starting value; iterate offset (1.5-3px) for legibility at the tagline's small size, both themes, both duotone/revealed hero states. The shadow echoes the misregistered-print brand language.
+- [ ] Screenshot 1440 + 375, both themes; `bun run build` clean; commit `feat(rocks): hard accent shadow on the tagline`.

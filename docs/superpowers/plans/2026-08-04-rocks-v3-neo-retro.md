@@ -379,3 +379,16 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] This is the FIRST real exercise of the cover pipeline (coverPanel slot on cards + DuotonePanel on detail pages): visually verify the card cover (landing, both locales, both themes, hover reveal) and the detail-page cover panel; fix any latent defects the real data exposes (the path was previously build-verified only).
 - [ ] The remaining eight covers stay as an uncommitted-into-content library (committed as files) for future entries; list them in the report.
 - [ ] `bun run build` clean (no raw PNGs in dist); commit content change as `feat(rocks): sparks-crew cover art for the portfolio-platform case` (assets may share this commit).
+
+---
+
+### Task 14: Theme-native hero artwork + poster wrinkle morphism (owner feedback 2026-08-04)
+
+**Owner directives:** "I also added a light themes guitar player" / "we can add a bit of morphism by adding a wrinkle to the poster. I added two wrinkle textures if you need them."
+
+**Assets (untracked, commit them):** `guitar-player-light.png` (1024×1536, white/orange keyboard-guitarist on near-white — light-theme counterpart), `wrinkle-dark.jpg` (720×1280), `wrinkle-light.jpg` (736×1308).
+
+- [ ] **Theme-native artwork:** dark theme keeps `guitar-player.png`; light theme renders `guitar-player-light.png` instead. The site themes by `html.dark`/`html.light` class and `@custom-variant dark` exists, so `dark:`/class-based visibility works. Render both, toggle via CSS (`hidden dark:block` pattern or equivalent); decide loading (both eager, or eager the default-theme image and document the tradeoff). Judgment call to iterate: whether the light artwork keeps the duotone treatment or renders raw (it is already palette-native; raw likely reads better and the hover reveal then applies only where duotone does) — screenshots decide, document the call.
+- [ ] **Wrinkle morphism:** overlay the theme-matched wrinkle texture across the whole hero poster (above the artwork, below or above the scrim — iterate), blend mode `overlay`/`soft-light`/`multiply` at tuned opacity, `background-size: cover` (small sources upscale; acceptable for a soft texture) or tiled if cover looks stretched. The poster should read subtly crumpled/physical, NOT grunge-dirty; text legibility must not degrade in any theme/state. Textures load lazily (decorative, below nothing) via CSS background or an aria-hidden img.
+- [ ] **Spec amendment:** the v3 spec's "no aged-paper/grunge textures" line gets an owner-decision amendment sentence sanctioning the poster wrinkle (docs/superpowers/specs/2026-08-04-rocks-v3-neo-retro-design.md, Out of Scope section).
+- [ ] Visual iteration at 1440/1024/768/375 × themes × locales × duotone/revealed states; `bun run build` clean (no raw source images in dist beyond known orphans); commits: `feat(rocks): theme-native hero artwork` and `feat(rocks): wrinkle morphism on the poster` (spec edit may ride the second).

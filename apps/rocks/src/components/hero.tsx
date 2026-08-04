@@ -73,22 +73,19 @@ export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
       {art && (
         <div className="absolute inset-0" style={{ clipPath: 'url(#v8-hero-tear)' }}>
           {art}
-          {/* Theme-aware scrim between art and content: a center-weighted
-              radial wash (strongest behind the content stack, fading out so
-              the art stays punchy at the edges) plus top/bottom gradients, so
-              kicker, tagline, and intro hold contrast in both themes and in
-              both duotone and hover-revealed states. The wash is heavier in
-              light mode (base styles) than dark (`dark:` overrides): the
-              mostly-black artwork under a weak cream wash reads as murky gray
-              and sinks the accent kicker below AA, while a stronger wash turns
-              it into a faded print that dark text clears comfortably. */}
+          {/* Theme-aware scrim between art and content: the lockup now anchors
+              the top of the poster (bill-style), so the wash is top-heavy
+              instead of the old center radial — a tall band behind kicker +
+              masthead + tagline, plus a bottom band behind the intro. The
+              middle of the poster (the figure's torso/keyboard) is left mostly
+              bare so the artwork owns it, per the brief. Alpha is baked into
+              each color stop via `var(--v8-bg)`, so both bands adapt to theme
+              automatically: the mostly-black artwork under a weak cream wash
+              reads as murky gray and sinks the accent kicker below AA, so the
+              stops lean strong rather than needing separate `dark:` overrides. */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-[radial-gradient(ellipse_75%_62%_at_50%_46%,var(--v8-bg)_0%,transparent_78%)] opacity-70 dark:opacity-55"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-3/5 bg-gradient-to-b from-[var(--v8-bg)]/75 to-transparent"
+            className="absolute inset-x-0 top-0 h-[46%] bg-gradient-to-b from-[var(--v8-bg)]/92 via-[var(--v8-bg)]/55 to-transparent"
           />
           <div
             aria-hidden="true"
@@ -96,12 +93,19 @@ export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
           />
         </div>
       )}
-      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-1 flex-col items-center justify-center px-6 py-16 text-center md:px-20 md:py-20">
-        <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
-        <div className="mt-5">
-          <Masthead nameFirst={nameFirst} nameLast={nameLast} tagline={hero.tagline} />
+      {/* Content stack: kicker + masthead + tagline anchor the TOP of the
+          poster (concert-bill lockup, owner directive), the intro is pinned to
+          the bottom via `mt-auto` above the torn edge — the figure's
+          helmet/keyboard then owns the middle of the sheet between the two
+          text bands. */}
+      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-1 flex-col items-center px-6 pt-12 pb-16 text-center md:px-20 md:pt-16 md:pb-20">
+        <div>
+          <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
+          <div className="mt-5">
+            <Masthead nameFirst={nameFirst} nameLast={nameLast} tagline={hero.tagline} />
+          </div>
         </div>
-        <p className="reveal mx-auto mt-10 max-w-[58ch] text-base leading-relaxed text-muted-foreground md:mt-14 md:text-lg">
+        <p className="reveal mx-auto mt-auto max-w-[58ch] pt-10 text-base leading-relaxed text-muted-foreground md:pt-14 md:text-lg">
           {hero.intro.before}
           <s className="opacity-60">{hero.intro.struck}</s>{' '}
           <strong className="font-medium text-foreground">{hero.intro.replacement}</strong>

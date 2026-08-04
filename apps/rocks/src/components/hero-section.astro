@@ -20,13 +20,29 @@ const { hero } = Astro.props;
 <Hero hero={hero} nameFirst="Sebastian" nameLast="Heitmann">
   {/* The artwork is the likely LCP: eager + high priority (via `eager`). It is
       the full-bleed poster background: the panel fills the hero block, and the
-      1024×1536 portrait source is cropped with the crop window biased toward
-      the top third (helmet + keyboard-guitar neck) via object-position. Astro
-      clamps generated widths at the 1024px source (it never upscales), so the
-      1440/1920 entries are dropped today and the browser upscales the 1024w
-      candidate on large screens instead — softness the owner accepted, and the
-      duotone treatment hides most of it. The entries stay listed so a larger
-      source master would light them up without a code change. */}
+      1024×1536 portrait source is cropped via object-position. The masthead
+      lockup now anchors the top of the poster (owner directive), so the crop
+      is pulled down from the old top-third bias (50% 22%) to `50% 14%` on
+      lg+ screens, keeping the whole helmet out from under the text band — the
+      visor sits just below the tagline rule, with the keyboard-guitar neck
+      below it.
+
+      Below `lg` the container flips from landscape-ish to portrait-tall
+      (`min-h-[calc(100svh-6rem)]` against a narrow width), which makes
+      `object-fit: cover`'s crop window cover most of the source height —
+      object-position alone can no longer pull the helmet out from behind the
+      (now two-line, taller) masthead, since panning can't zoom. `max-lg:` adds
+      a `scale(1.4)` with a negative `transform-origin` (above the box, in
+      the pre-scale crop's coordinate space) to zoom into the helmet and push
+      it down past the text block instead of just panning to it — the negative
+      origin was hand-derived (see task-10-report.md) then verified visually
+      per breakpoint, not a value you can eyeball.
+
+      Astro clamps generated widths at the 1024px source (it never upscales),
+      so the 1440/1920 entries are dropped today and the browser upscales the
+      1024w candidate on large screens instead — softness the owner accepted,
+      and the duotone treatment hides most of it. The entries stay listed so a
+      larger source master would light them up without a code change. */}
   <DuotonePanel
     slot="art"
     src={artwork}
@@ -35,6 +51,6 @@ const { hero } = Astro.props;
     sizes="100vw"
     eager
     class="absolute inset-0"
-    imgClass="object-[50%_22%]"
+    imgClass="object-[50%_14%] max-lg:scale-140 max-lg:object-[50%_8%] max-lg:[transform-origin:50%_-85%]"
   />
 </Hero>

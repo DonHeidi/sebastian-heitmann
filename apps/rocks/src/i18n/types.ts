@@ -13,7 +13,7 @@ export interface Strings {
   };
   hero: {
     kicker: string;
-    headingParts: { misregistered: string; rest: string };
+    tagline: string;
     intro: { before: string; struck: string; replacement: string; after: string };
     artAlt: string;
   };

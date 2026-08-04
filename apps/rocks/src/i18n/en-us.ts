@@ -15,7 +15,7 @@ export const enUs: Strings = {
   },
   hero: {
     kicker: 'Portfolio',
-    headingParts: { misregistered: 'Loud', rest: ' where it counts.' },
+    tagline: 'Unconventionally effective',
     intro: {
       before: 'Everything here shipped. The ',
       struck: 'portfolio',

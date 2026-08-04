@@ -15,7 +15,7 @@ export const deDe: Strings = {
   },
   hero: {
     kicker: 'Portfolio',
-    headingParts: { misregistered: 'Laut', rest: ', wo es zählt.' },
+    tagline: 'Unkonventionell effektiv',
     intro: {
       before: 'Alles hier ist live gegangen. ',
       struck: 'Portfolio',

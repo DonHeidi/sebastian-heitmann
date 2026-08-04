@@ -8,7 +8,6 @@ import { Footer } from '../components/footer';
 import { ThemeToggle } from '../components/theme-toggle';
 import HeroSection from '../components/hero-section.astro';
 import AboutSection from '../components/about-section.astro';
-import { HeroStageMoment } from '../components/backdrop/hero-stage-moment';
 import { CaseCard } from '../components/case-card';
 import { TeaserCard } from '../components/teaser-card';
 import { AsteriskMark } from '../components/asterisk-mark';
@@ -37,10 +36,7 @@ const caseHref = (e: (typeof entries)[number]) =>
     <ThemeToggle client:load labels={t.themeToggle} />
   </Navigation>
   <main>
-    <div class="relative overflow-hidden">
-      <HeroStageMoment annotations={t.annotations} />
-      <HeroSection hero={t.hero} word="loud" />
-    </div>
+    <HeroSection hero={t.hero} />
     <section class="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="cases">
       <h2 class="reveal flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
         <AsteriskMark size={12} tone="accent" className="v8-spin-hover" />

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Strings } from '../i18n/types';
-import { GraffitiWord } from './graffiti-word';
+import { Masthead } from './masthead';
 
 // Torn-poster clip outlines in objectBoundingBox units (0..1), baked once from a
 // seeded generator (irregular vertex spacing, mostly shallow jitter, a few deep
@@ -12,8 +12,10 @@ const PANEL_TEAR =
 
 export interface HeroProps {
   hero: Strings['hero'];
-  word: 'loud' | 'laut';
-  /** Slotted `<Image>` from astro:assets (slot="art"): the flaming rocker artwork. */
+  /** Brand literals passed from the section, not i18n strings. */
+  nameFirst: string;
+  nameLast: string;
+  /** Slotted `<DuotonePanel>` (slot="art"): the flaming rocker artwork. */
   art?: ReactNode;
 }
 
@@ -48,11 +50,7 @@ export function TornPrint({
   );
 }
 
-export function Hero({ hero, word, art }: HeroProps) {
-  // Keep leading punctuation (de: ", wo …") glued to the wordmark so a line
-  // break can never orphan it at the start of the next line.
-  const rest = hero.headingParts.rest;
-  const restLead = /^\S*/.exec(rest)?.[0] ?? '';
+export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
   return (
     <header className="mx-auto max-w-[1440px] px-6 pt-16 pb-12 md:px-20 md:pt-20 md:pb-20">
       <svg aria-hidden="true" className="absolute h-0 w-0">
@@ -62,28 +60,17 @@ export function Hero({ hero, word, art }: HeroProps) {
           </clipPath>
         </defs>
       </svg>
-      <div className="grid items-center gap-12 md:grid-cols-[minmax(0,1fr)_min(38%,420px)] md:gap-14">
-        <div>
-          <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
-          <h1 className="reveal mt-5 max-w-[14ch] font-[family-name:var(--v8-font-display)] text-[clamp(3.5rem,9vw,7.5rem)] leading-[0.95] text-foreground">
-            <span className="sr-only">{hero.headingParts.misregistered}</span>
-            <span className="whitespace-nowrap">
-              <GraffitiWord
-                word={word}
-                height={110}
-                className="inline-block h-[1.02em]! align-[-0.13em]"
-              />
-              {restLead}
-            </span>
-            {rest.slice(restLead.length)}
-          </h1>
-          <p className="reveal mt-8 max-w-[58ch] text-base leading-relaxed text-muted-foreground md:text-lg">
-            {hero.intro.before}
-            <s className="opacity-60">{hero.intro.struck}</s>{' '}
-            <strong className="font-medium text-foreground">{hero.intro.replacement}</strong>
-            {hero.intro.after}
-          </p>
-        </div>
+      <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
+      <div className="mt-5">
+        <Masthead nameFirst={nameFirst} nameLast={nameLast} tagline={hero.tagline} />
+      </div>
+      <div className="mt-10 grid items-center gap-12 md:mt-14 md:grid-cols-[minmax(0,1fr)_min(38%,420px)] md:gap-14">
+        <p className="reveal max-w-[58ch] text-base leading-relaxed text-muted-foreground md:text-lg">
+          {hero.intro.before}
+          <s className="opacity-60">{hero.intro.struck}</s>{' '}
+          <strong className="font-medium text-foreground">{hero.intro.replacement}</strong>
+          {hero.intro.after}
+        </p>
         {art && (
           <figure className="reveal m-0 md:-rotate-1">
             <TornPrint clipId="v8-torn-panel" offset={8}>

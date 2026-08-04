@@ -12,9 +12,12 @@ import { Masthead } from './masthead';
 // of exposed paper fiber hugging the torn line. The geometry is generated once
 // at module load from a seeded PRNG (deterministic: identical on the server,
 // at hydration, and on every build — no Date.now/Math.random at render), in
-// objectBoundingBox units (0..1 of the hero box) so one path serves every
-// viewport. Only the bottom edge tears: the hero bleeds to the viewport edges
-// on the other three sides, so side tears would be clipped away anyway.
+// objectBoundingBox units (0..1 of the hero box). Width fractions don't scale
+// visually across viewports, so two variants are baked — desktop and a
+// wider-notched small-viewport one — and a `md:` split picks which clip is
+// live (see HERO_TEAR_SM below). Only the bottom edge tears: the hero bleeds
+// to the viewport edges on the other three sides, so side tears would be
+// clipped away anyway.
 // ---------------------------------------------------------------------------
 
 /** Tiny seeded PRNG (mulberry32) — deterministic across SSR and hydration. */
@@ -37,8 +40,25 @@ interface TearEdge {
   echo: string;
 }
 
-const HERO_TEAR: TearEdge = (() => {
-  const rand = mulberry32(0x524f434b);
+interface TearGeometry {
+  /** Number of deep V-rips, one per horizontal band. */
+  bands: number;
+  /**
+   * Multiplier on every notch/tag *width* (x fractions). objectBoundingBox x
+   * units shrink with the viewport, so the desktop fractions that read as
+   * 9-70px rips at 1440 compress into 2-18px needles at 375 (an EKG trace,
+   * the sawtooth failure mode this tear exists to avoid). Narrow viewports
+   * therefore get their own variant with proportionally wider fractions so
+   * V-walls stay comfortably wider than a few device pixels.
+   */
+  widthScale: number;
+  /** Multiplier on the between-rip sampling step, so the fine jitter between
+   * rips doesn't itself compress into a mini-sawtooth on narrow viewports. */
+  stepScale: number;
+}
+
+function makeTear(seed: number, { bands, widthScale, stepScale }: TearGeometry): TearEdge {
+  const rand = mulberry32(seed);
   const TAU = Math.PI * 2;
   // Resting tear line, as a fraction of hero height. Depths/amplitudes below
   // are also height fractions: at typical hero heights (~700-900px) the drift
@@ -58,15 +78,14 @@ const HERO_TEAR: TearEdge = (() => {
   // Deep asymmetric V-rips: one per horizontal band (so they spread out
   // without colliding), each with a steep narrow side and a shallow wide flap
   // side; one "hero" rip gets extra depth and width.
-  const BANDS = 4;
-  const bandW = 0.88 / BANDS;
-  const heroRip = Math.floor(rand() * BANDS);
-  const notches = Array.from({ length: BANDS }, (_, i) => {
+  const bandW = 0.88 / bands;
+  const heroRip = Math.floor(rand() * bands);
+  const notches = Array.from({ length: bands }, (_, i) => {
     const xc = 0.06 + bandW * i + bandW * (0.2 + 0.6 * rand());
     const deep = i === heroRip;
     const depth = (deep ? 0.03 : 0.018) + 0.014 * rand();
-    const wN = 0.006 + 0.008 * rand();
-    const wW = (deep ? 0.03 : 0.02) + 0.028 * rand();
+    const wN = (0.006 + 0.008 * rand()) * widthScale;
+    const wW = ((deep ? 0.03 : 0.02) + 0.028 * rand()) * widthScale;
     const steepLeft = rand() < 0.5;
     return {
       xc,
@@ -76,7 +95,7 @@ const HERO_TEAR: TearEdge = (() => {
       steepLeft,
       // Little tag of paper left hanging just past some rips.
       tag: rand() < 0.65,
-      tagW: 0.006 + 0.008 * rand(),
+      tagW: (0.006 + 0.008 * rand()) * widthScale,
       tagD: 0.006 + 0.008 * rand(),
       xl: xc - (steepLeft ? wN : wW),
       xr: xc + (steepLeft ? wW : wN),
@@ -95,7 +114,7 @@ const HERO_TEAR: TearEdge = (() => {
   let ni = 0;
   while (x < 1) {
     const n = notches[ni];
-    const nx = x + 0.016 + 0.03 * rand();
+    const nx = x + (0.016 + 0.03 * rand()) * stepScale;
     if (n && nx > n.xl) {
       const xl = Math.max(n.xl, x + 0.004);
       push(xl, level(xl));
@@ -134,7 +153,18 @@ const HERO_TEAR: TearEdge = (() => {
     edge: pts.map(([px, py]) => `${px},${py}`).join(' '),
     echo: pts.map(([px, py]) => `${px},${fmt(py - (0.0015 + 0.0035 * rand()))}`).join(' '),
   };
-})();
+}
+
+// Two baked variants of the one tear, same seed, viewport-appropriate geometry
+// (both generated once at module load — still zero render-time randomness).
+// `md:` picks which is live: objectBoundingBox width fractions don't scale
+// visually, so the desktop rips that read at >=768px collapse into near-uniform
+// 2-5px spikes at 375px. The small-viewport variant compensates with fewer rips
+// (2 vs 4) at ~3x the width so a V-wall still spans >=8px at 375.
+const HERO_TEAR = makeTear(0x524f434b, { bands: 4, widthScale: 1, stepScale: 1 });
+const HERO_TEAR_SM = makeTear(0x524f434b, { bands: 2, widthScale: 3, stepScale: 2.5 });
+/** One shared clip for ALL hero layers (art, scrim, wrinkle) per breakpoint. */
+const HERO_CLIP = '[clip-path:url(#v8-hero-tear-sm)] md:[clip-path:url(#v8-hero-tear)]';
 
 export interface HeroProps {
   hero: Strings['hero'];
@@ -191,13 +221,16 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
           <clipPath id="v8-hero-tear" clipPathUnits="objectBoundingBox">
             <path d={HERO_TEAR.clip} />
           </clipPath>
+          <clipPath id="v8-hero-tear-sm" clipPathUnits="objectBoundingBox">
+            <path d={HERO_TEAR_SM.clip} />
+          </clipPath>
         </defs>
       </svg>
       {/* Background art: the duotone panel fills the block edge to edge, and the
           torn clip on this layer (not the header) rips only the art + scrim, so
           the page background shows through the tear beneath unclipped content. */}
       {art && (
-        <div className="absolute inset-0" style={{ clipPath: 'url(#v8-hero-tear)' }}>
+        <div className={`absolute inset-0 ${HERO_CLIP}`}>
           {art}
           {/* Theme-aware scrim between art and content: the lockup now anchors
               the top of the poster (bill-style), so the wash is top-heavy
@@ -318,8 +351,7 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
       {art && (
         <div
           aria-hidden="true"
-          className="v8-wrinkle pointer-events-none absolute inset-0 z-20"
-          style={{ clipPath: 'url(#v8-hero-tear)' }}
+          className={`v8-wrinkle pointer-events-none absolute inset-0 z-20 ${HERO_CLIP}`}
         />
       )}
       {/* Exposed paper fiber along the tear (task 15): a torn edge is never a
@@ -344,43 +376,56 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
              inset-0, which would park the strokes below the hero. */
           className="pointer-events-none absolute inset-0 z-30 h-full w-full overflow-visible"
         >
-          {/* Soft shadow: stacked widening/fading strokes rather than a blur
-              filter — CSS filter lengths on SVG children resolve in user units,
-              and one user unit here is the whole hero box, so even blur(1px)
-              diffuses the stroke into invisibility. Three translated strokes
-              approximate the falloff instead. */}
+          {/* The fiber (and its light-theme shadow) must follow whichever clip
+              path is live, so both tear variants render here and the same `md:`
+              split that swaps the clip swaps the visible group. `md:inline`
+              (SVG elements' initial display), not `md:block`. */}
           {(
             [
-              [0.004, 3, 'stroke-black/20'],
-              [0.006, 6, 'stroke-black/12'],
-              [0.009, 10, 'stroke-black/8'],
+              [HERO_TEAR_SM, 'md:hidden'],
+              [HERO_TEAR, 'hidden md:inline'],
             ] as const
-          ).map(([dy, width, cls]) => (
-            <polyline
-              key={dy}
-              points={HERO_TEAR.edge}
-              fill="none"
-              vectorEffect="non-scaling-stroke"
-              strokeWidth={width}
-              transform={`translate(0 ${dy})`}
-              className={`${cls} dark:hidden`}
-            />
+          ).map(([tear, visibility]) => (
+            <g key={visibility} className={visibility}>
+              {/* Soft shadow: stacked widening/fading strokes rather than a blur
+                  filter — CSS filter lengths on SVG children resolve in user
+                  units, and one user unit here is the whole hero box, so even
+                  blur(1px) diffuses the stroke into invisibility. Three
+                  translated strokes approximate the falloff instead. */}
+              {(
+                [
+                  [0.004, 3, 'stroke-black/20'],
+                  [0.006, 6, 'stroke-black/12'],
+                  [0.009, 10, 'stroke-black/8'],
+                ] as const
+              ).map(([dy, width, cls]) => (
+                <polyline
+                  key={dy}
+                  points={tear.edge}
+                  fill="none"
+                  vectorEffect="non-scaling-stroke"
+                  strokeWidth={width}
+                  transform={`translate(0 ${dy})`}
+                  className={`${cls} dark:hidden`}
+                />
+              ))}
+              <polyline
+                points={tear.edge}
+                fill="none"
+                vectorEffect="non-scaling-stroke"
+                strokeWidth={2}
+                className="stroke-white dark:stroke-[#EFE8D8]/90"
+              />
+              <polyline
+                points={tear.echo}
+                fill="none"
+                vectorEffect="non-scaling-stroke"
+                strokeWidth={1}
+                strokeDasharray="0.018 0.011 0.032 0.007 0.024 0.014"
+                className="stroke-white/70 dark:stroke-[#EFE8D8]/50"
+              />
+            </g>
           ))}
-          <polyline
-            points={HERO_TEAR.edge}
-            fill="none"
-            vectorEffect="non-scaling-stroke"
-            strokeWidth={2}
-            className="stroke-white dark:stroke-[#EFE8D8]/90"
-          />
-          <polyline
-            points={HERO_TEAR.echo}
-            fill="none"
-            vectorEffect="non-scaling-stroke"
-            strokeWidth={1}
-            strokeDasharray="0.018 0.011 0.032 0.007 0.024 0.014"
-            className="stroke-white/70 dark:stroke-[#EFE8D8]/50"
-          />
         </svg>
       )}
     </header>

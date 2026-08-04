@@ -735,6 +735,27 @@ Wrap the footer `PixelRocker` in `class="v8-headbang-hover"`. The 404 rocker kee
 
 ---
 
+### Task 12: About Me section (avatar relocates out of the hero)
+
+**Owner directives (2026-08-04):** "You don't have to push everything into the hero." / "You can add an about me section and use the avatar there."
+
+**Files:**
+- Create: `apps/rocks/src/components/about-section.tsx` (or `.astro`, matching however the hero panel was structured)
+- Modify: `apps/rocks/src/components/hero.tsx` / `hero-section.astro` (remove the avatar; keep the guitar-player panel)
+- Modify: both index pages (mount the section), `apps/rocks/src/i18n/{types,en-us,de-de}.ts`
+
+**Interfaces:**
+- Consumes: `AsteriskMark`, the torn-edge clip technique from the hero avatar (move/rename the avatar clipPath rather than duplicating it), `avatar.png` via `astro:assets` `<Image>`.
+- Produces: `Strings['about'] = { sectionTitle: string; body: string; avatarAlt: string }` — `hero.avatarAlt` MOVES here (removed from `hero`).
+
+- [ ] **Step 1: Strings** — add `about` section; en: `sectionTitle: 'About'`, `body: 'Sebastian Heitmann. Technology consultant, end-to-end builder: product, code, infrastructure, delivery. The business side lives at sebastian-heitmann.dev.'`, `avatarAlt: 'Portrait of Sebastian Heitmann'`; de: `sectionTitle: 'Über mich'`, `body: 'Sebastian Heitmann. Technologieberater, End-to-End-Entwickler: Produkt, Code, Infrastruktur, Delivery. Die Business-Seite lebt auf sebastian-heitmann.dev.'`, `avatarAlt: 'Porträt von Sebastian Heitmann'`. Remove `hero.avatarAlt` from types + both locales. Render the `sebastian-heitmann.dev` mention in the body as a plain-text sentence with an accompanying mono link chip to `https://www.sebastian-heitmann.dev` (label is the domain itself, present in the string; do not add a new label key).
+- [ ] **Step 2: Section component** — last section before the footer on both index pages, same section shell as the others (`mx-auto max-w-[1440px] px-6 py-12 md:px-20`, asterisk kicker `<h2>` like the setlist/teaser sections). Layout: torn-edge avatar (~140-180px, ±2-3° rotation, the relocated clip shape) on the left, body text beside it (`max-w-[48ch]`, muted foreground), the `.dev` link chip below the text (mono, bordered, uppercase, same chip style as existing buttons). Mobile: avatar above text.
+- [ ] **Step 3: Hero cleanup** — remove the avatar `<Image>`, its clipPath (if moving), and its wrapper from the hero; the guitar-player panel and its clipPath stay untouched. Both index pages parallel.
+- [ ] **Step 4: Visual verification** — 1440/768/375 × both themes × both locales: hero no longer shows the avatar; About section sits above the footer with the torn avatar and readable text; no layout collision with the teaser grid. `bun run build` clean, dist has no raw PNGs.
+- [ ] **Step 5: Commit** — `feat(rocks): add about section, move the avatar out of the hero`
+
+---
+
 ### Task 8: Final verification and PR update
 
 - [ ] **Step 1:** `cd apps/rocks && rm -rf dist && bun run build` — clean, 5 pages.

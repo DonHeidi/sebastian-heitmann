@@ -41,21 +41,18 @@ const caseHref = (e: (typeof entries)[number]) =>
       <SectionHeader title={t.cases.sectionTitle} />
       <div class="mt-8 grid gap-6 md:grid-cols-2">
         {caseStudies.map((e, i) => (
-          <CaseCard
-            data={e.data}
-            href={caseHref(e)}
-            strings={t.cases}
-            index={i}
-            coverPanel={e.data.cover ? (
+          <CaseCard data={e.data} href={caseHref(e)} strings={t.cases} index={i}>
+            {e.data.cover && (
               <DuotonePanel
+                slot="coverPanel"
                 src={e.data.cover}
                 alt=""
                 widths={[480, 768]}
                 sizes="(max-width: 768px) 100vw, 50vw"
                 class="aspect-[16/9]"
               />
-            ) : undefined}
-          />
+            )}
+          </CaseCard>
         ))}
       </div>
     </section>
@@ -64,21 +61,18 @@ const caseHref = (e: (typeof entries)[number]) =>
         <SectionHeader title={t.projects.sectionTitle} />
         <div class="mt-8 grid gap-6 md:grid-cols-3">
           {projects.map((e, i) => (
-            <CaseCard
-              data={e.data}
-              href={caseHref(e)}
-              strings={t.cases}
-              index={i}
-              coverPanel={e.data.cover ? (
+            <CaseCard data={e.data} href={caseHref(e)} strings={t.cases} index={i}>
+              {e.data.cover && (
                 <DuotonePanel
+                  slot="coverPanel"
                   src={e.data.cover}
                   alt=""
                   widths={[480, 768]}
                   sizes="(max-width: 768px) 100vw, 50vw"
                   class="aspect-[16/9]"
                 />
-              ) : undefined}
-            />
+              )}
+            </CaseCard>
           ))}
         </div>
       </section>

@@ -18,8 +18,10 @@ export interface CaseCardProps {
   strings: Strings['cases'];
   /** 0-based position within its section; rendered as `01 /`. */
   index: number;
-  /** Rendered `<DuotonePanel>` from the calling `.astro` page (`.astro` components
-   * can't be rendered inside `.tsx`); shown full-bleed above the card content. */
+  /** Slotted `<DuotonePanel>` (slot="coverPanel") from the calling `.astro` page
+   * (`.astro` components can't be rendered inside `.tsx`, and only a named slot
+   * — not a plain prop — crosses that boundary); shown full-bleed above the
+   * card content. */
   coverPanel?: ReactNode;
 }
 

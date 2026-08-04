@@ -335,3 +335,26 @@
     }
   }
 }
+
+@layer components {
+  /* v8-wildcard duotone: accent-ink poster treatment. The wrapper paints the
+     accent; the grayscale image multiplies over it, mapping highlights to
+     accent and shadows to black in both themes. Hover reveals full color:
+     a color transition, deliberately outside the reduced-motion gate. */
+  .v8-duotone {
+    background-color: var(--v8-accent);
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .v8-duotone > img {
+    display: block;
+    mix-blend-mode: multiply;
+    filter: grayscale(1) contrast(1.06) brightness(1.04);
+    transition: filter 0.35s ease, opacity 0.35s ease;
+  }
+  .v8-duotone:hover > img,
+  .v8-duotone:focus-within > img {
+    mix-blend-mode: normal;
+    filter: none;
+  }
+}

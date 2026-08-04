@@ -45,7 +45,7 @@ export function Masthead({ nameFirst, nameLast, tagline }: MastheadProps) {
       </h1>
       <p className="reveal mt-5 flex items-center gap-4 font-mono text-[clamp(0.7rem,1.4vw,0.95rem)] tracking-[0.32em] text-foreground uppercase">
         <span className="h-[2px] flex-1 bg-primary" aria-hidden="true" />
-        <span>{tagline}</span>
+        <span className="[text-shadow:1.5px_1.5px_0_var(--v8-accent)]">{tagline}</span>
         <span className="h-[2px] flex-1 bg-primary" aria-hidden="true" />
       </p>
     </div>

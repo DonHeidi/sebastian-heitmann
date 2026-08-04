@@ -82,10 +82,28 @@ export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
               each color stop via `var(--v8-bg)`, so both bands adapt to theme
               automatically: the mostly-black artwork under a weak cream wash
               reads as murky gray and sinks the accent kicker below AA, so the
-              stops lean strong rather than needing separate `dark:` overrides. */}
+              stops lean strong rather than needing separate `dark:` overrides.
+
+              `min-[1024px]:max-[1363px]:` widens/strengthens the band for one
+              specific zone: the masthead (`Masthead`'s fluid `clamp()` type)
+              wraps to two lines anywhere from ~320px up to 1362px inclusive
+              (measured directly via `getBoundingClientRect` on the name
+              spans — 1362px wraps, 1363px doesn't), but the `lg`/`max-lg`
+              crop split in `hero-section.astro` switches to the
+              single-line-tuned desktop crop right at 1024px. Below 1024px
+              the mobile crop already zooms/pans the helmet out from under
+              the (two-line) text band, so it's unaffected. From 1363px the
+              masthead is single-line again and the tagline sits high enough
+              that the base band already covers it. Only 1024–1362px has both
+              problems at once — two-line masthead (tagline pushed down) *and*
+              the desktop crop (visor un-panned, sitting right under the
+              tagline) — so that's the only range that needs extra reach.
+              `max-[1363px]` (not `max-[1362px]`) because Tailwind's `max-*`
+              is an exclusive `width <` comparison — `max-[1363px]` is what
+              actually includes the 1362px boundary. */}
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-[46%] bg-gradient-to-b from-[var(--v8-bg)]/92 via-[var(--v8-bg)]/55 to-transparent"
+            className="absolute inset-x-0 top-0 h-[46%] min-[1024px]:max-[1363px]:h-[74%] bg-gradient-to-b from-[var(--v8-bg)]/92 via-[var(--v8-bg)]/55 min-[1024px]:max-[1363px]:via-[var(--v8-bg)]/90 to-transparent"
           />
           <div
             aria-hidden="true"

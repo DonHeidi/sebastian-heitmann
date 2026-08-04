@@ -1,9 +1,11 @@
 ---
-// Wires the avatar through astro:assets' <Image> (never ImageMetadata.src — repo
-// gotcha) and slots it into the shared React AboutSection. Both index pages
-// render this once, so the image wiring lives in exactly one place.
-import { Image } from 'astro:assets';
+// Wires the avatar through the shared DuotonePanel (which uses astro:assets'
+// <Image> internally — never ImageMetadata.src, repo gotcha) and slots it into
+// the shared React AboutSection. Both index pages render this once, so the
+// image wiring lives in exactly one place. The duotone wrapper sits inside the
+// section's torn clip (see about-section.tsx's TornPrint).
 import portrait from '../assets/avatar.png';
+import DuotonePanel from './duotone-panel.astro';
 import { AboutSection } from './about-section';
 import type { Strings } from '../i18n/types';
 
@@ -16,15 +18,12 @@ const { about } = Astro.props;
 
 <AboutSection about={about}>
   {/* Below the fold: lazy, no fetchpriority boost (contrast with the hero art). */}
-  <Image
+  <DuotonePanel
     slot="avatar"
     src={portrait}
     alt={about.avatarAlt}
-    width={320}
-    height={320}
     widths={[160, 320]}
     sizes="160px"
-    loading="lazy"
-    class="block h-auto w-full"
+    class="aspect-square h-full w-full"
   />
 </AboutSection>

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Strings } from '../i18n/types';
 
 export interface CaseCardData {
@@ -17,12 +18,16 @@ export interface CaseCardProps {
   strings: Strings['cases'];
   /** 0-based position within its section; rendered as `01 /`. */
   index: number;
+  /** Rendered `<DuotonePanel>` from the calling `.astro` page (`.astro` components
+   * can't be rendered inside `.tsx`); shown full-bleed above the card content. */
+  coverPanel?: ReactNode;
 }
 
-export function CaseCard({ data, href, strings, index }: CaseCardProps) {
+export function CaseCard({ data, href, strings, index, coverPanel }: CaseCardProps) {
   const external = data.kind === 'project' ? data.links[0] : undefined;
   return (
     <article className="reveal flex h-full flex-col border border-border bg-surface p-6 transition-colors hover:border-muted-foreground md:p-8">
+      {coverPanel && <div className="-mx-6 -mt-6 mb-5 md:-mx-8 md:-mt-8">{coverPanel}</div>}
       <div className="flex items-start justify-between">
         <span className="font-mono text-[11px] tracking-[0.1em] text-muted-foreground">
           {String(index + 1).padStart(2, '0')} /
@@ -32,7 +37,7 @@ export function CaseCard({ data, href, strings, index }: CaseCardProps) {
           {data.startDate.getUTCFullYear()}
         </span>
       </div>
-      <h3 className="mt-4 font-[family-name:var(--v8-font-display)] text-3xl text-foreground">{data.title}</h3>
+      <h3 className="mt-4 font-[family-name:var(--v8-font-poster)] text-2xl tracking-[0.02em] text-foreground uppercase">{data.title}</h3>
       <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{data.summary}</p>
       <dl className="mt-5 space-y-1">
         <div className="flex gap-2">

@@ -1,13 +1,12 @@
 ---
 import { getCollection, render } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { Image } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
 import { Navigation } from '../../../components/navigation';
 import { Footer } from '../../../components/footer';
 import { ThemeToggle } from '../../../components/theme-toggle';
-import { DetailMoment } from '../../../components/backdrop/detail-moment';
+import DuotonePanel from '../../../components/duotone-panel.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('cases');
@@ -41,11 +40,10 @@ const period = `${formatDate(entry.data.startDate)} — ${entry.data.endDate ? f
     <ThemeToggle client:load labels={t.themeToggle} />
   </Navigation>
   <main class="relative mx-auto max-w-[840px] px-6 py-12 md:py-20">
-    <DetailMoment />
     <a href={getRelativeLocaleUrl(locale, '/')} class="font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase no-underline transition-colors hover:text-foreground">
       ← {t.cases.backToOverview}
     </a>
-    <h1 class="mt-6 font-[family-name:var(--v8-font-display)] text-4xl leading-[1.1] text-foreground md:text-5xl">{entry.data.title}</h1>
+    <h1 class="mt-6 font-[family-name:var(--v8-font-poster)] text-4xl tracking-[0.02em] text-foreground uppercase md:text-5xl">{entry.data.title}</h1>
     <p class="mt-4 text-base leading-relaxed text-muted-foreground">{entry.data.summary}</p>
     <span class="mt-8 inline-block rotate-2 border border-border px-2 py-1 font-mono text-[9px] tracking-[0.14em] text-muted-foreground uppercase">
       {t.cases.stampCaseStudy} {entry.data.startDate.getUTCFullYear()}
@@ -65,12 +63,12 @@ const period = `${formatDate(entry.data.startDate)} — ${entry.data.endDate ? f
       </div>
     </dl>
     {entry.data.cover && (
-      <Image
+      <DuotonePanel
         src={entry.data.cover}
-        alt={entry.data.title}
-        class="mt-10 w-full border border-border"
+        alt=""
         widths={[768, 1440]}
         sizes="(max-width: 840px) 100vw, 840px"
+        class="mt-10 aspect-[16/9] w-full border border-border"
       />
     )}
     <article class="case-prose mt-10">

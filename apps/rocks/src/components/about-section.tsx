@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Strings } from '../i18n/types';
-import { AsteriskMark } from './asterisk-mark';
+import { SectionHeader } from './section-header';
 import { TornPrint } from './hero';
 
 // Torn-poster clip outline in objectBoundingBox units (0..1) — the avatar's clip
@@ -18,7 +18,7 @@ const DEV_LABEL = DEV.replace(/^https:\/\/www\./, '');
 
 export interface AboutSectionProps {
   about: Strings['about'];
-  /** Slotted `<Image>` from astro:assets (slot="avatar"): the portrait. */
+  /** Slotted `<DuotonePanel>` (slot="avatar"): the portrait. */
   avatar?: ReactNode;
 }
 
@@ -32,10 +32,7 @@ export function AboutSection({ about, avatar }: AboutSectionProps) {
           </clipPath>
         </defs>
       </svg>
-      <h2 className="reveal flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
-        <AsteriskMark size={12} tone="accent" className="v8-spin-hover" />
-        {about.sectionTitle}
-      </h2>
+      <SectionHeader title={about.sectionTitle} />
       <div className="reveal mt-8 flex flex-col items-start gap-8 md:flex-row md:items-center">
         {avatar && (
           <TornPrint clipId="v8-torn-avatar" offset={4} className="w-36 shrink-0 rotate-2 md:w-40">

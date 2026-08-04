@@ -40,3 +40,11 @@
     font-display: swap;
     src: url('/fonts/IBMPlexMono-Bold.woff2') format('woff2');
 }
+/* Anton (SIL OFL) — the v8-wildcard poster face. Display lines only. */
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Anton-Regular.woff2') format('woff2');
+}

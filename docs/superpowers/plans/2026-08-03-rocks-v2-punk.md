@@ -702,10 +702,36 @@ const t = getStrings(locale);
 **Interfaces:**
 - Consumes: `<Image>` from `astro:assets` ONLY (repo gotcha: never `ImageMetadata.src`).
 
-- [ ] **Step 1:** Verify the file exists (`ls apps/rocks/src/assets/`); if absent, this task stays blocked — do not substitute a placeholder image.
+- [ ] **Step 1:** The file exists: `apps/rocks/src/assets/guitar-player.png` (1024×1536 PNG). AMENDED per owner feedback (2026-08-04): the image must be **masked to look roughed up** — not a clean rectangle. Build an inline SVG `clipPath` (in the hero markup, `clipPathUnits="objectBoundingBox"`) whose outline is a jagged, torn-paper/ripped-poster edge: 10-16 irregular vertices per side, asymmetric, with one or two deeper tears; optionally 2-3 small irregular "chipped" notches. Apply via `clip-path: url(#...)` on the Image wrapper. Keep a faint border effect if it still reads (a rough-edged shadow or an offset accent echo of the same clip shape behind it is welcome; iterate visually). The torn edge must survive both themes and all widths.
 - [ ] **Step 2:** Hero layout becomes two-zone at `md:`: text left, artwork right — the image as a bordered panel (`border border-border`), roughly 40% width at `md+`, full-width below the text on mobile. The image is the likely LCP, so pass `loading="eager"` and `fetchpriority="high"`: `<Image src={art} loading="eager" fetchpriority="high" widths={[480, 768, 1080]} sizes="(max-width: 768px) 100vw, 40vw" />`, with `alt` from a new `hero.artAlt` string added to `Strings` (both locales; short factual description, e.g. 'Helmeted figure playing a keyboard like a guitar, engulfed in flames' / German equivalent). In light theme it stays a dark framed panel by design.
 - [ ] **Step 3:** Demote the backdrop asterisk: in `hero-stage-moment.tsx`, drop the misregistered giant to a single ~220px mark positioned so it doesn't fight the image (visual iteration decides: overlapping the panel's top-left corner is the starting idea).
 - [ ] **Step 4:** Visual iteration (1440/768/375 × themes), build, commit — `git commit -am "feat(rocks): flaming rocker hero artwork"`
+
+---
+
+### Task 11: Owner feedback fixes (LOUD legibility, headbang hover, rougher asterisk)
+
+**Files:**
+- Modify: `apps/rocks/src/components/graffiti-word.tsx` (the `loud` word's D)
+- Modify: `apps/rocks/src/components/footer.tsx` + `apps/rocks/src/styles/global.css` (hover behavior)
+- Modify: `apps/rocks/src/components/asterisk-mark.tsx` (+ `apps/rocks/public/favicon.svg` if it still reads at 16px)
+
+**Owner feedback verbatim (2026-08-04):** "While the SVG for LAUT works, the one for LOUD doesn't. The O und D are not distinguishable enough leading do reading louo." / "The sprite for the Rock'n'Roller was meant to be animated differently. I meant like heaving him headbang, not rotate." / "The asterisk looks to cleanr [too clean]."
+
+- [ ] **Step 1: Fix the LOUD `D`** — redraw the D in the `loud` wordmark so it cannot be read as an O: hard flat vertical left stem (painted-straight, minor wobble only), squared top-left and bottom-left corners, the bowl flattened on the left where it meets the stem, counter (inner hole) D-shaped (flat left edge) not round. Keep the paint register (wobble, speckle) of the other letters. Verify with an isolated 500% render AND in the hero at 375/1440: the acceptance test is that the word unambiguously reads LOUD.
+- [ ] **Step 2: Footer cameo headbangs on hover (no rotation)** — remove `v8-spin-hover` from the rocker's wrapper in `footer.tsx`. Add to the v2 utilities block in `global.css` a hover-scoped variant of the existing frame-swap (same keyframes, applied under `:hover` and motion-safe):
+
+```css
+  .v8-headbang-hover .v8-frame-2 { visibility: hidden; }
+  @media (prefers-reduced-motion: no-preference) {
+    .v8-headbang-hover:hover .v8-frame-1 { animation: v8-frame-a 0.8s steps(1) infinite; }
+    .v8-headbang-hover:hover .v8-frame-2 { animation: v8-frame-b 0.8s steps(1) infinite; }
+  }
+```
+
+Wrap the footer `PixelRocker` in `class="v8-headbang-hover"`. The 404 rocker keeps its always-on `animated` behavior unchanged.
+- [ ] **Step 3: Roughen the AsteriskMark** — the mark currently renders as clean round-capped strokes; give it the hand-set print register of the wordmarks: replace each stroked `<line>` spoke with a filled irregular quad/path (wobbled edges, slightly varying widths along the spoke, blunt uneven tips), add 4-8 tiny flecks around the mark (like GraffitiWord speckle, same fill, low opacity), keep the misregister ghost offset working (the ghost uses the same rough spokes). MUST stay legible at 12px (section kickers) — verify a kicker screenshot. Then decide the favicon: apply the same roughness only if a 16px render still reads as an asterisk; otherwise leave the favicon geometry clean and note it.
+- [ ] **Step 4:** Visual verification (hero + kicker + footer hover + 404 both themes), `bun run build` clean, commit as `fix(rocks): rougher asterisk, legible LOUD, headbang hover cameo`.
 
 ---
 

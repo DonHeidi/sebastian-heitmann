@@ -47,7 +47,7 @@ Decisions from conversation: cases stay as cards (explicitly NO tour-date table)
 
 **Case detail (both locales).** Anton uppercase title; spec-block `<dl>` and stamp stay; cover art (when present) renders as a full-width duotone panel with hover reveal above the prose; `.case-prose` asterisk bullets stay; no backdrop moment.
 
-**404.** `NO ENCORE.` / `KEINE ZUGABE.` in Anton (sr-only h1 pattern stays), rough asterisk backdrop stays, ticket-stub button and headbanging rocker stay.
+**404.** `NO ENCORE.` / `KEINE ZUGABE.` in Anton as a real, visible h1 (the sr-only pattern was only needed while the heading was artwork), rough asterisk backdrop stays, ticket-stub button and headbanging rocker stay.
 
 ## Copy
 

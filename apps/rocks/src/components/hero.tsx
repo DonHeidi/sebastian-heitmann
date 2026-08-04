@@ -60,24 +60,25 @@ export function Hero({ hero, nameFirst, nameLast, art }: HeroProps) {
           </clipPath>
         </defs>
       </svg>
-      <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
-      <div className="mt-5">
-        <Masthead nameFirst={nameFirst} nameLast={nameLast} tagline={hero.tagline} />
-      </div>
-      <div className="mt-10 grid items-center gap-12 md:mt-14 md:grid-cols-[minmax(0,1fr)_min(38%,420px)] md:gap-14">
-        <p className="reveal max-w-[58ch] text-base leading-relaxed text-muted-foreground md:text-lg">
-          {hero.intro.before}
-          <s className="opacity-60">{hero.intro.struck}</s>{' '}
-          <strong className="font-medium text-foreground">{hero.intro.replacement}</strong>
-          {hero.intro.after}
-        </p>
+      <div className="flex flex-col items-center text-center">
+        <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
+        <div className="mt-5">
+          <Masthead nameFirst={nameFirst} nameLast={nameLast} tagline={hero.tagline} />
+        </div>
+        {/* Artwork is the poster's center stage; capped so the 1024px source stays sharp at 2x. */}
         {art && (
-          <figure className="reveal m-0 md:-rotate-1">
+          <figure className="reveal mx-auto mt-10 w-full max-w-[680px] md:mt-14 md:-rotate-1">
             <TornPrint clipId="v8-torn-panel" offset={8}>
               {art}
             </TornPrint>
           </figure>
         )}
+        <p className="reveal mx-auto mt-10 max-w-[58ch] text-base leading-relaxed text-muted-foreground md:mt-14 md:text-lg">
+          {hero.intro.before}
+          <s className="opacity-60">{hero.intro.struck}</s>{' '}
+          <strong className="font-medium text-foreground">{hero.intro.replacement}</strong>
+          {hero.intro.after}
+        </p>
       </div>
     </header>
   );

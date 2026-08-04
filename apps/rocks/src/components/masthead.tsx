@@ -10,6 +10,10 @@ export interface MastheadProps {
 /**
  * Gig-poster masthead: NAME ✳ NAME in Anton with the asterisk mark as the
  * divider (the AC/DC-lightning-bolt role), tagline bar with rules beneath.
+ * Centered lockup: the poster composition stacks kicker / masthead / tagline
+ * / artwork / intro in one centered column, so the name lockup and the
+ * tagline bar both center as a unit (and wrap to centered lines on mobile)
+ * rather than sitting left-aligned.
  *
  * The divider must scale with the type, so the mark is em-sized: `!`-forced
  * em width/height on the mark's root span (its `size` prop sets inline px
@@ -22,8 +26,8 @@ export interface MastheadProps {
  */
 export function Masthead({ nameFirst, nameLast, tagline }: MastheadProps) {
   return (
-    <div>
-      <h1 className="reveal flex flex-wrap items-center gap-x-[0.14em] gap-y-1 font-[family-name:var(--v8-font-poster)] text-[clamp(3.25rem,13vw,8.5rem)] leading-[0.95] tracking-[0.01em] text-foreground uppercase">
+    <div className="text-center">
+      <h1 className="reveal flex flex-wrap items-center justify-center gap-x-[0.14em] gap-y-1 font-[family-name:var(--v8-font-poster)] text-[clamp(3.25rem,13vw,8.5rem)] leading-[0.95] tracking-[0.01em] text-foreground uppercase">
         <span>{nameFirst}</span>
         {' '}
         <span

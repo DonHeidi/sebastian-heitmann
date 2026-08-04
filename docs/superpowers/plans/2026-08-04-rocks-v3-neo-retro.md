@@ -299,6 +299,27 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 
 ---
 
+### Task 9: Full-bleed poster background hero (owner feedback 2026-08-04)
+
+**Owner directive:** "Can you make it so, that it spans the whole 'poster' as the background art?" — the guitar-player image becomes the background of the entire hero poster block, content layered on top.
+
+**Files:**
+- Modify: `apps/rocks/src/components/hero.tsx` / `hero-section.astro` (and `duotone-panel.astro` only if it needs a fill/background variant prop — keep any change additive)
+
+**Composition:**
+- Hero block: `relative`, min-height around `92svh` (poster presence; iterate), full-bleed within the page (edge to edge of the viewport is acceptable for this block even though inner content keeps the max-width container).
+- The image: absolutely positioned `inset-0`, `object-cover` (portrait source: keep the figure's head/guitar in frame; iterate `object-position`), inside the `.v8-duotone` wrapper so the whole background is duotone ink; widths extended for large screens (add 1440, 1920 to the `widths` list; keep eager + fetchpriority high). Upscaling softness beyond the 1024px source is accepted by the owner; duotone hides most of it.
+- A scrim over the image, under the content: theme-aware gradient (e.g. `bg-gradient-to-t from-[var(--v8-bg)] via-[color-mix(in_srgb,var(--v8-bg)_55%,transparent)] to-transparent` plus a subtle full-area tint if needed) so kicker/masthead/tagline/intro stay AA-contrast legible in BOTH themes, in BOTH duotone and hover-revealed states. Iterate until legible; screenshots judge.
+- Hover reveal: keep (it is the signature move) but verify legibility in the revealed state too; if revealed-state legibility cannot be held with a reasonable scrim, gate the reveal to the image area below the text block and say so in the report.
+- Torn language: the side tears disappear at full bleed; keep a torn BOTTOM edge on the hero block (reuse the torn-clip technique as a bottom-edge clip or an SVG tear strip between hero and the cases section) so the ripped-poster gesture survives. The accent echo may be dropped if it fights the full-bleed look (judgment call, note it).
+- Content stack on top (unchanged order, centered): kicker, masthead, tagline bar, intro. The intro may move INTO the poster block (over the scrim) or sit just below it; pick what reads better and note the choice.
+
+- [ ] **Step 1:** Rework the hero to the layered full-bleed composition.
+- [ ] **Step 2:** Visual iteration at 1440/1024/768/375 × both themes × both locales × duotone-and-revealed states: legibility everywhere, sensible crop focus at every ratio, torn bottom edge reads as a rip, no layout shift on hover.
+- [ ] **Step 3:** `bun run build` clean; commit `feat(rocks): full-bleed poster background hero`.
+
+---
+
 ### Task 7: Final verification, push, PR update
 
 - [ ] **Step 1:** `cd apps/rocks && rm -rf dist && bun run build` — clean; no raw PNGs in dist; `dist/fonts/Anton-Regular.woff2` present.

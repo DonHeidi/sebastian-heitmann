@@ -25,6 +25,7 @@ export function Masthead({ nameFirst, nameLast, tagline }: MastheadProps) {
     <div>
       <h1 className="reveal flex flex-wrap items-center gap-x-[0.14em] gap-y-1 font-[family-name:var(--v8-font-poster)] text-[clamp(3.25rem,13vw,8.5rem)] leading-[0.95] tracking-[0.01em] text-foreground uppercase">
         <span>{nameFirst}</span>
+        {' '}
         <span
           className="inline-flex h-[0.72em] w-[0.62em] shrink-0 items-center justify-center"
           aria-hidden="true"

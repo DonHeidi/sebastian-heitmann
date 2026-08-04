@@ -162,8 +162,10 @@
      can't reach into rendered markdown, so this is the one sanctioned place
      for element selectors. */
   .case-prose h2 {
-    font-family: var(--v8-font-display);
-    font-size: 1.75rem;
+    font-family: var(--v8-font-poster);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 1.375rem;
     color: var(--v8-text);
     margin-top: 2.5rem;
   }

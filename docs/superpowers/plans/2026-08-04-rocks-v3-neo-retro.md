@@ -425,3 +425,13 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **Merge the light artwork into the sheet:** render the light guitar player with `mix-blend-mode: multiply` (its near-white ground disappears into the cream paper and the wrinkle texture reads THROUGH the art — one continuous sheet, no seam) instead of raw-on-panel. Verify the flames/orange survive multiply acceptably; tune contrast/brightness filter if the figure washes out. Hover behavior in light theme stays none (already so).
 - [ ] **Align mobile composition with desktop:** per-theme crop/scale so the light image at small widths composes like the desktop poster (figure placed proportionally, no dead band between tagline and art, intro/billing not colliding); the existing `scale(1.4)` mobile trick was tuned on the dark art — retune or branch per theme as needed. Both themes at 375/768 must read as the SAME poster as 1440, just narrower.
 - [ ] Visual iteration at 1440/1024/768/375 × BOTH themes × locales (dark must not regress); `bun run build` clean; commit `fix(rocks): unify the light-theme poster and scope the tagline shadow`.
+
+---
+
+### Task 18: Mobile hero placement under the nav (owner feedback 2026-08-05)
+
+**Owner directive:** "On mobile, the placement of the hero is off. It doesn't sit under the nav like the desktop version."
+
+- [ ] Reproduce FIRST: screenshot the nav/hero seam at 375 and 768 (both themes) and diagnose the actual offset (suspects: the hero's `calc(100svh - 6rem)` height paired with a mobile nav that wraps taller than 6rem; the masthead block's top padding tuned for desktop nav clearance; any fixed/sticky nav behavior differing by width).
+- [ ] Fix so the poster starts immediately below the nav at every width, matching the desktop relationship (options: measure-free CSS such as the hero filling the remaining viewport via flex column on a `min-h-svh` page wrapper instead of hardcoded rem subtraction; or width-scoped clearance values). No magic numbers that break when the nav wraps differently in de-de (its longer CTA wraps the nav to three rows at 375 — test that case explicitly).
+- [ ] Verify 375/768/1024/1440 × themes × locales: no gap, no overlap, poster fold-fill preserved at desktop, tear/billing intact; `bun run build` clean; commit `fix(rocks): seat the hero under the nav at every width`.

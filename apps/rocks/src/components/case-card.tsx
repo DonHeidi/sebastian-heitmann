@@ -108,10 +108,10 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
         </h3>
       </div>
       {/* Jewel-case chrome, above art/scrims/copy (plastic sits in FRONT of the
-          printed booklet): spine + hinge teeth, then the lid's gloss and bevel
-          across the whole face including the spine. All layers are hairlines
-          or ≤11%-alpha washes, so the copy's AA contrast over the scrims
-          survives untouched. */}
+          printed booklet): spine + hinge teeth, then the grill haptic ribs at
+          the hinge edge, then the lid's gloss and bevel across the whole face
+          including the spine. All layers are hairlines or ≤11%-alpha washes,
+          so the copy's AA contrast over the scrims survives untouched. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="v8-jewel-spine absolute inset-y-0 left-0 w-[8%]">
           {/* Hinge teeth: small notches inside the spine profile, flush with
@@ -119,8 +119,8 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
               hairline border is the case seam, so any gap read as stray
               space) and flush with its width (no overhang past the seam),
               so the case reads as a closed rectangle. */}
-          <div className="v8-jewel-tooth absolute inset-x-0 top-0 h-[5%]" />
-          <div className="v8-jewel-tooth absolute inset-x-0 bottom-0 h-[5%]" />
+          <div className="v8-jewel-tooth absolute inset-x-0 top-0 h-[3.5%]" />
+          <div className="v8-jewel-tooth absolute inset-x-0 bottom-0 h-[3.5%]" />
           {/* Spine title, reading top-to-bottom like a real CD spine. NOTE:
               `top/bottom` must be the PHYSICAL properties — logical `inset-y`
               (inset-block) would map to left/right under vertical-rl. */}
@@ -128,6 +128,12 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
             {data.title}
           </span>
         </div>
+        {/* Grill haptic: the ribbed grip texture along the lid's hinge edge,
+            immediately right of the spine seam — sits UNDER the gloss (so the
+            diagonal streaks glaze over it like the rest of the lid) but OVER
+            the spine/art (so the ridges read as molded plastic, not a stripe
+            painted on the artwork). */}
+        <div className="v8-jewel-grill absolute inset-y-0 left-[8%] w-[4%]" />
         <div className="v8-jewel-gloss absolute inset-0" />
         <div className="v8-jewel-bevel absolute inset-0" />
       </div>

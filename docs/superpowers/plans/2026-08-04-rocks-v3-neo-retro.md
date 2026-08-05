@@ -459,3 +459,13 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **Swap the hero edge from clip-path to CSS mask:** restructure so the maskable stack (art + scrims + wrinkle) sits in ONE wrapper masked via `mask-image: linear-gradient(#fff,#fff), url(tear-mask.png)` (gradient sized to fill all but the strip height, strip anchored bottom, `mask-mode: luminance`, `mask-size: 100% <strip>`, no-repeat, appropriate `mask-composite`/positioning — iterate); content (masthead, intro, billing) stays unmasked above. The generated `HERO_TEAR`/`HERO_TEAR_SM` clip paths and the drawn fiber SVG RETIRE (the photo brings its own fiber). Keep: scrim behavior, wrinkle continuity, per-theme art, no layout shift, mobile continuity from Task 19 (mask scales with width; verify fiber reads at 375 and 1920).
 - [ ] **Fiber visibility per theme:** on dark the fiber's white detail reads as exposed paper (good); on light verify the edge against the cream page (a subtle shadow under the mask edge may be needed — additive only).
 - [ ] Visual iteration at 375/768/1024/1440 × themes × locales incl. tear close-ups; `bun run build` clean; commits: `feat(rocks): generate photographic tear mask` (script + asset) and `feat(rocks): photographic tear edge via css mask` (hero swap).
+
+---
+
+### Task 21: Whitened paper fiber on the tear (owner feedback 2026-08-05)
+
+**Owner directive:** "make the paper tear a bit more paper like by whitening the tear" — the torn edge should show visible white paper fiber, like exposed pulp on a real rip.
+
+- [ ] Extend `generate-tear-mask.mjs` to ALSO emit `apps/rocks/src/assets/tear-fiber.png`: the boundary band's fiber detail rendered as white-with-alpha (transparent elsewhere), same 1920 width and boundary geometry as the mask so the two derivatives align by construction.
+- [ ] Overlay it at the hero's bottom edge (aria-hidden, pointer-events-none, above the wrinkle, below content), scaled identically to the mask strip (`100% <strip-height>`, bottom-anchored) so the white fiber hugs the cut. Tune opacity per theme (dark: strong — this is where it pops; light: subtler, the paper below is already light; a slight warm tint toward the paper tone is allowed if pure white looks clinical).
+- [ ] Verify alignment at 375/768/1440 both themes (fiber must sit ON the edge at every width, no floating white line offset from the cut); hover states unchanged; `bun run build` clean; commit `feat(rocks): whitened paper fiber on the tear edge`.

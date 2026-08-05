@@ -259,9 +259,9 @@
   }
 
   /* CD jewel-case chrome for the case tiles (task 22). Front-on view: a flat
-     plastic spine bar on the left with the front lid's two hinge teeth near
-     its top and bottom, a directional gloss (one strong diagonal streak, one
-     faint) across the lid, and a hairline bevel catching light top/left.
+     plastic spine bar on the left, a directional gloss (one strong diagonal
+     streak, one faint) across the lid, and a hairline bevel catching light
+     top/left.
      Everything is translucent black/white so the SAME chrome reads over
      duotone art, revealed full-color art, the generated sleeve, and both
      themes — the plastic tints whatever is behind it. Deliberately restrained:
@@ -299,25 +299,6 @@
     right: -1px;
     width: 1px;
     background: rgba(255, 255, 255, 0.22);
-  }
-  .v8-jewel-tooth {
-    /* Hinge tooth: a notch cut INTO the spine profile near its end — a
-       slightly lighter plastic segment between two dark cut lines. Strictly
-       inside the spine bar: the fill is subtle, and the tooth repeats the
-       spine's own outer-left highlight and right-seam shadow so the case
-       silhouette lines run through it unbroken — nothing reads as a tab
-       escaping the closed rectangle. */
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.11),
-      rgba(255, 255, 255, 0.04)
-    );
-    box-shadow:
-      inset 0 1px 0 rgba(0, 0, 0, 0.7),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.7),
-      inset 0 2px 0 rgba(255, 255, 255, 0.1),
-      inset 1px 0 0 rgba(255, 255, 255, 0.26),
-      inset -1px 0 0 rgba(0, 0, 0, 0.6);
   }
   .v8-jewel-gloss {
     /* Directional gloss on the lid: soft top-left sheen, one strong diagonal

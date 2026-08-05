@@ -34,7 +34,7 @@ export interface CaseCardProps {
  * CD-jewel-case tile: a real jewel case's front, front-on (142mm × 125mm,
  * spine included in the width — landscape, not square), with the cover art
  * (or the generated sleeve) as the booklet behind the plastic. The `.v8-jewel-*`
- * chrome (global.css) draws the spine + hinge teeth on the left and the lid's
+ * chrome (global.css) draws the spine on the left and the lid's
  * gloss/bevel over everything — it is aria-hidden, pointer-transparent decor,
  * so the printed copy (setlist number top-left, rotated stamp top-right,
  * Anton title over a bottom scrim) and the stretched anchor keep working
@@ -108,17 +108,12 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
         </h3>
       </div>
       {/* Jewel-case chrome, above art/scrims/copy (plastic sits in FRONT of the
-          printed booklet): spine + hinge teeth, then the lid's gloss and bevel
-          across the whole face including the spine. All layers are hairlines
-          or ≤11%-alpha washes, so the copy's AA contrast over the scrims
+          printed booklet): spine, then the lid's gloss and bevel across the
+          whole face including the spine. All layers are hairlines or
+          ≤11%-alpha washes, so the copy's AA contrast over the scrims
           survives untouched. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="v8-jewel-spine absolute inset-y-0 left-0 w-[8%]">
-          {/* Hinge teeth: small notches inside the spine profile near its
-              ends — flush with the spine's width (no overhang past the seam),
-              so the case reads as a closed rectangle. */}
-          <div className="v8-jewel-tooth absolute inset-x-0 top-[3%] h-[10%]" />
-          <div className="v8-jewel-tooth absolute inset-x-0 bottom-[3%] h-[10%]" />
           {/* Spine title, reading top-to-bottom like a real CD spine. NOTE:
               `top/bottom` must be the PHYSICAL properties — logical `inset-y`
               (inset-block) would map to left/right under vertical-rl. */}

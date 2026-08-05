@@ -1,6 +1,11 @@
 // Generates src/assets/tear-mask.png — the photographic torn-paper luminance
 // mask for the hero's bottom edge (task 20, owner directive: "using an image of
-// an actual paper tear is better than using a polypath to cut it out").
+// an actual paper tear is better than using a polypath to cut it out") — and
+// src/assets/tear-fiber.png — the same boundary band's fiber detail rendered
+// as warm white over transparency (task 21, owner directive: "make the paper
+// tear a bit more paper like by whitening the tear"). Both derivatives share
+// one boundary construction and one canvas size, so overlaying the fiber PNG
+// with the exact scaling used for the mask strip aligns them by construction.
 //
 // Source texture: TextureLabs "Paper 314" (small size)
 //   https://texturelabs.org/wp-content/uploads/Texturelabs_Paper_314S.jpg
@@ -33,10 +38,18 @@
 //      off in a hard aliased line where the photographed fiber is wispy, and
 //      the fiber grayscale supplies the genuine ragged detail on top of it.
 //
-// Output: 1920×{OUT_H} 8-bit grayscale PNG, consumed as a luminance mask
-// (`mask-mode: luminance`) in src/components/hero.tsx. The top WHITE_MARGIN
-// rows are guaranteed pure white so the full-white gradient layer above the
-// strip can overlap into it without a seam (see the HERO_MASK comment there).
+// Outputs, both 1920×{OUT_H}:
+//   tear-mask.png  — 8-bit grayscale, consumed as a luminance mask
+//     (`mask-mode: luminance`) in src/components/hero.tsx. The top
+//     WHITE_MARGIN rows are guaranteed pure white so the full-white gradient
+//     layer above the strip can overlap into it without a seam (see the
+//     HERO_MASK comment there).
+//   tear-fiber.png — RGBA, a constant warm paper-white whose ALPHA is the
+//     fiber zone's contrast-stretched grayscale (transparent outside the
+//     zone). Overlaid additively on the torn edge it turns the ragged fringe
+//     into exposed white pulp; per-theme strength lives in CSS. The tint is
+//     baked here (not tinted in CSS) and fills every pixel — including fully
+//     transparent ones — so downscaling never blends toward black fringes.
 //
 // Run from apps/rocks:  bun scripts/generate-tear-mask.mjs
 import { existsSync } from 'node:fs';
@@ -49,6 +62,7 @@ import sharp from 'sharp';
 const SOURCE_URL = 'https://texturelabs.org/wp-content/uploads/Texturelabs_Paper_314S.jpg';
 const CACHE_PATH = path.join(os.tmpdir(), 'Texturelabs_Paper_314S.jpg');
 const OUT_PATH = fileURLToPath(new URL('../src/assets/tear-mask.png', import.meta.url));
+const FIBER_OUT_PATH = fileURLToPath(new URL('../src/assets/tear-fiber.png', import.meta.url));
 
 // Band around the chosen fiber line (probed: boundary spans y 1009–1234 in the
 // source; 996+252 leaves ≥13px of clean black on both sides). A second, faint
@@ -63,6 +77,17 @@ const BLACK_MARGIN = 16; // guaranteed pure-black rows at the bottom
 // Contrast stretch for the fiber grayscale: lifts the pulp toward solid paper.
 const STRETCH_LO = 26;
 const STRETCH_HI = 215;
+// Warm paper-white for tear-fiber.png (pure white read clinical against the
+// cream/near-black poster tones; this leans slightly toward the paper).
+const FIBER_TINT = { r: 255, g: 248, b: 238 };
+// Guaranteed whitening right at the cut: where the photographed fiber goes
+// wispy, the MASK's edge is defined by its synthetic ramp — the fiber
+// grayscale alone leaves those stretches unwhitened (black-on-black in dark
+// theme, iter1). A short alpha ramp from the boundary guarantees a thin soft
+// white line everywhere along the cut; the fiber detail still dominates
+// wherever real pulp exists (max composition).
+const EDGE_ALPHA = 195; // peak alpha of the guaranteed edge line
+const EDGE_LEN_FRACTION = 0.6; // of the mask ramp length, clamped 3–8px
 
 async function ensureSource() {
   if (existsSync(CACHE_PATH)) return;
@@ -172,6 +197,13 @@ const stretch = (v) =>
   Math.max(0, Math.min(255, Math.round(((v - STRETCH_LO) * 255) / (STRETCH_HI - STRETCH_LO))));
 
 const out = new Uint8Array(W * OUT_H);
+// tear-fiber.png: constant warm tint everywhere, alpha only in the fiber zone.
+const fiberOut = new Uint8Array(W * OUT_H * 4);
+for (let i = 0; i < W * OUT_H; i++) {
+  fiberOut[i * 4] = FIBER_TINT.r;
+  fiberOut[i * 4 + 1] = FIBER_TINT.g;
+  fiberOut[i * 4 + 2] = FIBER_TINT.b;
+}
 for (let x = 0; x < W; x++) {
   const oy0 = y0s[x] - shift[x] - base;
   const oy1 = y1s[x] - shift[x] - base;
@@ -186,6 +218,12 @@ for (let x = 0; x < W; x++) {
       const fiber = stretch(px(x, sy));
       const rampV = Math.max(0, Math.round(255 * (1 - (oy - oy0) / ramp)));
       v = Math.max(fiber, rampV);
+      // Whitening alpha: the fiber's own brightness (bright pulp goes solid
+      // white, wisps translucent) floored by a short guaranteed edge line at
+      // the cut (see EDGE_ALPHA) so no stretch of the tear stays unwhitened.
+      const edgeLen = Math.max(3, Math.min(8, ramp * EDGE_LEN_FRACTION));
+      const edgeV = Math.max(0, Math.round(EDGE_ALPHA * (1 - (oy - oy0) / edgeLen)));
+      fiberOut[(x + oy * W) * 4 + 3] = Math.max(fiber, edgeV);
     }
     out[x + oy * W] = v;
   }
@@ -195,9 +233,13 @@ await mkdir(path.dirname(OUT_PATH), { recursive: true });
 await sharp(out, { raw: { width: W, height: OUT_H, channels: 1 } })
   .png({ compressionLevel: 9 })
   .toFile(OUT_PATH);
+await sharp(fiberOut, { raw: { width: W, height: OUT_H, channels: 4 } })
+  .png({ compressionLevel: 9 })
+  .toFile(FIBER_OUT_PATH);
 
 const spanPx = Math.ceil(maxY1 - minY0);
 console.log(`wrote ${OUT_PATH}`);
+console.log(`wrote ${FIBER_OUT_PATH}`);
 console.log(
   `size ${W}×${OUT_H} (fiber span ${spanPx}px, margins ${WHITE_MARGIN}/${BLACK_MARGIN}, aspect ${(OUT_H / W).toFixed(5)})`
 );

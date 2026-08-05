@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
+import tearFiber from '../assets/tear-fiber.png';
 import tearMask from '../assets/tear-mask.png';
 import type { Strings } from '../i18n/types';
 import { AsteriskMark } from './asterisk-mark';
@@ -50,6 +51,26 @@ const HERO_MASK: CSSProperties = {
   maskSize: `100% calc(100% - ${TEAR_GRADIENT_VW.toFixed(4)}vw), 100% auto`,
   maskRepeat: 'no-repeat',
   maskMode: 'luminance',
+};
+/**
+ * Whitened tear fiber (task 21, owner: "make the paper tear a bit more paper
+ * like by whitening the tear"): tear-fiber.png is the mask strip's sibling
+ * derivative — same generator run, same 1920-wide canvas and boundary
+ * geometry, but rendered as warm white with the fiber detail as alpha. Drawn
+ * as a background with the SAME `100% auto` size and bottom anchoring as the
+ * mask strip, so the white pulp lands pixel-for-pixel on the cut at every
+ * viewport width — alignment by construction, no per-breakpoint math. It is
+ * deliberately NOT masked: its own alpha already confines it to the fiber
+ * zone, and masking it would fade the whitening exactly where the sheet
+ * thins — the opposite of exposed pulp. Per-theme strength is a Tailwind
+ * opacity on the element (dark strong: white pops off the near-black sheet;
+ * light subtle: the page below is already cream, so a hint suffices).
+ */
+const TEAR_FIBER_STYLE: CSSProperties = {
+  backgroundImage: `url(${tearFiber.src})`,
+  backgroundPosition: 'bottom center',
+  backgroundSize: '100% auto',
+  backgroundRepeat: 'no-repeat',
 };
 
 export interface HeroProps {
@@ -254,6 +275,19 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
           aria-hidden="true"
           className="v8-wrinkle pointer-events-none absolute inset-0 z-20"
           style={HERO_MASK}
+        />
+      )}
+      {/* Whitened tear fiber (task 21): warm-white pulp along the ragged edge,
+          see TEAR_FIBER_STYLE. Painted after the wrinkle at the same z so the
+          exposed fiber isn't dimmed by the wrinkle's blend — torn pulp is raw
+          paper, not part of the printed/crumpled face. It never reaches the
+          content (its alpha lives only in the bottom fiber band, which the
+          billing block clears at every width — task 20's valley construction). */}
+      {art && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20 opacity-45 dark:opacity-90"
+          style={TEAR_FIBER_STYLE}
         />
       )}
     </header>

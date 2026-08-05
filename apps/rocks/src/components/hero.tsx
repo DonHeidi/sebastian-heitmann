@@ -214,9 +214,9 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
           the bottom via `mt-auto` above the torn edge — the figure's
           helmet/keyboard then owns the middle of the sheet between the two
           text bands. */}
-      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-1 flex-col items-center px-6 pt-12 pb-16 text-center md:px-20 md:pt-16 md:pb-20">
+      <div className="relative z-10 mx-auto flex w-full max-w-[90rem] flex-1 flex-col items-center px-6 pt-12 pb-16 text-center md:px-20 md:pt-16 md:pb-20">
         <div>
-          <p className="reveal font-mono text-[11px] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
+          <p className="reveal font-mono text-[0.6875rem] tracking-[0.2em] text-primary uppercase">{hero.kicker}</p>
           <div className="mt-5">
             <Masthead nameFirst={nameFirst} nameLast={nameLast} tagline={hero.tagline} />
           </div>
@@ -237,7 +237,7 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
             only rendered inside a pair when a next name follows — so a line
             break never strands a lone separator at its start or end. */}
         <div className="reveal mt-8 flex flex-col items-center gap-3 md:mt-10">
-          <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+          <p className="font-mono text-[0.625rem] tracking-[0.3em] text-muted-foreground uppercase">
             {credits.label}
           </p>
           <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-[family-name:var(--v8-font-poster)] text-sm tracking-[0.06em] text-foreground uppercase md:text-base">

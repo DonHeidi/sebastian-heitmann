@@ -25,7 +25,7 @@ export function LanguagePicker({ links, label }: LanguagePickerProps) {
         <a
           key={link.code}
           className={cn(
-            'flex items-center justify-center px-2 py-1.5 font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:text-primary',
+            'flex items-center justify-center px-2 py-1.5 font-mono text-[0.625rem] tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:text-primary',
             index !== links.length - 1 && 'border-r border-border',
             link.active && 'bg-surface text-primary'
           )}

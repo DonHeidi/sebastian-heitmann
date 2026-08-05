@@ -27,6 +27,16 @@
     scrollbar-gutter: stable;
     width: 100%;
     height: 100%;
+    /* Fluid large-screen type scale (task 27): the root font-size stays 16px
+       up to 1440px viewports (the clamp floor makes the sub-1440 range a
+       strict no-op) and grows linearly — 3px per 1000px of extra viewport —
+       to a 19px ceiling reached at 2440px. Every rem-derived length (the
+       Tailwind text scale, spacing, the masthead clamp's rem cap, the
+       rem-converted mono labels) scales with it, so compositions zoom
+       proportionally instead of copy shrinking into desert margins on large
+       screens. Physical px details (borders, hinge teeth, cracks, blurs)
+       deliberately do not participate. */
+    font-size: clamp(16px, calc(16px + (100vw - 1440px) * 0.003), 19px);
   }
 
   @media (prefers-reduced-motion: no-preference) {

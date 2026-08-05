@@ -182,12 +182,12 @@ export function CaseCard({
           <div className="absolute inset-0 flex flex-col justify-between py-5 pr-5 pl-[calc(8%+1.25rem)] md:py-6 md:pr-6 md:pl-[calc(8%+1.5rem)]">
             <div className="flex items-start justify-between">
               <span
-                className={`font-mono text-[11px] tracking-[0.1em] ${hasCover ? 'text-white/90' : 'text-muted-foreground'}`}
+                className={`font-mono text-[0.6875rem] tracking-[0.1em] ${hasCover ? 'text-white/90' : 'text-muted-foreground'}`}
               >
                 {number} /
               </span>
               <span
-                className={`rotate-2 border px-2 py-1 font-mono text-[9px] tracking-[0.14em] uppercase ${
+                className={`rotate-2 border px-2 py-1 font-mono text-[0.5625rem] tracking-[0.14em] uppercase ${
                   hasCover ? 'border-white/60 text-white/95' : 'border-border text-muted-foreground'
                 }`}
               >
@@ -245,7 +245,7 @@ export function CaseCard({
               {/* Spine title, reading top-to-bottom like a real CD spine. NOTE:
                   `top/bottom` must be the PHYSICAL properties — logical `inset-y`
                   (inset-block) would map to left/right under vertical-rl. */}
-              <span className="absolute top-[18%] bottom-[18%] left-1/2 -translate-x-1/2 overflow-hidden font-mono text-[8px] tracking-[0.18em] uppercase whitespace-nowrap text-ellipsis text-white/70 [writing-mode:vertical-rl]">
+              <span className="absolute top-[18%] bottom-[18%] left-1/2 -translate-x-1/2 overflow-hidden font-mono text-[0.5rem] tracking-[0.18em] uppercase whitespace-nowrap text-ellipsis text-white/70 [writing-mode:vertical-rl]">
                 {data.title}
               </span>
             </div>
@@ -297,11 +297,11 @@ export function CaseCard({
                 de-de's longer role line wraps — the compact base keeps all six
                 tracks + the two-line register inside the case. */}
             <div className="flex max-h-full w-full min-w-0 flex-col overflow-hidden bg-black/80 px-3.5 py-3 @sm:px-5 @sm:py-4">
-              <div className="flex items-baseline justify-between gap-2 border-b border-white/25 pb-2 font-mono text-[9px] tracking-[0.16em] uppercase text-white/80">
+              <div className="flex items-baseline justify-between gap-2 border-b border-white/25 pb-2 font-mono text-[0.5625rem] tracking-[0.16em] uppercase text-white/80">
                 <span>{backStrings.tracksLabel}</span>
                 <span>{number} /</span>
               </div>
-              <ol className="mt-2 space-y-1 overflow-hidden font-mono text-[10px] leading-tight text-white/95 @sm:mt-2.5 @sm:space-y-1.5 @sm:text-[11px]">
+              <ol className="mt-2 space-y-1 overflow-hidden font-mono text-[0.625rem] leading-tight text-white/95 @sm:mt-2.5 @sm:space-y-1.5 @sm:text-[0.6875rem]">
                 {data.stack.map((tech, n) => (
                   <li key={tech} className="flex items-baseline gap-2">
                     <span className="text-white/75">{String(n + 1).padStart(2, '0')}</span>
@@ -310,7 +310,7 @@ export function CaseCard({
                   </li>
                 ))}
               </ol>
-              <div className="mt-2 border-t border-white/25 pt-2 font-mono text-[9px] leading-relaxed tracking-[0.05em] text-white/80 @sm:mt-2.5">
+              <div className="mt-2 border-t border-white/25 pt-2 font-mono text-[0.5625rem] leading-relaxed tracking-[0.05em] text-white/80 @sm:mt-2.5">
                 <span className="tracking-[0.14em] uppercase text-white/70">{strings.roleLabel}</span> {data.role}
                 <span className="mx-1 text-white/70">·</span>
                 <span className="tracking-[0.14em] uppercase text-white/70">{backStrings.yearLabel}</span>{' '}
@@ -340,7 +340,7 @@ export function CaseCard({
               )}
               <div className="v8-jewel-tooth absolute inset-x-0 top-0 h-[6px]" />
               <div className="v8-jewel-tooth absolute inset-x-0 bottom-0 h-[6px]" />
-              <span className="absolute top-[18%] bottom-[18%] left-1/2 -translate-x-1/2 -scale-x-100 overflow-hidden font-mono text-[8px] tracking-[0.18em] uppercase whitespace-nowrap text-ellipsis text-white/70 [writing-mode:vertical-rl]">
+              <span className="absolute top-[18%] bottom-[18%] left-1/2 -translate-x-1/2 -scale-x-100 overflow-hidden font-mono text-[0.5rem] tracking-[0.18em] uppercase whitespace-nowrap text-ellipsis text-white/70 [writing-mode:vertical-rl]">
                 {data.title}
               </span>
             </div>

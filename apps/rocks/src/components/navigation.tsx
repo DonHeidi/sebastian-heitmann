@@ -32,11 +32,11 @@ export function Navigation({ nav, languagePicker, locale, currentPath, children 
        "auto width fills the container" behavior — auto margins take priority
        over cross-axis stretch, so without an explicit width the nav shrinks
        to fit its content (logo + links) instead of filling out to
-       `max-w-[1440px]`. `w-full` restores the pre-flex sizing; `mx-auto` +
-       `max-w-[1440px]` still center/cap it past 1440px viewports. */
-    <nav className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-between gap-3 px-6 py-4 md:flex-nowrap md:gap-0 md:px-20 md:py-7">
+       `max-w-[90rem]`. `w-full` restores the pre-flex sizing; `mx-auto` +
+       `max-w-[90rem]` still center/cap it past 1440px viewports. */
+    <nav className="mx-auto flex w-full max-w-[90rem] flex-wrap items-center justify-between gap-3 px-6 py-4 md:flex-nowrap md:gap-0 md:px-20 md:py-7">
       <a
-        className="w-full text-xs text-muted-foreground transition-colors hover:text-foreground min-[400px]:w-auto md:text-[13px] md:tracking-[0.02em]"
+        className="w-full text-xs text-muted-foreground transition-colors hover:text-foreground min-[400px]:w-auto md:text-[0.8125rem] md:tracking-[0.02em]"
         href={getRelativeLocaleUrl(locale, '/')}
       >
         {nav.logo}
@@ -46,7 +46,7 @@ export function Navigation({ nav, languagePicker, locale, currentPath, children 
         <LanguagePicker links={languageLinks} label={languagePicker.label} />
         {children}
         <a
-          className="border border-border px-3.5 py-2 font-mono text-[10px] tracking-[0.06em] text-foreground uppercase transition-colors hover:border-primary hover:text-primary md:px-6 md:py-2.5 md:text-xs md:tracking-[0.08em]"
+          className="border border-border px-3.5 py-2 font-mono text-[0.625rem] tracking-[0.06em] text-foreground uppercase transition-colors hover:border-primary hover:text-primary md:px-6 md:py-2.5 md:text-xs md:tracking-[0.08em]"
           href="https://www.sebastian-heitmann.dev/#contact"
         >
           {nav.contactCta}

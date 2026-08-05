@@ -26,7 +26,7 @@ export interface AboutSectionProps {
 
 export function AboutSection({ about, avatar }: AboutSectionProps) {
   return (
-    <section className="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="about">
+    <section className="mx-auto max-w-[90rem] px-6 py-12 md:px-20" id="about">
       <svg aria-hidden="true" className="absolute h-0 w-0">
         <defs>
           <clipPath id="v8-torn-avatar" clipPathUnits="objectBoundingBox">
@@ -45,7 +45,7 @@ export function AboutSection({ about, avatar }: AboutSectionProps) {
           <p className="max-w-[48ch] text-base leading-relaxed text-muted-foreground md:text-lg">{about.body}</p>
           <a
             href={DEV}
-            className="mt-6 inline-block border border-border px-4 py-2 font-mono text-[10px] tracking-[0.1em] text-foreground uppercase transition-colors hover:border-primary hover:text-primary"
+            className="mt-6 inline-block border border-border px-4 py-2 font-mono text-[0.625rem] tracking-[0.1em] text-foreground uppercase transition-colors hover:border-primary hover:text-primary"
           >
             {DEV_LABEL}
           </a>

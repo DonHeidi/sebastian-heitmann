@@ -68,10 +68,12 @@ export interface CaseCardProps {
  *
  * Resting pose (task 24 follow-up, owner request): the slab is never seen
  * flat-on, so its thickness stays visible at rest — a static product-shot
- * tilt of `rotateX(-3deg) rotateY(10deg)` (composable Tailwind rotate
+ * tilt of `rotateX(6deg) rotateY(10deg)` (composable Tailwind rotate
  * utilities, so the hover flip only swaps the Y angle). Positive rotateY
- * brings the LEFT edge toward the viewer: the spine wall peeks; negative
- * rotateX tips the top edge toward the viewer: a sliver of the top wall.
+ * brings the LEFT edge toward the viewer: the spine wall peeks; positive
+ * rotateX leans the top edge BACK (owner correction: the forward lean read
+ * as skew), exposing the lit top wall (`.v8-jewel-wall-lid-top`) from
+ * slightly above.
  * The back settles at rotateY(170deg) — a MIRRORED bias, not 180+10: at
  * 170° the spine wall (DOM-left, on screen-right after the flip, flush
  * with the back's mirrored spine chrome) peeks again, so both settled
@@ -98,12 +100,12 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
   const linkHref = data.kind === 'case-study' ? href : external?.url;
   const number = String(index + 1).padStart(2, '0');
   const faceChrome =
-    'absolute inset-0 overflow-hidden border border-border bg-surface backface-hidden transition-colors group-hover:border-muted-foreground group-focus-within:border-primary';
+    'absolute inset-0 overflow-hidden rounded-[3px] border border-border bg-surface backface-hidden [outline:1px_solid_transparent] transition-colors group-hover:border-muted-foreground group-focus-within:border-primary';
   return (
     <article className="reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] -rotate-x-3 rotate-y-10 group-hover:rotate-y-170 group-focus-within:rotate-y-170 motion-reduce:transition-none"
+        className="pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] rotate-x-8 rotate-y-22 group-hover:rotate-y-170 group-focus-within:rotate-y-170 motion-reduce:transition-none"
       >
         {/* ---- FRONT face: the jewel case's lid, permanently duotone. ---- */}
         <div className={faceChrome}>
@@ -309,14 +311,14 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
              hollow inside. Purely presentational (inside the aria-hidden
              scene); absolutely positioned, so zero layout at rest. */}
         {/* Left wall — the spine's outer edge (dark plastic, vertical specular). */}
-        <div className="v8-jewel-wall-spine absolute inset-y-0 left-0 w-[var(--case-depth)] backface-hidden [transform:translateX(calc(var(--case-depth)/-2))_translateZ(calc(var(--case-depth)/-2))_rotateY(-90deg)]" />
+        <div className="v8-jewel-wall-spine absolute inset-y-0 left-0 w-[var(--case-depth)] backface-hidden [outline:1px_solid_transparent] [transform:translateX(calc(var(--case-depth)/-2))_translateZ(calc(var(--case-depth)/-2))_rotateY(-90deg)]" />
         {/* Right wall — the opening edge (lighter plastic, lid/tray seam). */}
-        <div className="v8-jewel-wall-open absolute inset-y-0 right-0 w-[var(--case-depth)] backface-hidden [transform:translateX(calc(var(--case-depth)/2))_translateZ(calc(var(--case-depth)/-2))_rotateY(90deg)]" />
+        <div className="v8-jewel-wall-open absolute inset-y-0 right-0 w-[var(--case-depth)] backface-hidden [outline:1px_solid_transparent] [transform:translateX(calc(var(--case-depth)/2))_translateZ(calc(var(--case-depth)/-2))_rotateY(90deg)]" />
         {/* Top/bottom walls — plain lid-edge plastic. Needed: the tile-centered
              perspective diverges ±~10° vertically, so without them the mid-flip
              silhouette shows a see-through slit along the top/bottom edges. */}
-        <div className="v8-jewel-wall-lid absolute inset-x-0 top-0 h-[var(--case-depth)] backface-hidden [transform:translateY(calc(var(--case-depth)/-2))_translateZ(calc(var(--case-depth)/-2))_rotateX(90deg)]" />
-        <div className="v8-jewel-wall-lid absolute inset-x-0 bottom-0 h-[var(--case-depth)] backface-hidden [transform:translateY(calc(var(--case-depth)/2))_translateZ(calc(var(--case-depth)/-2))_rotateX(-90deg)]" />
+        <div className="v8-jewel-wall-lid v8-jewel-wall-lid-top absolute inset-x-0 top-0 h-[var(--case-depth)] backface-hidden [outline:1px_solid_transparent] [transform:translateY(calc(var(--case-depth)/-2))_translateZ(calc(var(--case-depth)/-2))_rotateX(90deg)]" />
+        <div className="v8-jewel-wall-lid absolute inset-x-0 bottom-0 h-[var(--case-depth)] backface-hidden [outline:1px_solid_transparent] [transform:translateY(calc(var(--case-depth)/2))_translateZ(calc(var(--case-depth)/-2))_rotateX(-90deg)]" />
       </div>
       {/* The ONE real link, outside the 3D scene so it stays hit-testable from
           both faces (a backface-hidden front would swallow a stretched ::after

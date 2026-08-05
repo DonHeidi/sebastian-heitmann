@@ -424,10 +424,26 @@
       linear-gradient(to right, #3c3c44, #4a4a53 30%, #40404a 75%, #33333b);
   }
   .v8-jewel-wall-lid {
-    /* Top/bottom edges: plain dark lid-edge plastic. Only ever seen as a
-       near-edge-on sliver (they exist to plug the mid-flip see-through
-       slit), so no feature lines — just a faint lengthwise shading. */
+    /* Bottom edge: shadowed lid-edge plastic (rarely seen; also plugs the
+       mid-flip see-through slit). */
     background: linear-gradient(to right, #1b1b1f, #232329 50%, #17171b);
+  }
+  .v8-jewel-wall-lid-top {
+    /* Top edge: permanently visible since the lean-back rest pose — a lit
+       plastic surface catching overhead light, with the lid/tray seam
+       carried around from the opening wall (same 38%-depth groove; here
+       element-bottom is the case's FRONT side). */
+    background:
+      linear-gradient(
+        to bottom,
+        transparent calc(62% - 1.5px),
+        rgba(0, 0, 0, 0.55) calc(62% - 1.5px),
+        rgba(0, 0, 0, 0.55) calc(62% + 0.5px),
+        rgba(255, 255, 255, 0.18) calc(62% + 0.5px),
+        rgba(255, 255, 255, 0.18) calc(62% + 1.5px),
+        transparent calc(62% + 1.5px)
+      ),
+      linear-gradient(to right, #3b3b43, #4b4b55 45%, #34343c);
   }
 
   /* Wrinkle morphism for the hero poster (spec amendment 2026-08-04): a

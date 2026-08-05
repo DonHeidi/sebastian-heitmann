@@ -45,9 +45,9 @@ const cropClassLight =
       visor sits just below the tagline rule, with the keyboard-guitar neck
       below it.
 
-      Below `lg` the container flips from landscape-ish to portrait-tall
-      (`min-h-[calc(100svh-6rem)]` against a narrow width), which makes
-      `object-fit: cover`'s crop window cover most of the source height —
+      Below `lg` the container flips from landscape-ish to portrait-tall (the
+      hero's viewport-filling height, task 18, against a narrow width), which
+      makes `object-fit: cover`'s crop window cover most of the source height —
       object-position alone can no longer pull the helmet out from behind the
       (now two-line, taller) masthead, since panning can't zoom. `max-lg:` adds
       a `scale(1.4)` with a negative `transform-origin` (above the box, in

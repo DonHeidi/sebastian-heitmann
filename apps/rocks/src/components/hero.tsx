@@ -214,8 +214,23 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
     /* `v8-duotone-host` scopes the duotone hover reveal to the whole poster
        block (the content stack sits above the art, so the wrapper itself never
        receives :hover — see global.css). The reveal only swaps blend/filter on
-       the image layer, so there is no layout shift on hover. */
-    <header className="v8-duotone-host relative flex min-h-[calc(100svh-6rem)] flex-col overflow-hidden">
+       the image layer, so there is no layout shift on hover.
+
+       Height is measure-free (task 18): the calling page wraps `Navigation` +
+       this hero in a `flex min-h-svh flex-col` column, and `flex-1` here
+       makes the hero fill whatever viewport space the nav didn't take —
+       matching the desktop "poster fills the first screen" relationship at
+       EVERY width, including de-de's 3-row mobile nav (longer CTA wraps the
+       nav to 3 rows at 375, vs 2 for en-us). The old `min-h-[calc(100svh-
+       6rem)]` assumed a fixed ~6rem desktop-nav height; on mobile the nav can
+       be taller (2-3 wrapped rows), so the hero's height stayed pinned to the
+       wrong constant and its bottom edge (billing block, tear) overshot the
+       first viewport instead of ending exactly where the nav's actual height
+       allows. A flex item's automatic min-height is its content size, so the
+       hero still grows past one viewport when its own content needs more
+       room (e.g. a very short viewport) — same "at least, can grow" contract
+       the old min-height had, just measured by layout instead of a constant. */
+    <header className="v8-duotone-host relative flex flex-1 flex-col overflow-hidden">
       <svg aria-hidden="true" className="absolute h-0 w-0">
         <defs>
           <clipPath id="v8-hero-tear" clipPathUnits="objectBoundingBox">

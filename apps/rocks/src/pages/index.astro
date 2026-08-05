@@ -33,11 +33,18 @@ const caseHref = (e: (typeof entries)[number]) =>
   alternates={getHreflangAlternates('/')}
   includeRedirectScript={true}
 >
-  <Navigation nav={t.nav} languagePicker={t.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
-    <ThemeToggle client:load labels={t.themeToggle} />
-  </Navigation>
-  <main>
+  {/* `min-h-svh flex flex-col` (task 18): the nav's height is measured by
+      layout, not assumed — it can wrap to 2 or 3 rows on narrow widths (de-de's
+      longer CTA wraps to 3 at 375), so the hero (a `flex-1` child, see hero.tsx)
+      fills exactly the remaining first-viewport space below the nav at every
+      width instead of subtracting a fixed desktop-nav rem value. */}
+  <div class="flex min-h-svh flex-col">
+    <Navigation nav={t.nav} languagePicker={t.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+      <ThemeToggle client:load labels={t.themeToggle} />
+    </Navigation>
     <HeroSection hero={t.hero} credits={t.credits} />
+  </div>
+  <main>
     <section class="mx-auto max-w-[1440px] px-6 py-12 md:px-20" id="cases">
       <SectionHeader title={t.cases.sectionTitle} />
       <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

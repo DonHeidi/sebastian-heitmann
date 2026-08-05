@@ -25,7 +25,16 @@ export function Navigation({ nav, languagePicker, locale, currentPath, children 
   }));
 
   return (
-    <nav className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-3 px-6 py-4 md:flex-nowrap md:gap-0 md:px-20 md:py-7">
+    /* `w-full` (task 18): the index pages wrap this nav in a `flex flex-col`
+       column (so the hero below can fill the remaining viewport height
+       measure-free — see hero.tsx). That makes `<nav>` a flex item, and a
+       flex item with its own `mx-auto` doesn't get the usual block-level
+       "auto width fills the container" behavior — auto margins take priority
+       over cross-axis stretch, so without an explicit width the nav shrinks
+       to fit its content (logo + links) instead of filling out to
+       `max-w-[1440px]`. `w-full` restores the pre-flex sizing; `mx-auto` +
+       `max-w-[1440px]` still center/cap it past 1440px viewports. */
+    <nav className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-between gap-3 px-6 py-4 md:flex-nowrap md:gap-0 md:px-20 md:py-7">
       <a
         className="w-full text-xs text-muted-foreground transition-colors hover:text-foreground min-[400px]:w-auto md:text-[13px] md:tracking-[0.02em]"
         href={getRelativeLocaleUrl(locale, '/')}

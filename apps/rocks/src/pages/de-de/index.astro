@@ -92,6 +92,7 @@ const caseHref = (e: (typeof entries)[number]) =>
               strings={t.cases}
               backStrings={t.caseBack}
               index={i}
+              poseOffset={caseStudies.length}
               hasCover={Boolean(e.data.cover)}
             >
               {e.data.cover && (

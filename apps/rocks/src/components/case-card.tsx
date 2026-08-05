@@ -20,6 +20,13 @@ export interface CaseCardProps {
   backStrings: Strings['caseBack'];
   /** 0-based position within its section; rendered as `01 /`. */
   index: number;
+  /** Added to `index` before picking the resting pose variant (NOT shown in
+   * the printed number). Sections restart `index` at 0, so a later section
+   * would replay the pose sequence from the top — same column, same tilt as
+   * the section above. Pages pass the running tile count (e.g. the projects
+   * grid passes `caseStudies.length`) so the pose sequence continues across
+   * sections instead of restarting. */
+  poseOffset?: number;
   /** Slotted `<DuotonePanel>` (slot="coverPanel") from the calling `.astro` page
    * (`.astro` components can't be rendered inside `.tsx`, and only a named slot
    * — not a plain prop — crosses that boundary); fills the square tile as the
@@ -66,21 +73,30 @@ export interface CaseCardProps {
  * mid-flip (backface-hidden faces don't paint when seen from inside the
  * slab).
  *
- * Resting pose (task 24 follow-up, owner request): the slab is never seen
- * flat-on, so its thickness stays visible at rest — a static product-shot
- * tilt of `rotateX(6deg) rotateY(10deg)` (composable Tailwind rotate
- * utilities, so the hover flip only swaps the Y angle). Positive rotateY
- * brings the LEFT edge toward the viewer: the spine wall peeks; positive
- * rotateX leans the top edge BACK (owner correction: the forward lean read
- * as skew), exposing the lit top wall (`.v8-jewel-wall-lid-top`) from
- * slightly above.
- * The back settles at rotateY(170deg) — a MIRRORED bias, not 180+10: at
- * 170° the spine wall (DOM-left, on screen-right after the flip, flush
- * with the back's mirrored spine chrome) peeks again, so both settled
- * states read as the same case photographed spine-forward, and the track
- * list sits at the same |10°| off-axis as the front copy (equal
- * legibility). The pose lives entirely inside this absolutely-positioned
- * scene, so the article's layout box never moves.
+ * Resting pose (task 24 follow-up + task 26, owner requests): the slab is
+ * never seen flat-on, so its thickness stays visible at rest — a static
+ * product-shot tilt built from composable Tailwind rotate utilities, so the
+ * hover flip only swaps the Y angle. Each tile picks ONE pose from the
+ * fixed `POSES` table below via `(index + poseOffset) % POSES.length` —
+ * SSR-deterministic (no randomness, no hydration drift), so the grid reads
+ * as casually-placed cases rather than a uniform product wall. Positive
+ * rotateY brings the LEFT edge toward the viewer: the spine wall peeks.
+ * NEGATIVE rotateY turns the case the other way: the opening-edge wall
+ * with the lid/tray seam (`.v8-jewel-wall-open`) peeks instead — a
+ * different physical edge, which is the point of the variance. rotateX is
+ * always POSITIVE (top leans back — owner correction: a forward lean read
+ * as skew; and the lit top wall `.v8-jewel-wall-lid-top` is painted for a
+ * from-slightly-above view only).
+ * The back settles at ±170deg — a MIRRORED bias, not |rest|+180: at 170°
+ * the spine wall (DOM-left, on screen-right after the flip, flush with the
+ * back's mirrored spine chrome) peeks again, so both settled states read
+ * as the same case photographed spine-forward, and the track list sits a
+ * legible 10° off-axis regardless of how strong the rest tilt was.
+ * Negative-rest variants settle at -170° (same picture as 190°): the
+ * opening edge keeps facing the viewer on the back too, and the case flips
+ * the OPPOSITE direction — a case resting turned the other way naturally
+ * spins the other way when picked up. The pose lives entirely inside this
+ * absolutely-positioned scene, so the article's layout box never moves.
  *
  * A11y contract: the whole 3D scene is one `aria-hidden`, pointer-inert
  * layer — purely presentational, so nothing on either face duplicates into
@@ -95,17 +111,50 @@ export interface CaseCardProps {
  * and tap-to-navigate; `motion-reduce` swaps faces without animating the
  * rotation.
  */
-export function CaseCard({ data, href, strings, backStrings, index, coverPanel, backPanel, hasCover }: CaseCardProps) {
+/** Resting-pose variants (task 26) — full static class strings so Tailwind's
+ * scanner sees every utility. rotY spans -18..+28 (two variants turned the
+ * other way, opening edge forward), rotX stays 5..10 (always leaning back).
+ * Ordered so 2- and 3-column rows mix directions and strengths — no two
+ * horizontal or vertical neighbors share a pose at either column count with
+ * the current six tiles. Each variant carries its own back-settle sign
+ * (±170°, see the pose notes in the component doc block). */
+const POSES = [
+  /* strong spine-forward — the original task-24 pose */
+  'rotate-x-8 rotate-y-22 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+  /* gentle opening-edge-forward (turned the other way) */
+  'rotate-x-6 -rotate-y-14 group-hover:-rotate-y-170 group-focus-within:-rotate-y-170',
+  /* strongest spine-forward */
+  'rotate-x-9 rotate-y-28 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+  /* near-square, barely turned */
+  'rotate-x-5 rotate-y-12 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+  /* strong opening-edge-forward (turned the other way) */
+  'rotate-x-7 -rotate-y-18 group-hover:-rotate-y-170 group-focus-within:-rotate-y-170',
+  /* medium spine-forward, steepest lean-back */
+  'rotate-x-10 rotate-y-17 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+];
+
+export function CaseCard({
+  data,
+  href,
+  strings,
+  backStrings,
+  index,
+  poseOffset = 0,
+  coverPanel,
+  backPanel,
+  hasCover,
+}: CaseCardProps) {
   const external = data.kind === 'project' ? data.links[0] : undefined;
   const linkHref = data.kind === 'case-study' ? href : external?.url;
   const number = String(index + 1).padStart(2, '0');
+  const pose = POSES[(index + poseOffset) % POSES.length];
   const faceChrome =
     'absolute inset-0 overflow-hidden rounded-[3px] border border-border bg-surface backface-hidden [outline:1px_solid_transparent] transition-colors group-hover:border-muted-foreground group-focus-within:border-primary';
   return (
     <article className="reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] rotate-x-8 rotate-y-22 group-hover:rotate-y-170 group-focus-within:rotate-y-170 motion-reduce:transition-none"
+        className={`pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] ${pose} motion-reduce:transition-none`}
       >
         {/* ---- FRONT face: the jewel case's lid, permanently duotone. ---- */}
         <div className={faceChrome}>

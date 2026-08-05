@@ -414,3 +414,14 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] Grid: squares likely want 3 columns at `lg` (2 at md, 1 below); iterate visually. Both locale pages parallel. Accessibility: the tile link's accessible name is the title; overlaid text must stay AA-legible over every cover in both themes and both duotone/revealed states (scrim strength per tile, not per artwork).
 - [ ] Visual iteration incl. the seed entry's sparks-crew cover + at least one placeholder-sleeve mock (temporarily unset cover on a copy? No: verify the placeholder path with a temporary draft entry deleted before commit, or by temporarily removing the cover in the dev server only); screenshots at 1440/768/375 × themes × locales.
 - [ ] `bun run build` clean; commit `feat(rocks): album-cover case tiles`.
+
+---
+
+### Task 17: Light-theme poster unification (owner feedback 2026-08-05, screenshots)
+
+**Owner directives:** (1) light-theme tagline: "The shadow doesn't work here" — the black hard shadow smears against near-black text on light paper. (2) mobile light theme "looks like a different poster. Align it with the higher width pages" — the raw light artwork's own near-white ground reads as a separate grey panel on the cream page (hard seam, large empty gap above it, wrinkle not continuous through the art).
+
+- [ ] **Tagline shadow:** scope the black hard shadow to dark theme only (`dark:` variant). In light theme try (a) no shadow and (b) a subtle paper-light letterpress offset (e.g. `1.5px 1.5px 0 rgba(255,255,255,0.9)`); pick by screenshot, document the call.
+- [ ] **Merge the light artwork into the sheet:** render the light guitar player with `mix-blend-mode: multiply` (its near-white ground disappears into the cream paper and the wrinkle texture reads THROUGH the art — one continuous sheet, no seam) instead of raw-on-panel. Verify the flames/orange survive multiply acceptably; tune contrast/brightness filter if the figure washes out. Hover behavior in light theme stays none (already so).
+- [ ] **Align mobile composition with desktop:** per-theme crop/scale so the light image at small widths composes like the desktop poster (figure placed proportionally, no dead band between tagline and art, intro/billing not colliding); the existing `scale(1.4)` mobile trick was tuned on the dark art — retune or branch per theme as needed. Both themes at 375/768 must read as the SAME poster as 1440, just narrower.
+- [ ] Visual iteration at 1440/1024/768/375 × BOTH themes × locales (dark must not regress); `bun run build` clean; commit `fix(rocks): unify the light-theme poster and scope the tagline shadow`.

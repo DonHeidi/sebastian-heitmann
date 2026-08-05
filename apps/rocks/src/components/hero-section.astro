@@ -20,19 +20,24 @@ interface Props {
 const { hero, credits } = Astro.props;
 
 // Both artworks share the same 1024×1536 frame and near-identical composition
-// (helmet top-center, keyboard-guitar diagonal), so the lg+ crop — derived for
-// the dark artwork in task 10 — is shared. Below lg the two themes want
-// DIFFERENT verticals (task 17): both scale(1.4) from a negative
-// transform-origin (see the layer comment below), but the dark crop's
-// `50% -85%` pushes the figure far down past the text block, which on the
-// light art opened a dead cream band between the tagline and the figure (the
-// dark art fills that zone with red glow; the light art's ground there is
-// empty near-white). `50% -55%` lifts the light figure so the visor tucks
-// just under the tagline rule — the same composition the desktop poster has.
-const cropClass =
-  'object-[50%_14%] max-lg:scale-140 max-lg:object-[50%_8%] max-lg:[transform-origin:50%_-85%]';
-const cropClassLight =
-  'object-[50%_14%] max-lg:scale-140 max-lg:object-[50%_8%] max-lg:[transform-origin:50%_-55%]';
+// (helmet top-center, keyboard-guitar diagonal), so one crop serves both
+// themes at every width. Task 19 removed the old `max-lg` scale(1.4) +
+// negative-transform-origin mobile crop for good: scaling the image inside
+// the wrapper slid its top edge below the poster top and exposed the
+// wrapper's ground color as a band with a hard seam (twice — light seam in
+// task 17's round, orange dark band in the round-2 owner screenshot). The
+// art layer now covers the poster by construction — `absolute inset-0` +
+// `object-cover`, nothing transformed — so an uncovered region is
+// impossible; composition control is object-position only. `50% 14%` keeps
+// the visor just under the tagline rule on lg+ (task 10). Below lg the
+// portrait-tall hero makes `cover` height-limited at phone widths (the full
+// artwork height is visible, so the Y component is inert and only the sides
+// crop), and at 768 the same top-biased Y keeps the helmet high like the
+// desktop poster: one continuous sheet, same poster, narrower. The helmet
+// sitting behind the masthead at phone widths is the accepted trade
+// (legibility comes from the scrim bands, not from panning the art away).
+const cropClass = 'object-[50%_14%]';
+const cropClassLight = cropClass;
 ---
 
 <Hero hero={hero} credits={credits} nameFirst="Sebastian" nameLast="Heitmann">
@@ -43,18 +48,10 @@ const cropClassLight =
       is pulled down from the old top-third bias (50% 22%) to `50% 14%` on
       lg+ screens, keeping the whole helmet out from under the text band — the
       visor sits just below the tagline rule, with the keyboard-guitar neck
-      below it.
-
-      Below `lg` the container flips from landscape-ish to portrait-tall (the
-      hero's viewport-filling height, task 18, against a narrow width), which
-      makes `object-fit: cover`'s crop window cover most of the source height —
-      object-position alone can no longer pull the helmet out from behind the
-      (now two-line, taller) masthead, since panning can't zoom. `max-lg:` adds
-      a `scale(1.4)` with a negative `transform-origin` (above the box, in
-      the pre-scale crop's coordinate space) to zoom into the helmet and push
-      it down past the text block instead of just panning to it — the negative
-      origin was hand-derived (see task-10-report.md) then verified visually
-      per breakpoint, not a value you can eyeball.
+      below it. Below `lg` the same crop applies untransformed (see the
+      cropClass comment above — the scale-zoom mobile crop is deliberately
+      gone, and the helmet sharing space with the masthead is the accepted
+      composition there).
 
       Astro clamps generated widths at the 1024px source (it never upscales),
       so the 1440/1920 entries are dropped today and the browser upscales the
@@ -75,11 +72,10 @@ const cropClassLight =
       already palette-native — it skips the duotone pipeline (duotoning would
       map its near-white background to solid accent and turn the whole light
       poster orange). It is NOT raw either (task 17): raw, its cool near-white
-      ground read as a discrete grey panel over the cream page — hard seam
-      where the mobile-scaled image's top edge landed, wrinkle texture blocked.
-      Instead it mirrors the duotone panel's own construction: a paper-colored
-      underlay (`bg-[var(--v8-bg)]`, also covering the band above the scaled
-      image's top edge below lg) with the image `multiply`ed over it inside an
+      ground read as a discrete grey panel over the cream page, and the
+      wrinkle texture was blocked. Instead it mirrors the duotone panel's own
+      construction: a paper-colored underlay (`bg-[var(--v8-bg)]`) with the
+      image `multiply`ed over it inside an
       `isolate` wrapper, so the ground sinks into the paper and the z-20
       wrinkle overlay reads THROUGH the art — one continuous sheet. The filter
       lifts the ground to true white so multiply renders it as bare paper

@@ -262,11 +262,11 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
               specific zone: the masthead (`Masthead`'s fluid `clamp()` type)
               wraps to two lines anywhere from ~320px up to 1362px inclusive
               (measured directly via `getBoundingClientRect` on the name
-              spans — 1362px wraps, 1363px doesn't), but the `lg`/`max-lg`
-              crop split in `hero-section.astro` switches to the
-              single-line-tuned desktop crop right at 1024px. Below 1024px
-              the mobile crop already zooms/pans the helmet out from under
-              the (two-line) text band, so it's unaffected. From 1363px the
+              spans — 1362px wraps, 1363px doesn't). Below 1024px the poster
+              is portrait-tall and the helmet deliberately shares space with
+              the text band (task 19: art covers by construction, scrims own
+              legibility), so this band's extra reach isn't the mechanism
+              there. From 1363px the
               masthead is single-line again and the tagline sits high enough
               that the base band already covers it. Only 1024–1362px has both
               problems at once — two-line masthead (tagline pushed down) *and*

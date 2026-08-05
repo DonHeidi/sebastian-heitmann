@@ -469,3 +469,17 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] Extend `generate-tear-mask.mjs` to ALSO emit `apps/rocks/src/assets/tear-fiber.png`: the boundary band's fiber detail rendered as white-with-alpha (transparent elsewhere), same 1920 width and boundary geometry as the mask so the two derivatives align by construction.
 - [ ] Overlay it at the hero's bottom edge (aria-hidden, pointer-events-none, above the wrinkle, below content), scaled identically to the mask strip (`100% <strip-height>`, bottom-anchored) so the white fiber hugs the cut. Tune opacity per theme (dark: strong — this is where it pops; light: subtler, the paper below is already light; a slight warm tint toward the paper tone is allowed if pure white looks clinical).
 - [ ] Verify alignment at 375/768/1440 both themes (fiber must sit ON the edge at every width, no floating white line offset from the cut); hover states unchanged; `bun run build` clean; commit `feat(rocks): whitened paper fiber on the tear edge`.
+
+---
+
+### Task 22: Case tiles as CD jewel cases (owner feedback 2026-08-05)
+
+**Owner directive:** "Now to the cd cover for the cases on the home. I like to make them look like a cd case."
+
+- [ ] Rework `CaseCard` so each tile reads as a CD JEWEL CASE containing the cover art (front-on view). The vocabulary that sells it (all CSS/SVG, no image assets, no new deps):
+  - **Spine:** a vertical bar on the left edge (roughly 7-10% of tile width), visually distinct (darker plastic tone), carrying the case's hinge geometry: small notch marks near top and bottom (the hinge teeth). Optional: the title in tiny rotated mono on the spine like a real CD spine — iterate, drop it if it doubles the title awkwardly.
+  - **Plastic gloss:** subtle diagonal highlight streaks across the front (low-opacity white linear-gradients, 1-2 streaks), a brighter thin edge highlight top/left and shadow bottom/right (bevel), and a faint overall sheen. Must read in BOTH themes without washing out the duotone art or the overlaid copy.
+  - **Existing tile content stays:** duotone cover art (with hover full-color reveal), overlaid number/stamp/title, whole-tile link, placeholder sleeve for coverless entries (the plastic case wraps the placeholder art the same way).
+- [ ] The gloss/spine layers must not break the hover reveal, AA text contrast (per-tile scrim may be retuned additively), or the square grid (spine included WITHIN the square tile).
+- [ ] Visual iteration at 1440/768/375 × themes × locales, duotone + revealed, incl. a close-up of one tile per theme (does it read "CD case" at a glance?) and a placeholder-sleeve check (temporary entry, reverted before commit).
+- [ ] `bun run build` clean; commit `feat(rocks): cd jewel case treatment for case tiles`.

@@ -23,7 +23,11 @@ export interface CaseCardProps {
   /** Slotted `<DuotonePanel>` (slot="coverPanel") from the calling `.astro` page
    * (`.astro` components can't be rendered inside `.tsx`, and only a named slot
    * — not a plain prop — crosses that boundary); fills the square tile as the
-   * album-cover art. Entries without one get the generated asterisk sleeve. */
+   * album-cover art. Entries without one get the generated asterisk sleeve.
+   * Rendered THREE times (React mounts the same node wherever it appears,
+   * emitting identical markup/srcset, so the browser still fetches each
+   * variant once): the front booklet, plus the printed wraparound inlay
+   * behind the spine bar on both faces. */
   coverPanel?: ReactNode;
   /** Slotted `<DuotonePanel duotone={false}>` (slot="backPanel"): the SAME
    * cover art, full color (no duotone), for the flip side. A second slot
@@ -160,6 +164,23 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
               scrims survives untouched. */}
           <div className="absolute inset-0">
             <div className="v8-jewel-spine absolute inset-y-0 left-0 w-[8%]">
+              {hasCover && (
+                <>
+                  {/* Printed wraparound spine: the SAME slotted duotone cover
+                      rendered a second time (same element, same srcset — the
+                      browser fetches nothing extra), cropped to the artwork's
+                      LEFT edge (object-cover + object-left shows a tall left
+                      slice, like the inlay sheet folding around the spine —
+                      a full squeeze read as noise stripes at 1:11). Darkened
+                      by a scrim, then the spine's own plastic gradients are
+                      re-painted ON TOP (`.v8-jewel-spine-plastic`, global.css)
+                      so the print sits BEHIND the plastic like the booklet
+                      does, and the vertical title stays legible. */}
+                  <div className="absolute inset-0 overflow-hidden [&_img]:object-left">{coverPanel}</div>
+                  <div className="absolute inset-0 bg-black/45" />
+                  <div className="v8-jewel-spine-plastic absolute inset-0" />
+                </>
+              )}
               {/* Hinge teeth: small ribbed blocks inside the spine profile, flush
                   with its very top/bottom edge (no inset margin — the spine's own
                   hairline border is the case seam, so any gap read as stray
@@ -177,6 +198,14 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
                 {data.title}
               </span>
             </div>
+            {/* The physical crack between the spine and the booklet's cut edge:
+                a crisp 2px column of case-interior charcoal (an opaque fill,
+                NOT a border — nothing strokes it), shaded dark on the spine
+                side and with a lit paper-edge lip on the booklet side — over
+                this near-black artwork the gap reads mostly by that lit cut
+                edge, exactly how a real crack in dark plastic shows. Sits
+                under the gloss/bevel: the outer plastic spans the crack. */}
+            <div className="absolute inset-y-0 left-[8%] w-[2px] bg-[#101014] shadow-[inset_1px_0_0_rgba(0,0,0,0.85),inset_-1px_0_0_rgba(255,255,255,0.22)]" />
             <div className="v8-jewel-gloss absolute inset-0" />
             <div className="v8-jewel-bevel absolute inset-0" />
           </div>
@@ -247,12 +276,26 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
               environmental (top-left), it does not flip with the object. */}
           <div className="absolute inset-0">
             <div className="v8-jewel-spine absolute inset-y-0 right-0 w-[8%] -scale-x-100">
+              {hasCover && (
+                /* Same printed spine inlay as the front — it is the same
+                   physical spine, so the same duotone left-edge slice rides
+                   inside the mirrored container (the parent's -scale-x-100
+                   flips the print, exactly as a case seen from behind). */
+                <>
+                  <div className="absolute inset-0 overflow-hidden [&_img]:object-left">{coverPanel}</div>
+                  <div className="absolute inset-0 bg-black/45" />
+                  <div className="v8-jewel-spine-plastic absolute inset-0" />
+                </>
+              )}
               <div className="v8-jewel-tooth absolute inset-x-0 top-0 h-[6px]" />
               <div className="v8-jewel-tooth absolute inset-x-0 bottom-0 h-[6px]" />
               <span className="absolute top-[18%] bottom-[18%] left-1/2 -translate-x-1/2 -scale-x-100 overflow-hidden font-mono text-[8px] tracking-[0.18em] uppercase whitespace-nowrap text-ellipsis text-white/70 [writing-mode:vertical-rl]">
                 {data.title}
               </span>
             </div>
+            {/* Booklet crack, mirrored with the spine: lit paper lip on ITS
+                booklet side (the left of the crack on this face). */}
+            <div className="absolute inset-y-0 right-[8%] w-[2px] bg-[#101014] shadow-[inset_-1px_0_0_rgba(0,0,0,0.85),inset_1px_0_0_rgba(255,255,255,0.22)]" />
             <div className="v8-jewel-gloss absolute inset-0" />
             <div className="v8-jewel-bevel absolute inset-0" />
           </div>

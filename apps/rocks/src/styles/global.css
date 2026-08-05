@@ -293,15 +293,15 @@
       inset 1px 0 0 rgba(255, 255, 255, 0.26),
       inset -1px 0 0 rgba(0, 0, 0, 0.6);
   }
-  .v8-jewel-spine::after {
-    /* Lit ridge of the front lid, just right of the seam. */
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: -1px;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.22);
+  /* Re-paints the spine's plastic ON TOP of the printed wraparound inlay the
+     card slides underneath it (case-card.tsx renders the slotted cover art a
+     second time inside the spine): `inherit` copies the parent spine's own
+     gradients and inset edge shadows verbatim, so the plastic shading is
+     defined exactly once. On coverless sleeves the overlay isn't rendered and
+     the spine element's own background does the same job. */
+  .v8-jewel-spine-plastic {
+    background: inherit;
+    box-shadow: inherit;
   }
   .v8-jewel-tooth {
     /* Hinge tooth: a notch cut INTO the spine profile, flush against its

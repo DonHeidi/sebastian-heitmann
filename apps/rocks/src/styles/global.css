@@ -307,10 +307,11 @@
        cut lines. Strictly inside the spine bar: the fill is subtle, and the
        tooth repeats the spine's own outer-left highlight and right-seam
        shadow so the case silhouette lines run through it unbroken — nothing
-       reads as a tab escaping the closed rectangle. Sized small (3.5% of the
-       spine's height) so it reads as a hinge nub at the corner, not a stray
-       highlight. Positioned (via `absolute` on the element) so `::before`
-       below has a box to fill. */
+       reads as a tab escaping the closed rectangle. Sized small — a fixed
+       6px (`h-[6px]`, not a percentage: the tooth stays a hairline strip
+       regardless of tile size) — so it reads as a hinge nub at the corner,
+       not a stray highlight. Positioned (via `absolute` on the element) so
+       `::before` below has a box to fill. */
     background: linear-gradient(
       to bottom,
       rgba(255, 255, 255, 0.11),
@@ -325,24 +326,24 @@
   }
   .v8-jewel-tooth::before {
     /* Grill haptic: the ribbed grip texture a real jewel case has ON the
-       hinge tooth itself — parallel ridges running the width of the tooth
-       (horizontal bands, stacked along the vertical axis: `0deg` repeats
-       down the block). Hard stops (same-offset color pairs, no gradation)
-       so the ridges read as crisp molded plastic, not a smeared gradient.
-       Scoped to the tooth's own box only — nothing bleeds onto the spine
-       proper or the cover side of the seam. Low `opacity` on the pseudo
-       (rather than baked into the band alphas) is the "overall
-       transparency": faint enough to read as texture sitting on the tooth,
-       not stripes painted over it. */
+       hinge tooth itself — vertical grooves repeating across the width of
+       the tooth (`90deg` repeats left-to-right across the block). Hard
+       stops (same-offset color pairs, no gradation) so the ridges read as
+       crisp molded plastic, not a smeared gradient. Scoped to the tooth's
+       own box only — nothing bleeds onto the spine proper or the cover side
+       of the seam. Low `opacity` on the pseudo (rather than baked into the
+       band alphas) is the "overall transparency": faint enough to read as
+       texture sitting on the tooth, not stripes painted over it. Fine
+       grooves, not stripes: ~1px lines with ~1.2px gaps. */
     content: '';
     position: absolute;
     inset: 0;
     background-image: repeating-linear-gradient(
-      0deg,
+      90deg,
       rgba(0, 0, 0, 0.55) 0px,
-      rgba(0, 0, 0, 0.55) 2px,
-      rgba(255, 255, 255, 0.4) 2px,
-      rgba(255, 255, 255, 0.4) 4px
+      rgba(0, 0, 0, 0.55) 1px,
+      rgba(255, 255, 255, 0.4) 1px,
+      rgba(255, 255, 255, 0.4) 2.2px
     );
     opacity: 0.35;
   }

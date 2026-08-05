@@ -122,8 +122,8 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
               (::before, global.css) is scoped to these blocks only — a real
               jewel case's hinge grill lives on the tooth itself, not
               elsewhere on the spine or cover. */}
-          <div className="v8-jewel-tooth absolute inset-x-0 top-0 h-[3.5%]" />
-          <div className="v8-jewel-tooth absolute inset-x-0 bottom-0 h-[3.5%]" />
+          <div className="v8-jewel-tooth absolute inset-x-0 top-0 h-[6px]" />
+          <div className="v8-jewel-tooth absolute inset-x-0 bottom-0 h-[6px]" />
           {/* Spine title, reading top-to-bottom like a real CD spine. NOTE:
               `top/bottom` must be the PHYSICAL properties — logical `inset-y`
               (inset-block) would map to left/right under vertical-rl. */}

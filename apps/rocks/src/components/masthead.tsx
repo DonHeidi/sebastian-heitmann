@@ -45,7 +45,12 @@ export function Masthead({ nameFirst, nameLast, tagline }: MastheadProps) {
       </h1>
       <p className="reveal mt-5 flex items-center gap-4 font-mono text-[clamp(0.7rem,1.4vw,0.95rem)] tracking-[0.32em] text-foreground uppercase">
         <span className="h-[2px] flex-1 bg-primary" aria-hidden="true" />
-        <span className="[text-shadow:2px_2px_0_#000]">{tagline}</span>
+        {/* Hard poster shadow is dark-theme only (task 17): black-on-near-black
+            text over light paper just smears. Light theme goes bare — an A/B
+            against a white letterpress offset showed the offset ghosting over
+            the busy art at desktop widths (another smear), while bare stays
+            crisp on both paper and flames. */}
+        <span className="dark:[text-shadow:2px_2px_0_#000]">{tagline}</span>
         <span className="h-[2px] flex-1 bg-primary" aria-hidden="true" />
       </p>
     </div>

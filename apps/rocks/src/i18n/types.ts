@@ -60,6 +60,7 @@ export interface Strings {
   };
   footer: {
     copyright: string;
+    madeWith: string;
     privacyLabel: string;
     imprintLabel: string;
     contactLabel: string;

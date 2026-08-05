@@ -65,6 +65,7 @@ export const enUs: Strings = {
   },
   footer: {
     copyright: '© 2026 Sebastian Heitmann',
+    madeWith: 'Made with 🤖 and ❤️ by Sebastian Heitmann',
     privacyLabel: 'Privacy',
     imprintLabel: 'Imprint',
     contactLabel: 'Contact',

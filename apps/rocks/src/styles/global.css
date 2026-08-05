@@ -383,6 +383,53 @@
       inset -1px 0 0 rgba(0, 0, 0, 0.34);
   }
 
+  /* Edge-wall materials for the case's physical depth (task 24): the four
+     height×depth / width×depth planes case-card.tsx rotates onto the tile's
+     edges so the flip shows a solid slab. Unlike the face chrome above these
+     are OPAQUE — mid-flip there is nothing behind a wall but the page, so a
+     translucent wash would read as a hole, not plastic. Solid plastic tones,
+     deliberately theme-independent (the case is a physical object; its edge
+     doesn't recolor with the UI theme). Gradients run along each wall's
+     depth axis (`to right` = element x = the case's z once rotated). */
+  .v8-jewel-wall-spine {
+    /* Spine's outer edge: dark plastic, one soft vertical specular running
+       the wall's full height (element-right is the case's FRONT side here —
+       the streak sits just behind the front lip, where folded plastic
+       catches the same top-left light as the lid). */
+    background:
+      linear-gradient(
+        to right,
+        transparent 30%,
+        rgba(255, 255, 255, 0.13) 44%,
+        rgba(255, 255, 255, 0.13) 54%,
+        transparent 70%
+      ),
+      linear-gradient(to right, #141417, #26262b 40%, #1c1c21 75%, #121215);
+  }
+  .v8-jewel-wall-open {
+    /* Opening edge: lighter plastic (the lid's polished lip) split by the
+       lid/tray seam — a dark groove with a lit lower lip at ~38% of the
+       depth (element-left is the case's FRONT side: the lid shell owns the
+       front ~38%, the tray the rest), running the wall's full height. */
+    background:
+      linear-gradient(
+        to right,
+        transparent calc(38% - 1.5px),
+        rgba(0, 0, 0, 0.7) calc(38% - 1.5px),
+        rgba(0, 0, 0, 0.7) calc(38% + 0.5px),
+        rgba(255, 255, 255, 0.22) calc(38% + 0.5px),
+        rgba(255, 255, 255, 0.22) calc(38% + 1.5px),
+        transparent calc(38% + 1.5px)
+      ),
+      linear-gradient(to right, #3c3c44, #4a4a53 30%, #40404a 75%, #33333b);
+  }
+  .v8-jewel-wall-lid {
+    /* Top/bottom edges: plain dark lid-edge plastic. Only ever seen as a
+       near-edge-on sliver (they exist to plug the mid-flip see-through
+       slit), so no feature lines — just a faint lengthwise shading. */
+    background: linear-gradient(to right, #1b1b1f, #232329 50%, #17171b);
+  }
+
   /* Wrinkle morphism for the hero poster (spec amendment 2026-08-04): a
      theme-matched crumpled-paper texture blended over the whole poster block.
      Subtle physical print, NOT grunge — tuned low opacity, soft blends only.

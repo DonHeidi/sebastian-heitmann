@@ -38,15 +38,32 @@ export interface CaseCardProps {
 }
 
 /**
- * CD-jewel-case tile: a real jewel case's front, front-on (142mm × 125mm,
- * spine included in the width — landscape, not square), with the cover art
- * (or the generated sleeve) as the booklet behind the plastic. Hover or
+ * CD-jewel-case tile: a real jewel case's front, front-on (142mm × 125mm ×
+ * 10mm, spine included in the width — landscape, not square), with the cover
+ * art (or the generated sleeve) as the booklet behind the plastic. Hover or
  * keyboard focus flips the case horizontally (rotateY, task 23) to its back:
  * the same art in full color under a printed back-inlay panel listing the
  * stack as a track list plus role/year fine print. The `.v8-jewel-*` chrome
  * (global.css) draws the spine + hinge teeth and the lid's gloss/bevel on
  * both faces; on the back the spine chrome is mirrored to the RIGHT edge
  * (`-scale-x-100`), where a physically flipped case's spine lands.
+ *
+ * Physical depth (task 24): the case is a 3D slab, not a rotating plane.
+ * `--case-depth` = 7cqw (10/142 of the tile width — the real case's depth
+ * ratio; @container on the article makes cqw track the TILE, so the depth
+ * scales with the grid). The slab sits BEHIND the tile plane — front face
+ * at z=0, back face at z=-depth — and the scene's rotation origin is pushed
+ * to the slab's core (`transform-origin: 50% 50% -depth/2`), so BOTH
+ * settled states land their visible face exactly at z=0: the rest state is
+ * pixel-identical to the pre-depth tile and the flipped back is not
+ * perspective-enlarged. Four edge walls (`.v8-jewel-wall-*`, global.css)
+ * close the slab: the left wall is the spine's outer edge, the right wall
+ * the opening edge with the lid/tray seam, and thin top/bottom walls plug
+ * the see-through slit the perspective's vertical divergence would reveal
+ * mid-flip (backface-hidden faces don't paint when seen from inside the
+ * slab). All walls are exactly edge-on at 0° and 180°, so the
+ * reduced-motion instant swap never shows them and the rest state cannot
+ * leak a wall sliver.
  *
  * A11y contract: the whole 3D scene is one `aria-hidden`, pointer-inert
  * layer — purely presentational, so nothing on either face duplicates into
@@ -71,7 +88,7 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
     <article className="reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] group-hover:rotate-y-180 group-focus-within:rotate-y-180 motion-reduce:transition-none"
+        className="pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] group-hover:rotate-y-180 group-focus-within:rotate-y-180 motion-reduce:transition-none"
       >
         {/* ---- FRONT face: the jewel case's lid, permanently duotone. ---- */}
         <div className={faceChrome}>
@@ -154,8 +171,11 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
           </div>
         </div>
         {/* ---- BACK face: the back inlay. Pre-rotated 180° so the flip lands
-             on it reading normally; spine chrome mirrored to the right edge. ---- */}
-        <div className={`${faceChrome} rotate-y-180`}>
+             on it reading normally, and pushed a full case-depth behind the
+             front face (rotate-then-translate: the translateZ runs along the
+             face's own flipped axis, landing it at scene z = -depth); spine
+             chrome mirrored to the right edge. ---- */}
+        <div className={`${faceChrome} [transform:rotateY(180deg)_translateZ(var(--case-depth))]`}>
           {hasCover ? (
             /* Same art, full color, no duotone — slightly blurred (scaled past
                its own blur fringe) and darkened so the inlay panel stays
@@ -226,6 +246,23 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
             <div className="v8-jewel-bevel absolute inset-0" />
           </div>
         </div>
+        {/* ---- EDGE WALLS: the slab's 10mm sides. Each is an edge-anchored
+             plane rotated 90° about the edge it closes and slid half a depth
+             inward, spanning z 0..-depth between the faces (transform lists
+             read outer-to-inner: translate to the edge, recess into the slab,
+             then rotate the plane on). `backface-hidden` keeps them
+             exterior-only, matching the faces — the slab never paints its
+             hollow inside. Purely presentational (inside the aria-hidden
+             scene); absolutely positioned, so zero layout at rest. */}
+        {/* Left wall — the spine's outer edge (dark plastic, vertical specular). */}
+        <div className="v8-jewel-wall-spine absolute inset-y-0 left-0 w-[var(--case-depth)] backface-hidden [transform:translateX(calc(var(--case-depth)/-2))_translateZ(calc(var(--case-depth)/-2))_rotateY(-90deg)]" />
+        {/* Right wall — the opening edge (lighter plastic, lid/tray seam). */}
+        <div className="v8-jewel-wall-open absolute inset-y-0 right-0 w-[var(--case-depth)] backface-hidden [transform:translateX(calc(var(--case-depth)/2))_translateZ(calc(var(--case-depth)/-2))_rotateY(90deg)]" />
+        {/* Top/bottom walls — plain lid-edge plastic. Needed: the tile-centered
+             perspective diverges ±~10° vertically, so without them the mid-flip
+             silhouette shows a see-through slit along the top/bottom edges. */}
+        <div className="v8-jewel-wall-lid absolute inset-x-0 top-0 h-[var(--case-depth)] backface-hidden [transform:translateY(calc(var(--case-depth)/-2))_translateZ(calc(var(--case-depth)/-2))_rotateX(90deg)]" />
+        <div className="v8-jewel-wall-lid absolute inset-x-0 bottom-0 h-[var(--case-depth)] backface-hidden [transform:translateY(calc(var(--case-depth)/2))_translateZ(calc(var(--case-depth)/-2))_rotateX(-90deg)]" />
       </div>
       {/* The ONE real link, outside the 3D scene so it stays hit-testable from
           both faces (a backface-hidden front would swallow a stretched ::after

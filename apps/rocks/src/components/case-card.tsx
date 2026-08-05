@@ -31,8 +31,9 @@ export interface CaseCardProps {
 }
 
 /**
- * CD-jewel-case tile: a square case, front-on, with the cover art (or the
- * generated sleeve) as the booklet behind the plastic. The `.v8-jewel-*`
+ * CD-jewel-case tile: a real jewel case's front, front-on (142mm × 125mm,
+ * spine included in the width — landscape, not square), with the cover art
+ * (or the generated sleeve) as the booklet behind the plastic. The `.v8-jewel-*`
  * chrome (global.css) draws the spine + hinge teeth on the left and the lid's
  * gloss/bevel over everything — it is aria-hidden, pointer-transparent decor,
  * so the printed copy (setlist number top-left, rotated stamp top-right,
@@ -47,7 +48,7 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
   const external = data.kind === 'project' ? data.links[0] : undefined;
   const linkHref = data.kind === 'case-study' ? href : external?.url;
   return (
-    <article className="reveal v8-duotone-host group @container relative aspect-square overflow-hidden border border-border bg-surface transition-colors focus-within:border-primary hover:border-muted-foreground">
+    <article className="reveal v8-duotone-host group @container relative aspect-[142/125] overflow-hidden border border-border bg-surface transition-colors focus-within:border-primary hover:border-muted-foreground">
       {hasCover ? (
         <div className="absolute inset-0">{coverPanel}</div>
       ) : (

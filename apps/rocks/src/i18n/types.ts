@@ -25,6 +25,7 @@ export interface Strings {
     system: string;
     light: string;
     dark: string;
+    label: string;
   };
   cases: {
     sectionTitle: string;

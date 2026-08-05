@@ -19,7 +19,7 @@ function applyTheme(mode: Mode) {
 }
 
 export interface ThemeToggleProps {
-  labels: { system: string; light: string; dark: string };
+  labels: { system: string; light: string; dark: string; label: string };
 }
 
 export function ThemeToggle({ labels }: ThemeToggleProps) {
@@ -64,7 +64,7 @@ export function ThemeToggle({ labels }: ThemeToggleProps) {
       type="single"
       value={mode}
       onValueChange={(value) => value && select(value as Mode)}
-      aria-label="Theme"
+      aria-label={labels.label}
       spacing={0}
       className="rounded-none border border-border bg-transparent p-0 shadow-none"
     >

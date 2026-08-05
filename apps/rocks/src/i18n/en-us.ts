@@ -32,6 +32,7 @@ export const enUs: Strings = {
     system: 'System',
     light: 'Light',
     dark: 'Dark',
+    label: 'Theme',
   },
   cases: {
     sectionTitle: 'Setlist: Cases',

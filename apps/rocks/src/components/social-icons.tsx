@@ -1,8 +1,8 @@
 // simple-icons removed the LinkedIn mark from published packages (trademark policy).
 // Path below is the last-published glyph, sourced from the still-installed
 // @iconify-json/simple-icons dataset, so the rendered icon matches the old
-// astro-icon output exactly. Shared across author-card, hero, and footer —
-// the only three places the site links out to LinkedIn.
+// astro-icon output exactly. Only footer.tsx links out to LinkedIn in this app,
+// so this is currently a single-consumer component.
 export function LinkedInIcon({ className, size = 16 }: { className?: string; size?: number }) {
   return (
     <svg role="img" viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor">

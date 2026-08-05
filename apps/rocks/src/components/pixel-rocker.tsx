@@ -24,7 +24,8 @@
 //   headstock (cols 4-5, well clear of the hair on the opposite side), a
 //   contiguous 1px neck stepping diagonally down-right across the shirt, an
 //   accent body slanted at the right hip that sticks out past the torso,
-//   with a cutaway notch (empty cell at 15,14) where the neck joins, plus a
+//   with a cutaway notch (a single jacket-colored pixel, not empty space,
+//   breaking the diagonal where the neck's last step meets the body) plus a
 //   1px faint strap line parallel one row below the neck. The fretting hand
 //   grips the neck below the headstock; frame 1's strumming hand rests on
 //   the body's top edge.

@@ -32,6 +32,7 @@ export const deDe: Strings = {
     system: 'System',
     light: 'Hell',
     dark: 'Dunkel',
+    label: 'Darstellung',
   },
   cases: {
     sectionTitle: 'Setlist: Fallstudien',

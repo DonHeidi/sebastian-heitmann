@@ -494,3 +494,22 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **The back face:** a mirrored jewel-case back — spine edge continuity on the right, same plastic gloss/bevel language, ribbed 6px hinge teeth mirrored. Background: the SAME cover art in full color (no duotone tint), darkened/blurred just enough under the panel for legibility. Over it, the CD-back idiom: a track-list panel (semi-translucent dark panel like printed back inlays) listing the case study's data as tracks: numbered rows from `stack` (01, 02, ... in mono, dotted leaders optional), a `role` line, the year; labels via NEW `Strings.caseBack` section (e.g. `{ tracksLabel: 'Stack' / 'Stack', roleLabel, yearLabel }` — reuse existing `cases.roleLabel` where sensible instead of duplicating). Placeholder-sleeve entries: same back panel over the sleeve ground.
 - [ ] **Integrity:** whole-tile link still works from BOTH faces (the link must not be duplicated in the a11y tree — one stretched link, faces are presentational); accessible name unchanged; no layout shift; grid/aspect untouched; both locales parallel; AA contrast on the back panel.
 - [ ] Visual iteration at 1440/768 both themes both locales: front, mid-flip feel, back; reduced-motion emulation; `bun run build` clean; commit `feat(rocks): flip case tiles to a track-list back on hover`.
+
+---
+
+### Task 25: Case entries from Sebastian's repositories (owner request 2026-08-05)
+
+**Owner directive:** "Can you add some more cases from my repositories?"
+
+- [ ] Research via `gh` (READMEs + repo metadata; several repos are private — the local gh auth is the owner's): draft content entries in BOTH locales for: `blickwerk` (case-study), `job-directory` (case-study), `v8-asterisk` (case-study), `sub-tracker` (project), `typescript-best-practices` (project). Facts ONLY from the repos (description, README, languages, first/last commit dates for startDate); role is honest ("Design and development" etc.); NO invented outcomes or clients; summaries in the site's dry register; German is real German. Entries whose repos are private get no source link (links: [] or a live URL only if the README names one, e.g. blickwerk/job-directory live deployments if documented).
+- [ ] Covers from the committed library (owner may reassign): blickwerk → cover-art-goggles-grin, job-directory → cover-art-red-suits, v8-asterisk → cover-art-red-shades, sub-tracker → cover-art-masked-duo, typescript-best-practices → cover-art-blue-menagerie. `featured: false` for all (portfolio-platform stays the featured lead); kind per above; draft: false.
+- [ ] Verify: build clean; landing shows six tiles (4 case studies incl. seed, 2 projects) in both locales; detail pages emit for the case-study kinds; jewel-case grid + flip work per tile (spot screenshots). Commit `feat(rocks): five case entries drafted from the owner's repositories`.
+- [ ] PR note + report must flag: copy is DRAFTED FOR OWNER REVIEW.
+
+### Task 26: Per-tile pose variance (owner request 2026-08-05)
+
+**Owner directive:** "this will sell even better, when we apply different tilts"
+
+- [ ] Give each tile a deterministic individual rest pose instead of the uniform rotateY(22) rotateX(8): a small fixed set of pose variants (4-6 combos varying rotY roughly 12-28deg, INCLUDING one or two turned the other way — negative rotY showing the opening edge instead of the spine — and rotX 5-10deg, always top-leaning-back positive), selected by `index % variants.length` (SSR-deterministic, no randomness). The hover flip still settles at the mirrored-bias back (adjust per-variant if a negative-rotY rest makes 170° read wrong — judge visually; per-variant settle angles are fine).
+- [ ] Legibility bar: front copy AA-legible at the extreme variants both themes; the grid reads as casually-placed cases, not chaos (screenshots of the six-tile grid at 1440 + 768 both themes judge it).
+- [ ] Build clean; commit `feat(rocks): individual resting tilts per case tile`.

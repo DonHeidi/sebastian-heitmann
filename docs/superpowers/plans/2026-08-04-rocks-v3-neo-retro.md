@@ -435,3 +435,16 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] Reproduce FIRST: screenshot the nav/hero seam at 375 and 768 (both themes) and diagnose the actual offset (suspects: the hero's `calc(100svh - 6rem)` height paired with a mobile nav that wraps taller than 6rem; the masthead block's top padding tuned for desktop nav clearance; any fixed/sticky nav behavior differing by width).
 - [ ] Fix so the poster starts immediately below the nav at every width, matching the desktop relationship (options: measure-free CSS such as the hero filling the remaining viewport via flex column on a `min-h-svh` page wrapper instead of hardcoded rem subtraction; or width-scoped clearance values). No magic numbers that break when the nav wraps differently in de-de (its longer CTA wraps the nav to three rows at 375 — test that case explicitly).
 - [ ] Verify 375/768/1024/1440 × themes × locales: no gap, no overlap, poster fold-fill preserved at desktop, tear/billing intact; `bun run build` clean; commit `fix(rocks): seat the hero under the nav at every width`.
+
+---
+
+### Task 19: One continuous mobile poster (owner feedback 2026-08-05, round 2 screenshot)
+
+**Owner directive:** dark-mobile screenshot shows the poster split in two: an orange band (masthead area) ending in a hard horizontal seam, then the artwork as a separate dark block. "This is no better."
+
+**Diagnosis:** the `max-lg` `scale(1.4)` + shifted `transform-origin` crop slides the artwork's top edge DOWN below the poster's top; the region above it exposes the `.v8-duotone` wrapper's accent ground (blended with the wrinkle) → the orange band + seam. The scale-hack approach has failed twice (light seam, now dark band).
+
+- [ ] **Remove the mobile scale/transform crop entirely** (both themes). The art layer covers the poster by construction: `absolute inset-0` + `object-cover`, full stop. Composition control comes ONLY from per-theme/per-breakpoint `object-position` (and, if the helmet still collides with text at small widths, scrim adjustments — never uncovered regions).
+- [ ] **Acceptance bar (hard):** at 375/430/768, both themes, both locales, duotone AND revealed: the poster is ONE continuous sheet — no horizontal edge, band, or ground-color region anywhere between the nav seam and the tear. Compare each mobile shot side-by-side against the 1440 shot of the same theme: same poster, narrower.
+- [ ] Desktop (1024+) must remain pixel-identical (it never used the scale trick). Protected: scrim bands (the 1024-1362 band and light-theme additions), tear, billing block, wrinkle.
+- [ ] `bun run build` clean; commit `fix(rocks): cover the full poster with artwork on mobile`.

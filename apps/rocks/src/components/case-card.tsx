@@ -54,16 +54,27 @@ export interface CaseCardProps {
  * scales with the grid). The slab sits BEHIND the tile plane — front face
  * at z=0, back face at z=-depth — and the scene's rotation origin is pushed
  * to the slab's core (`transform-origin: 50% 50% -depth/2`), so BOTH
- * settled states land their visible face exactly at z=0: the rest state is
- * pixel-identical to the pre-depth tile and the flipped back is not
+ * settled states land their visible face exactly at z=0 and neither is
  * perspective-enlarged. Four edge walls (`.v8-jewel-wall-*`, global.css)
  * close the slab: the left wall is the spine's outer edge, the right wall
  * the opening edge with the lid/tray seam, and thin top/bottom walls plug
  * the see-through slit the perspective's vertical divergence would reveal
  * mid-flip (backface-hidden faces don't paint when seen from inside the
- * slab). All walls are exactly edge-on at 0° and 180°, so the
- * reduced-motion instant swap never shows them and the rest state cannot
- * leak a wall sliver.
+ * slab).
+ *
+ * Resting pose (task 24 follow-up, owner request): the slab is never seen
+ * flat-on, so its thickness stays visible at rest — a static product-shot
+ * tilt of `rotateX(-3deg) rotateY(10deg)` (composable Tailwind rotate
+ * utilities, so the hover flip only swaps the Y angle). Positive rotateY
+ * brings the LEFT edge toward the viewer: the spine wall peeks; negative
+ * rotateX tips the top edge toward the viewer: a sliver of the top wall.
+ * The back settles at rotateY(170deg) — a MIRRORED bias, not 180+10: at
+ * 170° the spine wall (DOM-left, on screen-right after the flip, flush
+ * with the back's mirrored spine chrome) peeks again, so both settled
+ * states read as the same case photographed spine-forward, and the track
+ * list sits at the same |10°| off-axis as the front copy (equal
+ * legibility). The pose lives entirely inside this absolutely-positioned
+ * scene, so the article's layout box never moves.
  *
  * A11y contract: the whole 3D scene is one `aria-hidden`, pointer-inert
  * layer — purely presentational, so nothing on either face duplicates into
@@ -88,7 +99,7 @@ export function CaseCard({ data, href, strings, backStrings, index, coverPanel, 
     <article className="reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] group-hover:rotate-y-180 group-focus-within:rotate-y-180 motion-reduce:transition-none"
+        className="pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] -rotate-x-3 rotate-y-10 group-hover:rotate-y-170 group-focus-within:rotate-y-170 motion-reduce:transition-none"
       >
         {/* ---- FRONT face: the jewel case's lid, permanently duotone. ---- */}
         <div className={faceChrome}>

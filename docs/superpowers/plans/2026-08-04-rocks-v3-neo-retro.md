@@ -483,3 +483,14 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] The gloss/spine layers must not break the hover reveal, AA text contrast (per-tile scrim may be retuned additively), or the square grid (spine included WITHIN the square tile).
 - [ ] Visual iteration at 1440/768/375 × themes × locales, duotone + revealed, incl. a close-up of one tile per theme (does it read "CD case" at a glance?) and a placeholder-sleeve check (temporary entry, reverted before commit).
 - [ ] `bun run build` clean; commit `feat(rocks): cd jewel case treatment for case tiles`.
+
+---
+
+### Task 23: Hover flips the case to its back (owner feature 2026-08-05)
+
+**Owner directive:** "change the behavior of the on hover. I like to flip the case horizontally, so that the back appears. The background art is just the image without the orange tint and some information about the case study. I thought about maybe making it reminiscent to the track list but with tech and roles or similar."
+
+- [ ] **Flip mechanic:** hover (and `:focus-within` for keyboard) rotates the tile 180° on the Y axis (CSS `perspective` on the grid cell, `transform-style: preserve-3d`, `backface-visibility: hidden` on both faces, ~0.5-0.7s ease). This REPLACES the duotone hover reveal on tiles (the front stays permanently duotone; remove the tile-scoped reveal, do not touch the hero's reveal). Under `prefers-reduced-motion: reduce`: no rotation — instant face swap (opacity) or no flip at all, judged; touch devices keep tap-to-navigate on the front (back is a pointer-hover bonus).
+- [ ] **The back face:** a mirrored jewel-case back — spine edge continuity on the right, same plastic gloss/bevel language, ribbed 6px hinge teeth mirrored. Background: the SAME cover art in full color (no duotone tint), darkened/blurred just enough under the panel for legibility. Over it, the CD-back idiom: a track-list panel (semi-translucent dark panel like printed back inlays) listing the case study's data as tracks: numbered rows from `stack` (01, 02, ... in mono, dotted leaders optional), a `role` line, the year; labels via NEW `Strings.caseBack` section (e.g. `{ tracksLabel: 'Stack' / 'Stack', roleLabel, yearLabel }` — reuse existing `cases.roleLabel` where sensible instead of duplicating). Placeholder-sleeve entries: same back panel over the sleeve ground.
+- [ ] **Integrity:** whole-tile link still works from BOTH faces (the link must not be duplicated in the a11y tree — one stretched link, faces are presentational); accessible name unchanged; no layout shift; grid/aspect untouched; both locales parallel; AA contrast on the back panel.
+- [ ] Visual iteration at 1440/768 both themes both locales: front, mid-flip feel, back; reduced-motion emulation; `bun run build` clean; commit `feat(rocks): flip case tiles to a track-list back on hover`.

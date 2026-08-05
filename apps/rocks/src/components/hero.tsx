@@ -277,16 +277,25 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
           style={HERO_MASK}
         />
       )}
-      {/* Whitened tear fiber (task 21): warm-white pulp along the ragged edge,
-          see TEAR_FIBER_STYLE. Painted after the wrinkle at the same z so the
-          exposed fiber isn't dimmed by the wrinkle's blend — torn pulp is raw
-          paper, not part of the printed/crumpled face. It never reaches the
-          content (its alpha lives only in the bottom fiber band, which the
-          billing block clears at every width — task 20's valley construction). */}
+      {/* Whitened tear fiber (task 21, restacked task 21 addendum 2 — review
+          finding: this near-opaque dark fiber must never be able to overlap
+          text, so it sits BELOW the content stack, unlike the wrinkle (which
+          stays z-20 above everything, approved design, unchanged). `z-[5]`
+          sits between the masked art+scrim wrapper (position absolute,
+          z-index auto — the lowest layer in this header) and the content
+          stack (z-10): the art wrapper establishes its own stacking context
+          via `filter`, so its children (art, both scrim bands) are painted
+          as one encapsulated unit at that auto layer regardless of the
+          fiber's exact z-value — the fiber still paints above the whole art
+          stack, including the bottom scrim, exactly as it did at z-20; only
+          its relationship to the wrinkle and content changed. See
+          TEAR_FIBER_STYLE. It never reaches the content (its alpha lives
+          only in the bottom fiber band, which the billing block clears at
+          every width — task 20's valley construction). */}
       {art && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-20 opacity-45 dark:opacity-90"
+          className="pointer-events-none absolute inset-0 z-[5] opacity-45 dark:opacity-90"
           style={TEAR_FIBER_STYLE}
         />
       )}

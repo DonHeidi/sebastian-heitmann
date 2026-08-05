@@ -513,3 +513,15 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] Give each tile a deterministic individual rest pose instead of the uniform rotateY(22) rotateX(8): a small fixed set of pose variants (4-6 combos varying rotY roughly 12-28deg, INCLUDING one or two turned the other way — negative rotY showing the opening edge instead of the spine — and rotX 5-10deg, always top-leaning-back positive), selected by `index % variants.length` (SSR-deterministic, no randomness). The hover flip still settles at the mirrored-bias back (adjust per-variant if a negative-rotY rest makes 170° read wrong — judge visually; per-variant settle angles are fine).
 - [ ] Legibility bar: front copy AA-legible at the extreme variants both themes; the grid reads as casually-placed cases, not chaos (screenshots of the six-tile grid at 1440 + 768 both themes judge it).
 - [ ] Build clean; commit `feat(rocks): individual resting tilts per case tile`.
+
+---
+
+### Task 27: Large-screen typography scale (owner feedback 2026-08-05)
+
+**Owner directive:** "It looks good up until 1080 but on larger screens, the copy gets hard to read, especially when it is kept small."
+
+- [ ] **Fluid root scale:** in `global.css`, give `html` a root font-size that stays 16px up to ~1440px viewport width and grows fluidly to ~19px by ~2560px (e.g. `font-size: clamp(16px, calc(16px + (100vw - 1440px) * 0.003), 19px)` — exact curve iterated visually; must be a no-op at and below 1440 so nothing regresses). Everything rem-based (Tailwind text scale, spacing, the masthead clamp's rem cap) then grows together, preserving compositions.
+- [ ] **Convert pixel-pinned TEXT sizes to rem** so they participate: audit every `text-[Npx]` in apps/rocks/src (mono labels 9/10/11/13px are the worst offenders the owner means) and convert to rem-based arbitrary values (`text-[0.6875rem]` etc. — same rendered size at root 16, scaling above). Letter-spacing in em already scales. Do NOT convert physical/decorative px: hinge teeth height, crack width, borders, tear/mask geometry, blur/offset values, the favicon.
+- [ ] **Audit line-height + measure:** where copy blocks (intro, case prose, about body, back-inlay track list) grow, confirm max-width containers (`max-w-[58ch]` etc.) are ch/rem-based so measure scales sanely; fix any px-based text containers.
+- [ ] Verify at 1080 (unchanged - pixel-diff a page), 1440 (unchanged or imperceptibly larger), 1920 and 2560 (copy comfortably larger, compositions intact: hero poster, jewel-case grid incl. spine titles + track-list backs, billing block, detail pages, footer) — both themes, both locales. Check the jewel case: cqw-based depth is container-relative (unaffected), but rem-based paddings inside tiles will grow slightly — confirm no overflow/clipping in the tiles at 2560.
+- [ ] `bun run build` clean; commit `feat(rocks): fluid large-screen typography scale`.

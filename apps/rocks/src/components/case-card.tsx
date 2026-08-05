@@ -31,13 +31,17 @@ export interface CaseCardProps {
 }
 
 /**
- * Album-cover case tile: a square sleeve where the artwork IS the card and the
- * copy is printed onto it — setlist number top-left, rotated stamp top-right,
- * Anton title over a bottom scrim. The whole tile links out via the stretched
- * anchor around the title (accessible name = title). `v8-duotone-host` on the
- * article re-triggers the duotone hover reveal from anywhere over the tile,
- * since the overlaid copy would otherwise swallow the pointer before it
- * reaches the `.v8-duotone` wrapper.
+ * CD-jewel-case tile: a square case, front-on, with the cover art (or the
+ * generated sleeve) as the booklet behind the plastic. The `.v8-jewel-*`
+ * chrome (global.css) draws the spine + hinge teeth on the left and the lid's
+ * gloss/bevel over everything — it is aria-hidden, pointer-transparent decor,
+ * so the printed copy (setlist number top-left, rotated stamp top-right,
+ * Anton title over a bottom scrim) and the stretched anchor keep working
+ * unchanged. The copy is left-padded past the spine so it sits on the
+ * booklet, not the plastic bar. `v8-duotone-host` on the article re-triggers
+ * the duotone hover reveal from anywhere over the tile, since the overlaid
+ * copy would otherwise swallow the pointer before it reaches the
+ * `.v8-duotone` wrapper.
  */
 export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: CaseCardProps) {
   const external = data.kind === 'project' ? data.links[0] : undefined;
@@ -50,7 +54,7 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
         /* Generated sleeve for coverless entries: solid surface ground with a
            big rough off-register asterisk, so the grid stays coherent as
            content grows before art exists. */
-        <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center pb-12">
+        <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center pb-12 pl-[8%]">
           <AsteriskMark size={230} tone="faint" misregister />
         </div>
       )}
@@ -65,7 +69,7 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
           <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
         </div>
       )}
-      <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-6">
+      <div className="absolute inset-0 flex flex-col justify-between py-5 pr-5 pl-[calc(8%+1.25rem)] md:py-6 md:pr-6 md:pl-[calc(8%+1.5rem)]">
         <div className="flex items-start justify-between">
           <span
             className={`font-mono text-[11px] tracking-[0.1em] ${hasCover ? 'text-white/90' : 'text-muted-foreground'}`}
@@ -101,6 +105,25 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
             data.title
           )}
         </h3>
+      </div>
+      {/* Jewel-case chrome, above art/scrims/copy (plastic sits in FRONT of the
+          printed booklet): spine + hinge teeth, then the lid's gloss and bevel
+          across the whole face including the spine. All layers are hairlines
+          or ≤11%-alpha washes, so the copy's AA contrast over the scrims
+          survives untouched. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="v8-jewel-spine absolute inset-y-0 left-0 w-[8%]">
+          <div className="v8-jewel-tooth absolute -right-1 left-0 top-[4.5%] h-[11%] rounded-r-[2px]" />
+          <div className="v8-jewel-tooth absolute -right-1 left-0 bottom-[4.5%] h-[11%] rounded-r-[2px]" />
+          {/* Spine title, reading top-to-bottom like a real CD spine. NOTE:
+              `top/bottom` must be the PHYSICAL properties — logical `inset-y`
+              (inset-block) would map to left/right under vertical-rl. */}
+          <span className="absolute top-[18%] bottom-[18%] left-1/2 -translate-x-1/2 overflow-hidden font-mono text-[8px] tracking-[0.18em] uppercase whitespace-nowrap text-ellipsis text-white/70 [writing-mode:vertical-rl]">
+            {data.title}
+          </span>
+        </div>
+        <div className="v8-jewel-gloss absolute inset-0" />
+        <div className="v8-jewel-bevel absolute inset-0" />
       </div>
     </article>
   );

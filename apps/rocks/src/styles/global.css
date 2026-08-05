@@ -258,6 +258,96 @@
     filter: none;
   }
 
+  /* CD jewel-case chrome for the case tiles (task 22). Front-on view: a flat
+     plastic spine bar on the left with the front lid's two hinge teeth near
+     its top and bottom, a directional gloss (one strong diagonal streak, one
+     faint) across the lid, and a hairline bevel catching light top/left.
+     Everything is translucent black/white so the SAME chrome reads over
+     duotone art, revealed full-color art, the generated sleeve, and both
+     themes — the plastic tints whatever is behind it. Deliberately restrained:
+     neo-retro print object, not glassmorphism. */
+  .v8-jewel-spine {
+    /* Edge-on plastic: darker than the lid, shaded across its width, with a
+       narrow interior specular running its full height (folded plastic
+       catching light) — layered gradients, highlight on top of the shading. */
+    background:
+      linear-gradient(
+        to right,
+        transparent 22%,
+        rgba(255, 255, 255, 0.1) 30%,
+        rgba(255, 255, 255, 0.1) 36%,
+        transparent 46%
+      ),
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.52),
+        rgba(0, 0, 0, 0.32) 30%,
+        rgba(0, 0, 0, 0.4) 75%,
+        rgba(0, 0, 0, 0.6)
+      );
+    /* Outer-left edge highlight; dark seam where the lid meets the spine. */
+    box-shadow:
+      inset 1px 0 0 rgba(255, 255, 255, 0.26),
+      inset -1px 0 0 rgba(0, 0, 0, 0.6);
+  }
+  .v8-jewel-spine::after {
+    /* Lit ridge of the front lid, just right of the seam. */
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -1px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .v8-jewel-tooth {
+    /* Hinge tooth: the lid's tab wrapping the spine — an extra plastic layer
+       (slightly lighter) between two dark cutout lines, its blunt end
+       overhanging the seam onto the lid face. */
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.09)
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(0, 0, 0, 0.75),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.75),
+      inset 0 2px 0 rgba(255, 255, 255, 0.14);
+  }
+  .v8-jewel-gloss {
+    /* Directional gloss on the lid: soft top-left sheen, one strong diagonal
+       streak, one faint parallel follower. */
+    background-image: linear-gradient(
+        112deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0) 26%
+      ),
+      linear-gradient(
+        112deg,
+        transparent 32%,
+        rgba(255, 255, 255, 0.05) 38%,
+        rgba(255, 255, 255, 0.15) 42%,
+        rgba(255, 255, 255, 0.02) 49%,
+        rgba(0, 0, 0, 0.05) 52%,
+        transparent 57%
+      ),
+      linear-gradient(
+        112deg,
+        transparent 57%,
+        rgba(255, 255, 255, 0.06) 62%,
+        rgba(0, 0, 0, 0.03) 66%,
+        transparent 70%
+      );
+  }
+  .v8-jewel-bevel {
+    /* Case edges: light catches top/left, shadow pools bottom/right. */
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.34),
+      inset 1px 0 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.46),
+      inset -1px 0 0 rgba(0, 0, 0, 0.34);
+  }
+
   /* Wrinkle morphism for the hero poster (spec amendment 2026-08-04): a
      theme-matched crumpled-paper texture blended over the whole poster block.
      Subtle physical print, NOT grunge — tuned low opacity, soft blends only.

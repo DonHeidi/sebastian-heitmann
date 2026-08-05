@@ -113,8 +113,11 @@ export function CaseCard({ data, href, strings, index, coverPanel, hasCover }: C
           survives untouched. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="v8-jewel-spine absolute inset-y-0 left-0 w-[8%]">
-          <div className="v8-jewel-tooth absolute -right-1 left-0 top-[4.5%] h-[11%] rounded-r-[2px]" />
-          <div className="v8-jewel-tooth absolute -right-1 left-0 bottom-[4.5%] h-[11%] rounded-r-[2px]" />
+          {/* Hinge teeth: small notches inside the spine profile near its
+              ends — flush with the spine's width (no overhang past the seam),
+              so the case reads as a closed rectangle. */}
+          <div className="v8-jewel-tooth absolute inset-x-0 top-[3%] h-[10%]" />
+          <div className="v8-jewel-tooth absolute inset-x-0 bottom-[3%] h-[10%]" />
           {/* Spine title, reading top-to-bottom like a real CD spine. NOTE:
               `top/bottom` must be the PHYSICAL properties — logical `inset-y`
               (inset-block) would map to left/right under vertical-rl. */}

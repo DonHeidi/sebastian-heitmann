@@ -46,6 +46,10 @@ export const deDe: Strings = {
     ongoing: 'laufend',
     backToOverview: 'Zurück zur Übersicht',
   },
+  caseBack: {
+    tracksLabel: 'Stack',
+    yearLabel: 'Jahr',
+  },
   projects: {
     sectionTitle: 'Side Projects',
   },

@@ -46,6 +46,10 @@ export const enUs: Strings = {
     ongoing: 'ongoing',
     backToOverview: 'Back to overview',
   },
+  caseBack: {
+    tracksLabel: 'Stack',
+    yearLabel: 'Year',
+  },
   projects: {
     sectionTitle: 'Side Projects',
   },

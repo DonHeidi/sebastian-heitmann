@@ -264,8 +264,10 @@
      strong diagonal streak, one faint) across the lid, and a hairline bevel
      catching light top/left.
      Everything is translucent black/white so the SAME chrome reads over
-     duotone art, revealed full-color art, the generated sleeve, and both
-     themes — the plastic tints whatever is behind it. Deliberately restrained:
+     duotone art, the back inlay's full-color art (task 23 renders it on both
+     faces of the flip — mirrored onto the right edge on the back via
+     -scale-x-100 in case-card.tsx), the generated sleeve, and both themes —
+     the plastic tints whatever is behind it. Deliberately restrained:
      neo-retro print object, not glassmorphism. */
   .v8-jewel-spine {
     /* Edge-on plastic: darker than the lid, shaded across its width, with a

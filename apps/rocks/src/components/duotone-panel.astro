@@ -10,12 +10,26 @@ interface Props {
   eager?: boolean;
   class?: string;
   imgClass?: string;
+  /** Set false to render the same responsive <Image> WITHOUT the duotone
+   * treatment (the case tiles' flip side, task 23): the wrapper stays so
+   * callers keep identical sizing/overflow behavior; same src/widths means
+   * the browser fetches each variant once for both faces. */
+  duotone?: boolean;
 }
 
-const { src, alt, widths, sizes, eager = false, class: className = '', imgClass = '' } = Astro.props;
+const {
+  src,
+  alt,
+  widths,
+  sizes,
+  eager = false,
+  class: className = '',
+  imgClass = '',
+  duotone = true,
+} = Astro.props;
 ---
 
-<div class={`v8-duotone ${className}`}>
+<div class={`${duotone ? 'v8-duotone' : 'overflow-hidden'} ${className}`}>
   <Image
     src={src}
     alt={alt}

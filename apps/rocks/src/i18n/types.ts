@@ -39,6 +39,12 @@ export interface Strings {
     ongoing: string;
     backToOverview: string;
   };
+  /** Labels printed on the case tile's flip side (the CD back inlay).
+   * The role line reuses `cases.roleLabel` — no duplicate here. */
+  caseBack: {
+    tracksLabel: string;
+    yearLabel: string;
+  };
   projects: {
     sectionTitle: string;
   };

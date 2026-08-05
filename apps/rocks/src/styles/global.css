@@ -259,10 +259,10 @@
   }
 
   /* CD jewel-case chrome for the case tiles (task 22). Front-on view: a flat
-     plastic spine bar on the left with the front lid's two hinge teeth flush
-     against its top and bottom edge, the ribbed grill haptic just right of
-     the seam, a directional gloss (one strong diagonal streak, one faint)
-     across the lid, and a hairline bevel catching light top/left.
+     plastic spine bar on the left with the front lid's two ribbed hinge
+     teeth flush against its top and bottom edge, a directional gloss (one
+     strong diagonal streak, one faint) across the lid, and a hairline bevel
+     catching light top/left.
      Everything is translucent black/white so the SAME chrome reads over
      duotone art, revealed full-color art, the generated sleeve, and both
      themes — the plastic tints whatever is behind it. Deliberately restrained:
@@ -309,7 +309,8 @@
        shadow so the case silhouette lines run through it unbroken — nothing
        reads as a tab escaping the closed rectangle. Sized small (3.5% of the
        spine's height) so it reads as a hinge nub at the corner, not a stray
-       highlight. */
+       highlight. Positioned (via `absolute` on the element) so `::before`
+       below has a box to fill. */
     background: linear-gradient(
       to bottom,
       rgba(255, 255, 255, 0.11),
@@ -322,17 +323,22 @@
       inset 1px 0 0 rgba(255, 255, 255, 0.26),
       inset -1px 0 0 rgba(0, 0, 0, 0.6);
   }
-  .v8-jewel-grill {
-    /* Grill haptic: the ribbed grip texture a real jewel case has along the
-       lid's hinge edge, just right of the spine seam — alternating black and
-       white bands with HARD stops (same-offset color pairs below, no
-       gradation between them) so the ridges read as crisp molded plastic
-       rather than a smeared gradient. `opacity` on the element (not baked
-       into the band alphas) is the "overall transparency": low enough that
-       this reads as texture sitting over the art/spine, not stripes painted
-       on top of it. */
+  .v8-jewel-tooth::before {
+    /* Grill haptic: the ribbed grip texture a real jewel case has ON the
+       hinge tooth itself — parallel ridges running the width of the tooth
+       (horizontal bands, stacked along the vertical axis: `0deg` repeats
+       down the block). Hard stops (same-offset color pairs, no gradation)
+       so the ridges read as crisp molded plastic, not a smeared gradient.
+       Scoped to the tooth's own box only — nothing bleeds onto the spine
+       proper or the cover side of the seam. Low `opacity` on the pseudo
+       (rather than baked into the band alphas) is the "overall
+       transparency": faint enough to read as texture sitting on the tooth,
+       not stripes painted over it. */
+    content: '';
+    position: absolute;
+    inset: 0;
     background-image: repeating-linear-gradient(
-      90deg,
+      0deg,
       rgba(0, 0, 0, 0.55) 0px,
       rgba(0, 0, 0, 0.55) 2px,
       rgba(255, 255, 255, 0.4) 2px,

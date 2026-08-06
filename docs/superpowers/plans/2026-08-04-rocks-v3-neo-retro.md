@@ -538,3 +538,16 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **i18n:** any labels via a new `Strings.showcase` section (e.g. a mono kicker like the annotations register); generic per-device alts from Strings ('Desktop view' / 'Desktop-Ansicht' etc.); no hardcoded text.
 - [ ] Verify: build clean with no showcases anywhere; temp entry with 1 and with 3 device images (reverted before commit) screenshotted at 1440/768/375 both themes both locales; AA/layout sanity. Commit `feat(rocks): device showcase trio for case detail pages`.
 - [ ] Report + PR note: Sebastian supplies real screenshots per case (drop into assets, add frontmatter paths).
+
+---
+
+### Task 29: Realistic laptop frame craft (owner reference 2026-08-06)
+
+**Owner shared a CodePen MacBook mockup** (devindavid/poeaxEb) as a craft reference. Adopt its TECHNIQUES, rebuilt in our own structure/palette (do not paste its CSS; and explicitly DO NOT reproduce its `.macbookpro` wordmark SVG — Apple trademark, and it would turn our generic frame into a claimed Apple product):
+
+- [ ] **Front-edge extrusion:** the deck's front face gets a many-stop horizontal gradient (the reference uses ~20 stops from dark edge → bright highlight → body tone → mirrored at the far edge) so the lip reads as a milled extrusion catching light, instead of today's flat bar. Tune to our dark-plastic palette (we are not silver aluminum), keeping the same optical trick: tight bright stops near both ends, broad even body.
+- [ ] **Tapered base:** bottom corners via two-value percentage radii (reference: `25% 60%`) so the base reads as a wedge, plus the pair of rounded thumb-scoop "openers" (rounded inner corners, radial shading) at the deck's front centre.
+- [ ] **Contact shadow:** a dedicated blurred shadow element under the deck (reference: two halves with mirrored corner radii, blur ~2px, multiply blend) rather than relying on box-shadow — it should ground the device on the page in both themes (lighter/warmer in light theme, per our existing `.v8-device-cast` override).
+- [ ] **Screen glare:** replace/augment our soft sheen with a HARD-STOP diagonal reflection (reference: `linear-gradient(55deg, transparent 61%, rgba(242,245,248,0.15) 61%)`, screen blend, clipped to the bezel's top-right radius) — a single crisp glass reflection line reads far more convincingly than a gradient wash. Verify over the now-committed DARK screenshot (`portfolio-platform-desktop.png`) and keep it subtle enough not to obscure UI detail.
+- [ ] Tablet/phone frames get the proportional equivalents (hard-stop glare + contact shadow); no wordmarks anywhere; still generic.
+- [ ] Verify on the live case page (portfolio-platform has a real desktop screenshot now) at 1440/768/375 both themes, plus the temp 3-device check (reverted); `bun run build` clean; commit `feat(rocks): craft pass on the device frames`.

@@ -527,12 +527,40 @@
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
   }
   .v8-device-deck {
-    /* Laptop base, seen almost edge-on — the TOP surface only; the front face
-       is `.v8-device-edge` below and the thumb recess is `.v8-device-scoop*`.
-       Layers: the lid's shadow falling on the deck (a hard dark band) closed
-       by the lit front lip of the hinge groove, a left/right darkening
-       (foreshortening — without it the deck reads as a flat painted bar), and
-       the plastic itself.
+    /* Laptop base with the lid open, seen from slightly above — so what is
+       actually visible is the base's FRONT LIP, not its top surface. That
+       fixes the vertical order of everything painted here, and getting it
+       upside down is what made an earlier pass read as a flipped part:
+
+         top       the light-catching CHAMFER where the deck's top surface
+                   turns down into the front face (`.v8-device-chamfer`,
+                   which also carries the hinge shadow closing the junction
+                   with the lid above it)
+         middle    the face itself, near flat
+         bottom    darkening into a contact line where it meets the table
+
+       Light on a horizontal-ish chamfer under an overhead key is the
+       brightest thing on the part, and a vertical face below it only ever
+       gets dimmer as it goes down. Reverse those two and the eye reads the
+       object as photographed upside down, whatever the silhouette does.
+
+       The thumb scoop follows from the same viewpoint: it is a notch in the
+       lip's TOP edge that you look down INTO, so it hangs from the top
+       (`.v8-device-scoop*`), never a dish sitting near the foot.
+
+       The base tone is the milled horizontal extrusion gradient (was its own
+       element while the face was only the bottom 38% of this box): the face
+       is very nearly flat across its middle, but the last fraction of a
+       percent at each end curls away, so the specular runs from a black
+       corner through a hot line back down to the body tone within ~4% of the
+       width. Hence the stop DENSITY: 11 stops inside the first 5%, mirrored
+       in the last 5%, and only four across the whole middle. Spacing the same
+       colours evenly would just produce a wide soft vignette and the lip
+       would go back to reading as paint. Adapted to our dark plastic rather
+       than the silver-aluminium reference: the body sits at #26262f–#2e2e39
+       and the hot line peaks at #8c8c9e, a grey highlight on grey, never
+       white — anodised aluminium blows out to near-white, moulded dark
+       plastic does not.
 
        TAPERED BASE (task 29): the silhouette is the intersection of a
        clip-path and a border-radius, which do different halves of the wedge.
@@ -543,20 +571,21 @@
        along the bottom edge rather than a quarter circle. That is what stops
        a 33:1 box reading as a rectangle: the base tucks under itself at both
        ends the way a moulded wedge does. Generic hardware, no branded
-       silhouette. `overflow: hidden` is what makes the radius clip the front
-       face and scoops too (clip-path clips descendants; border-radius does
+       silhouette. `overflow: hidden` is what makes the radius clip the
+       chamfer and scoops too (clip-path clips descendants; border-radius does
        not, without it). */
-    background:
-      /* lid shadow on the deck, closed by the hinge's lit front lip */
+    background-image:
+      /* the face's own shading: it only darkens going DOWN, into the contact
+         line at the foot */
       linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.88) 0,
-        rgba(0, 0, 0, 0.88) 10%,
-        rgba(255, 255, 255, 0.2) 10%,
-        rgba(255, 255, 255, 0.2) 15%,
-        transparent 15%
+        rgba(0, 0, 0, 0) 34%,
+        rgba(0, 0, 0, 0.12) 60%,
+        rgba(0, 0, 0, 0.32) 84%,
+        rgba(0, 0, 0, 0.56) 95%,
+        rgba(0, 0, 0, 0.74) 100%
       ),
-      /* the surface falls away at both ends — foreshortening, and it stops the
+      /* the face falls away at both ends — foreshortening, and it stops the
          deck reading as a flat painted bar */
         linear-gradient(
           to right,
@@ -565,40 +594,6 @@
           transparent 74%,
           rgba(0, 0, 0, 0.46)
         ),
-      linear-gradient(to bottom, #3c3c46, #4a4a55 38%, #30303a 86%, #1f1f26);
-    border-bottom-left-radius: 2.4% 42%;
-    border-bottom-right-radius: 2.4% 42%;
-    clip-path: polygon(1.4% 0, 98.6% 0, 100% 100%, 0 100%);
-  }
-  .v8-device-edge {
-    /* FRONT-EDGE EXTRUSION (task 29). The deck's front face used to be a flat
-       lit band; this is the same trick a milled extrusion plays on light —
-       the face is very nearly flat across its middle, but the last fraction
-       of a percent at each end curls away, so the specular runs from a black
-       corner through a hot line back down to the body tone within ~4% of the
-       width. Hence the stop DENSITY: 11 stops inside the first 5%, mirrored
-       in the last 5%, and only four across the whole middle. Spacing the same
-       colours evenly would just produce a wide soft vignette and the lip
-       would go back to reading as paint.
-
-       Adapted to our dark plastic rather than the silver-aluminium reference:
-       the body sits at #26262f–#2e2e39 and the hot line peaks at #8c8c9e, a
-       grey highlight on grey, never white — anodised aluminium blows out to
-       near-white, moulded dark plastic does not.
-
-       The vertical layer on top is the face's own shading: in the overhanging
-       top surface's shadow at the top, a lit lower lip, and a dark contact
-       line right at the bottom so the silhouette closes. */
-    background-image:
-      linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.4) 0,
-        rgba(0, 0, 0, 0.14) 14%,
-        rgba(0, 0, 0, 0) 42%,
-        rgba(255, 255, 255, 0.1) 82%,
-        rgba(255, 255, 255, 0.16) 92%,
-        rgba(0, 0, 0, 0.35) 100%
-      ),
       linear-gradient(
         to right,
         #0e0e12 0%,
@@ -626,31 +621,74 @@
         #0e0e12 100%
       );
   }
+  .v8-device-chamfer {
+    /* The lip's TOP edge, and the deck's brightest feature: the narrow bevel
+       where the base's top surface turns down into the front face, tilted
+       just enough toward the overhead key light to catch a specular. It is a
+       separate element rather than two more stops on the deck's own gradient
+       because it has to paint UNDER the scoops — the scoop is a dip in this
+       very edge, so it must be able to interrupt it (see `.v8-device-scoop`).
+
+       Two layers, in paint order:
+       - horizontal: the bevel rolls out of the light at both ends, matching
+         the deck's foreshortening, so the highlight is a lens and not a rule
+         drawn edge to edge.
+       - vertical: the HINGE SHADOW first (the lid's underside, dark, in the
+         top ~18% of this element), then the hot chamfer line, then a fast
+         decay into the face. Painting the hinge shadow here rather than on
+         the lid is what lets the deck overlap the lid by a hair without a
+         seam: the overlap lands inside the dark band. */
+    background-image:
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.5) 0,
+        rgba(0, 0, 0, 0) 7%,
+        rgba(0, 0, 0, 0) 93%,
+        rgba(0, 0, 0, 0.54) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.66) 0,
+        rgba(0, 0, 0, 0.34) 16%,
+        rgba(255, 255, 255, 0.4) 26%,
+        rgba(255, 255, 255, 0.34) 44%,
+        rgba(255, 255, 255, 0.14) 72%,
+        rgba(255, 255, 255, 0) 100%
+      );
+  }
   .v8-device-scoop {
-    /* The opener recess milled into the front edge, drawn as two mirrored
-       halves (task 29). Task 28 cut it out of the deck's clip-path, which at
-       these sizes read as a chip missing from the silhouette; a shaded recess
-       is both more legible and more honest — a thumb scoop is a dish, not a
-       hole. Two halves rather than one element so each side can round only
-       its OUTER top corner (the two inner edges meet flush at the centre) and
+    /* The opener recess, drawn as two mirrored halves (task 29). Task 28 cut
+       it out of the deck's clip-path, which at these sizes read as a chip
+       missing from the silhouette; a shaded recess is both more legible and
+       more honest — a thumb scoop is a dish, not a hole.
+
+       It hangs from the deck's TOP edge because that is where it is milled:
+       the notch is taken out of the lip's upper bevel and, from a viewpoint
+       slightly above the machine, you look down into it. So the recess
+       CEILING is the overhang at the top (deepest shade) and the light that
+       does reach it pools on the dish floor lower down, where the arc of the
+       cut catches a hairline. Drawn the other way up — a dish sitting near
+       the deck's foot — it reads as a smudge on the front face, which is
+       what an earlier pass shipped.
+
+       Two halves rather than one element so each side can round only its
+       OUTER bottom corner (the two inner edges meet flush at the centre) and
        catch light differently: the left wall faces the top-left key light and
        picks up a bounce, the right wall stays in shadow. */
-    /* The dish's own shading: deepest against the recess ceiling, gone by the
-       bottom so the front face's lit lip runs UNBROKEN through the scoop — a
-       shallow dish dims the lip, it doesn't cut it. */
     --v8-scoop-floor: linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0.34) 40%,
-      rgba(0, 0, 0, 0.12) 74%,
+      rgba(0, 0, 0, 0.62) 0,
+      rgba(0, 0, 0, 0.46) 34%,
+      rgba(0, 0, 0, 0.24) 68%,
+      rgba(0, 0, 0, 0.06) 92%,
       rgba(0, 0, 0, 0)
     );
-    /* Hairline of light on the recess ceiling, which follows the elliptical
-       corner radius below and so draws the arch itself. */
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    /* Hairline of light on the dish floor, which follows the elliptical
+       corner radius below and so draws the arc of the cut itself. */
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.16);
   }
   .v8-device-scoop-l {
-    border-top-left-radius: 92% 100%;
+    border-bottom-left-radius: 92% 100%;
     background-image:
       radial-gradient(
         130% 170% at 0 100%,
@@ -660,7 +698,7 @@
       var(--v8-scoop-floor);
   }
   .v8-device-scoop-r {
-    border-top-right-radius: 92% 100%;
+    border-bottom-right-radius: 92% 100%;
     background-image:
       radial-gradient(
         130% 170% at 100% 100%,

@@ -12,7 +12,7 @@
  * showcase ships zero client JS.
  *
  * The frames are GENERIC hardware: rounded plastic bodies, a thin lit bezel, a
- * single centered camera dot, a laptop deck with a hinge groove and a thumb
+ * single centered camera dot, a laptop deck with a hinge shadow and a thumb
  * scoop. No trade dress of any manufacturer — no notch/island silhouette, no
  * home button, no logos, no branded proportions.
  *
@@ -23,13 +23,20 @@
  *
  * Task 29 craft pass — four things carry the illusion, all documented at the
  * rules themselves: a many-stop horizontal gradient on the deck's front face
- * (`.v8-device-edge`) so the lip reads as a milled extrusion; a base tapered
- * by clip-path at the top and two-value percentage radii at the foot, with a
- * drawn opener recess (`.v8-device-deck`, `.v8-device-scoop*`); a dedicated
- * blurred contact shadow on the floor (`.v8-device-ground`); and ONE
- * hard-stop reflection wedge over the glass (`.v8-device-glare`) in place of
- * the soft sheen this replaced. The last two apply to all three kinds; the
- * first two are the laptop deck.
+ * (`.v8-device-deck`) so the lip reads as a milled extrusion; a base tapered
+ * by clip-path at the top and two-value percentage radii at the foot, lit
+ * chamfer-down-to-contact-line with the opener recess cut into its TOP edge
+ * (`.v8-device-chamfer`, `.v8-device-scoop*`); a dedicated blurred contact
+ * shadow on the floor (`.v8-device-ground`); and ONE hard-stop reflection
+ * wedge over the glass (`.v8-device-glare`) in place of the soft sheen this
+ * replaced. The last two apply to all three kinds; the first two are the
+ * laptop deck.
+ *
+ * The deck is the base's FRONT LIP viewed from slightly above, so its internal
+ * order is fixed and non-negotiable: bright chamfer at the very top, face,
+ * darkening into a contact line at the foot, scoop notched down from the top
+ * edge. Every one of those is upside down if you build the deck as a top
+ * surface instead — see the block comment on `.v8-device-deck`.
  *
  * Geometry is expressed in PERCENTAGES of the frame's own width so a frame is
  * resolution-independent — the composition sets only a width, everything else
@@ -79,6 +86,13 @@ const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
  *   deck    width 1.000, height 0.0446 (7.6% of the block)
  *   ⇒ the deck overhangs the lid by 9.25% of the block on EACH side
  *
+ * The deck also carries `-mt-[0.2%]` so it rides ~1px over the lid's bottom
+ * edge. Percentage margins resolve against the containing block's WIDTH, so
+ * that stays proportional like everything else here; it is small enough not
+ * to disturb the block's height (0.5866 → 0.5846) and large enough to absorb
+ * the sub-pixel seam that fractional layout heights otherwise leave between
+ * two stacked boxes.
+ *
  * Laying the block out this way (rather than the lid at 100% and the deck on
  * negative margins) means the width the composition hands us is the width of
  * the whole laptop: nothing overflows its column, and `md:w-[82%]` means what
@@ -92,7 +106,13 @@ const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
  *          slightly deeper chin: that asymmetry is what a laptop lid actually
  *          has, and a uniform bezel is exactly what makes one read as a
  *          tablet. Screen 0.9765 × 0.5952 → 1.64:1.
- *          Body radius 2.2% → 2.2/0.665 = 3.3% vertical.
+ *          Body radius 2.2% → 2.2/0.665 = 3.3% vertical, on the TOP corners
+ *          only: a lid's bottom edge is the hinge line, which is straight and
+ *          square on real hardware. Rounding it, as a first pass did, opened
+ *          two crescents of page background between the lid and the deck at
+ *          exactly the place the eye checks for contact, and that alone was
+ *          enough to make the display look like a separate object resting
+ *          behind the base.
  *          Screen radius = 2.2 − 1.175 = 1.025% of the lid = 1.025/0.9765 ≈
  *          1.05% of the screen's width, 1.025/0.5952 ≈ 1.7% of its height.
  * tablet   side bezel 3.6%, top/bottom 5.2%; screen 3/4 portrait →
@@ -117,7 +137,7 @@ const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
 const FRAME = {
   desktop: {
     lid: 'mx-auto w-[81.5%]',
-    body: 'aspect-[1000/665] rounded-[2.2%/3.3%] px-[1.175%] pt-[2.33%] pb-[4.65%]',
+    body: 'aspect-[1000/665] rounded-[2.2%_2.2%_0_0/3.3%_3.3%_0_0] px-[1.175%] pt-[2.33%] pb-[4.65%]',
     screen: 'rounded-[1.05%/1.7%]',
     lens: 'w-[0.7%] translate-y-[116%]',
     ground: 'inset-x-[1%]',
@@ -209,19 +229,26 @@ const f = FRAME[kind];
            radii at the foot. The front face and the opener scoops are
            children so `overflow-hidden` + the deck's radius clip them to the
            wedge. */
-        <div class="v8-device-deck relative aspect-[224/10] overflow-hidden">
-          {/* Front face: the milled lip, bottom 38% of the deck. */}
-          <div class="v8-device-edge absolute inset-x-0 bottom-0 h-[38%]"></div>
-          {/* Opener scoops: 7% of the deck's width each, meeting flush at the
-              centre, 22% of the deck's height deep. Wider and shallower than
-              the first pass, which was tuned against a deck 1.5× thinner —
-              carried over unchanged onto the taller deck it stopped reading
-              as a dish and became a dark blob at 1×. */}
+        <div class="v8-device-deck relative -mt-[0.2%] aspect-[224/10] overflow-hidden">
+          {/* Top chamfer: the lit bevel along the lip's upper edge, carrying
+              the hinge shadow in its own top sixth. `top-0` combined with the
+              deck's negative margin above is the whole hinge junction — the
+              deck rides ~1px over the lid's bottom edge, and that overlap is
+              swallowed by this element's dark band, so no page background can
+              show between the two at any width or theme. */}
+          <div class="v8-device-chamfer absolute inset-x-0 top-0 h-[30%]"></div>
+          {/* Opener scoop: two halves of 7% of the deck's width, meeting flush
+              at the centre, hanging 40% of the deck's height down from the TOP
+              edge — a notch milled into the chamfer that you look down into,
+              not a dish on the front face. They come after the chamfer so they
+              paint over it: the bright bevel is interrupted across the scoop
+              and picks back up along the arc of the cut, which is what makes
+              the edge read as dipping rather than as being smudged. */}
           <span
-            class="v8-device-scoop v8-device-scoop-l absolute bottom-0 left-[43%] h-[22%] w-[7%]"
+            class="v8-device-scoop v8-device-scoop-l absolute top-0 right-1/2 h-[40%] w-[7%]"
           ></span>
           <span
-            class="v8-device-scoop v8-device-scoop-r absolute bottom-0 left-1/2 h-[22%] w-[7%]"
+            class="v8-device-scoop v8-device-scoop-r absolute top-0 left-1/2 h-[40%] w-[7%]"
           ></span>
         </div>
       )}

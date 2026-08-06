@@ -8,6 +8,7 @@ cover: ../../../assets/cover-art-sparks-crew.png
 showcase:
   desktop: ../../../assets/portfolio-platform-desktop.png
   tablet: ../../../assets/portfolio-platform-tablet.png
+  phone: ../../../assets/portfolio-platform-phone.png
 startDate: 2026-05-01
 links:
   - label: 'Live-Website'

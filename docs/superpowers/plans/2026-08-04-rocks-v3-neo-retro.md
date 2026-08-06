@@ -525,3 +525,16 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **Audit line-height + measure:** where copy blocks (intro, case prose, about body, back-inlay track list) grow, confirm max-width containers (`max-w-[58ch]` etc.) are ch/rem-based so measure scales sanely; fix any px-based text containers.
 - [ ] Verify at 1080 (unchanged - pixel-diff a page), 1440 (unchanged or imperceptibly larger), 1920 and 2560 (copy comfortably larger, compositions intact: hero poster, jewel-case grid incl. spine titles + track-list backs, billing block, detail pages, footer) — both themes, both locales. Check the jewel case: cqw-based depth is container-relative (unaffected), but rem-based paddings inside tiles will grow slightly — confirm no overflow/clipping in the tiles at 2560.
 - [ ] `bun run build` clean; commit `feat(rocks): fluid large-screen typography scale`.
+
+---
+
+### Task 28: Device showcase on case detail pages (owner feature 2026-08-06)
+
+**Owner directive:** "Most of my projects have some form of UI, therefore, I like to include the classic reel with Macbook, iPad and iPhone to showcase the project."
+
+- [ ] **Schema:** optional `showcase` group on the cases collection: `{ desktop?: image; tablet?: image; phone?: image }` (any subset). No entry has these yet — the section renders only when at least one exists; build must stay clean with zero showcases (temp-entry verification like prior tasks, reverted).
+- [ ] **Drawn device frames** (`device-frame.tsx` or split files): GENERIC laptop/tablet/phone frames drawn in the v8-wildcard language (thin dark bezels, subtle plastic/glass highlights consistent with the jewel-case chrome vocabulary; laptop with a base/hinge deck, tablet and phone with rounded bezels + camera dot; NO Apple trade dress: no notch-shape mimicry, no logos). Screenshots render inside via `astro:assets` `<Image>` (full color — UI screenshots are the content; no duotone), `object-cover` top-aligned so tall pages crop from the bottom.
+- [ ] **Composition:** the classic trio arrangement on the detail page between the cover panel and the prose: laptop centered and largest, tablet overlapping left, phone overlapping right-front, slight individual tilts consistent with the site's 3D poster language (subtle rotateY/rotateX like the jewel-case rest poses, static — no flip); stacks vertically on mobile (laptop, then tablet+phone row or stacked). Renders whichever subset exists gracefully (single device = centered alone).
+- [ ] **i18n:** any labels via a new `Strings.showcase` section (e.g. a mono kicker like the annotations register); generic per-device alts from Strings ('Desktop view' / 'Desktop-Ansicht' etc.); no hardcoded text.
+- [ ] Verify: build clean with no showcases anywhere; temp entry with 1 and with 3 device images (reverted before commit) screenshotted at 1440/768/375 both themes both locales; AA/layout sanity. Commit `feat(rocks): device showcase trio for case detail pages`.
+- [ ] Report + PR note: Sebastian supplies real screenshots per case (drop into assets, add frontmatter paths).

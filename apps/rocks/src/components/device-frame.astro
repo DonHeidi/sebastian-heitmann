@@ -14,10 +14,10 @@
  * showcase ships zero client JS.
  *
  * The frames are GENERIC hardware: rounded plastic bodies, a thin lit bezel, a
- * single centered camera dot, an unmarked keyboard bed and a plain trackpad.
- * No trade dress of any manufacturer — no notch/island silhouette, no home
- * button, no logos, no wordmarks, no branded key legends, no branded
- * proportions.
+ * single centered camera dot, an unmarked ANSI keyboard bed and a plain
+ * trackpad. No trade dress of any manufacturer — no notch/island silhouette,
+ * no home button, no logos, no wordmarks, no key legends of any kind, no
+ * branded proportions. ANSI is a published standard layout, not a trade dress.
  *
  * ─────────────────────────────────────────────────────────────────────────
  * THE 3D VOCABULARY (shared with the jewel case, `case-card.tsx` + task 24)
@@ -200,6 +200,58 @@ const FRAME = {
 } as const;
 
 const f = FRAME[kind];
+
+/* ──────────────────────── THE ANSI KEYBOARD BED ────────────────────────
+ *
+ * The bed is REAL KEY ELEMENTS, not a repeating gradient. Each number below
+ * is a key's width in **units** (1u = one alpha key), which is how keyboard
+ * layouts are actually specified, and every row sums to exactly **15u** —
+ * the width of the ANSI alphanumeric block. That single invariant is what
+ * makes this genuinely ANSI rather than ANSI-flavoured:
+ *
+ *   number row   13 × 1u                    + 2u    Backspace
+ *   Tab row      1.5u + 12 × 1u             + 1.5u  Backslash
+ *   Caps row     1.75u + 11 × 1u            + 2.25u Enter — the STRAIGHT
+ *                                                   ANSI enter, one row tall.
+ *                                                   (The tall L-shaped enter
+ *                                                   is ISO, and it is the one
+ *                                                   thing that would give the
+ *                                                   layout away as not-ANSI.)
+ *   Shift row    2.25u + 10 × 1u            + 2.75u right Shift — the
+ *                                                   asymmetry between the two
+ *                                                   shifts is ANSI's other
+ *                                                   signature; ISO's left
+ *                                                   shift is 1.25u with an
+ *                                                   extra key beside it.
+ *   bottom row   7 × 1.25u modifiers flanking a 6.25u spacebar
+ *
+ * The function row is laptop-style: 15 × 1u at ~0.7 the height of an alpha
+ * row, no F5/F9 grouping gaps (those belong to a full-size board, and at this
+ * scale they would read as damage). There is no numpad and no navigation
+ * cluster — this is a laptop deck, and the block is the alpha block.
+ *
+ * NO LEGENDS. At the deck's 81° a row is ~4px tall on screen, so a letter
+ * would be sub-pixel mush; and a legend set is the one part of a keyboard
+ * that can carry a manufacturer's trade dress. The ANSI read comes entirely
+ * from the widths and the stagger.
+ *
+ * `flex-grow` is the unit, applied inline: a row is a flexbox whose items
+ * have `flex-basis: 0`, so free space is handed out in exact proportion to
+ * these numbers and a 2.25u Enter is exactly 2.25 times a 1u key — but ONLY
+ * because the gutter is a margin on the cap INSIDE each cell rather than
+ * padding on the cell or `gap` on the row. Either of those is subtracted from
+ * the free space before the split, which measured 1.93u for the 2u backspace
+ * and 6.06u for the 6.25u spacebar. Materials and gutters are in `global.css`,
+ * which says the same thing at more length; do not "tidy" it back to `gap`.
+ */
+const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[] }[] = [
+  { fn: true, keys: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] },
+  { keys: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2] },
+  { keys: [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.5] },
+  { keys: [1.75, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2.25] },
+  { keys: [2.25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2.75] },
+  { keys: [1.25, 1.25, 1.25, 6.25, 1.25, 1.25, 1.25, 1.25] },
+];
 ---
 
 {/* Perspective lives on the frame's own layout box rather than on the row, so
@@ -300,12 +352,25 @@ const f = FRAME[kind];
       <div
         class="v8-device-bed absolute top-[53.8cqw] left-[6.4cqw] h-[57.9cqw] w-[81.5cqw] rounded-[1.6cqw] transform-3d origin-top [transform:rotateX(81deg)]"
       >
-        {/* Keyboard bed. Two repeating gradients crossed into a key grid, on
-            the back half of the deck where a keyboard actually is. At 81° the
-            row pitch collapses to a few pixels on screen — that is the point:
-            it must read as MACHINED TEXTURE, not as keys you could name. No
-            legends, no branded row layout. */}
-        <div class="v8-device-keys pointer-events-none absolute inset-x-[9%] top-[9%] h-[42%] rounded-[0.7cqw]"></div>
+        {/* Keyboard bed: a real ANSI key block (see ANSI_ROWS above), sunk
+            into a dark well on the back half of the deck. The box is sized so
+            that a key comes out very nearly square in the deck's own flat
+            space: 15u across 82% of the machine's width is 4.42cqw per unit,
+            and 5.7 row-units over 44% of the deck's depth is 4.30cqw per row.
+            Foreshortening then squashes the rows to ~4px on screen while
+            leaving the widths — and therefore the ANSI-ness — untouched, which
+            is exactly the right way round. */}
+        <div class="v8-device-keys pointer-events-none absolute inset-x-[9%] top-[8%] h-[44%] rounded-[0.7cqw]">
+          {ANSI_ROWS.map((row) => (
+            <div class={row.fn ? 'v8-device-krow v8-device-krow-fn' : 'v8-device-krow'}>
+              {row.keys.map((u) => (
+                <span class="v8-device-key" style={`flex-grow:${u}`}
+                  ><span class="v8-device-cap"></span
+                ></span>
+              ))}
+            </div>
+          ))}
+        </div>
         {/* Trackpad: a plain rounded rectangle on the palm rest, slightly
             proud of the bed with a hairline seam. */}
         <div class="v8-device-pad pointer-events-none absolute left-1/2 top-[62%] h-[26%] w-[30%] -translate-x-1/2 rounded-[1.2cqw/0.5cqw]"></div>

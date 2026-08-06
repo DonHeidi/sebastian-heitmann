@@ -590,50 +590,130 @@
       linear-gradient(to bottom, #2e2e36, #28282f 48%, #232329);
   }
   .v8-device-keys {
-    /* Keyboard bed as TEXTURE, not as keys. At the deck's 81° the row pitch
-       collapses to a handful of pixels on screen, so anything drawn per-key
-       (legends, a branded row layout, individually radiused caps) would be
-       both illegible and legally pointless. What survives foreshortening is
-       the regular dark grid between the caps — so that is all this is: two
-       repeating gradients crossed, the row one squeezed by the projection and
-       the column one untouched by it.
+    /* THE ANSI KEYBOARD BED — the well the key block is sunk into.
 
-       Pitches are chosen in the deck's own flat space: 6 rows over the height
-       (16.67% each) and 14 columns across (7.14% each). Two things had to be
-       unequal for this to read as a keyboard rather than as a speaker grille,
-       and both are a consequence of the projection:
-         · the ROW gutters are strong and every cap carries a lit leading
-           edge, because the rows are the only feature the foreshortening
-           preserves — a photographed keyboard at this angle is a stack of
-           dark bands with light on each cap's front lip.
-         · the COLUMN gutters are deliberately faint. They are NOT
-           foreshortened, so at equal strength they dominate — 14 full-height
-           vertical rules over six 3px rows is a radiator, not a keyboard.
-       Laid over each other the two gutter grids still intersect into discrete
-       keys; the columns just whisper it. */
-    background-image:
-      repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.16) 0,
-        rgba(255, 255, 255, 0.16) 2%,
-        rgba(255, 255, 255, 0.06) 2%,
-        rgba(255, 255, 255, 0.06) 12.5%,
-        rgba(0, 0, 0, 0.66) 12.5%,
-        rgba(0, 0, 0, 0.66) 16.67%
-      ),
-      repeating-linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.03) 0,
-        rgba(255, 255, 255, 0.03) 6.3%,
-        rgba(0, 0, 0, 0.4) 6.3%,
-        rgba(0, 0, 0, 0.4) 7.14%
-      ),
-      linear-gradient(to bottom, #202028, #1a1a21);
-    /* The well the keyboard is sunk into: a dark hairline inside, a lit one
-       outside — the milled edge of the cutout. */
+       This used to be two crossed `repeating-linear-gradient`s: a uniform
+       6 × 14 texture with no space bar. It is now REAL KEY ELEMENTS in a
+       genuine ANSI arrangement (the widths, and why they are the widths, are
+       documented at `ANSI_ROWS` in `device-frame.astro`). The reason that is
+       affordable is a happy accident of the projection: the deck's 81°
+       squashes the rows to ~4px on screen but leaves the WIDTHS alone, and
+       the widths are the entire content of "ANSI" — the 2u backspace, the
+       straight 2.25u enter, the mismatched shifts, the 6.25u spacebar. The
+       one thing foreshortening would have destroyed, per-key legends, is the
+       one thing a keyboard layout does not need in order to be recognised
+       (and the one part that could carry someone's trade dress). So: no
+       legends, ever.
+
+       TWO GUTTERS, DELIBERATELY UNEQUAL — the same craft note the gradient
+       version carried, for the same reason, now expressed as geometry:
+         · `--v8-key-gy` is ~2.5× `--v8-key-gx`, because the vertical gutter
+           is the one the projection is about to compress ~6:1. At equal size
+           the row gutters vanish to a quarter-pixel and the columns turn the
+           block into a radiator grille.
+         · the caps carry a hard lit band along their TOP edge. Looking down
+           a deck that leans towards you, the cap face you actually see past
+           the top surface is the one turned back towards the hinge — and it
+           is turned towards the light. That band is what reads at 4px/row,
+           far more than the gutter does.
+       What stops the columns reading as a grille even at ~2px is ANSI itself:
+       the vertical gutters DON'T line up between rows. A uniform grid has no
+       such defence, which is why the first version needed the columns turned
+       down to a whisper. */
+    --v8-key-gx: 0.36cqw;
+    --v8-key-gy: 0.9cqw;
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--v8-key-gy) / 2) calc(var(--v8-key-gx) / 2);
+    /* The well floor. Darker than the old bed's #202028 because the caps now
+       sit ON it rather than being painted into it — this is shadow, not
+       plastic. */
+    background-image: linear-gradient(to bottom, #17171d, #101015);
+    /* A dark hairline inside, a lit one outside — the milled edge of the
+       cutout. */
     box-shadow:
       inset 0 0 0 1px rgba(0, 0, 0, 0.55),
       0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  .v8-device-keys::after {
+    /* The lighting the old bed baked into its gradient, restored as an
+       overlay because opaque key caps now cover the deck beneath them:
+       the open lid's hard shadow falling across the top rows, and a roll-off
+       at both flanks. A pseudo-element rather than a div — 76 keys is enough
+       DOM. It is `absolute`, so it paints above the (static) rows. */
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.62) 0,
+        rgba(0, 0, 0, 0.4) 9%,
+        rgba(0, 0, 0, 0.18) 22%,
+        rgba(0, 0, 0, 0) 44%
+      ),
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.34) 0,
+        rgba(0, 0, 0, 0) 9%,
+        rgba(0, 0, 0, 0) 90%,
+        rgba(0, 0, 0, 0.34) 100%
+      );
+  }
+  .v8-device-krow {
+    /* One keyboard row. `flex: 1 1 0` so the five alpha rows split the well
+       evenly whatever height it is given. */
+    display: flex;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+  .v8-device-krow-fn {
+    /* Laptop function row: same 15u width, ~0.7 the height. */
+    flex-grow: 0.7;
+  }
+  .v8-device-key {
+    /* The key's CELL — its footprint on the plate. `flex-grow` is set inline
+       to the key's width in units and `flex-basis` is 0, so the row hands out
+       its whole width in exact proportion and a 2.25u enter is exactly 2.25
+       times a 1u key. THE CELL MUST CARRY NO PADDING, MARGIN OR BORDER of its
+       own, and this is not a style preference: a flex item's outer padding is
+       part of its base size, so it is subtracted from the free space BEFORE
+       the proportional split, and the leftover constant lands on every key
+       equally. Measured, that turned a 2u backspace into 1.93u and a 6.25u
+       spacebar into 6.06u — small, but it is the exact number the ANSI claim
+       rests on. The gutter therefore lives on the cap as a margin, where it
+       is invisible to the cell's flex sizing (and `gap` on the row would have
+       had precisely the same defect). */
+    display: flex;
+    flex: 0 1 0;
+    min-width: 0;
+  }
+  .v8-device-cap {
+    /* The moulded cap itself. Top-lit like everything else on the page: a
+       hard bright band along the back edge (the face turned up towards the
+       light and back towards the camera), a flat mid, and the front edge
+       falling into its own shadow just before the gutter. `flex: 1 1 auto`
+       plus stretch means it fills the cell inside its margins on both axes. */
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: calc(var(--v8-key-gy) / 2) calc(var(--v8-key-gx) / 2);
+    border-radius: 0.3cqw;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.29) 0,
+      rgba(255, 255, 255, 0.29) 16%,
+      rgba(255, 255, 255, 0.1) 16%,
+      rgba(255, 255, 255, 0.055) 64%,
+      rgba(0, 0, 0, 0.24) 100%
+    );
+    /* Sits proud of the plate: a short drop into the well below it. */
+    box-shadow: 0 0.12cqw 0.16cqw rgba(0, 0, 0, 0.5);
+  }
+  .v8-device-krow-fn .v8-device-cap {
+    /* A half-height row cannot afford a full-height gutter. */
+    margin-block: calc(var(--v8-key-gy) / 4);
   }
   .v8-device-pad {
     /* Trackpad: a plain rectangle of harder, slightly cooler material set

@@ -568,3 +568,15 @@ Shared vocabulary: reuse the jewel-case slab technique (`transform-3d` scene, fa
   - PRESERVE the approved silhouette relationships: the deck must still read WIDER than the lid (the 9%-per-side overhang idea survives in 3D as the deck's greater width), thin bezels, generic (no wordmarks/trade dress).
 - [ ] Contact shadows re-derived for the new geometry (the laptop's shadow now sits under a receding deck); both themes; screenshots stay legible (the lid's angle must not foreshorten the UI into mush — the lid should be near-facing).
 - [ ] Verify on the live case page (all three devices have real screenshots now) at 1440/768/375 both themes, both locales: full reel, per-device close-ups, hinge junction close-up, silhouette check at small scale, reduced-motion irrelevant (static) but confirm no layout shift. `bun run build` clean; commit `feat(rocks): device frames as physical 3d objects`.
+
+---
+
+### Task 31: Consistent light source on the 3D objects (owner request 2026-08-06)
+
+**Owner directive:** "Can you add a light to those objects?" — the devices should read as LIT by one coherent source rather than each face carrying an independently tuned gradient.
+
+- [ ] **Define one key light** as documented CSS custom properties in `global.css` (top-left-front, matching the convention the jewel-case chrome already implies — its spine wall comment references "the same top-left light as the lid"). Document it in place so future 3D work follows it.
+- [ ] **Shade every device face/wall by its orientation** relative to that light: the laptop deck (facing up) is the brightest plane; the lid front (facing the viewer) mid; walls facing away darkest; each slab's light-facing side wall brighter than its opposite. Replace per-face arbitrary tones with a small documented tone ladder (e.g. `--v8-face-lit/mid/dim/dark`) so relationships are explicit and tunable in one place.
+- [ ] **Specular + occlusion:** crisp specular lines along the top/left edges facing the light (the existing milled-lip highlight is the model); ambient occlusion where surfaces meet (hinge crevice, tablet/phone edge junctions); and the lid casting a soft shadow onto the deck's rear portion — that single cue sells "lit" more than anything else.
+- [ ] Keep the flat-shaded aesthetic (the owner likes the 90s/00s 3D read): coherent facet lighting, NOT smooth/glossy PBR.
+- [ ] Both themes (light theme = brighter, warmer ambient, same direction); screenshots legible; no layout shift; generic hardware unchanged. Verify at 1440/768/375 both themes with per-device close-ups and before/after pairs; `bun run build` clean; commit `feat(rocks): coherent key light across the 3d devices`.

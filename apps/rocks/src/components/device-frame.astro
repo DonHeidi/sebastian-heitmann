@@ -18,8 +18,18 @@
  *
  * Material vocabulary is the jewel case's (global.css `@layer components`):
  * thin gradients and hairline inset edges, dark plastic that does NOT recolor
- * with the theme (a device is a physical object, like the case's edge walls),
- * one restrained gloss streak over the glass. See `.v8-device-*` in global.css.
+ * with the theme (a device is a physical object, like the case's edge walls).
+ * See `.v8-device-*` in global.css.
+ *
+ * Task 29 craft pass — four things carry the illusion, all documented at the
+ * rules themselves: a many-stop horizontal gradient on the deck's front face
+ * (`.v8-device-edge`) so the lip reads as a milled extrusion; a base tapered
+ * by clip-path at the top and two-value percentage radii at the foot, with a
+ * drawn opener recess (`.v8-device-deck`, `.v8-device-scoop*`); a dedicated
+ * blurred contact shadow on the floor (`.v8-device-ground`); and ONE
+ * hard-stop reflection wedge over the glass (`.v8-device-glare`) in place of
+ * the soft sheen this replaced. The last two apply to all three kinds; the
+ * first two are the laptop deck.
  *
  * Geometry is expressed in PERCENTAGES of the frame's own width so a frame is
  * resolution-independent — the composition sets only a width, everything else
@@ -80,18 +90,21 @@ const FRAME = {
     body: 'aspect-[1000/658] rounded-[2.2%/3.3%] px-[1.5%] py-[2.6%]',
     screen: 'rounded-[0.7%/1.2%]',
     lens: 'w-[0.8%] translate-y-[112%]',
+    ground: 'inset-x-[-1%]',
     widths: [800, 1600],
   },
   tablet: {
     body: 'aspect-[1000/1341] rounded-[5.6%/4.2%] px-[3.6%] py-[5.2%]',
     screen: 'rounded-[2.2%/1.6%]',
     lens: 'w-[2.2%] translate-y-[68%]',
+    ground: 'inset-x-[3%]',
     widths: [320, 640],
   },
   phone: {
     body: 'aspect-[1000/2113] rounded-[13%/6.2%] px-[4.2%] py-[6.4%]',
     screen: 'rounded-[9.6%/4.4%]',
     lens: 'w-[3%] translate-y-[57%]',
+    ground: 'inset-x-[4%]',
     widths: [200, 400],
   },
 } as const;
@@ -105,39 +118,75 @@ const f = FRAME[kind];
     whatever sits off-centre. Matches `case-card.tsx`, which perspectives per
     tile for the same reason. */}
 <div class={`perspective-distant ${className}`}>
-  <div class={`v8-device-cast origin-bottom ${pose}`}>
-    {/* Body. `origin-bottom` above means the tilts pivot on the device's feet,
-        so a row of frames stays planted on one floor line. */}
-    <div class={`v8-device-shell relative ${f.body}`}>
-      <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
-        {/* The screenshot is the content: full colour, no duotone (unlike the
-            cover panel). `object-top` so a tall page crops from the BOTTOM —
-            the header/hero of a screenshot is what identifies the product. */}
-        <Image
-          src={src}
-          alt={alt}
-          widths={[...f.widths]}
-          sizes={sizes}
-          loading="lazy"
-          class="h-full w-full object-cover object-top"
-        />
-        {/* Glass: the recessed hairline around the display plus one soft
-            diagonal sheen. Alphas are ≤9% — the screenshot has to stay
-            readable, this is a highlight, not a glaze. */}
-        <div class="v8-device-glass pointer-events-none absolute inset-0 rounded-[inherit]"></div>
+  <div class={`relative origin-bottom ${pose}`}>
+    {/* Contact shadow, FIRST in DOM so the hardware sits on it. Anchored to
+        the bottom of the whole device (the deck's front edge on a laptop, the
+        body's foot on a tablet/phone) and pushed 92% of its own height below
+        that line — percentage translate resolves against the element, which
+        keeps this width-relative like every other measurement here. Height is
+        5% of the device's width via `aspect-*` for the same reason, so the
+        shadow scales with the object: a 630px laptop casts ~31px, a 160px
+        phone ~8px. (Do NOT size this off `getBoundingClientRect` — the pose
+        transform means the reported box is the projected quad's bounding box,
+        not the element.) It is a SIBLING of the `.v8-device-cast` element,
+        not a child: `drop-shadow` would otherwise re-shadow the shadow, and
+        the blend would be isolated by the filter. `-z-10` because a positioned
+        element paints ABOVE its in-flow siblings regardless of DOM order —
+        without it the shadow's dense top lands on the deck's lit front lip
+        and puts it out. The pose transform makes this element a stacking
+        context, so the negative index cannot escape behind the page. */}
+    <div
+      class={`v8-device-ground pointer-events-none absolute -z-10 bottom-0 aspect-[1000/50] translate-y-[92%] ${f.ground}`}
+    ></div>
+    <div class="v8-device-cast">
+      {/* Body. `origin-bottom` above means the tilts pivot on the device's
+          feet, so a row of frames stays planted on one floor line. */}
+      <div class={`v8-device-shell relative ${f.body}`}>
+        <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
+          {/* The screenshot is the content: full colour, no duotone (unlike the
+              cover panel). `object-top` so a tall page crops from the BOTTOM —
+              the header/hero of a screenshot is what identifies the product. */}
+          <Image
+            src={src}
+            alt={alt}
+            widths={[...f.widths]}
+            sizes={sizes}
+            loading="lazy"
+            class="h-full w-full object-cover object-top"
+          />
+          {/* One hard-stop reflection wedge in the top-right corner, cut by
+              the bezel radius (`rounded-[inherit]`). Screen blend, so it can
+              only add light — the UI under it hazes, never disappears. */}
+          <div class="v8-device-glare pointer-events-none absolute inset-0 rounded-[inherit]"></div>
+          {/* Glass: the recessed hairline around the display. Last, so the
+              recess reads over the reflection rather than under it. */}
+          <div class="v8-device-glass pointer-events-none absolute inset-0 rounded-[inherit]"></div>
+        </div>
+        {/* Camera: one small round lens centred in the top bezel. Round and
+            centred is the generic form factor — deliberately not a cutout
+            silhouette. */}
+        <span class={`v8-device-lens absolute top-0 left-1/2 aspect-square -translate-x-1/2 rounded-full ${f.lens}`}></span>
       </div>
-      {/* Camera: one small round lens centred in the top bezel. Round and
-          centred is the generic form factor — deliberately not a cutout
-          silhouette. */}
-      <span class={`v8-device-lens absolute top-0 left-1/2 aspect-square -translate-x-1/2 rounded-full ${f.lens}`}></span>
+      {kind === 'desktop' && (
+        /* Deck: the closed base seen almost edge-on. Slightly wider than the
+           lid (105%, hence the -2.5% side margins), tapered by clip-path at
+           the top and by two-value bottom radii at the foot. Height is 3.05%
+           of its own width ≈ 3.2% of the lid's. The front face and the opener
+           scoops are children so `overflow-hidden` + the deck's radius clip
+           them to the wedge. */
+        <div class="v8-device-deck relative -mx-[2.5%] aspect-[328/10] overflow-hidden">
+          {/* Front face: the milled lip, bottom 38% of the deck. */}
+          <div class="v8-device-edge absolute inset-x-0 bottom-0 h-[38%]"></div>
+          {/* Opener scoops: 5.5% of the deck's width each, meeting flush at
+              the centre, 30% of the deck's height deep. */}
+          <span
+            class="v8-device-scoop v8-device-scoop-l absolute bottom-0 left-[44.5%] h-[30%] w-[5.5%]"
+          ></span>
+          <span
+            class="v8-device-scoop v8-device-scoop-r absolute bottom-0 left-1/2 h-[30%] w-[5.5%]"
+          ></span>
+        </div>
+      )}
     </div>
-    {kind === 'desktop' && (
-      /* Deck: the closed base seen almost edge-on. Slightly wider than the lid
-         (105%, hence the -2.5% side margins) and clipped to a shallow
-         trapezoid, so the front edge reads as nearer the viewer; the clip also
-         carves the thumb scoop out of the front edge. Height is 3.05% of its
-         own width ≈ 3.2% of the lid's. */
-      <div class="v8-device-deck relative -mx-[2.5%] aspect-[328/10]"></div>
-    )}
   </div>
 </div>

@@ -483,27 +483,35 @@
       inset 0 -1px 0 rgba(0, 0, 0, 0.6);
   }
   .v8-device-glass {
-    /* Over the screenshot: the display's recessed hairline (inset shadow, an
-       overlay rather than the screen box's own box-shadow — an inset shadow
-       paints UNDER child content, so on the screen element itself the image
-       would hide it) plus a soft top-left sheen and one faint diagonal
-       streak at the same 112deg as the jewel-case gloss. Alphas stay ≤9%:
-       the screenshot is the content and must survive the plastic. */
-    background-image: linear-gradient(
-        112deg,
-        rgba(255, 255, 255, 0.09),
-        rgba(255, 255, 255, 0) 24%
-      ),
-      linear-gradient(
-        112deg,
-        transparent 38%,
-        rgba(255, 255, 255, 0.055) 44%,
-        rgba(255, 255, 255, 0.015) 50%,
-        transparent 56%
-      );
+    /* Over the screenshot: purely the display's recessed hairline (inset
+       shadow, an overlay rather than the screen box's own box-shadow — an
+       inset shadow paints UNDER child content, so on the screen element
+       itself the image would hide it). The reflection is no longer here; it
+       moved to `.v8-device-glare` below, which paints between the image and
+       this overlay so the recess hairline stays the topmost thing. */
     box-shadow:
       inset 0 0 0 1px rgba(0, 0, 0, 0.55),
       inset 0 2px 5px rgba(0, 0, 0, 0.45);
+  }
+  .v8-device-glare {
+    /* Hard-stop glass reflection (task 29). The soft 112deg sheen this
+       replaces read as a printed gradient; what actually says "glass" is ONE
+       crisp edge where a reflected surface ends — so the gradient is
+       transparent up to 61% and then jumps, with no transition stop, to a
+       flat cool white. `screen` blend means the wedge only ever ADDS light,
+       so dark UI under it lifts to a legible haze instead of being covered.
+       The wedge lands in the top-RIGHT: a reflection shows what is behind the
+       viewer, not the top-left key light that models the plastic, and our
+       screenshots put their content left, so the right side is where a
+       reflection costs the least legibility. Clipping is free — the overlay
+       inherits the screen box's corner radius, so the wedge is cut by the
+       bezel's radius exactly like real glass under a bezel. */
+    background-image: linear-gradient(
+      55deg,
+      transparent 76%,
+      rgba(236, 242, 250, 0.1) 76%
+    );
+    mix-blend-mode: screen;
   }
   .v8-device-lens {
     /* Camera: a dark well with a single off-centre catchlight, ringed by a
@@ -519,14 +527,25 @@
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
   }
   .v8-device-deck {
-    /* Laptop base, seen almost edge-on. Two layers: the lid's shadow falling
-       on the deck's top (a hard dark band) with the lit front lip of the
-       hinge groove just under it, over the deck's own plastic — brightest
-       just below the hinge, where the surface faces the light.
-       The clip-path does two jobs: the 1.4% inset at the top makes the base
-       a shallow trapezoid (front edge nearer the viewer, so wider), and the
-       notch between 43% and 57% carves the thumb scoop out of the front
-       edge. Generic hardware — no branded silhouette. */
+    /* Laptop base, seen almost edge-on — the TOP surface only; the front face
+       is `.v8-device-edge` below and the thumb recess is `.v8-device-scoop*`.
+       Layers: the lid's shadow falling on the deck (a hard dark band) closed
+       by the lit front lip of the hinge groove, a left/right darkening
+       (foreshortening — without it the deck reads as a flat painted bar), and
+       the plastic itself.
+
+       TAPERED BASE (task 29): the silhouette is the intersection of a
+       clip-path and a border-radius, which do different halves of the wedge.
+       The clip-path insets the TOP by 1.4% a side, so the base widens
+       downwards (the front edge is nearer the viewer). The bottom corners use
+       the TWO-VALUE percentage radius form — a small horizontal radius
+       against a large vertical one — so each corner is a long shallow sweep
+       along the bottom edge rather than a quarter circle. That is what stops
+       a 33:1 box reading as a rectangle: the base tucks under itself at both
+       ends the way a moulded wedge does. Generic hardware, no branded
+       silhouette. `overflow: hidden` is what makes the radius clip the front
+       face and scoops too (clip-path clips descendants; border-radius does
+       not, without it). */
     background:
       /* lid shadow on the deck, closed by the hinge's lit front lip */
       linear-gradient(
@@ -537,15 +556,6 @@
         rgba(255, 255, 255, 0.2) 15%,
         transparent 15%
       ),
-      /* front edge: the lip the deck ends on, so the silhouette has a bottom
-         line instead of fading into the page */
-        linear-gradient(
-          to bottom,
-          transparent 78%,
-          rgba(255, 255, 255, 0.1) 86%,
-          rgba(255, 255, 255, 0.18) 93%,
-          rgba(0, 0, 0, 0.4) 100%
-        ),
       /* the surface falls away at both ends — foreshortening, and it stops the
          deck reading as a flat painted bar */
         linear-gradient(
@@ -556,27 +566,171 @@
           rgba(0, 0, 0, 0.46)
         ),
       linear-gradient(to bottom, #3c3c46, #4a4a55 38%, #30303a 86%, #1f1f26);
-    clip-path: polygon(
-      1.4% 0,
-      98.6% 0,
-      100% 100%,
-      54.2% 100%,
-      53.2% 66%,
-      46.8% 66%,
-      45.8% 100%,
-      0 100%
+    border-bottom-left-radius: 2.4% 42%;
+    border-bottom-right-radius: 2.4% 42%;
+    clip-path: polygon(1.4% 0, 98.6% 0, 100% 100%, 0 100%);
+  }
+  .v8-device-edge {
+    /* FRONT-EDGE EXTRUSION (task 29). The deck's front face used to be a flat
+       lit band; this is the same trick a milled extrusion plays on light —
+       the face is very nearly flat across its middle, but the last fraction
+       of a percent at each end curls away, so the specular runs from a black
+       corner through a hot line back down to the body tone within ~4% of the
+       width. Hence the stop DENSITY: 11 stops inside the first 5%, mirrored
+       in the last 5%, and only four across the whole middle. Spacing the same
+       colours evenly would just produce a wide soft vignette and the lip
+       would go back to reading as paint.
+
+       Adapted to our dark plastic rather than the silver-aluminium reference:
+       the body sits at #26262f–#2e2e39 and the hot line peaks at #7a7a8c, a
+       grey highlight on grey, never white — anodised aluminium blows out to
+       near-white, moulded dark plastic does not.
+
+       The vertical layer on top is the face's own shading: in the overhanging
+       top surface's shadow at the top, a lit lower lip, and a dark contact
+       line right at the bottom so the silhouette closes. */
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.4) 0,
+        rgba(0, 0, 0, 0.14) 14%,
+        rgba(0, 0, 0, 0) 42%,
+        rgba(255, 255, 255, 0.1) 82%,
+        rgba(255, 255, 255, 0.16) 92%,
+        rgba(0, 0, 0, 0.35) 100%
+      ),
+      linear-gradient(
+        to right,
+        #0e0e12 0%,
+        #17171d 0.5%,
+        #2e2e39 1.1%,
+        #646475 1.7%,
+        #8c8c9e 2.3%,
+        #7c7c8e 2.9%,
+        #555563 3.6%,
+        #3a3a45 4.3%,
+        #2c2c35 5.1%,
+        #272730 6.2%,
+        #2b2b35 28%,
+        #2e2e39 50%,
+        #2b2b35 72%,
+        #272730 93.8%,
+        #2c2c35 94.9%,
+        #3a3a45 95.7%,
+        #555563 96.4%,
+        #7c7c8e 97.1%,
+        #8c8c9e 97.7%,
+        #646475 98.3%,
+        #2e2e39 98.9%,
+        #17171d 99.5%,
+        #0e0e12 100%
+      );
+  }
+  .v8-device-scoop {
+    /* The opener recess milled into the front edge, drawn as two mirrored
+       halves (task 29). Task 28 cut it out of the deck's clip-path, which at
+       these sizes read as a chip missing from the silhouette; a shaded recess
+       is both more legible and more honest — a thumb scoop is a dish, not a
+       hole. Two halves rather than one element so each side can round only
+       its OUTER top corner (the two inner edges meet flush at the centre) and
+       catch light differently: the left wall faces the top-left key light and
+       picks up a bounce, the right wall stays in shadow. */
+    /* The dish's own shading: deepest against the recess ceiling, gone by the
+       bottom so the front face's lit lip runs UNBROKEN through the scoop — a
+       shallow dish dims the lip, it doesn't cut it. */
+    --v8-scoop-floor: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.34) 40%,
+      rgba(0, 0, 0, 0.12) 74%,
+      rgba(0, 0, 0, 0)
     );
+    /* Hairline of light on the recess ceiling, which follows the elliptical
+       corner radius below and so draws the arch itself. */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .v8-device-scoop-l {
+    border-top-left-radius: 92% 100%;
+    background-image:
+      radial-gradient(
+        130% 170% at 0 100%,
+        rgba(255, 255, 255, 0.12),
+        rgba(255, 255, 255, 0) 62%
+      ),
+      var(--v8-scoop-floor);
+  }
+  .v8-device-scoop-r {
+    border-top-right-radius: 92% 100%;
+    background-image:
+      radial-gradient(
+        130% 170% at 100% 100%,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0) 62%
+      ),
+      var(--v8-scoop-floor);
+  }
+  .v8-device-ground {
+    /* CONTACT SHADOW (task 29): a dedicated blurred element on the floor
+       under the device, painted BEFORE the hardware so the device sits on it.
+       A `box-shadow`/`drop-shadow` alone spreads evenly in every direction,
+       which is what a floating object casts; what grounds an object is a
+       dense, tight core right at the contact line that decays fast. Hence the
+       vertical ramp: full strength at the top edge (the contact line) and
+       gone by ~62%, over a radial core under the middle of the device.
+
+       The silhouette is the two-value radius trick again — a lens/wedge shape
+       with a nearly flat top and a deep sweeping bottom — which the reference
+       builds from two mirrored half-elements; one element with mirrored
+       radii gets the same outline for one node. `blur(2px)` takes the last
+       hardness off the ends.
+
+       Adapted: the reference multiply-blends onto a light page. `multiply`
+       against our near-black dark theme would be invisible, and a `filter`ed
+       ancestor would isolate the blend anyway, so these are plain alpha
+       layers — identical result on our flat backgrounds. */
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.72) 0,
+        rgba(0, 0, 0, 0.36) 26%,
+        rgba(0, 0, 0, 0) 62%
+      ),
+      radial-gradient(
+        62% 100% at 50% 0,
+        rgba(0, 0, 0, 0.55),
+        rgba(0, 0, 0, 0) 78%
+      );
+    border-radius: 44% 44% 50% 50% / 22% 22% 100% 100%;
+    filter: blur(3px);
+  }
+  .light .v8-device-ground {
+    /* Cream theme: lighter, and warm rather than neutral — a black smudge on
+       #F5F1E8 reads as soot. Same ramp, brown-grey pigment, ~55% strength. */
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(58, 50, 40, 0.5) 0,
+        rgba(58, 50, 40, 0.24) 26%,
+        rgba(58, 50, 40, 0) 62%
+      ),
+      radial-gradient(
+        62% 100% at 50% 0,
+        rgba(58, 50, 40, 0.36),
+        rgba(58, 50, 40, 0) 78%
+      );
   }
   .v8-device-cast {
-    /* Grounds the device: `drop-shadow` (not `box-shadow`) so the shadow
-       follows the frame's actual silhouette, including the deck's clipped
-       trapezoid and scoop. Sits on the same element as the pose transform,
-       so the shadow tilts with the device. Lighter and warmer on the cream
-       theme, where a black drop reads as soot. */
-    filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.42));
+    /* The device's own soft ambient shadow: `drop-shadow` (not `box-shadow`)
+       so it follows the frame's actual silhouette, including the deck's
+       clipped wedge. Sits on the same element as the pose transform, so it
+       tilts with the device. Deliberately weaker than in task 28 — the
+       contact shadow above now does the grounding, and this only has to keep
+       the body from floating. Lighter and warmer on the cream theme, where a
+       black drop reads as soot. */
+    filter: drop-shadow(0 6px 11px rgba(0, 0, 0, 0.4));
   }
   .light .v8-device-cast {
-    filter: drop-shadow(0 10px 18px rgba(20, 20, 19, 0.26));
+    filter: drop-shadow(0 6px 13px rgba(20, 20, 19, 0.2));
   }
 
   /* Wrinkle morphism for the hero poster (spec amendment 2026-08-04): a

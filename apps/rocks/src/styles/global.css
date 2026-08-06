@@ -497,7 +497,7 @@
     /* Hard-stop glass reflection (task 29). The soft 112deg sheen this
        replaces read as a printed gradient; what actually says "glass" is ONE
        crisp edge where a reflected surface ends — so the gradient is
-       transparent up to 61% and then jumps, with no transition stop, to a
+       transparent up to 76% and then jumps, with no transition stop, to a
        flat cool white. `screen` blend means the wedge only ever ADDS light,
        so dark UI under it lifts to a legible haze instead of being covered.
        The wedge lands in the top-RIGHT: a reflection shows what is behind the
@@ -582,7 +582,7 @@
        would go back to reading as paint.
 
        Adapted to our dark plastic rather than the silver-aluminium reference:
-       the body sits at #26262f–#2e2e39 and the hot line peaks at #7a7a8c, a
+       the body sits at #26262f–#2e2e39 and the hot line peaks at #8c8c9e, a
        grey highlight on grey, never white — anodised aluminium blows out to
        near-white, moulded dark plastic does not.
 
@@ -681,7 +681,7 @@
        The silhouette is the two-value radius trick again — a lens/wedge shape
        with a nearly flat top and a deep sweeping bottom — which the reference
        builds from two mirrored half-elements; one element with mirrored
-       radii gets the same outline for one node. `blur(2px)` takes the last
+       radii gets the same outline for one node. `blur(3px)` takes the last
        hardness off the ends.
 
        Adapted: the reference multiply-blends onto a light page. `multiply`
@@ -722,7 +722,8 @@
   .v8-device-cast {
     /* The device's own soft ambient shadow: `drop-shadow` (not `box-shadow`)
        so it follows the frame's actual silhouette, including the deck's
-       clipped wedge. Sits on the same element as the pose transform, so it
+       clipped wedge. Sits inside the posed wrapper (the pose/origin moved to
+       a parent in the task-29 restructure), so it
        tilts with the device. Deliberately weaker than in task 28 — the
        contact shadow above now does the grounding, and this only has to keep
        the body from floating. Lighter and warmer on the cream theme, where a

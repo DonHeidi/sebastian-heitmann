@@ -551,3 +551,20 @@ export function SectionHeader({ title }: SectionHeaderProps) {
 - [ ] **Screen glare:** replace/augment our soft sheen with a HARD-STOP diagonal reflection (reference: `linear-gradient(55deg, transparent 61%, rgba(242,245,248,0.15) 61%)`, screen blend, clipped to the bezel's top-right radius) — a single crisp glass reflection line reads far more convincingly than a gradient wash. Verify over the now-committed DARK screenshot (`portfolio-platform-desktop.png`) and keep it subtle enough not to obscure UI detail.
 - [ ] Tablet/phone frames get the proportional equivalents (hard-stop glare + contact shadow); no wordmarks anywhere; still generic.
 - [ ] Verify on the live case page (portfolio-platform has a real desktop screenshot now) at 1440/768/375 both themes, plus the temp 3-device check (reverted); `bun run build` clean; commit `feat(rocks): craft pass on the device frames`.
+
+---
+
+### Task 30: Devices as physical 3D objects (owner request 2026-08-06)
+
+**Owner directive:** "as we are already going for a morphism look with the cd cases, we should do something similar with these devices. I think that the tablet and phone are probably easy but the notebook needs some rework to shine in 3d."
+
+Shared vocabulary: reuse the jewel-case slab technique (`transform-3d` scene, faces at ±depth with `backface-hidden`, edge walls via translate+rotateY/rotateX, `transform-origin` pushed to the slab core so the rest pose doesn't scale the object, perspective on the parent, contact shadow beneath). Devices are STATIC (no flip) — a rest pose only.
+
+- [ ] **Tablet + phone as slabs:** front face (bezel + screenshot), back face (plain dark shell — never seen at the rest angles but required for solidity), four edge walls (thin plastic with a subtle specular line; the phone's long walls may carry hairline button nubs — judgment). Depths: tablet ≈ 6mm, phone ≈ 8mm, scaled by the same ratio logic the jewel case uses (`--device-depth` from the frame's own width via cqw or a computed %). Individual rest poses in the site's language (a few degrees Y + slight X, top leaning back), differing per device so the reel reads casually placed.
+- [ ] **Laptop as a hinged object (the real work):** the lid and the deck become two separate 3D planes joined at a hinge line, inside one perspective scene:
+  - Deck: a slab lying nearly flat, rotated back on X (~72-82°, iterate) so it recedes; its top surface shows a simplified keyboard bed (repeating-gradient key rows — foreshortening means it must read as texture, not individual keys; NO branded key legends) and a trackpad rectangle; real thickness (~15mm scaled) with front/side walls, the approved milled front-lip extrusion becoming the deck slab's front wall.
+  - Lid: a thin slab (~5mm) standing from the hinge at a natural open angle (~100-110° from the deck, iterate), carrying the existing thin bezel + screenshot + hard-stop glare; its back face is plain shell.
+  - Hinge: the two meet along a shared edge with no gap at any width (this was a defect before — verify with close-ups); a hinge shadow/barrel hint where they join.
+  - PRESERVE the approved silhouette relationships: the deck must still read WIDER than the lid (the 9%-per-side overhang idea survives in 3D as the deck's greater width), thin bezels, generic (no wordmarks/trade dress).
+- [ ] Contact shadows re-derived for the new geometry (the laptop's shadow now sits under a receding deck); both themes; screenshots stay legible (the lid's angle must not foreshorten the UI into mush — the lid should be near-facing).
+- [ ] Verify on the live case page (all three devices have real screenshots now) at 1440/768/375 both themes, both locales: full reel, per-device close-ups, hinge junction close-up, silhouette check at small scale, reduced-motion irrelevant (static) but confirm no layout shift. `bun run build` clean; commit `feat(rocks): device frames as physical 3d objects`.

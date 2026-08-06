@@ -90,6 +90,27 @@
  * `.v8-device-screen`, which exists for no other reason than that the
  * screenshot's clip is one of the edges that stairsteps.
  *
+ * ─────────────────────────────────────────────────────────────────────────
+ * A FACET THAT IS A SILHOUETTE DOES NOT PAINT ITSELF (task 33)
+ * ─────────────────────────────────────────────────────────────────────────
+ * The outline above cannot help the one case that mattered, because a
+ * 3D-transformed layer's OWN boundary is composited without antialiasing
+ * whatever you do to it — it snaps to whole device pixels, which on a
+ * shallow diagonal is a visible staircase at DPR 1. The cure is structural
+ * and it is one rule:
+ *
+ *   if a transformed element's own edge is a VISIBLE edge of the object,
+ *   the element becomes a transparent container and a plain child paints
+ *   the surface — because content INSIDE a 3D layer is drawn by Skia, with
+ *   antialiasing, while the layer's boundary is not.
+ *
+ * `.v8-device-bed` → `.v8-device-bed-face` is the one place this was needed
+ * (the deck's lower edge). Everything else on the machine already satisfies
+ * the rule by accident: the lid's `.v8-device-shell` and the slab faces are
+ * children of the element that turns them, so their edges were never layer
+ * boundaries — which is exactly why they never stepped. Measured for all of
+ * them with `harness/mask33.mjs`; only the deck failed.
+ *
  * Every class string is a complete literal (never assembled from parts) so
  * Tailwind's scanner sees it.
  */
@@ -383,10 +404,32 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
           sliver of it passes behind the lid — that overlap is what guarantees
           no page background can ever show through the junction at a fractional
           pixel, and because it is rotated it lands BEHIND the lid rather than
-          on it, so nothing paints over the chin. */}
+          on it, so nothing paints over the chin.
+
+          THIS ELEMENT PAINTS NOTHING (task 33). It is the deck's coordinate
+          space and its 81° transform, and that is all: the surface is
+          `.v8-device-bed-face` below, a plain child filling it. A
+          3D-transformed layer's OWN boundary is composited without
+          antialiasing and snaps to whole device pixels, and this layer's lower
+          boundary is the deck's front edge — the brightest tone step on the
+          machine, running as a shallow diagonal because of the pose's
+          `rotate-y-5`. Painting the surface on a child makes that edge
+          INTERIOR content, which Skia does antialias. Measured, not assumed:
+          `harness/mask33.mjs` recovers the edge's sub-pixel position from its
+          coverage, and the worst jump between two adjacent columns goes from
+          exactly 1.000px — the staircase — to ≤0.035px, at DPR 1 and 2, both
+          themes, 1440 and 375. The full argument, including why the child is
+          not inset by a pixel, is at `.v8-device-bed` in `global.css`.
+
+          So: anything added here that PAINTS belongs in the face, not on this
+          element. The face is also why the radius moved down a level. */}
       <div
-        class="v8-device-bed absolute top-[53.8cqw] left-[6.4cqw] h-[57.9cqw] w-[81.5cqw] rounded-[1.6cqw] transform-3d origin-top [transform:rotateX(81deg)]"
+        class="v8-device-bed absolute top-[53.8cqw] left-[6.4cqw] h-[57.9cqw] w-[81.5cqw] transform-3d origin-top [transform:rotateX(81deg)]"
       >
+        {/* The deck's surface. First child, so it paints under everything that
+            sits ON the deck — exactly where the element's own background used
+            to be in the paint order. */}
+        <div class="v8-device-bed-face pointer-events-none absolute inset-0 rounded-[1.6cqw]"></div>
         {/* Keyboard bed: a real ANSI key block (see ANSI_ROWS above), sunk
             into a dark well on the back half of the deck. The box is sized so
             that a key comes out very nearly square in the deck's own flat

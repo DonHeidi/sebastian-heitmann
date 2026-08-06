@@ -645,8 +645,10 @@
        inherits it from a class rather than from someone remembering.
 
        ── THE EXCLUSION, and it is load-bearing ───────────────────────────
-       `.v8-device-bed` (the deck's top surface) and `.v8-device-deck` (the
-       milled front lip) are deliberately NOT in this list. Giving an element
+       `.v8-device-bed` / `.v8-device-bed-face` (the deck's plane and the
+       surface painted on it) and `.v8-device-deck` (the milled front lip) are
+       deliberately NOT in this list — the face for the same reason as the
+       plane it fills, since it projects identically. Giving an element
        an outline also gives Chromium a bounded paint rect to rasterise the
        transformed content into, and anything the PROJECTION pushes outside
        the element's own layout box is then cut off. Both of those two
@@ -670,6 +672,12 @@
        because content inside a transformed layer is drawn by Skia with AA —
        which is why the trackpad's slanted seam resolves cleanly and the
        layer edge beside it does not.
+
+       TASK 33 turned that last sentence into the fix rather than the excuse:
+       if interior content is antialiased, then a facet whose own boundary is
+       a visible edge should not paint itself — it should hold a child that
+       does. `.v8-device-bed` is now exactly that, and the deck's lower edge
+       is antialiased at DPR 1 without any outline. See the block there.
 
        DO NOT swap this for a blur, a soft border or a translucent edge. The
        devices are FLAT-SHADED on purpose: the object is read from the hard
@@ -756,6 +764,53 @@
     );
   }
   .v8-device-bed {
+    /* THE DECK'S CONTAINER, AND IT PAINTS NOTHING (task 33).
+       ══════════════════════════════════════════════════════════════════════
+       This element carries the 81° transform and the deck's coordinate space;
+       the surface itself is painted by `.v8-device-bed-face`, a plain child
+       filling it exactly. That split is not tidiness — it is the fix for the
+       one defect task 32 could only document:
+
+         Content INSIDE a 3D-transformed layer is drawn by Skia with proper
+         antialiasing. The layer's OWN boundary is composited without it, and
+         snaps to whole device pixels.
+
+       The deck's lower edge — the boundary between the brightest plane in the
+       reel and the dark front lip — is the layer boundary of this element, and
+       the laptop's `rotate-y-5` makes it a shallow diagonal. Snapped, it
+       staircased. Measured with `harness/mask33.mjs`, which recovers the
+       edge's SUB-PIXEL position from the coverage of its boundary pixel:
+
+                       worst step between  deviation from   boundary pixels
+                       adjacent columns    a straight line  carrying coverage
+         painting self   1.000px            0.28–0.30 rms     1–4%
+         inset child     ≤0.035px           0.09–0.11 rms     68–80%
+
+       One whole device pixel, jumped in a single column, roughly nine times
+       across the machine: that is the staircase, and it is the same at DPR 2
+       (half a CSS pixel, still visible). Afterwards the worst column-to-column
+       move is 1/30th of a pixel; what is left of `rms` is a slow bow from
+       perspective and the corner radius, which no eye reads as an edge defect.
+       Both DPRs, both themes, 1440 and 375.
+
+       WHY THE CHILD IS `inset: 0` AND NOT INSET BY A PIXEL. The obvious form
+       of this is a container slightly LARGER than the surface. It is not
+       needed and it would not be free: the deck is foreshortened ~6:1, so a
+       1px inset in the deck's own space is ~0.2px on screen — far too little
+       to matter — and to buy a useful margin the container would have to grow
+       by over a centimetre of deck, which moves every percentage-positioned
+       thing on it (`.v8-device-keys` at `top-[8%]`, `.v8-device-pad` at
+       `top-[62%]`). A coincident child edge was measured to be enough at DPR 1
+       and 2, at 1440 and 375, in both themes: the container paints nothing, so
+       its own aliased boundary is invisible, and it does not clip.
+
+       Everything else on the machine was measured too, and needed nothing:
+       the lip's foot, the lid's face and the tablet/phone slab faces are all
+       already children of a transformed element, and their edges come back
+       97–100% partial. This is the only facet that was painting itself. */
+    background: none;
+  }
+  .v8-device-bed-face {
     /* THE LAPTOP DECK'S TOP SURFACE (task 30): the plane the keyboard and
        trackpad sit on, laid down 81° towards the camera. It is the facet
        most nearly square to the key (L·N = 0.874, the highest on the whole
@@ -871,7 +926,7 @@
        caps now cover the deck beneath them and a key sitting inside the
        lid/deck wedge must be occluded exactly as much as the deck under it
        is. So: the tail of the wedge occlusion across the top rows, and the
-       flank roll-off — the same two layers `.v8-device-bed` carries, at the
+       flank roll-off — the same two layers `.v8-device-bed-face` carries, at the
        strength they have reached by the time they cross this box (the well
        starts at 8% of the deck, so the wedge is already past its worst).
        A pseudo-element rather than a div — 76 keys is enough DOM. It is

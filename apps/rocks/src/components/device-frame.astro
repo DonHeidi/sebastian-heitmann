@@ -76,6 +76,20 @@
  * `--v8-tone-lit`, right and bottom flanks `--v8-tone-dim`, crowns
  * `--v8-tone-up`. Add a wall, decide its normal, give it a rung.
  *
+ * ─────────────────────────────────────────────────────────────────────────
+ * EVERY FACET NEEDS A CLASS (task 32)
+ * ─────────────────────────────────────────────────────────────────────────
+ * Elements inside a 3D transform rasterise their quad WITHOUT edge
+ * antialiasing, which stairsteps every non-axis-aligned boundary — badly on
+ * the deck, which is nearly edge-on at 81°. The cure is one declaration,
+ * `outline: 1px solid transparent`, and it is applied ONCE in `global.css`
+ * to a list of `.v8-device-*` classes (see the RASTERISATION HYGIENE block
+ * there) rather than as a utility repeated on each element here. So: a new
+ * facet in this file must carry a `.v8-device-*` class and that class must
+ * be added to that list — including purely structural boxes like
+ * `.v8-device-screen`, which exists for no other reason than that the
+ * screenshot's clip is one of the edges that stairsteps.
+ *
  * Every class string is a complete literal (never assembled from parts) so
  * Tailwind's scanner sees it.
  */
@@ -318,7 +332,7 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
         class="absolute top-0 left-[6.4cqw] w-[81.5cqw] aspect-[1000/665] transform-3d origin-bottom [--device-depth:1.7cqw] [transform:rotateX(7deg)]"
       >
         <div class={`v8-device-shell absolute inset-0 ${f.body}`}>
-          <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
+          <div class={`v8-device-screen relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
             {/* The screenshot is the content: full colour, no duotone (unlike
                 the cover panel). `object-top` so a tall page crops from the
                 BOTTOM — the header/hero identifies the product. */}
@@ -353,13 +367,13 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
             (the hinge edge is square). The top wall closes the crown. No
             bottom wall: that edge is the hinge, permanently buried. */}
         <div
-          class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-lit)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
+          class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-lit)] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
         ></div>
         <div
-          class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
+          class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-dim)] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
         ></div>
         <div
-          class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] ${f.wallX} backface-hidden [--v8-wall-dir:to_top] [--v8-wall-tone:var(--v8-tone-up)] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
+          class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] ${f.wallX} backface-hidden [--v8-wall-dir:to_top] [--v8-wall-tone:var(--v8-tone-up)] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
         ></div>
       </div>
 
@@ -400,7 +414,7 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
             something. `origin-bottom` + a negative rotateX tips it back
             towards the camera (net ≈ 45° in world space), which is the lit
             quadrant of a cylinder seen from above. */}
-        <div class="v8-device-hinge pointer-events-none absolute inset-x-[5%] top-0 h-[1.8cqw] origin-bottom [transform:rotateX(-32deg)]"></div>
+        <div class="v8-device-hinge pointer-events-none absolute inset-x-[5%] top-0 h-[1.8cqw] origin-bottom rounded-[0.25cqw] [transform:rotateX(-32deg)]"></div>
 
         {/* FRONT LIP — the approved milled front face, carried over whole.
             In the flat build this WAS the deck; here it is the deck slab's
@@ -408,22 +422,57 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
             vertical (81 − 81 = 0° in world space). Everything inside it is
             unchanged: the many-stop extrusion gradient, the lit top chamfer
             with the hinge-side shadow, and the two opener scoops notched down
-            from its top edge. */}
+            from its top edge.
+
+            `rounded-b-[0.35cqw]` is new in task 32 and is the one place a
+            radius was added for rasterisation reasons: these two are the
+            machine's front-bottom corners, they are the sharpest right angles
+            in the silhouette, and a right angle on a 3D-transformed layer
+            boundary stairsteps on BOTH of its edges at once. ~1.9px at 1440
+            and ~0.5px at 375 — below the threshold where it reads as a
+            rounded box, and a milled aluminium foot has a radius anyway. It
+            does NOT open the corner onto the page: the lip IS the silhouette
+            there, so what the radius takes away is silhouette, not a facet
+            junction (the flanks are behind, hinged off the deck plane). */}
         <div
-          class="v8-device-deck absolute inset-x-0 top-[57.4cqw] h-[4.5cqw] origin-top overflow-hidden [transform:rotateX(-81deg)]"
+          class="v8-device-deck absolute inset-x-0 top-[57.4cqw] h-[4.5cqw] origin-top overflow-hidden rounded-b-[0.35cqw] [transform:rotateX(-81deg)]"
         >
           {/* Top chamfer: the lit bevel along the lip's upper edge, where the
-              deck's top surface turns down into the front face. */}
-          <div class="v8-device-chamfer absolute inset-x-0 top-0 h-[30%]"></div>
+              deck's top surface turns down into the front face.
+
+              It starts 0.15cqw ABOVE the lip's own top edge, not at it (task
+              32). The lip clips with `overflow: hidden`, so that sliver is
+              cut straight back off and nothing moves — but the chamfer's top
+              boundary and the lip's are no longer the SAME line, and two
+              coincident edges are exactly where a fractional device pixel can
+              round one of them short and leave a hairline of raw lip face
+              along the machine's brightest edge. Same idea as the deck's own
+              0.5cqw overlap onto this box (see the DECK note above) and the
+              hinge's `-mt`: facets in this scene overlap, they never butt. */}
+          <div class="v8-device-chamfer absolute inset-x-0 -top-[0.15cqw] h-[calc(30%+0.15cqw)]"></div>
           {/* Opener scoop: two halves of 7% of the lip's width, meeting flush
               at the centre, hanging 40% of its height down from the TOP edge
               — a notch milled into the chamfer that you look down into, not a
               dish on the front face. They come after the chamfer so they paint
               over it: the bright bevel is interrupted across the scoop and
               picks back up along the arc of the cut, which is what makes the
-              edge read as dipping rather than as being smudged. */}
-          <span class="v8-device-scoop v8-device-scoop-l absolute top-0 right-1/2 h-[40%] w-[7%]"></span>
-          <span class="v8-device-scoop v8-device-scoop-r absolute top-0 left-1/2 h-[40%] w-[7%]"></span>
+              edge read as dipping rather than as being smudged.
+
+              Same 0.15cqw overrun at the top as the chamfer, for the same
+              reason and clipped the same way.
+
+              The two halves DO still butt exactly at the centre, and that is
+              deliberate: they are TRANSLUCENT darkening layers over the
+              chamfer, so overlapping them would double the alpha rather than
+              close a seam. At the joint, split coverage a leaves the pixel
+              1−(1−αa)(1−α(1−a)) dark instead of α — at α = .62 and a = .5
+              that is .52 against .62, i.e. ~15% light. Overlapping by a hair
+              instead would give 1−(1−α)² = .86, i.e. ~38% DARK. A faint light
+              hairline is the cheaper of the two, and 6× probes at 1440 and
+              375 find no visible seam at all (`task32-seam-scoop-light.png`).
+              Do not "fix" this by overlapping them. */}
+          <span class="v8-device-scoop v8-device-scoop-l absolute -top-[0.15cqw] right-1/2 h-[calc(40%+0.15cqw)] w-[7%]"></span>
+          <span class="v8-device-scoop v8-device-scoop-r absolute -top-[0.15cqw] left-1/2 h-[calc(40%+0.15cqw)] w-[7%]"></span>
         </div>
 
         {/* Deck side walls: the base's left and right flanks, running the full
@@ -433,10 +482,10 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
             the header note. No underside and no back wall: the first is on the
             table, the second is behind the lid. */}
         <div
-          class="v8-device-wall pointer-events-none absolute inset-y-0 left-0 w-[4cqw] origin-left backface-hidden [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-lit)] [outline:1px_solid_transparent] [transform:rotateY(90deg)]"
+          class="v8-device-wall pointer-events-none absolute inset-y-0 left-0 w-[4cqw] origin-left backface-hidden [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-lit)] [transform:rotateY(90deg)]"
         ></div>
         <div
-          class="v8-device-wall pointer-events-none absolute inset-y-0 right-0 w-[4cqw] origin-right backface-hidden [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:rotateY(-90deg)]"
+          class="v8-device-wall pointer-events-none absolute inset-y-0 right-0 w-[4cqw] origin-right backface-hidden [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-dim)] [transform:rotateY(-90deg)]"
         ></div>
       </div>
     </div>
@@ -445,7 +494,7 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
     <div class={`relative transform-3d ${f.scene} ${pose}`}>
       {/* Front face, in flow: it is what gives the scene its height. */}
       <div class={`v8-device-shell relative w-full ${f.body}`}>
-        <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
+        <div class={`v8-device-screen relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
           <Image
             src={src}
             alt={alt}
@@ -467,16 +516,16 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
           90° onto the side; each inset by the body's corner radius on the axis
           it runs along so it cannot poke past a rounded corner. */}
       <div
-        class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-lit)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-lit)] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
       ></div>
       <div
-        class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-dim)] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
       ></div>
       <div
-        class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_top] [--v8-wall-tone:var(--v8-tone-up)] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_top] [--v8-wall-tone:var(--v8-tone-up)] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
       ></div>
       <div
-        class={`v8-device-wall pointer-events-none absolute bottom-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_bottom] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateX(-90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute bottom-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_bottom] [--v8-wall-tone:var(--v8-tone-dim)] [transform:translateY(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateX(-90deg)]`}
       ></div>
     </div>
   )}

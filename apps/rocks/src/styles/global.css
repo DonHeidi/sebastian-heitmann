@@ -616,6 +616,67 @@
     --v8-shadow: #2c2822;
     --v8-device-ambient: 0.35cqw 0.9cqw 2cqw rgba(20, 20, 19, 0.22);
   }
+  .v8-device-shell,
+  .v8-device-back,
+  .v8-device-wall,
+  .v8-device-screen,
+  .v8-device-glass,
+  .v8-device-glare,
+  .v8-device-lens,
+  .v8-device-keys,
+  .v8-device-cap,
+  .v8-device-pad,
+  .v8-device-hinge,
+  .v8-device-chamfer,
+  .v8-device-scoop {
+    /* ══════════════════════════════════════════════════════════════════════
+       RASTERISATION HYGIENE (task 32) — stated once, for every facet that
+       may safely carry it. READ THE EXCLUSION BELOW BEFORE ADDING TO THIS
+       LIST; it is not a decorative declaration and it is not free.
+
+       A 3D-transformed element is rasterised into a quad and the quad's own
+       boundary is composited WITHOUT edge antialiasing, so any boundary that
+       is not axis-aligned on screen stairsteps. `outline: 1px solid
+       transparent` extends the element's paint bounds past its border box,
+       which is what pushes Chromium onto the antialiased path; it costs no
+       layout and paints nothing. It is the same one-liner that fixed this on
+       the jewel-case tiles (`case-card.tsx`) and it was already carried, as
+       a utility, on the nine device walls — it lives here now so a new facet
+       inherits it from a class rather than from someone remembering.
+
+       ── THE EXCLUSION, and it is load-bearing ───────────────────────────
+       `.v8-device-bed` (the deck's top surface) and `.v8-device-deck` (the
+       milled front lip) are deliberately NOT in this list. Giving an element
+       an outline also gives Chromium a bounded paint rect to rasterise the
+       transformed content into, and anything the PROJECTION pushes outside
+       the element's own layout box is then cut off. Both of those two
+       project well outside their boxes — the deck flares ~20% wider than its
+       81.5cqw box (that flare IS the approved wide-deck read, see task 30)
+       and the lip swings from the deck's 81° plane back to vertical, so it
+       lands several times taller on screen than its 4.5cqw box. Outlining
+       either one slices the machine open and the cream page shows through
+       the missing corner: `task32-regress-bed-outline.png` is the picture,
+       taken before the exclusion existed. The rule that generalises: an
+       outline is safe only where the projected quad still fits inside the
+       layout box.
+
+       What that costs is measured rather than assumed. `harness/edge32.mjs`
+       scores the stairstepping along the lip's top edge, and the deck's own
+       boundary keeps it — the remaining hard steps in the owner's crop are
+       that boundary, and no promotion moves them (`will-change: transform`,
+       `translateZ(0)`, `backface-visibility`, `opacity: .999`, and outlines
+       on the scene / perspective / frame wrappers were all measured: byte-
+       identical output). The facets' INTERIORS are already antialiased,
+       because content inside a transformed layer is drawn by Skia with AA —
+       which is why the trackpad's slanted seam resolves cleanly and the
+       layer edge beside it does not.
+
+       DO NOT swap this for a blur, a soft border or a translucent edge. The
+       devices are FLAT-SHADED on purpose: the object is read from the hard
+       steps BETWEEN facets, so softening a tone boundary is a design change.
+       This asks only for the same hard edge at sub-pixel accuracy. */
+    outline: 1px solid transparent;
+  }
   .v8-device-shell {
     /* THE FRONT FACE — the laptop's lid and the tablet/phone slab fronts.
        It faces the viewer, so it sits on the ladder's `front` rung (the lid,

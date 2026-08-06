@@ -5,6 +5,8 @@ kind: 'case-study'
 role: 'Design, Entwicklung und Betrieb'
 stack: ['Astro', 'TypeScript', 'Tailwind v4', 'Bun', 'Terraform', 'Scaleway']
 cover: ../../../assets/cover-art-sparks-crew.png
+showcase:
+  desktop: ../../../assets/portfolio-platform-desktop.png
 startDate: 2026-05-01
 links:
   - label: 'Live-Website'

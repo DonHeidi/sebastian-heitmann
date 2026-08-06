@@ -59,6 +59,23 @@
  * arithmetic vertically says a device leaning its top AWAY from the camera can
  * only ever show its BOTTOM wall, never its top.
  *
+ * ─────────────────────────────────────────────────────────────────────────
+ * THE LIGHT (task 31)
+ * ─────────────────────────────────────────────────────────────────────────
+ * There is exactly ONE light in this scene and it is defined, with its
+ * arithmetic, in `global.css` at `.v8-device-frame` — a key up, to the left
+ * and in front (L = (-0.40, -0.82, +0.41), x right, y DOWN, z toward the
+ * viewer), the same one the jewel-case chrome assumes. Every facet's tone
+ * comes off a six-rung ladder derived from `max(0, L·N)`, so a face's
+ * brightness is decided by which way it points and nothing else.
+ *
+ * What that means for THIS file: whenever a wall is rotated onto an edge,
+ * the markup must also say which rung the wall lands on, because only the
+ * markup knows which way the wall ends up pointing. Hence `--v8-wall-tone`
+ * beside `--v8-wall-dir` on all nine walls below — left flanks take
+ * `--v8-tone-lit`, right and bottom flanks `--v8-tone-dim`, crowns
+ * `--v8-tone-up`. Add a wall, decide its normal, give it a rung.
+ *
  * Every class string is a complete literal (never assembled from parts) so
  * Tailwind's scanner sees it.
  */
@@ -168,7 +185,7 @@ const FRAME = {
     body: 'rounded-[2.2%_2.2%_0_0/3.3%_3.3%_0_0] px-[1.175%] pt-[2.33%] pb-[4.65%]',
     screen: 'rounded-[1.05%/1.7%]',
     lens: 'w-[0.7%] translate-y-[116%]',
-    ground: 'inset-x-[3%] translate-y-[80%]',
+    ground: 'left-[5%] right-[1%] translate-y-[80%]',
     /* The lid's bottom corners are square (that edge IS the hinge), so its
        side walls run all the way down; only the top corners need clearing. */
     wallY: 'top-[3.3%] bottom-0',
@@ -181,7 +198,7 @@ const FRAME = {
     body: 'aspect-[1000/1341] rounded-[5.6%/4.2%] px-[3.6%] py-[5.2%]',
     screen: 'rounded-[2.2%/1.6%]',
     lens: 'w-[2.2%] translate-y-[68%]',
-    ground: 'inset-x-[3%] translate-y-[92%]',
+    ground: 'left-[5%] right-[1%] translate-y-[92%]',
     wallY: 'inset-y-[4.2%]',
     wallX: 'inset-x-[5.6%]',
     widths: [320, 640],
@@ -192,7 +209,7 @@ const FRAME = {
     body: 'aspect-[1000/2113] rounded-[13%/6.2%] px-[4.2%] py-[6.4%]',
     screen: 'rounded-[9.6%/4.4%]',
     lens: 'w-[3%] translate-y-[57%]',
-    ground: 'inset-x-[4%] translate-y-[92%]',
+    ground: 'left-[6%] right-[2%] translate-y-[92%]',
     wallY: 'inset-y-[6.2%]',
     wallX: 'inset-x-[13%]',
     widths: [200, 400],
@@ -266,8 +283,12 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
       the object. Anchored to the bottom of the frame box and pushed most of
       its own height below that line — percentage translate resolves against
       the element, which keeps this width-relative like every other measurement
-      here. Height is 5% of the device's width via `aspect-*` for the same
-      reason, so the shadow scales with the object. (Do NOT size this off
+      here. It is also offset a couple of percent to the RIGHT (asymmetric
+      `left`/`right` insets rather than `inset-x`), because the key light is
+      to the left: a contact shadow sitting dead centre under the object is
+      a shadow from a lamp directly overhead, and it fights every other cue
+      on the device. Height is 5% of the device's width via `aspect-*` for
+      the same reason, so the shadow scales with the object. (Do NOT size this off
       `getBoundingClientRect` — the pose transform means the reported box is
       the projected quad's bounding box, not the element.) `-z-10` because a
       positioned element paints ABOVE its in-flow siblings regardless of DOM
@@ -332,13 +353,13 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
             (the hinge edge is square). The top wall closes the crown. No
             bottom wall: that edge is the hinge, permanently buried. */}
         <div
-          class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_left] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
+          class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-lit)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
         ></div>
         <div
-          class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_right] [--v8-wall-shade:0.5] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
+          class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
         ></div>
         <div
-          class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] ${f.wallX} backface-hidden [--v8-wall-dir:to_top] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
+          class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] ${f.wallX} backface-hidden [--v8-wall-dir:to_top] [--v8-wall-tone:var(--v8-tone-up)] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
         ></div>
       </div>
 
@@ -412,10 +433,10 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
             the header note. No underside and no back wall: the first is on the
             table, the second is behind the lid. */}
         <div
-          class="v8-device-wall pointer-events-none absolute inset-y-0 left-0 w-[4cqw] origin-left backface-hidden [--v8-wall-dir:to_right] [outline:1px_solid_transparent] [transform:rotateY(90deg)]"
+          class="v8-device-wall pointer-events-none absolute inset-y-0 left-0 w-[4cqw] origin-left backface-hidden [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-lit)] [outline:1px_solid_transparent] [transform:rotateY(90deg)]"
         ></div>
         <div
-          class="v8-device-wall pointer-events-none absolute inset-y-0 right-0 w-[4cqw] origin-right backface-hidden [--v8-wall-dir:to_left] [--v8-wall-shade:0.5] [outline:1px_solid_transparent] [transform:rotateY(-90deg)]"
+          class="v8-device-wall pointer-events-none absolute inset-y-0 right-0 w-[4cqw] origin-right backface-hidden [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:rotateY(-90deg)]"
         ></div>
       </div>
     </div>
@@ -446,16 +467,16 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
           90° onto the side; each inset by the body's corner radius on the axis
           it runs along so it cannot poke past a rounded corner. */}
       <div
-        class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_left] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-lit)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
       ></div>
       <div
-        class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_right] [--v8-wall-shade:0.5] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
       ></div>
       <div
-        class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_top] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_top] [--v8-wall-tone:var(--v8-tone-up)] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
       ></div>
       <div
-        class={`v8-device-wall pointer-events-none absolute bottom-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_bottom] [--v8-wall-shade:0.55] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateX(-90deg)]`}
+        class={`v8-device-wall pointer-events-none absolute bottom-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_bottom] [--v8-wall-tone:var(--v8-tone-dim)] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateX(-90deg)]`}
       ></div>
     </div>
   )}

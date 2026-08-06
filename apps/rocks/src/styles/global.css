@@ -458,12 +458,141 @@
 
   /* Device-frame materials for the case-detail showcase (task 28). Same
      vocabulary as the jewel case above — thin layered gradients, hairline
-     inset edges, one restrained gloss streak — and, like the case's edge
-     walls, deliberately theme-INDEPENDENT: a device is a physical object in
-     the scene, its plastic doesn't recolour with the UI. The geometry
-     (aspect ratios, bezel widths, corner radii) lives in device-frame.astro
-     as percentage utilities; only the materials are here. */
+     inset edges, one restrained gloss streak. The geometry (aspect ratios,
+     bezel widths, corner radii) lives in device-frame.astro as percentage
+     utilities; only the materials are here. */
+
+  /* ══════════════════════════════════════════════════════════════════════
+     THE KEY LIGHT (task 31)
+     ══════════════════════════════════════════════════════════════════════
+     One light lights every 3D object on this page. Before task 31 each face
+     carried its own hand-tuned gradient and the devices read as a set of
+     separately shaded drawings; now every facet's tone is DERIVED from its
+     orientation relative to this one source, and the numbers below are the
+     only place a relationship can be changed.
+
+     AXES are CSS's: x right, y DOWN, z toward the viewer.
+
+       L = (-0.40, -0.82, +0.41)   unit vector from a surface TOWARD the key
+                                   ≈ 55° above horizontal, 26° to the LEFT of
+                                   the camera axis, 24° in FRONT of the object
+       B = ( 0.55,  0.45, +0.70)   the bounce: weak fill off the page/table,
+                                   low and to the right, which is what keeps
+                                   the shadow side from going flat black
+
+     This is the same top-left key the jewel-case chrome above already
+     assumes by hand (see `.v8-jewel-bevel`, `.v8-jewel-wall-spine`), so the
+     whole page agrees on where the light is. On screen L projects to a
+     bearing of 334° — 26° left of straight up — which is why every shading
+     gradient on a viewer-facing face runs at 154deg (334 − 180) rather than
+     at some rounder-looking angle.
+
+     TONE, for a facet with unit normal N:
+
+       tone(N) = A + K·max(0, L·N) + F·max(0, B·N)
+       A = 0.16 ambient    K = 0.74 key    F = 0.10 bounce
+
+     Lambert, plus an ambient floor, plus one bounce. It is deliberately not
+     a BRDF: the look is FLAT-SHADED 90s/00s 3D — each facet gets one
+     constant-ish tone and the object is read from the STEPS between facets,
+     not from smooth falloff inside them. Every gradient still on a face is
+     either (a) a facet's slight curvature at its ends, (b) a specular on an
+     edge, or (c) occlusion in a crevice. Nothing else.
+
+     THE LADDER. Running the formula over every facet the devices actually
+     have (`harness/lambert31.mjs` prints this table) collapses to six rungs:
+
+       facet                              L·N     tone    rung
+       deck top surface     rotateX(81)   0.874   0.807   up      79%
+       top edge wall             up       0.820   0.767   up
+       lid front face       rotateX(7)    0.507   0.599   front   60%
+       slab front face      rotateX(0)    0.410   0.533   vert    53%
+       milled front lip     rotateX(0)    0.410   0.533   vert
+       left edge wall           left      0.400   0.456   lit     46%
+       key cap dish front   rotateX(-9)   0.277   0.441   lit
+       right edge wall         right     -0.400   0.215   dim     21%
+       bottom edge wall         down     -0.820   0.205   dim
+       back face               away      -0.410   0.160   dark    16%
+
+     Read as percentages so they can be handed straight to `color-mix()`.
+     A rung is a LIGHTING term, not a colour: it is applied to whichever
+     ALBEDO the part is moulded from, which is how the key caps can be a
+     darker material than the palm rest without disagreeing about the light.
+
+     WHAT THE LIGHT DOES *NOT* DO. It cannot cast the laptop's lid onto its
+     deck. The lid stands BEHIND the hinge (its top edge is at z = −6.6cqw)
+     and the key has a +z component, so the lid's shadow falls backwards,
+     off the machine — trace it and the shadow of the lid's top edge lands
+     at z = −31cqw, 31cqw behind the hinge line. Any light that would throw
+     the lid forward onto the deck is a light BEHIND the object, and that
+     same light puts the lid's front face — the face carrying the
+     screenshot — into shadow. The dark band across the back of the deck is
+     therefore not a cast shadow and is not drawn as one: it is the AMBIENT
+     OCCLUSION of the 106° wedge between the two planes, which is what
+     actually produces that read in a real product photograph.
+     ══════════════════════════════════════════════════════════════════════ */
   .v8-device-frame {
+    /* ALBEDOS — the materials, before any light touches them. Two, because a
+       real machine has two: the moulded body, and the harder matte plastic
+       the caps are made of. Theme-independent: a device is a physical object
+       in the scene and its plastic does not recolour with the UI. */
+    --v8-plastic: #5b5b6a;
+    --v8-keycap: #3d3d48;
+    /* What a facet tends to at tone 0 — i.e. the ambient itself. This IS the
+       theme-dependent part, and the only one: the cream page bounces more
+       light, and warmer light, back into the object. The key does not move
+       between themes and the ladder below does not change; only where the
+       shadow end of every mix lands. */
+    --v8-shadow: #08080b;
+
+    /* THE TONE LADDER. Six rungs, derived above. */
+    --v8-face-up: 79%;
+    --v8-face-front: 60%;
+    --v8-face-vert: 53%;
+    --v8-face-lit: 46%;
+    --v8-face-dim: 21%;
+    --v8-face-dark: 16%;
+
+    /* The body's plastic at each rung. `oklab` rather than sRGB so the steps
+       are perceptually even — in sRGB the dark half of the ladder collapses
+       and the walls stop being distinguishable from the back face.
+
+       Don't bother hand-writing a pre-computed literal next to each of
+       these as a no-`color-mix()` fallback: the build (Lightning CSS) wraps
+       every mix in `@supports (color: color-mix(…))` and emits its OWN
+       fallback declaration after yours, resolving each rung to the first
+       colour in the mix — the fully lit `--v8-plastic`. A hand-written
+       literal is silently overridden. The consequence is that a browser
+       predating `color-mix()` (pre-2023) renders the devices in flat
+       unlit albedo; nothing breaks, no layout moves, they simply stop
+       being lit. `harness/lambert31.mjs` prints what each rung resolves
+       to if you need the numbers. */
+    --v8-tone-up: color-mix(in oklab, var(--v8-plastic) var(--v8-face-up), var(--v8-shadow));
+    --v8-tone-front: color-mix(in oklab, var(--v8-plastic) var(--v8-face-front), var(--v8-shadow));
+    --v8-tone-vert: color-mix(in oklab, var(--v8-plastic) var(--v8-face-vert), var(--v8-shadow));
+    --v8-tone-lit: color-mix(in oklab, var(--v8-plastic) var(--v8-face-lit), var(--v8-shadow));
+    --v8-tone-dim: color-mix(in oklab, var(--v8-plastic) var(--v8-face-dim), var(--v8-shadow));
+    --v8-tone-dark: color-mix(in oklab, var(--v8-plastic) var(--v8-face-dark), var(--v8-shadow));
+
+    /* SPECULAR — the crisp line on a convex edge turned toward the key. Only
+       edges that face UP or LEFT get one; edges facing down or right get the
+       corresponding dark terminator instead. Grey-white, never white: the
+       body is moulded dark plastic, which does not blow out. The milled front
+       lip's existing chamfer highlight is the reference for how crisp these
+       are allowed to be — one hard stop, no ramp. */
+    --v8-spec: rgba(255, 255, 255, 0.34); /* top edge, square to the key */
+    --v8-spec-soft: rgba(255, 255, 255, 0.16); /* left edge, grazed */
+    --v8-edge-dim: rgba(0, 0, 0, 0.45); /* right edge */
+    --v8-edge-dark: rgba(0, 0, 0, 0.6); /* bottom edge */
+
+    /* AMBIENT OCCLUSION — light removed where two planes close on each
+       other, applied ON TOP of a facet's tone (occlusion attenuates the
+       ambient term; it does not replace the facet). Two depths: a hard
+       crevice (the lid/deck wedge, the floor of the key well) and a shallow
+       seam (the trackpad's groove, a scoop's dish). */
+    --v8-ao-deep: rgba(0, 0, 0, 0.86);
+    --v8-ao-soft: rgba(0, 0, 0, 0.44);
+
     /* The device's own soft ambient shadow, as a CUSTOM PROPERTY rather than
        a rule of its own (task 30). It used to be `filter: drop-shadow()` on a
        wrapper around the whole device — which cannot survive here, because
@@ -474,120 +603,156 @@
        outer `box-shadow`, which is also more honest — it now projects WITH
        the face it belongs to instead of being applied to a flattened
        silhouette. Inherited from here so the light/cream pair is stated once.
-       In cqw, so it scales with the device like everything else. */
-    --v8-device-ambient: 0 0.9cqw 1.7cqw rgba(0, 0, 0, 0.42);
+       In cqw, so it scales with the device like everything else. Offset to
+       the RIGHT as well as down, because the key is to the left: a shadow
+       that drops straight down is a shadow from a lamp directly overhead. */
+    --v8-device-ambient: 0.35cqw 0.9cqw 1.7cqw rgba(0, 0, 0, 0.42);
   }
   .light .v8-device-frame {
-    /* Cream page: lighter and warmer — a black drop on #F5F1E8 reads as soot. */
-    --v8-device-ambient: 0 0.9cqw 2cqw rgba(20, 20, 19, 0.22);
+    /* Cream page: a brighter, warmer ambient — the page bounces light back
+       into the object, so the shadow end of every mix lifts off black and
+       goes warm. THE KEY DOES NOT MOVE: same L, same ladder, same speculars.
+       (A black drop on #F5F1E8 also reads as soot, hence the warm ambient.) */
+    --v8-shadow: #2c2822;
+    --v8-device-ambient: 0.35cqw 0.9cqw 2cqw rgba(20, 20, 19, 0.22);
   }
   .v8-device-shell {
-    /* Body plastic, lit from the top-left like every other object on the
-       page: a bright edge sweeping to a dark trough, with a second lift at
-       the lower right so the body doesn't read as a flat slab. The inset
-       shadows are the moulded rim — light on top/left, shadow bottom/right;
-       the leading outer shadow is the ambient (see `.v8-device-frame`). */
-    background: linear-gradient(
-      152deg,
-      #4a4a55,
-      #2a2a31 22%,
-      #1b1b20 58%,
-      #2e2e36 84%,
-      #16161a
+    /* THE FRONT FACE — the laptop's lid and the tablet/phone slab fronts.
+       It faces the viewer, so it sits on the ladder's `front` rung (the lid,
+       tipped 7° back, is the exact facet that rung was derived from; the two
+       slabs stand within a few degrees of it and share it rather than each
+       carrying a per-pose value — see the concerns in the task-31 report).
+
+       Flat-shaded means the tone is a flat COLOUR and the gradient over it
+       is only the moulding's slight curvature: a lift where the face rolls
+       up toward the key at the top-left, a fall where it rolls away at the
+       bottom-right. 154deg is not a taste value — it is the key's screen
+       bearing (334°) turned around, so this gradient and every other one on
+       a viewer-facing face lean the same way.
+
+       The insets are the moulded rim, and they are the ladder's edge rule:
+       the top and left edges face the key and get the specular, the bottom
+       and right edges are turned away and get the terminator. The leading
+       outer shadow is the ambient (see `.v8-device-frame`). */
+    background-color: var(--v8-tone-front);
+    background-image: linear-gradient(
+      154deg,
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0) 26%,
+      rgba(0, 0, 0, 0) 62%,
+      rgba(0, 0, 0, 0.16)
     );
     box-shadow:
       var(--v8-device-ambient),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3),
-      inset 1px 0 0 rgba(255, 255, 255, 0.13),
-      inset -1px 0 0 rgba(0, 0, 0, 0.5),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+      inset 0 1px 0 var(--v8-spec),
+      inset 1px 0 0 var(--v8-spec-soft),
+      inset -1px 0 0 var(--v8-edge-dim),
+      inset 0 -1px 0 var(--v8-edge-dark);
   }
   .v8-device-back {
     /* The slab's back shell. Never seen at any rest pose in the reel — it is
        here because a solid object HAS one: without it the walls would be a
        hollow ribbon the moment a pose turned far enough, and `backface-hidden`
        on the walls would show the page straight through the object. Plain
-       moulded plastic, no features. */
-    background: linear-gradient(160deg, #26262d, #1a1a1f 46%, #101014);
+       moulded plastic, no features, and it faces directly AWAY from the key,
+       so it is the ladder's bottom rung by construction. */
+    background-color: var(--v8-tone-dark);
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.55);
   }
   .v8-device-wall {
-    /* Edge wall of a device slab (task 30) — the same role the jewel case's
-       `.v8-jewel-wall-*` play. OPAQUE and theme-independent: mid-scene there
-       is nothing behind a wall but the page, so a translucent wash would read
-       as a hole rather than as plastic, and a device's edge does not recolour
-       with the UI theme any more than the case's does.
+    /* EDGE WALL of a device slab (task 30) — the same role the jewel case's
+       `.v8-jewel-wall-*` play. OPAQUE: mid-scene there is nothing behind a
+       wall but the page, so a translucent wash would read as a hole rather
+       than as plastic.
 
-       The gradient runs along the wall's DEPTH axis, and which way that points
-       depends on how the wall was rotated onto its edge — so the direction is
-       a variable the markup sets (`--v8-wall-dir`), always oriented so the
-       FIRST stop is the end that meets the front face. That end catches the
-       same top-left key light as the bezel; the wall then falls away into the
-       body's shadow towards the back.
+       A wall's tone is decided entirely by which way it points, and the
+       markup says which rung it is on (`--v8-wall-tone`) because only the
+       markup knows how the wall was rotated:
 
-       `--v8-wall-shade` is the second variable and it is not decoration: the
-       page's key light is top-LEFT, so a device's left and top edges are lit
-       and its right and bottom edges are in the body's own shadow. One
-       material for all four with an even tone made whichever wall the pose
-       exposed look like a pale strip glued to the silhouette — the wall that
-       reads as thickness is the one whose brightness agrees with where the
-       light is. */
-    background-image:
-      linear-gradient(
-        rgba(0, 0, 0, var(--v8-wall-shade, 0)),
-        rgba(0, 0, 0, var(--v8-wall-shade, 0))
-      ),
-      linear-gradient(
-        var(--v8-wall-dir, to right),
-        #3a3a44 0,
-        #2a2a32 16%,
-        #1c1c22 54%,
-        #131318 84%,
-        #0c0c10 100%
-      );
+         left wall   → --v8-tone-lit   (46%) — turned into the key
+         top wall    → --v8-tone-up    (79%) — turned straight up at it
+         right wall  → --v8-tone-dim   (21%) — turned away, bounce only
+         bottom wall → --v8-tone-dim   (21%) — likewise
+
+       This is the whole reason the reel reads as three objects under one
+       lamp rather than three drawings: the tablet turns to show its LEFT
+       flank and that flank is bright, the phone turns the other way and its
+       right flank is dark, and both are correct at the same time.
+
+       Over that flat tone runs the wall's own depth shading, along the axis
+       the markup also owns (`--v8-wall-dir`, always oriented so the FIRST
+       stop is the end that meets the front face). That end is the convex
+       edge of the slab and carries the specular; from there the wall falls
+       away into the body's own shadow towards the back. */
+    background-color: var(--v8-wall-tone, var(--v8-tone-dim));
+    background-image: linear-gradient(
+      var(--v8-wall-dir, to right),
+      rgba(255, 255, 255, 0.18) 0,
+      rgba(255, 255, 255, 0.04) 9%,
+      rgba(0, 0, 0, 0) 30%,
+      rgba(0, 0, 0, 0.24) 70%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
   }
   .v8-device-bed {
     /* THE LAPTOP DECK'S TOP SURFACE (task 30): the plane the keyboard and
-       trackpad sit on, laid down 81° towards the camera. Read top to bottom
-       this is back-of-machine → front-of-machine, and the shading follows the
-       one light everything else on the page uses:
-         · a hard, fast shadow in the first few percent — the open lid's
-           underside falling onto the deck right behind the keyboard. It has to
-           be abrupt: a soft ramp there reads as a painted vignette and the lid
-           stops looking like it is standing ON something.
-         · a wide clean middle, brightest around the palm rest, because a
-           near-horizontal surface under an overhead key is the best-lit part
-           of the whole machine — brighter than the lid's front and much
-           brighter than the front lip below it.
-         · a slight fall-off at the very front edge, where the surface starts
-           to turn down into the chamfer.
-       Left-to-right there is a gentle lift on the left, matching the top-left
-       key: without it the bed is a flat grey field and the foreshortening
-       alone has to do all the work. */
+       trackpad sit on, laid down 81° towards the camera. It is the facet
+       most nearly square to the key (L·N = 0.874, the highest on the whole
+       machine), so it is THE BRIGHTEST PLANE IN THE REEL — brighter than the
+       lid's front, much brighter than the vertical lip below it. That step
+       is the single strongest statement that these are lit solids, and it is
+       why the ladder's top rung is spent here.
+
+       Read top to bottom the element is back-of-machine → front-of-machine.
+       Over the flat `up` tone sit exactly three things, and every one of them
+       is a lighting effect rather than decoration:
+
+       1. AMBIENT OCCLUSION in the first ~30%: the 106° wedge where the lid
+          closes on the deck. It reads as "the lid casting a shadow", and
+          that read is the point, but it is NOT drawn as a cast shadow and
+          must not be tuned as one — with a key light in FRONT of the object
+          the lid's shadow falls backwards off the machine entirely (the
+          arithmetic is in the light block above). What darkens this strip is
+          the wedge swallowing the ambient, so the falloff is the wedge's
+          geometry: near-total in the crevice itself, gone by the time the
+          two planes are a lid-thickness apart. It has to be ABRUPT — a soft
+          ramp reads as a painted vignette and the lid stops looking like it
+          is standing ON something.
+       2. The surface rolling off at both flanks, with the roll lifting on
+          the LEFT and deepening on the RIGHT, because that is the side the
+          key is on. A flat field edge to edge is the single loudest tell
+          that a "3D" surface is a painted rectangle.
+       3. A fall at the very front edge, where the surface starts to turn
+          down into the chamfer and out of the light.
+
+       The left edge gets the specular and the right edge the terminator, the
+       same rule every other facet follows. No specular on the rear edge: it
+       is inside the wedge. */
+    background-color: var(--v8-tone-up);
     background-image:
       linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.8) 0,
-        rgba(0, 0, 0, 0.62) 4%,
-        rgba(0, 0, 0, 0.34) 10%,
-        rgba(0, 0, 0, 0.12) 17%,
-        rgba(0, 0, 0, 0) 30%,
+        var(--v8-ao-deep) 0,
+        rgba(0, 0, 0, 0.66) 4%,
+        rgba(0, 0, 0, 0.38) 10%,
+        rgba(0, 0, 0, 0.14) 18%,
+        rgba(0, 0, 0, 0) 31%,
         rgba(0, 0, 0, 0) 74%,
-        rgba(0, 0, 0, 0.12) 92%,
-        rgba(0, 0, 0, 0.26) 100%
+        rgba(0, 0, 0, 0.14) 92%,
+        rgba(0, 0, 0, 0.3) 100%
       ),
-      /* the surface rolls off at both flanks — a flat field edge to edge is
-         the single loudest tell that a "3D" surface is a painted rectangle */
       linear-gradient(
         to right,
-        rgba(0, 0, 0, 0.4) 0,
-        rgba(255, 255, 255, 0.06) 5%,
-        rgba(255, 255, 255, 0.02) 32%,
-        rgba(0, 0, 0, 0) 62%,
-        rgba(0, 0, 0, 0.1) 95%,
-        rgba(0, 0, 0, 0.44) 100%
-      ),
-      linear-gradient(to bottom, #2e2e36, #28282f 48%, #232329);
+        rgba(0, 0, 0, 0.34) 0,
+        rgba(255, 255, 255, 0.08) 4%,
+        rgba(255, 255, 255, 0.03) 30%,
+        rgba(0, 0, 0, 0) 58%,
+        rgba(0, 0, 0, 0.16) 94%,
+        rgba(0, 0, 0, 0.52) 100%
+      );
+    box-shadow:
+      inset 1px 0 0 var(--v8-spec-soft),
+      inset -1px 0 0 var(--v8-edge-dim);
   }
   .v8-device-keys {
     /* THE ANSI KEYBOARD BED — the well the key block is sunk into.
@@ -625,22 +790,31 @@
     display: flex;
     flex-direction: column;
     padding: calc(var(--v8-key-gy) / 2) calc(var(--v8-key-gx) / 2);
-    /* The well floor. Darker than the old bed's #202028 because the caps now
-       sit ON it rather than being painted into it — this is shadow, not
-       plastic. */
-    background-image: linear-gradient(to bottom, #17171d, #101015);
-    /* A dark hairline inside, a lit one outside — the milled edge of the
-       cutout. */
-    box-shadow:
-      inset 0 0 0 1px rgba(0, 0, 0, 0.55),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
+    /* The well floor is the deck's own material at the deck's own `up` rung
+       — it is the same plane, a few millimetres down — with deep AMBIENT
+       OCCLUSION over it, because that is precisely what a floor at the
+       bottom of a cutout under 76 caps is: the same facet, with almost all
+       of its ambient taken away. Deriving it (rather than picking a near
+       black) is what keeps the gutters between the caps agreeing with the
+       rest of the machine in both themes. */
+    background-color: var(--v8-tone-up);
+    background-image: linear-gradient(to bottom, var(--v8-ao-deep), rgba(0, 0, 0, 0.92));
+    /* The milled edge of the cutout. A hole has no lit outer rim — every one
+       of its four edges is CONCAVE — so this is occlusion all round and no
+       specular anywhere, which is the opposite of what the slab edges get
+       and is the point of separating the two rules. */
+    box-shadow: inset 0 0 0 1px var(--v8-ao-soft);
   }
   .v8-device-keys::after {
-    /* The lighting the old bed baked into its gradient, restored as an
-       overlay because opaque key caps now cover the deck beneath them:
-       the open lid's hard shadow falling across the top rows, and a roll-off
-       at both flanks. A pseudo-element rather than a div — 76 keys is enough
-       DOM. It is `absolute`, so it paints above the (static) rows. */
+    /* The deck's own lighting carried ON TOP of the caps, because opaque
+       caps now cover the deck beneath them and a key sitting inside the
+       lid/deck wedge must be occluded exactly as much as the deck under it
+       is. So: the tail of the wedge occlusion across the top rows, and the
+       flank roll-off — the same two layers `.v8-device-bed` carries, at the
+       strength they have reached by the time they cross this box (the well
+       starts at 8% of the deck, so the wedge is already past its worst).
+       A pseudo-element rather than a div — 76 keys is enough DOM. It is
+       `absolute`, so it paints above the (static) rows. */
     content: '';
     position: absolute;
     inset: 0;
@@ -649,17 +823,17 @@
     background-image:
       linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.62) 0,
-        rgba(0, 0, 0, 0.4) 9%,
+        rgba(0, 0, 0, 0.66) 0,
+        rgba(0, 0, 0, 0.42) 9%,
         rgba(0, 0, 0, 0.18) 22%,
         rgba(0, 0, 0, 0) 44%
       ),
       linear-gradient(
         to right,
-        rgba(0, 0, 0, 0.34) 0,
-        rgba(0, 0, 0, 0) 9%,
-        rgba(0, 0, 0, 0) 90%,
-        rgba(0, 0, 0, 0.34) 100%
+        rgba(0, 0, 0, 0.26) 0,
+        rgba(0, 0, 0, 0) 8%,
+        rgba(0, 0, 0, 0) 88%,
+        rgba(0, 0, 0, 0.4) 100%
       );
   }
   .v8-device-krow {
@@ -691,25 +865,43 @@
     min-width: 0;
   }
   .v8-device-cap {
-    /* The moulded cap itself. Top-lit like everything else on the page: a
-       hard bright band along the back edge (the face turned up towards the
-       light and back towards the camera), a flat mid, and the front edge
-       falling into its own shadow just before the gutter. `flex: 1 1 auto`
-       plus stretch means it fills the cell inside its margins on both axes. */
+    /* THE MOULDED CAP. This is where the ladder earns its separation of
+       ALBEDO from TONE: a cap is not the palm rest painted darker, it is a
+       different material — harder, matte, and genuinely darker plastic
+       (`--v8-keycap`) — standing on the same plane under the same light. So
+       it takes the very same `up` rung as the deck and still comes out
+       clearly darker, which is what a real machine looks like and what one
+       shared tone for both would have destroyed.
+
+       The gradient on top is the cap's DISH, not a second light. A keycap is
+       concave: its back half tilts forward-and-up, i.e. toward a key that is
+       in front and above, so it is the bright end; its front half tilts
+       back-and-up, away, so it falls into the dish's own shade before the
+       gutter. Bright-at-the-back is therefore the same light as everything
+       else, arrived at from the cap's shape.
+
+       The drop shadow points UP the element, which looks wrong for half a
+       second and is right: the key is in FRONT of the machine, so everything
+       standing on the deck throws its shadow BACKWARDS, toward the hinge —
+       and slightly to the right, because the key is also to the left. This
+       is the same reason the lid cannot cast onto the deck.
+
+       `flex: 1 1 auto` plus stretch means it fills the cell inside its
+       margins on both axes. */
     flex: 1 1 auto;
     min-width: 0;
     margin: calc(var(--v8-key-gy) / 2) calc(var(--v8-key-gx) / 2);
     border-radius: 0.3cqw;
+    background-color: color-mix(in oklab, var(--v8-keycap) var(--v8-face-up), var(--v8-shadow));
     background-image: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.29) 0,
-      rgba(255, 255, 255, 0.29) 16%,
-      rgba(255, 255, 255, 0.1) 16%,
-      rgba(255, 255, 255, 0.055) 64%,
-      rgba(0, 0, 0, 0.24) 100%
+      rgba(255, 255, 255, 0.16) 0,
+      rgba(255, 255, 255, 0.16) 18%,
+      rgba(255, 255, 255, 0.02) 18%,
+      rgba(0, 0, 0, 0.06) 62%,
+      rgba(0, 0, 0, 0.34) 100%
     );
-    /* Sits proud of the plate: a short drop into the well below it. */
-    box-shadow: 0 0.12cqw 0.16cqw rgba(0, 0, 0, 0.5);
+    box-shadow: 0.05cqw -0.1cqw 0.14cqw rgba(0, 0, 0, 0.55);
   }
   .v8-device-krow-fn .v8-device-cap {
     /* A half-height row cannot afford a full-height gutter. */
@@ -717,48 +909,59 @@
   }
   .v8-device-pad {
     /* Trackpad: a plain rectangle of harder, slightly cooler material set
-       into the palm rest. The lit top edge plus the dark hairline around it is
-       the whole illusion — a machined seam, nothing more. Generic: no button
-       split, no branded proportions. */
+       FLUSH into the palm rest, so what is drawn is only the seam. That seam
+       is a groove and a groove is concave, hence occlusion all round rather
+       than a bevel — and the one lit hairline sits on the pad's FRONT edge,
+       not its back, because the groove's front wall is the one turned toward
+       a key that is in front of the machine. (It was on the back edge before
+       task 31; that was the same mistake as the key caps' drop shadow, and
+       it is the kind of thing only a single stated light catches.) Generic:
+       no button split, no branded proportions. */
     background-image: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.11),
-      rgba(255, 255, 255, 0.03) 38%,
-      rgba(0, 0, 0, 0.08)
+      rgba(0, 0, 0, 0.16),
+      rgba(0, 0, 0, 0.06) 44%,
+      rgba(255, 255, 255, 0.06)
     );
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.16),
-      inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+      inset 0 -1px 0 var(--v8-spec-soft),
+      inset 0 0 0 1px var(--v8-ao-deep);
   }
   .v8-device-hinge {
     /* Hinge barrel: a short band standing back up out of the deck just in
        front of the hinge line, so the lid visibly emerges FROM something
        rather than being glued to a surface. It is a flat plane pretending to
-       be a cylinder, which is all it can be at ~10px tall — the specular runs
-       across it and falls off to black at both the top (under the lid) and the
-       bottom (where it tucks into the deck), which is the shading of a barrel
-       seen from above. */
+       be a cylinder, which is all it can be at ~10px tall.
+
+       Its net world angle is 49°, which on the ladder is the brightest facet
+       the machine has (L·N = 0.888, above even the deck) — and it is drawn
+       DARK anyway, because it is buried in the lid/deck wedge and the wedge
+       takes the light away before it arrives. That is the clearest case on
+       the object of tone and occlusion being two separate terms: the base is
+       the deck's `up` rung, and everything over it is the crevice. The
+       specular that survives is a thin band across the barrel's middle,
+       falling to black at the top (under the lid), at the bottom (where it
+       tucks into the deck), and at BOTH ends — without the ends rolling out
+       of the light this reads as a light leak under the lid rather than as a
+       cylinder. */
+    background-color: var(--v8-tone-up);
     background-image:
-      /* both ends roll out of the light, so the barrel is a lens rather than
-         a rule drawn edge to edge — the same trick the front lip's chamfer
-         uses, and without it this reads as a light leak under the lid */
       linear-gradient(
         to right,
-        rgba(0, 0, 0, 0.65) 0,
+        var(--v8-ao-deep) 0,
         rgba(0, 0, 0, 0) 9%,
         rgba(0, 0, 0, 0) 91%,
-        rgba(0, 0, 0, 0.65) 100%
+        var(--v8-ao-deep) 100%
       ),
       linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.72) 0,
-        rgba(0, 0, 0, 0.34) 24%,
-        rgba(255, 255, 255, 0.07) 48%,
-        rgba(255, 255, 255, 0.02) 64%,
-        rgba(0, 0, 0, 0.46) 86%,
-        rgba(0, 0, 0, 0.7) 100%
-      ),
-      linear-gradient(to right, #16161b, #23232a 30%, #23232a 70%, #131317);
+        rgba(0, 0, 0, 0.86) 0,
+        rgba(0, 0, 0, 0.6) 24%,
+        rgba(0, 0, 0, 0.28) 48%,
+        rgba(0, 0, 0, 0.42) 64%,
+        rgba(0, 0, 0, 0.72) 86%,
+        rgba(0, 0, 0, 0.88) 100%
+      );
   }
   .v8-device-glass {
     /* Over the screenshot: purely the display's recessed hairline (inset
@@ -851,7 +1054,24 @@
        widened the lip towards its foot — a hand-drawn stand-in for the base
        being nearer the camera than the hinge. That is now produced by real
        perspective and the clip-path is gone; keeping it would have notched
-       the corners away from the deck's side walls. */
+       the corners away from the deck's side walls.
+
+       TASK 31 changed exactly one thing here: the face's FLAT stops are no
+       longer literals, they are the ladder's `vert` rung — a vertical plane
+       facing the viewer, L·N = 0.410, which lands it a clear step below the
+       deck above it and a smaller step below the lid. That step is now
+       guaranteed rather than coincidental, and it moves correctly with the
+       theme's ambient.
+
+       The bright stops inside the first and last 5% are deliberately NOT on
+       the ladder and must not be put on it: a specular is a reflection of
+       the source, not a facet's diffuse response, so it does not lift when
+       the cream page raises the ambient — it stays exactly as hot and the
+       face comes up to meet it. These stops are also the reference for how
+       crisp a specular on this page is allowed to be. */
+    --v8-lip: var(--v8-tone-vert);
+    --v8-lip-mid: color-mix(in oklab, var(--v8-tone-vert) 93%, var(--v8-shadow));
+    --v8-lip-edge: color-mix(in oklab, var(--v8-tone-vert) 84%, var(--v8-shadow));
     background-image:
       /* the face's own shading: it only darkens going DOWN, into the contact
          line at the foot */
@@ -883,11 +1103,11 @@
         #555563 3.6%,
         #3a3a45 4.3%,
         #2c2c35 5.1%,
-        #272730 6.2%,
-        #2b2b35 28%,
-        #2e2e39 50%,
-        #2b2b35 72%,
-        #272730 93.8%,
+        var(--v8-lip-edge) 6.2%,
+        var(--v8-lip-mid) 28%,
+        var(--v8-lip) 50%,
+        var(--v8-lip-mid) 72%,
+        var(--v8-lip-edge) 93.8%,
         #2c2c35 94.9%,
         #3a3a45 95.7%,
         #555563 96.4%,
@@ -911,11 +1131,23 @@
        - horizontal: the bevel rolls out of the light at both ends, matching
          the deck's foreshortening, so the highlight is a lens and not a rule
          drawn edge to edge.
-       - vertical: the HINGE SHADOW first (the lid's underside, dark, in the
-         top ~18% of this element), then the hot chamfer line, then a fast
-         decay into the face. Painting the hinge shadow here rather than on
-         the lid is what lets the deck overlap the lid by a hair without a
-         seam: the overlap lands inside the dark band. */
+       - vertical: a short veil where the deck's own front edge overlaps this
+         box (the overlap that keeps the seam from showing page through it),
+         then the hot chamfer line, then a fast decay into the face.
+
+       TASK 31 halved that top veil. It used to be a near-black band, which
+       put a SHADOW on the edge where the deck's top surface turns down into
+       the lip — and that edge is CONVEX, the one kind of edge the light rule
+       says gets a specular and never a shadow. The dark line made the
+       chamfer read as a separate lit bar glued below the deck rather than as
+       the deck's own edge rolling over. What remains is only as much veil as
+       the overlap needs.
+
+       The specular alphas here (.26/.21/.09) stay well under `--v8-spec`
+       (.34) on purpose: that token is for a ONE-PIXEL edge, and this band is
+       several pixels tall in projection. Same total light, spread further —
+       matching them would give the chrome bar the task-30 pass had to tune
+       its way out of. */
     background-image:
       linear-gradient(
         to right,
@@ -926,8 +1158,8 @@
       ),
       linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.66) 0,
-        rgba(0, 0, 0, 0.34) 16%,
+        rgba(0, 0, 0, 0.32) 0,
+        rgba(0, 0, 0, 0.13) 16%,
         rgba(255, 255, 255, 0.26) 26%,
         rgba(255, 255, 255, 0.21) 44%,
         rgba(255, 255, 255, 0.09) 72%,

@@ -45,6 +45,15 @@ export interface Strings {
     tracksLabel: string;
     yearLabel: string;
   };
+  /** Case-detail device reel (task 28). `kicker` is the section's heading,
+   * printed in the mono annotation register; the alts are deliberately
+   * generic per device — the surrounding page already names the case. */
+  showcase: {
+    kicker: string;
+    desktopAlt: string;
+    tabletAlt: string;
+    phoneAlt: string;
+  };
   projects: {
     sectionTitle: string;
   };

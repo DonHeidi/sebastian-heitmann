@@ -50,6 +50,12 @@ export const enUs: Strings = {
     tracksLabel: 'Stack',
     yearLabel: 'Year',
   },
+  showcase: {
+    kicker: 'On screen',
+    desktopAlt: 'Desktop view',
+    tabletAlt: 'Tablet view',
+    phoneAlt: 'Mobile view',
+  },
   projects: {
     sectionTitle: 'Side Projects',
   },

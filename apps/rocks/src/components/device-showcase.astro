@@ -1,0 +1,121 @@
+---
+/**
+ * The classic device reel for a case detail page (task 28): laptop centred and
+ * largest, tablet overlapping in front on the left, phone in front on the
+ * right. Renders whichever subset of `showcase` the entry actually supplies —
+ * a single device simply stands centred and a little larger.
+ *
+ * Layout is a bottom-aligned flex row with negative margins for the overlap
+ * (no absolute positioning, no aspect-ratio scaffold): that way ANY subset
+ * composes itself, and because each frame is an aspect-ratio box the section
+ * reserves its full height before the screenshots load — no layout shift.
+ * Depth ordering is z-index, not DOM order, so the reading order stays
+ * laptop → tablet → phone.
+ *
+ * Below `md` the row becomes a column: the laptop full width, then the tablet
+ * and phone side by side underneath. The inner wrapper that pairs them turns
+ * into `display: contents` at `md`, which dissolves it so all three frames
+ * become siblings of the same row — the `order-*` utilities then place the
+ * tablet to the left of the laptop without any DOM duplication.
+ *
+ * Poses are static rotates in the site's 3D poster language (`case-card.tsx`):
+ * positive `rotateY` brings the LEFT edge forward, so a device standing left
+ * of centre turns to face the viewer with a positive angle and one standing
+ * right with a negative one; `rotateX` is always positive (top leaning back),
+ * matching the case tiles. Nothing animates and nothing hydrates.
+ */
+import type { ImageMetadata } from 'astro';
+import type { Strings } from '../i18n/types';
+import DeviceFrame from './device-frame.astro';
+
+export interface ShowcaseImages {
+  desktop?: ImageMetadata;
+  tablet?: ImageMetadata;
+  phone?: ImageMetadata;
+}
+
+interface Props {
+  showcase: ShowcaseImages;
+  strings: Strings['showcase'];
+  class?: string;
+}
+
+const { showcase, strings, class: className = '' } = Astro.props;
+const { desktop, tablet, phone } = showcase;
+const solo = [desktop, tablet, phone].filter(Boolean).length === 1;
+
+/* Layout boxes. Full literals per branch (Tailwind scans source text, so a
+ * class can never be assembled from fragments). Percentages are of the
+ * 52.5rem prose column: the trio spans 66 + 25 + 13 − 6 − 6 = 92% of it, which
+ * keeps the reel visually inset from the copy above and below it.
+ * Overlaps only apply where there is actually something to overlap. */
+const desktopBox = solo
+  ? 'w-full md:order-2 md:w-[78%]'
+  : 'w-full md:order-2 md:w-[66%]';
+const tabletBox = solo
+  ? 'w-[62%] md:order-1 md:w-[34%]'
+  : desktop
+    ? 'w-[46%] md:order-1 md:w-[25%] md:-mr-[6%]'
+    : 'w-[46%] md:order-1 md:w-[30%]';
+const phoneBox = solo
+  ? 'w-[34%] md:order-3 md:w-[22%]'
+  : desktop
+    ? 'w-[24%] md:order-3 md:w-[13%] md:-ml-[6%]'
+    : 'w-[24%] md:order-3 md:w-[17%] md:-ml-[4%]';
+
+/* A device standing alone is the whole picture, so it gets a slightly stronger
+ * single turn; in the trio the laptop stays near-frontal and the flanks turn
+ * toward the viewer. */
+const SOLO_POSE = 'rotate-x-3 rotate-y-7';
+const desktopPose = solo ? SOLO_POSE : 'rotate-x-2 rotate-y-3';
+const tabletPose = solo ? SOLO_POSE : 'rotate-x-3 rotate-y-12';
+const phonePose = solo ? SOLO_POSE : 'rotate-x-4 -rotate-y-14';
+
+/* `sizes` for the widest case each frame can reach — its SOLO width — so a
+ * screenshot is never under-resolved whichever branch above applies. The
+ * column is `100vw − 3rem` below `md`; above it, 52.5rem, which the fluid root
+ * (task 27) grows to ~997px at 2560, hence the px figures: 78% / 34% / 22%
+ * of that. */
+const DESKTOP_SIZES = '(max-width: 767px) calc(100vw - 3rem), 780px';
+const TABLET_SIZES = '(max-width: 767px) calc((100vw - 3rem) * 0.62), 340px';
+const PHONE_SIZES = '(max-width: 767px) calc((100vw - 3rem) * 0.34), 220px';
+---
+
+<div
+  class={`flex flex-col items-center gap-10 md:flex-row md:items-end md:justify-center md:gap-0 ${className}`}
+>
+  {desktop && (
+    <DeviceFrame
+      kind="desktop"
+      src={desktop}
+      alt={strings.desktopAlt}
+      class={desktopBox}
+      pose={desktopPose}
+      sizes={DESKTOP_SIZES}
+    />
+  )}
+  {(tablet || phone) && (
+    <div class="flex w-full items-end justify-center gap-6 md:contents">
+      {tablet && (
+        <DeviceFrame
+          kind="tablet"
+          src={tablet}
+          alt={strings.tabletAlt}
+          class={`relative z-10 ${tabletBox}`}
+          pose={tabletPose}
+          sizes={TABLET_SIZES}
+        />
+      )}
+      {phone && (
+        <DeviceFrame
+          kind="phone"
+          src={phone}
+          alt={strings.phoneAlt}
+          class={`relative z-20 ${phoneBox}`}
+          pose={phonePose}
+          sizes={PHONE_SIZES}
+        />
+      )}
+    </div>
+  )}
+</div>

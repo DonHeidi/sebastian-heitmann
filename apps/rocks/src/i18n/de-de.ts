@@ -50,6 +50,12 @@ export const deDe: Strings = {
     tracksLabel: 'Stack',
     yearLabel: 'Jahr',
   },
+  showcase: {
+    kicker: 'Auf dem Bildschirm',
+    desktopAlt: 'Desktop-Ansicht',
+    tabletAlt: 'Tablet-Ansicht',
+    phoneAlt: 'Mobile Ansicht',
+  },
   projects: {
     sectionTitle: 'Side Projects',
   },

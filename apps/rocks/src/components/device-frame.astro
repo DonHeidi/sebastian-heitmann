@@ -1,0 +1,143 @@
+---
+/**
+ * Generic drawn device frame (task 28) — laptop, tablet or phone, with a real
+ * screenshot behind the glass.
+ *
+ * `.astro`, not `.tsx`, deliberately: the frame is a STATIC composition whose
+ * only dynamic content is an `astro:assets` `<Image>`, and `<Image>` can only
+ * render in `.astro`. The `.tsx` + named-slot dance the case tiles use
+ * (`case-card.tsx`) exists because those tiles need React for hover/focus
+ * state; here there is no state, no hydration and no island — so the image
+ * renders inline instead of being threaded through a slot, and the whole
+ * showcase ships zero client JS.
+ *
+ * The frames are GENERIC hardware: rounded plastic bodies, a thin lit bezel, a
+ * single centered camera dot, a laptop deck with a hinge groove and a thumb
+ * scoop. No trade dress of any manufacturer — no notch/island silhouette, no
+ * home button, no logos, no branded proportions.
+ *
+ * Material vocabulary is the jewel case's (global.css `@layer components`):
+ * thin gradients and hairline inset edges, dark plastic that does NOT recolor
+ * with the theme (a device is a physical object, like the case's edge walls),
+ * one restrained gloss streak over the glass. See `.v8-device-*` in global.css.
+ *
+ * Geometry is expressed in PERCENTAGES of the frame's own width so a frame is
+ * resolution-independent — the composition sets only a width, everything else
+ * follows. Two consequences worth knowing when editing the table below:
+ *  - `padding: n%` (including `py-`) resolves against the WIDTH, so bezels stay
+ *    a constant fraction of the body at any size.
+ *  - a single-value percentage `border-radius` would give ELLIPTICAL corners on
+ *    a non-square box, so every radius is written as the two-value
+ *    `horizontal%/vertical%` form, with the vertical half divided by the box's
+ *    aspect ratio — that makes the corners circular again.
+ * Every class string is a complete literal (never assembled from parts) so
+ * Tailwind's scanner sees it.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export type DeviceKind = 'desktop' | 'tablet' | 'phone';
+
+interface Props {
+  kind: DeviceKind;
+  src: ImageMetadata;
+  alt: string;
+  /** Layout box only (width, flex order, overlap margins): set by the
+   * composition in `device-showcase.astro`, which owns the arrangement. */
+  class?: string;
+  /** Resting-pose rotate utilities, also from the composition. */
+  pose: string;
+  /** Responsive `sizes` hint matching the width the composition gave us. */
+  sizes: string;
+}
+
+const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
+
+/* Per-device geometry. Derivations (body width = 1 throughout):
+ *
+ * desktop  side bezel 1.5%, top/bottom 2.6%; screen 16/10 →
+ *          screen 0.970 × 0.606, body height 0.658 → aspect 1000/658.
+ *          Body radius 2.2% → 2.2/0.658 = 3.3% vertical.
+ *          Screen radius = 2.2 − 1.5 = 0.7% of body = 0.7/0.970 ≈ 0.7% of the
+ *          screen's width, 0.7/0.606 ≈ 1.2% of its height.
+ * tablet   side bezel 3.6%, top/bottom 5.2%; screen 3/4 portrait →
+ *          screen 0.928 × 1.237, body height 1.341 → aspect 1000/1341.
+ *          Body radius 5.6% → 4.2% vertical. Screen radius 2.0% of body →
+ *          2.2% / 1.6% of the screen box.
+ * phone    side bezel 4.2%, top/bottom 6.4%; screen 9/19.5 →
+ *          screen 0.916 × 1.985, body height 2.113 → aspect 1000/2113.
+ *          Body radius 13% → 6.2% vertical. Screen radius 8.8% of body →
+ *          9.6% / 4.4% of the screen box.
+ *
+ * The lens sits at `top-0` and is pushed down by a percentage of ITS OWN
+ * height (percentage translate resolves against the element, so this survives
+ * the width/height base mismatch): offset = (topBezel − lens) / 2, expressed
+ * in lens-heights. desktop (2.6−0.8)/2 / 0.8 = 112%; tablet (5.2−2.2)/2 / 2.2
+ * = 68%; phone (6.4−3.0)/2 / 3.0 = 57%.
+ */
+const FRAME = {
+  desktop: {
+    body: 'aspect-[1000/658] rounded-[2.2%/3.3%] px-[1.5%] py-[2.6%]',
+    screen: 'rounded-[0.7%/1.2%]',
+    lens: 'w-[0.8%] translate-y-[112%]',
+    widths: [800, 1600],
+  },
+  tablet: {
+    body: 'aspect-[1000/1341] rounded-[5.6%/4.2%] px-[3.6%] py-[5.2%]',
+    screen: 'rounded-[2.2%/1.6%]',
+    lens: 'w-[2.2%] translate-y-[68%]',
+    widths: [320, 640],
+  },
+  phone: {
+    body: 'aspect-[1000/2113] rounded-[13%/6.2%] px-[4.2%] py-[6.4%]',
+    screen: 'rounded-[9.6%/4.4%]',
+    lens: 'w-[3%] translate-y-[57%]',
+    widths: [200, 400],
+  },
+} as const;
+
+const f = FRAME[kind];
+---
+
+{/* Perspective lives on the frame's own layout box rather than on the row, so
+    each device gets its own centered vanishing point: the poses read as three
+    product shots placed side by side, not as one wide-angle scene that skews
+    whatever sits off-centre. Matches `case-card.tsx`, which perspectives per
+    tile for the same reason. */}
+<div class={`perspective-distant ${className}`}>
+  <div class={`v8-device-cast origin-bottom ${pose}`}>
+    {/* Body. `origin-bottom` above means the tilts pivot on the device's feet,
+        so a row of frames stays planted on one floor line. */}
+    <div class={`v8-device-shell relative ${f.body}`}>
+      <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
+        {/* The screenshot is the content: full colour, no duotone (unlike the
+            cover panel). `object-top` so a tall page crops from the BOTTOM —
+            the header/hero of a screenshot is what identifies the product. */}
+        <Image
+          src={src}
+          alt={alt}
+          widths={[...f.widths]}
+          sizes={sizes}
+          loading="lazy"
+          class="h-full w-full object-cover object-top"
+        />
+        {/* Glass: the recessed hairline around the display plus one soft
+            diagonal sheen. Alphas are ≤9% — the screenshot has to stay
+            readable, this is a highlight, not a glaze. */}
+        <div class="v8-device-glass pointer-events-none absolute inset-0 rounded-[inherit]"></div>
+      </div>
+      {/* Camera: one small round lens centred in the top bezel. Round and
+          centred is the generic form factor — deliberately not a cutout
+          silhouette. */}
+      <span class={`v8-device-lens absolute top-0 left-1/2 aspect-square -translate-x-1/2 rounded-full ${f.lens}`}></span>
+    </div>
+    {kind === 'desktop' && (
+      /* Deck: the closed base seen almost edge-on. Slightly wider than the lid
+         (105%, hence the -2.5% side margins) and clipped to a shallow
+         trapezoid, so the front edge reads as nearer the viewer; the clip also
+         carves the thumb scoop out of the front edge. Height is 3.05% of its
+         own width ≈ 3.2% of the lid's. */
+      <div class="v8-device-deck relative -mx-[2.5%] aspect-[328/10]"></div>
+    )}
+  </div>
+</div>

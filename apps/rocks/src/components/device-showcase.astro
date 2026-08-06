@@ -68,20 +68,31 @@ const phoneBox = solo
     ? 'w-[24%] md:order-3 md:w-[13%] md:-ml-[6%]'
     : 'w-[24%] md:order-3 md:w-[17%] md:-ml-[4%]';
 
-/* A device standing alone is the whole picture, so it gets a slightly stronger
- * single turn — EXCEPT the laptop, which keeps essentially the frontal pose in
- * both branches. A laptop is read by its silhouette (wide deck, narrower lid);
- * a `rotateY` big enough to be felt shears that outline into a trapezoid and
- * hands back the ambiguity the proportions just resolved. Product photography
- * shoots laptops near-front-on for the same reason, and turns phones and
- * tablets freely because a rectangle stays a rectangle. `rotateX` stays
- * positive on all three (top leaning back), matching the case tiles: on the
- * laptop it is also what puts the eye slightly above the deck, which is the
- * viewpoint the wide deck implies. */
-const SOLO_POSE = 'rotate-x-3 rotate-y-7';
-const desktopPose = 'rotate-x-2 rotate-y-1';
-const tabletPose = solo ? SOLO_POSE : 'rotate-x-3 rotate-y-12';
-const phonePose = solo ? SOLO_POSE : 'rotate-x-4 -rotate-y-14';
+/* Rest poses. Now that the frames are real slabs (task 30) a pose has a second
+ * job beyond arrangement: it is what makes an object's THICKNESS visible at
+ * all. A centred box shot head-on shows no side wall — the camera is on its
+ * centre line — so a slab only starts to look solid past
+ * atan(half-width / perspective), ≈5.5° at the tablet and phone's
+ * `perspective: 520cqw`. Hence the turns below are larger than the flat
+ * version's; under ~6° the walls exist but nothing renders of them.
+ *
+ * `rotateX` stays positive on all three (top leaning back), matching the case
+ * tiles. Note what that implies: leaning the top away can only ever expose the
+ * BOTTOM wall, never the top one, and that too needs ≈7–8° before it appears —
+ * which is why the tablet and phone lean further than they used to.
+ *
+ * The LAPTOP is the exception and keeps a `rotateX` of zero: its viewpoint is
+ * already built into the object (the deck lies at 81°, the lid stands at 7°),
+ * and tilting the scene on top of that would flatten the keyboard bed the
+ * geometry exists to show. Its `rotateY` stays modest at 5°: a laptop is read
+ * by its silhouette, and a turn big enough to be felt shears that outline into
+ * a trapezoid — the ambiguity the proportions were rebuilt to remove. Product
+ * photography shoots laptops near-front-on for the same reason and turns
+ * phones and tablets freely, because a rectangle stays a rectangle. */
+const SOLO_POSE = 'rotate-x-8 rotate-y-11';
+const desktopPose = 'rotate-y-5';
+const tabletPose = solo ? SOLO_POSE : 'rotate-x-8 rotate-y-14';
+const phonePose = solo ? SOLO_POSE : 'rotate-x-9 -rotate-y-16';
 
 /* `sizes` for the widest case each frame can reach — its SOLO width — so a
  * screenshot is never under-resolved whichever branch above applies. The

@@ -463,11 +463,30 @@
      the scene, its plastic doesn't recolour with the UI. The geometry
      (aspect ratios, bezel widths, corner radii) lives in device-frame.astro
      as percentage utilities; only the materials are here. */
+  .v8-device-frame {
+    /* The device's own soft ambient shadow, as a CUSTOM PROPERTY rather than
+       a rule of its own (task 30). It used to be `filter: drop-shadow()` on a
+       wrapper around the whole device — which cannot survive here, because
+       `filter` is a grouping property and forces `transform-style: flat` on
+       the element it sits on: a drop-shadow anywhere above the frames would
+       collapse the 3D slabs into a plane. So the ambient moved onto the faces
+       that cast it (`.v8-device-shell`, `.v8-device-deck`) as an ordinary
+       outer `box-shadow`, which is also more honest — it now projects WITH
+       the face it belongs to instead of being applied to a flattened
+       silhouette. Inherited from here so the light/cream pair is stated once.
+       In cqw, so it scales with the device like everything else. */
+    --v8-device-ambient: 0 0.9cqw 1.7cqw rgba(0, 0, 0, 0.42);
+  }
+  .light .v8-device-frame {
+    /* Cream page: lighter and warmer — a black drop on #F5F1E8 reads as soot. */
+    --v8-device-ambient: 0 0.9cqw 2cqw rgba(20, 20, 19, 0.22);
+  }
   .v8-device-shell {
     /* Body plastic, lit from the top-left like every other object on the
        page: a bright edge sweeping to a dark trough, with a second lift at
        the lower right so the body doesn't read as a flat slab. The inset
-       shadows are the moulded rim — light on top/left, shadow bottom/right. */
+       shadows are the moulded rim — light on top/left, shadow bottom/right;
+       the leading outer shadow is the ambient (see `.v8-device-frame`). */
     background: linear-gradient(
       152deg,
       #4a4a55,
@@ -477,10 +496,189 @@
       #16161a
     );
     box-shadow:
+      var(--v8-device-ambient),
       inset 0 1px 0 rgba(255, 255, 255, 0.3),
       inset 1px 0 0 rgba(255, 255, 255, 0.13),
       inset -1px 0 0 rgba(0, 0, 0, 0.5),
       inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+  }
+  .v8-device-back {
+    /* The slab's back shell. Never seen at any rest pose in the reel — it is
+       here because a solid object HAS one: without it the walls would be a
+       hollow ribbon the moment a pose turned far enough, and `backface-hidden`
+       on the walls would show the page straight through the object. Plain
+       moulded plastic, no features. */
+    background: linear-gradient(160deg, #26262d, #1a1a1f 46%, #101014);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.55);
+  }
+  .v8-device-wall {
+    /* Edge wall of a device slab (task 30) — the same role the jewel case's
+       `.v8-jewel-wall-*` play. OPAQUE and theme-independent: mid-scene there
+       is nothing behind a wall but the page, so a translucent wash would read
+       as a hole rather than as plastic, and a device's edge does not recolour
+       with the UI theme any more than the case's does.
+
+       The gradient runs along the wall's DEPTH axis, and which way that points
+       depends on how the wall was rotated onto its edge — so the direction is
+       a variable the markup sets (`--v8-wall-dir`), always oriented so the
+       FIRST stop is the end that meets the front face. That end catches the
+       same top-left key light as the bezel; the wall then falls away into the
+       body's shadow towards the back.
+
+       `--v8-wall-shade` is the second variable and it is not decoration: the
+       page's key light is top-LEFT, so a device's left and top edges are lit
+       and its right and bottom edges are in the body's own shadow. One
+       material for all four with an even tone made whichever wall the pose
+       exposed look like a pale strip glued to the silhouette — the wall that
+       reads as thickness is the one whose brightness agrees with where the
+       light is. */
+    background-image:
+      linear-gradient(
+        rgba(0, 0, 0, var(--v8-wall-shade, 0)),
+        rgba(0, 0, 0, var(--v8-wall-shade, 0))
+      ),
+      linear-gradient(
+        var(--v8-wall-dir, to right),
+        #3a3a44 0,
+        #2a2a32 16%,
+        #1c1c22 54%,
+        #131318 84%,
+        #0c0c10 100%
+      );
+  }
+  .v8-device-bed {
+    /* THE LAPTOP DECK'S TOP SURFACE (task 30): the plane the keyboard and
+       trackpad sit on, laid down 81° towards the camera. Read top to bottom
+       this is back-of-machine → front-of-machine, and the shading follows the
+       one light everything else on the page uses:
+         · a hard, fast shadow in the first few percent — the open lid's
+           underside falling onto the deck right behind the keyboard. It has to
+           be abrupt: a soft ramp there reads as a painted vignette and the lid
+           stops looking like it is standing ON something.
+         · a wide clean middle, brightest around the palm rest, because a
+           near-horizontal surface under an overhead key is the best-lit part
+           of the whole machine — brighter than the lid's front and much
+           brighter than the front lip below it.
+         · a slight fall-off at the very front edge, where the surface starts
+           to turn down into the chamfer.
+       Left-to-right there is a gentle lift on the left, matching the top-left
+       key: without it the bed is a flat grey field and the foreshortening
+       alone has to do all the work. */
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.8) 0,
+        rgba(0, 0, 0, 0.62) 4%,
+        rgba(0, 0, 0, 0.34) 10%,
+        rgba(0, 0, 0, 0.12) 17%,
+        rgba(0, 0, 0, 0) 30%,
+        rgba(0, 0, 0, 0) 74%,
+        rgba(0, 0, 0, 0.12) 92%,
+        rgba(0, 0, 0, 0.26) 100%
+      ),
+      /* the surface rolls off at both flanks — a flat field edge to edge is
+         the single loudest tell that a "3D" surface is a painted rectangle */
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.4) 0,
+        rgba(255, 255, 255, 0.06) 5%,
+        rgba(255, 255, 255, 0.02) 32%,
+        rgba(0, 0, 0, 0) 62%,
+        rgba(0, 0, 0, 0.1) 95%,
+        rgba(0, 0, 0, 0.44) 100%
+      ),
+      linear-gradient(to bottom, #2e2e36, #28282f 48%, #232329);
+  }
+  .v8-device-keys {
+    /* Keyboard bed as TEXTURE, not as keys. At the deck's 81° the row pitch
+       collapses to a handful of pixels on screen, so anything drawn per-key
+       (legends, a branded row layout, individually radiused caps) would be
+       both illegible and legally pointless. What survives foreshortening is
+       the regular dark grid between the caps — so that is all this is: two
+       repeating gradients crossed, the row one squeezed by the projection and
+       the column one untouched by it.
+
+       Pitches are chosen in the deck's own flat space: 6 rows over the height
+       (16.67% each) and 14 columns across (7.14% each). Two things had to be
+       unequal for this to read as a keyboard rather than as a speaker grille,
+       and both are a consequence of the projection:
+         · the ROW gutters are strong and every cap carries a lit leading
+           edge, because the rows are the only feature the foreshortening
+           preserves — a photographed keyboard at this angle is a stack of
+           dark bands with light on each cap's front lip.
+         · the COLUMN gutters are deliberately faint. They are NOT
+           foreshortened, so at equal strength they dominate — 14 full-height
+           vertical rules over six 3px rows is a radiator, not a keyboard.
+       Laid over each other the two gutter grids still intersect into discrete
+       keys; the columns just whisper it. */
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.16) 0,
+        rgba(255, 255, 255, 0.16) 2%,
+        rgba(255, 255, 255, 0.06) 2%,
+        rgba(255, 255, 255, 0.06) 12.5%,
+        rgba(0, 0, 0, 0.66) 12.5%,
+        rgba(0, 0, 0, 0.66) 16.67%
+      ),
+      repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.03) 0,
+        rgba(255, 255, 255, 0.03) 6.3%,
+        rgba(0, 0, 0, 0.4) 6.3%,
+        rgba(0, 0, 0, 0.4) 7.14%
+      ),
+      linear-gradient(to bottom, #202028, #1a1a21);
+    /* The well the keyboard is sunk into: a dark hairline inside, a lit one
+       outside — the milled edge of the cutout. */
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  .v8-device-pad {
+    /* Trackpad: a plain rectangle of harder, slightly cooler material set
+       into the palm rest. The lit top edge plus the dark hairline around it is
+       the whole illusion — a machined seam, nothing more. Generic: no button
+       split, no branded proportions. */
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.11),
+      rgba(255, 255, 255, 0.03) 38%,
+      rgba(0, 0, 0, 0.08)
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+  }
+  .v8-device-hinge {
+    /* Hinge barrel: a short band standing back up out of the deck just in
+       front of the hinge line, so the lid visibly emerges FROM something
+       rather than being glued to a surface. It is a flat plane pretending to
+       be a cylinder, which is all it can be at ~10px tall — the specular runs
+       across it and falls off to black at both the top (under the lid) and the
+       bottom (where it tucks into the deck), which is the shading of a barrel
+       seen from above. */
+    background-image:
+      /* both ends roll out of the light, so the barrel is a lens rather than
+         a rule drawn edge to edge — the same trick the front lip's chamfer
+         uses, and without it this reads as a light leak under the lid */
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.65) 0,
+        rgba(0, 0, 0, 0) 9%,
+        rgba(0, 0, 0, 0) 91%,
+        rgba(0, 0, 0, 0.65) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.72) 0,
+        rgba(0, 0, 0, 0.34) 24%,
+        rgba(255, 255, 255, 0.07) 48%,
+        rgba(255, 255, 255, 0.02) 64%,
+        rgba(0, 0, 0, 0.46) 86%,
+        rgba(0, 0, 0, 0.7) 100%
+      ),
+      linear-gradient(to right, #16161b, #23232a 30%, #23232a 70%, #131317);
   }
   .v8-device-glass {
     /* Over the screenshot: purely the display's recessed hairline (inset
@@ -527,10 +725,16 @@
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
   }
   .v8-device-deck {
-    /* Laptop base with the lid open, seen from slightly above — so what is
-       actually visible is the base's FRONT LIP, not its top surface. That
-       fixes the vertical order of everything painted here, and getting it
-       upside down is what made an earlier pass read as a flipped part:
+    /* THE MILLED FRONT LIP — the one piece of the flat build that came
+       through task 30's 3D rework untouched, because the owner approved it
+       exactly as it is. In the flat version this element WAS the whole base;
+       now it is the deck slab's FRONT WALL, hinged on the deck's front edge
+       and swung back to vertical. Its job and its lighting are identical: it
+       is the base's front lip, seen from slightly above.
+
+       That viewpoint fixes the vertical order of everything painted here, and
+       getting it upside down is what made an earlier pass read as a flipped
+       part:
 
          top       the light-catching CHAMFER where the deck's top surface
                    turns down into the front face (`.v8-device-chamfer`,
@@ -562,18 +766,12 @@
        white — anodised aluminium blows out to near-white, moulded dark
        plastic does not.
 
-       TAPERED BASE (task 29): the silhouette is the intersection of a
-       clip-path and a border-radius, which do different halves of the wedge.
-       The clip-path insets the TOP by 1.4% a side, so the base widens
-       downwards (the front edge is nearer the viewer). The bottom corners use
-       the TWO-VALUE percentage radius form — a small horizontal radius
-       against a large vertical one — so each corner is a long shallow sweep
-       along the bottom edge rather than a quarter circle. That is what stops
-       a 33:1 box reading as a rectangle: the base tucks under itself at both
-       ends the way a moulded wedge does. Generic hardware, no branded
-       silhouette. `overflow: hidden` is what makes the radius clip the
-       chamfer and scoops too (clip-path clips descendants; border-radius does
-       not, without it). */
+       `overflow: hidden` in the markup is what keeps the chamfer and the
+       scoops inside this box. The flat build also carried a clip-path that
+       widened the lip towards its foot — a hand-drawn stand-in for the base
+       being nearer the camera than the hinge. That is now produced by real
+       perspective and the clip-path is gone; keeping it would have notched
+       the corners away from the deck's side walls. */
     background-image:
       /* the face's own shading: it only darkens going DOWN, into the contact
          line at the foot */
@@ -650,9 +848,9 @@
         to bottom,
         rgba(0, 0, 0, 0.66) 0,
         rgba(0, 0, 0, 0.34) 16%,
-        rgba(255, 255, 255, 0.4) 26%,
-        rgba(255, 255, 255, 0.34) 44%,
-        rgba(255, 255, 255, 0.14) 72%,
+        rgba(255, 255, 255, 0.26) 26%,
+        rgba(255, 255, 255, 0.21) 44%,
+        rgba(255, 255, 255, 0.09) 72%,
         rgba(255, 255, 255, 0) 100%
       );
   }
@@ -756,20 +954,6 @@
         rgba(58, 50, 40, 0.36),
         rgba(58, 50, 40, 0) 78%
       );
-  }
-  .v8-device-cast {
-    /* The device's own soft ambient shadow: `drop-shadow` (not `box-shadow`)
-       so it follows the frame's actual silhouette, including the deck's
-       clipped wedge. Sits inside the posed wrapper (the pose/origin moved to
-       a parent in the task-29 restructure), so it
-       tilts with the device. Deliberately weaker than in task 28 — the
-       contact shadow above now does the grounding, and this only has to keep
-       the body from floating. Lighter and warmer on the cream theme, where a
-       black drop reads as soot. */
-    filter: drop-shadow(0 6px 11px rgba(0, 0, 0, 0.4));
-  }
-  .light .v8-device-cast {
-    filter: drop-shadow(0 6px 13px rgba(20, 20, 19, 0.2));
   }
 
   /* Wrinkle morphism for the hero poster (spec amendment 2026-08-04): a

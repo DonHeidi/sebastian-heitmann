@@ -1,7 +1,9 @@
 ---
 /**
- * Generic drawn device frame (task 28) — laptop, tablet or phone, with a real
- * screenshot behind the glass.
+ * Generic drawn device frame — laptop, tablet or phone, with a real screenshot
+ * behind the glass. As of task 30 these are PHYSICAL 3D OBJECTS, not drawings:
+ * every frame is a real slab in a CSS 3D scene, and the laptop is a hinged
+ * two-plane assembly. Nothing animates; each device holds one rest pose.
  *
  * `.astro`, not `.tsx`, deliberately: the frame is a STATIC composition whose
  * only dynamic content is an `astro:assets` `<Image>`, and `<Image>` can only
@@ -12,41 +14,51 @@
  * showcase ships zero client JS.
  *
  * The frames are GENERIC hardware: rounded plastic bodies, a thin lit bezel, a
- * single centered camera dot, a laptop deck with a hinge shadow and a thumb
- * scoop. No trade dress of any manufacturer — no notch/island silhouette, no
- * home button, no logos, no branded proportions.
+ * single centered camera dot, an unmarked keyboard bed and a plain trackpad.
+ * No trade dress of any manufacturer — no notch/island silhouette, no home
+ * button, no logos, no wordmarks, no branded key legends, no branded
+ * proportions.
  *
- * Material vocabulary is the jewel case's (global.css `@layer components`):
- * thin gradients and hairline inset edges, dark plastic that does NOT recolor
- * with the theme (a device is a physical object, like the case's edge walls).
- * See `.v8-device-*` in global.css.
+ * ─────────────────────────────────────────────────────────────────────────
+ * THE 3D VOCABULARY (shared with the jewel case, `case-card.tsx` + task 24)
+ * ─────────────────────────────────────────────────────────────────────────
+ * A solid object is: a front face at z = 0, a back face pushed to z = −depth
+ * (`rotateY(180deg) translateZ(depth)`, so it faces away), and edge walls —
+ * each anchored to its edge, recessed half a depth, then rotated 90° onto the
+ * side. Every wall is `backface-hidden`: the slab must never paint its hollow
+ * inside. Keeping the FRONT face at z = 0 rather than centring the slab is
+ * what makes the rest pose neither scale nor shift the artwork — the visible
+ * face stays exactly where the flat version drew it and the body extends
+ * backwards, away from the camera.
  *
- * Task 29 craft pass — four things carry the illusion, all documented at the
- * rules themselves: a many-stop horizontal gradient on the deck's front face
- * (`.v8-device-deck`) so the lip reads as a milled extrusion; a base tapered
- * by clip-path at the top and two-value percentage radii at the foot, lit
- * chamfer-down-to-contact-line with the opener recess cut into its TOP edge
- * (`.v8-device-chamfer`, `.v8-device-scoop*`); a dedicated blurred contact
- * shadow on the floor (`.v8-device-ground`); and ONE hard-stop reflection
- * wedge over the glass (`.v8-device-glare`) in place of the soft sheen this
- * replaced. The last two apply to all three kinds; the first two are the
- * laptop deck.
+ * Two units carry all of it:
+ *  - `cqw` — the frame's own layout box is an `@container`, so 1cqw = 1% of
+ *    the device's width. Depths, perspective and the laptop's whole skeleton
+ *    are in cqw, which makes a frame resolution-independent: the composition
+ *    sets a width and every third dimension follows. (`translateZ` cannot take
+ *    a percentage — this is why the container unit exists here at all.)
+ *  - percentages of the frame's width for the flat geometry (bezels, radii).
+ *    `padding: n%` resolves against the WIDTH, so bezels stay a constant
+ *    fraction of the body at any size; a single-value percentage
+ *    `border-radius` would give ELLIPTICAL corners on a non-square box, so
+ *    every radius is the two-value `horizontal%/vertical%` form with the
+ *    vertical half divided by the box's aspect ratio.
  *
- * The deck is the base's FRONT LIP viewed from slightly above, so its internal
- * order is fixed and non-negotiable: bright chamfer at the very top, face,
- * darkening into a contact line at the foot, scoop notched down from the top
- * edge. Every one of those is upside down if you build the deck as a top
- * surface instead — see the block comment on `.v8-device-deck`.
+ * WHY THE PERSPECTIVE IS ALSO IN cqw. A fixed `perspective: 1200px` is a
+ * camera at a fixed distance, so a 650px laptop and a 330px one would be shot
+ * with different lenses. `Ncqw` is a camera N device-widths away — the same
+ * photograph at every breakpoint.
  *
- * Geometry is expressed in PERCENTAGES of the frame's own width so a frame is
- * resolution-independent — the composition sets only a width, everything else
- * follows. Two consequences worth knowing when editing the table below:
- *  - `padding: n%` (including `py-`) resolves against the WIDTH, so bezels stay
- *    a constant fraction of the body at any size.
- *  - a single-value percentage `border-radius` would give ELLIPTICAL corners on
- *    a non-square box, so every radius is written as the two-value
- *    `horizontal%/vertical%` form, with the vertical half divided by the box's
- *    aspect ratio — that makes the corners circular again.
+ * WHICH WALLS ARE ACTUALLY VISIBLE is decided by one inequality, and it is
+ * worth knowing before tuning any pose: a centred box photographed head-on
+ * shows NO side wall at all, because the camera sits ON the box's own centre
+ * line. A wall at half-width h from that line, with the camera p away, only
+ * comes into view once the object turns by more than atan(h/p). With
+ * `perspective: 520cqw` and h = 50cqw that is ≈ 5.5° — which is why the
+ * tablet and phone poses turn further than the flat version's did. The same
+ * arithmetic vertically says a device leaning its top AWAY from the camera can
+ * only ever show its BOTTOM wall, never its top.
+ *
  * Every class string is a complete literal (never assembled from parts) so
  * Tailwind's scanner sees it.
  */
@@ -70,35 +82,51 @@ interface Props {
 
 const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
 
-/* Per-device geometry.
+/* ───────────────────────── THE LAPTOP SKELETON ─────────────────────────
  *
- * THE LAPTOP'S PROPORTIONS ARE THE WHOLE ILLUSION. A first pass drew a deck
- * only 5% wider than the lid and it read, correctly, as "a tablet on a
- * plinth": a big slab balanced on a small base is a stand, not a computer.
- * What says "laptop" before any material detail does is the WIDTH DELTA — on
- * a real machine seen slightly from above the closed deck is far wider than
- * the lid, because you are looking down the deck's foreshortened top surface
- * and along the lid's face. So the desktop kind is laid out as a BLOCK whose
- * width is the DECK's, with the lid centred inside it at 81.5%:
+ * All figures are cqw, i.e. % of the frame's layout width, and all of them
+ * come from one physical machine: 312 × 221 × 15 mm base, 6 mm lid.
  *
- *   block   width 1, height 0.5866   → aspect ≈ 1.70 : 1
- *   lid     width 0.815 (81.5% of the block), height 0.542 (92.4% of it)
- *   deck    width 1.000, height 0.0446 (7.6% of the block)
- *   ⇒ the deck overhangs the lid by 9.25% of the block on EACH side
+ *   machine width   81.5   the lid AND the deck are the same width — they are
+ *                          the same machine. (In the flat version the deck was
+ *                          drawn 100 wide against an 81.5 lid; that 22% delta
+ *                          was a hand-drawn stand-in for perspective. It is
+ *                          now produced by perspective for real — see below.)
+ *   lid height      54.2   = 81.5 × 0.665, the approved lid aspect 1000/665
+ *   lid thickness    1.7   6 mm
+ *   deck depth      57.5   221 mm, the front-to-back dimension of the base
+ *   deck thickness   4.0   15 mm — this is the approved milled front lip
  *
- * The deck also carries `-mt-[0.2%]` so it rides ~1px over the lid's bottom
- * edge. Percentage margins resolve against the containing block's WIDTH, so
- * that stays proportional like everything else here; it is small enough not
- * to disturb the block's height (0.5866 → 0.5846) and large enough to absorb
- * the sub-pixel seam that fractional layout heights otherwise leave between
- * two stacked boxes.
+ * POSE OF THE TWO PLANES. The lid stands at `rotateX(7deg)` about its BOTTOM
+ * edge and the deck lies at `rotateX(81deg)` about its TOP edge; both edges
+ * are the same line (y = 54.2cqw, z = 0), which is the hinge. Because they
+ * literally share that line there is no gap to close at any width — the old
+ * flat build had to fake the junction with a negative margin.
+ *   · 81° means the deck is 9° off horizontal, extending TOWARDS the camera
+ *     (`rotateX(90deg)` lays a plane down with its bottom edge nearest the
+ *     viewer). Its top surface is therefore foreshortened ~6:1 — the keyboard
+ *     is texture, which is exactly what it must be at this size.
+ *   · 7° on the lid is deliberately small: the screenshot is the content, and
+ *     cos 7° = 0.993, so it is legible dead-on while still keystoning enough
+ *     to read as a plane in space. The two together open the machine to 106°,
+ *     a natural working angle.
  *
- * Laying the block out this way (rather than the lid at 100% and the deck on
- * negative margins) means the width the composition hands us is the width of
- * the whole laptop: nothing overflows its column, and `md:w-[82%]` means what
- * it says. The lid's own aspect follows: 0.542/0.815 → 1000/665.
+ * WHERE THE "WIDER DECK" COMES FROM NOW. The deck's front edge sits
+ * 57.5·sin81° ≈ 56.8cqw nearer the camera than the hinge. At
+ * `perspective: 380cqw` that is a scale of 380/(380−56.8) = 1.176, so the
+ * 81.5cqw-wide base projects ≈ 95.8cqw wide against the lid's 81.5 — the deck
+ * reads ~17% wider, from real depth rather than from a drawn overhang. The
+ * relationship the owner approved survives; the mechanism changed.
+ * `perspective-origin: 50% 34%` puts the camera roughly at the lid's middle,
+ * so we look DOWN onto the deck (and the keyboard is visible at all).
  *
- * Bezel derivations (LID width = 1):
+ * BLOCK HEIGHT. Lid 54.2 + projected deck top ~15.6 + projected front lip
+ * ~4.7 ≈ 74.5cqw, hence `aspect-[100/74]` on the scene (the 0.5 goes to the
+ * pose, which lifts the front edge slightly). The block is squarer than the
+ * flat version's 1.705 : 1 for an unavoidable reason — a receding deck costs
+ * vertical room — and `device-showcase.astro` re-balances the reel for it.
+ *
+ * Bezel derivations (LID width = 1) — unchanged from the approved flat frame:
  *
  * desktop  side bezel 1.175%, top 2.33%, chin 4.65% — the display fills
  *          97.65% × 89.5% of the lid, sitting 3.5% of the lid's HEIGHT below
@@ -107,22 +135,20 @@ const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
  *          has, and a uniform bezel is exactly what makes one read as a
  *          tablet. Screen 0.9765 × 0.5952 → 1.64:1.
  *          Body radius 2.2% → 2.2/0.665 = 3.3% vertical, on the TOP corners
- *          only: a lid's bottom edge is the hinge line, which is straight and
- *          square on real hardware. Rounding it, as a first pass did, opened
- *          two crescents of page background between the lid and the deck at
- *          exactly the place the eye checks for contact, and that alone was
- *          enough to make the display look like a separate object resting
- *          behind the base.
+ *          only: a lid's bottom edge is the hinge line, straight and square.
  *          Screen radius = 2.2 − 1.175 = 1.025% of the lid = 1.025/0.9765 ≈
  *          1.05% of the screen's width, 1.025/0.5952 ≈ 1.7% of its height.
  * tablet   side bezel 3.6%, top/bottom 5.2%; screen 3/4 portrait →
  *          screen 0.928 × 1.237, body height 1.341 → aspect 1000/1341.
  *          Body radius 5.6% → 4.2% vertical. Screen radius 2.0% of body →
- *          2.2% / 1.6% of the screen box.
+ *          2.2% / 1.6% of the screen box. Depth 4.3cqw ≈ 7.5 mm on a 175 mm
+ *          body.
  * phone    side bezel 4.2%, top/bottom 6.4%; screen 9/19.5 →
  *          screen 0.916 × 1.985, body height 2.113 → aspect 1000/2113.
  *          Body radius 13% → 6.2% vertical. Screen radius 8.8% of body →
- *          9.6% / 4.4% of the screen box.
+ *          9.6% / 4.4% of the screen box. Depth 10cqw ≈ 7.8 mm on a 71 mm
+ *          body — a phone is genuinely the CHUNKIEST of the three relative to
+ *          its own width, which is why its walls read the most.
  *
  * The lens sits at `top-0` and is pushed down by a percentage of ITS OWN
  * height (percentage translate resolves against the element, so this survives
@@ -130,33 +156,45 @@ const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
  * in lens-heights. desktop (2.33−0.7)/2 / 0.7 = 116%; tablet (5.2−2.2)/2 / 2.2
  * = 68%; phone (6.4−3.0)/2 / 3.0 = 57%.
  *
- * `lid` is the shell's own layout box inside the frame's block — only the
- * laptop needs one, because only the laptop has a part wider than its screen
- * assembly.
+ * Wall insets. A wall is a rectangle; a body has rounded corners. Each wall is
+ * pulled in by that body's corner radius on the axis it runs along, so it
+ * cannot poke out past the silhouette at a corner. (The laptop lid's bottom
+ * corners are square, so its side walls run to the very bottom.)
  */
 const FRAME = {
   desktop: {
-    lid: 'mx-auto w-[81.5%]',
-    body: 'aspect-[1000/665] rounded-[2.2%_2.2%_0_0/3.3%_3.3%_0_0] px-[1.175%] pt-[2.33%] pb-[4.65%]',
+    scene: 'aspect-[100/76] [transform-origin:50%_100%_24cqw]',
+    persp: '[perspective:330cqw] [perspective-origin:50%_34%]',
+    body: 'rounded-[2.2%_2.2%_0_0/3.3%_3.3%_0_0] px-[1.175%] pt-[2.33%] pb-[4.65%]',
     screen: 'rounded-[1.05%/1.7%]',
     lens: 'w-[0.7%] translate-y-[116%]',
-    ground: 'inset-x-[1%]',
+    ground: 'inset-x-[3%] translate-y-[80%]',
+    /* The lid's bottom corners are square (that edge IS the hinge), so its
+       side walls run all the way down; only the top corners need clearing. */
+    wallY: 'top-[3.3%] bottom-0',
+    wallX: 'inset-x-[2.2%]',
     widths: [800, 1600],
   },
   tablet: {
-    lid: 'w-full',
+    scene: '[--device-depth:4.3cqw] [transform-origin:50%_100%_-2.15cqw]',
+    persp: '[perspective:520cqw]',
     body: 'aspect-[1000/1341] rounded-[5.6%/4.2%] px-[3.6%] py-[5.2%]',
     screen: 'rounded-[2.2%/1.6%]',
     lens: 'w-[2.2%] translate-y-[68%]',
-    ground: 'inset-x-[3%]',
+    ground: 'inset-x-[3%] translate-y-[92%]',
+    wallY: 'inset-y-[4.2%]',
+    wallX: 'inset-x-[5.6%]',
     widths: [320, 640],
   },
   phone: {
-    lid: 'w-full',
+    scene: '[--device-depth:10cqw] [transform-origin:50%_100%_-5cqw]',
+    persp: '[perspective:520cqw]',
     body: 'aspect-[1000/2113] rounded-[13%/6.2%] px-[4.2%] py-[6.4%]',
     screen: 'rounded-[9.6%/4.4%]',
     lens: 'w-[3%] translate-y-[57%]',
-    ground: 'inset-x-[4%]',
+    ground: 'inset-x-[4%] translate-y-[92%]',
+    wallY: 'inset-y-[6.2%]',
+    wallX: 'inset-x-[13%]',
     widths: [200, 400],
   },
 } as const;
@@ -168,36 +206,160 @@ const f = FRAME[kind];
     each device gets its own centered vanishing point: the poses read as three
     product shots placed side by side, not as one wide-angle scene that skews
     whatever sits off-centre. Matches `case-card.tsx`, which perspectives per
-    tile for the same reason. */}
-<div class={`perspective-distant ${className}`}>
-  <div class={`relative origin-bottom ${pose}`}>
-    {/* Contact shadow, FIRST in DOM so the hardware sits on it. Anchored to
-        the bottom of the whole device (the deck's front edge on a laptop, the
-        body's foot on a tablet/phone) and pushed 92% of its own height below
-        that line — percentage translate resolves against the element, which
-        keeps this width-relative like every other measurement here. Height is
-        5% of the device's width via `aspect-*` for the same reason, so the
-        shadow scales with the object: a 630px laptop casts ~31px, a 160px
-        phone ~8px. (Do NOT size this off `getBoundingClientRect` — the pose
-        transform means the reported box is the projected quad's bounding box,
-        not the element.) It is a SIBLING of the `.v8-device-cast` element,
-        not a child: `drop-shadow` would otherwise re-shadow the shadow, and
-        the blend would be isolated by the filter. `-z-10` because a positioned
-        element paints ABOVE its in-flow siblings regardless of DOM order —
-        without it the shadow's dense top lands on the deck's lit front lip
-        and puts it out. The pose transform makes this element a stacking
-        context, so the negative index cannot escape behind the page. */}
-    <div
-      class={`v8-device-ground pointer-events-none absolute -z-10 bottom-0 aspect-[1000/50] translate-y-[92%] ${f.ground}`}
-    ></div>
-    <div class="v8-device-cast">
-      {/* Body. `origin-bottom` above means the tilts pivot on the device's
-          feet, so a row of frames stays planted on one floor line. */}
-      <div class={`v8-device-shell relative ${f.lid} ${f.body}`}>
+    tile for the same reason. `@container` on the same element is what makes
+    every cqw below mean "% of THIS device's width". */}
+<div class={`v8-device-frame @container relative ${className}`}>
+  {/* Contact shadow, FIRST in DOM so the hardware sits on it, and deliberately
+      OUTSIDE the 3D scene: it is the floor, and the floor does not turn with
+      the object. Anchored to the bottom of the frame box and pushed most of
+      its own height below that line — percentage translate resolves against
+      the element, which keeps this width-relative like every other measurement
+      here. Height is 5% of the device's width via `aspect-*` for the same
+      reason, so the shadow scales with the object. (Do NOT size this off
+      `getBoundingClientRect` — the pose transform means the reported box is
+      the projected quad's bounding box, not the element.) `-z-10` because a
+      positioned element paints ABOVE its in-flow siblings regardless of DOM
+      order; the container/perspective box is a stacking context, so the
+      negative index cannot escape behind the page. */}
+  <div
+    class={`v8-device-ground pointer-events-none absolute -z-10 bottom-0 aspect-[1000/50] ${f.ground}`}
+  ></div>
+
+  {/* Camera. `perspective` has to live on a SEPARATE element from
+      `@container`, not on the frame box itself: container query units used on
+      the container element resolve against an OUTER container (a container
+      cannot query itself), so `perspective: 330cqw` written up there silently
+      measured something else entirely and the depth barely read. Here it is a
+      descendant, so cqw means what the rest of this file means by it. The
+      wrapper is layout-transparent — it takes the scene's height. */}
+  <div class={f.persp}>
+  {kind === 'desktop' ? (
+    /* ── LAPTOP: two planes hinged on one shared line ──────────────────── */
+    <div class={`relative transform-3d ${f.scene} ${pose}`}>
+      {/* LID. Its layout box is the lid; the shell fills it. `origin-bottom`
+          + rotateX means the bottom edge — the hinge — never moves, so the
+          deck below can be pinned to exactly the same y with no seam to
+          close. Thin slab: front face (the shell) at z = 0, back face at
+          z = −depth, walls between. */}
+      <div
+        class="absolute top-0 left-[6.4cqw] w-[81.5cqw] aspect-[1000/665] transform-3d origin-bottom [--device-depth:1.7cqw] [transform:rotateX(7deg)]"
+      >
+        <div class={`v8-device-shell absolute inset-0 ${f.body}`}>
+          <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
+            {/* The screenshot is the content: full colour, no duotone (unlike
+                the cover panel). `object-top` so a tall page crops from the
+                BOTTOM — the header/hero identifies the product. */}
+            <Image
+              src={src}
+              alt={alt}
+              widths={[...f.widths]}
+              sizes={sizes}
+              loading="lazy"
+              class="h-full w-full object-cover object-top"
+            />
+            {/* One hard-stop reflection wedge in the top-right corner, cut by
+                the bezel radius (`rounded-[inherit]`). Screen blend, so it can
+                only add light — the UI under it hazes, never disappears. */}
+            <div class="v8-device-glare pointer-events-none absolute inset-0 rounded-[inherit]"></div>
+            {/* Glass: the recessed hairline around the display. Last, so the
+                recess reads over the reflection rather than under it. */}
+            <div class="v8-device-glass pointer-events-none absolute inset-0 rounded-[inherit]"></div>
+          </div>
+          {/* Camera: one small round lens centred in the top bezel. Round and
+              centred is the generic form factor — deliberately not a cutout
+              silhouette. */}
+          <span class={`v8-device-lens absolute top-0 left-1/2 aspect-square -translate-x-1/2 rounded-full ${f.lens}`}></span>
+        </div>
+        {/* Back of the lid: plain shell. Never seen at this pose, but a solid
+            object has one — and it is what stops the walls being a hollow
+            ribbon if the pose is ever turned further. */}
+        <div
+          class="v8-device-back pointer-events-none absolute inset-0 rounded-[2.2%_2.2%_0_0/3.3%_3.3%_0_0] backface-hidden [transform:translateZ(calc(var(--device-depth)*-1))_rotateY(180deg)]"
+        ></div>
+        {/* Lid walls. Sides run from the top corner radius to the very bottom
+            (the hinge edge is square). The top wall closes the crown. No
+            bottom wall: that edge is the hinge, permanently buried. */}
+        <div
+          class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_left] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
+        ></div>
+        <div
+          class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] ${f.wallY} backface-hidden [--v8-wall-dir:to_right] [--v8-wall-shade:0.5] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
+        ></div>
+        <div
+          class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] ${f.wallX} backface-hidden [--v8-wall-dir:to_top] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
+        ></div>
+      </div>
+
+      {/* DECK. The element IS the base's top surface: an 81.5 × 57.5cqw plane
+          hinged on its top edge and laid down 81° towards the camera. It is
+          pinned 0.4cqw ABOVE the hinge line and made 0.4cqw taller, so a
+          sliver of it passes behind the lid — that overlap is what guarantees
+          no page background can ever show through the junction at a fractional
+          pixel, and because it is rotated it lands BEHIND the lid rather than
+          on it, so nothing paints over the chin. */}
+      <div
+        class="v8-device-bed absolute top-[53.8cqw] left-[6.4cqw] h-[57.9cqw] w-[81.5cqw] rounded-[1.6cqw] transform-3d origin-top [transform:rotateX(81deg)]"
+      >
+        {/* Keyboard bed. Two repeating gradients crossed into a key grid, on
+            the back half of the deck where a keyboard actually is. At 81° the
+            row pitch collapses to a few pixels on screen — that is the point:
+            it must read as MACHINED TEXTURE, not as keys you could name. No
+            legends, no branded row layout. */}
+        <div class="v8-device-keys pointer-events-none absolute inset-x-[9%] top-[9%] h-[42%] rounded-[0.7cqw]"></div>
+        {/* Trackpad: a plain rounded rectangle on the palm rest, slightly
+            proud of the bed with a hairline seam. */}
+        <div class="v8-device-pad pointer-events-none absolute left-1/2 top-[62%] h-[26%] w-[30%] -translate-x-1/2 rounded-[1.2cqw/0.5cqw]"></div>
+        {/* Hinge barrel: a short band standing back up out of the deck just
+            in front of the hinge line, so the lid visibly emerges FROM
+            something. `origin-bottom` + a negative rotateX tips it back
+            towards the camera (net ≈ 45° in world space), which is the lit
+            quadrant of a cylinder seen from above. */}
+        <div class="v8-device-hinge pointer-events-none absolute inset-x-[5%] top-0 h-[1.8cqw] origin-bottom [transform:rotateX(-32deg)]"></div>
+
+        {/* FRONT LIP — the approved milled front face, carried over whole.
+            In the flat build this WAS the deck; here it is the deck slab's
+            front wall, hinged on the deck's front edge and swung back to
+            vertical (81 − 81 = 0° in world space). Everything inside it is
+            unchanged: the many-stop extrusion gradient, the lit top chamfer
+            with the hinge-side shadow, and the two opener scoops notched down
+            from its top edge. */}
+        <div
+          class="v8-device-deck absolute inset-x-0 top-[57.4cqw] h-[4.5cqw] origin-top overflow-hidden [transform:rotateX(-81deg)]"
+        >
+          {/* Top chamfer: the lit bevel along the lip's upper edge, where the
+              deck's top surface turns down into the front face. */}
+          <div class="v8-device-chamfer absolute inset-x-0 top-0 h-[30%]"></div>
+          {/* Opener scoop: two halves of 7% of the lip's width, meeting flush
+              at the centre, hanging 40% of its height down from the TOP edge
+              — a notch milled into the chamfer that you look down into, not a
+              dish on the front face. They come after the chamfer so they paint
+              over it: the bright bevel is interrupted across the scoop and
+              picks back up along the arc of the cut, which is what makes the
+              edge read as dipping rather than as being smudged. */}
+          <span class="v8-device-scoop v8-device-scoop-l absolute top-0 right-1/2 h-[40%] w-[7%]"></span>
+          <span class="v8-device-scoop v8-device-scoop-r absolute top-0 left-1/2 h-[40%] w-[7%]"></span>
+        </div>
+
+        {/* Deck side walls: the base's left and right flanks, running the full
+            depth. Each is hinged on its own edge and rotated straight down out
+            of the deck plane. Only one of the two can ever be visible, and
+            only once the pose turns past atan(half-width / perspective) — see
+            the header note. No underside and no back wall: the first is on the
+            table, the second is behind the lid. */}
+        <div
+          class="v8-device-wall pointer-events-none absolute inset-y-0 left-0 w-[4cqw] origin-left backface-hidden [--v8-wall-dir:to_right] [outline:1px_solid_transparent] [transform:rotateY(90deg)]"
+        ></div>
+        <div
+          class="v8-device-wall pointer-events-none absolute inset-y-0 right-0 w-[4cqw] origin-right backface-hidden [--v8-wall-dir:to_left] [--v8-wall-shade:0.5] [outline:1px_solid_transparent] [transform:rotateY(-90deg)]"
+        ></div>
+      </div>
+    </div>
+  ) : (
+    /* ── TABLET / PHONE: one slab ──────────────────────────────────────── */
+    <div class={`relative transform-3d ${f.scene} ${pose}`}>
+      {/* Front face, in flow: it is what gives the scene its height. */}
+      <div class={`v8-device-shell relative w-full ${f.body}`}>
         <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
-          {/* The screenshot is the content: full colour, no duotone (unlike the
-              cover panel). `object-top` so a tall page crops from the BOTTOM —
-              the header/hero of a screenshot is what identifies the product. */}
           <Image
             src={src}
             alt={alt}
@@ -206,52 +368,31 @@ const f = FRAME[kind];
             loading="lazy"
             class="h-full w-full object-cover object-top"
           />
-          {/* One hard-stop reflection wedge in the top-right corner, cut by
-              the bezel radius (`rounded-[inherit]`). Screen blend, so it can
-              only add light — the UI under it hazes, never disappears. */}
           <div class="v8-device-glare pointer-events-none absolute inset-0 rounded-[inherit]"></div>
-          {/* Glass: the recessed hairline around the display. Last, so the
-              recess reads over the reflection rather than under it. */}
           <div class="v8-device-glass pointer-events-none absolute inset-0 rounded-[inherit]"></div>
         </div>
-        {/* Camera: one small round lens centred in the top bezel. Round and
-            centred is the generic form factor — deliberately not a cutout
-            silhouette. */}
         <span class={`v8-device-lens absolute top-0 left-1/2 aspect-square -translate-x-1/2 rounded-full ${f.lens}`}></span>
       </div>
-      {kind === 'desktop' && (
-        /* Deck: the closed base seen almost edge-on, and the widest thing in
-           the frame — it spans the WHOLE block while the lid above it spans
-           81.5%, so it overhangs by 9.25% a side. That delta, not the
-           material, is what makes the silhouette read as a laptop instead of
-           a slab on a stand. Height 4.46% of its own width (7.6% of the
-           block), tapered by clip-path at the top and by two-value bottom
-           radii at the foot. The front face and the opener scoops are
-           children so `overflow-hidden` + the deck's radius clip them to the
-           wedge. */
-        <div class="v8-device-deck relative -mt-[0.2%] aspect-[224/10] overflow-hidden">
-          {/* Top chamfer: the lit bevel along the lip's upper edge, carrying
-              the hinge shadow in its own top sixth. `top-0` combined with the
-              deck's negative margin above is the whole hinge junction — the
-              deck rides ~1px over the lid's bottom edge, and that overlap is
-              swallowed by this element's dark band, so no page background can
-              show between the two at any width or theme. */}
-          <div class="v8-device-chamfer absolute inset-x-0 top-0 h-[30%]"></div>
-          {/* Opener scoop: two halves of 7% of the deck's width, meeting flush
-              at the centre, hanging 40% of the deck's height down from the TOP
-              edge — a notch milled into the chamfer that you look down into,
-              not a dish on the front face. They come after the chamfer so they
-              paint over it: the bright bevel is interrupted across the scoop
-              and picks back up along the arc of the cut, which is what makes
-              the edge read as dipping rather than as being smudged. */}
-          <span
-            class="v8-device-scoop v8-device-scoop-l absolute top-0 right-1/2 h-[40%] w-[7%]"
-          ></span>
-          <span
-            class="v8-device-scoop v8-device-scoop-r absolute top-0 left-1/2 h-[40%] w-[7%]"
-          ></span>
-        </div>
-      )}
+      {/* Back shell at z = −depth, facing away. */}
+      <div
+        class={`v8-device-back pointer-events-none absolute inset-0 backface-hidden ${f.body} [transform:translateZ(calc(var(--device-depth)*-1))_rotateY(180deg)]`}
+      ></div>
+      {/* Four edge walls. Anchored to the edge, recessed half a depth, rotated
+          90° onto the side; each inset by the body's corner radius on the axis
+          it runs along so it cannot poke past a rounded corner. */}
+      <div
+        class={`v8-device-wall pointer-events-none absolute left-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_left] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateY(-90deg)]`}
+      ></div>
+      <div
+        class={`v8-device-wall pointer-events-none absolute right-0 w-[var(--device-depth)] backface-hidden ${f.wallY} [--v8-wall-dir:to_right] [--v8-wall-shade:0.5] [outline:1px_solid_transparent] [transform:translateX(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateY(90deg)]`}
+      ></div>
+      <div
+        class={`v8-device-wall pointer-events-none absolute top-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_top] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/-2))_translateZ(calc(var(--device-depth)/-2))_rotateX(90deg)]`}
+      ></div>
+      <div
+        class={`v8-device-wall pointer-events-none absolute bottom-0 h-[var(--device-depth)] backface-hidden ${f.wallX} [--v8-wall-dir:to_bottom] [--v8-wall-shade:0.55] [outline:1px_solid_transparent] [transform:translateY(calc(var(--device-depth)/2))_translateZ(calc(var(--device-depth)/-2))_rotateX(-90deg)]`}
+      ></div>
     </div>
+  )}
   </div>
 </div>

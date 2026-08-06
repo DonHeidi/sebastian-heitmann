@@ -46,12 +46,17 @@ const solo = [desktop, tablet, phone].filter(Boolean).length === 1;
 
 /* Layout boxes. Full literals per branch (Tailwind scans source text, so a
  * class can never be assembled from fragments). Percentages are of the
- * 52.5rem prose column: the trio spans 66 + 25 + 13 − 6 − 6 = 92% of it, which
+ * 52.5rem prose column: the trio spans 70 + 25 + 13 − 6 − 6 = 96% of it, which
  * keeps the reel visually inset from the copy above and below it.
- * Overlaps only apply where there is actually something to overlap. */
+ * Overlaps only apply where there is actually something to overlap.
+ *
+ * A laptop's box is its DECK's width, i.e. the whole machine (see the block
+ * derivation in `device-frame.astro`); its lid is 81.5% of that. So these
+ * numbers are the real footprint and nothing overhangs the column — which is
+ * also why `w-full` is safe on mobile. */
 const desktopBox = solo
-  ? 'w-full md:order-2 md:w-[78%]'
-  : 'w-full md:order-2 md:w-[66%]';
+  ? 'w-full md:order-2 md:w-[82%]'
+  : 'w-full md:order-2 md:w-[70%]';
 const tabletBox = solo
   ? 'w-[62%] md:order-1 md:w-[34%]'
   : desktop
@@ -64,19 +69,27 @@ const phoneBox = solo
     : 'w-[24%] md:order-3 md:w-[17%] md:-ml-[4%]';
 
 /* A device standing alone is the whole picture, so it gets a slightly stronger
- * single turn; in the trio the laptop stays near-frontal and the flanks turn
- * toward the viewer. */
+ * single turn — EXCEPT the laptop, which keeps essentially the frontal pose in
+ * both branches. A laptop is read by its silhouette (wide deck, narrower lid);
+ * a `rotateY` big enough to be felt shears that outline into a trapezoid and
+ * hands back the ambiguity the proportions just resolved. Product photography
+ * shoots laptops near-front-on for the same reason, and turns phones and
+ * tablets freely because a rectangle stays a rectangle. `rotateX` stays
+ * positive on all three (top leaning back), matching the case tiles: on the
+ * laptop it is also what puts the eye slightly above the deck, which is the
+ * viewpoint the wide deck implies. */
 const SOLO_POSE = 'rotate-x-3 rotate-y-7';
-const desktopPose = solo ? SOLO_POSE : 'rotate-x-2 rotate-y-3';
+const desktopPose = 'rotate-x-2 rotate-y-1';
 const tabletPose = solo ? SOLO_POSE : 'rotate-x-3 rotate-y-12';
 const phonePose = solo ? SOLO_POSE : 'rotate-x-4 -rotate-y-14';
 
 /* `sizes` for the widest case each frame can reach — its SOLO width — so a
  * screenshot is never under-resolved whichever branch above applies. The
  * column is `100vw − 3rem` below `md`; above it, 52.5rem, which the fluid root
- * (task 27) grows to ~997px at 2560, hence the px figures: 78% / 34% / 22%
- * of that. */
-const DESKTOP_SIZES = '(max-width: 767px) calc(100vw - 3rem), 780px';
+ * (task 27) grows to ~997px at 2560, hence the px figures: 82% / 34% / 22%
+ * of that. The laptop carries an extra 0.796 factor because its image fills
+ * the lid's screen (0.9765 × 81.5%), not the box. */
+const DESKTOP_SIZES = '(max-width: 767px) calc((100vw - 3rem) * 0.8), 650px';
 const TABLET_SIZES = '(max-width: 767px) calc((100vw - 3rem) * 0.62), 340px';
 const PHONE_SIZES = '(max-width: 767px) calc((100vw - 3rem) * 0.34), 220px';
 ---

@@ -63,13 +63,38 @@ interface Props {
 
 const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
 
-/* Per-device geometry. Derivations (body width = 1 throughout):
+/* Per-device geometry.
  *
- * desktop  side bezel 1.5%, top/bottom 2.6%; screen 16/10 →
- *          screen 0.970 × 0.606, body height 0.658 → aspect 1000/658.
- *          Body radius 2.2% → 2.2/0.658 = 3.3% vertical.
- *          Screen radius = 2.2 − 1.5 = 0.7% of body = 0.7/0.970 ≈ 0.7% of the
- *          screen's width, 0.7/0.606 ≈ 1.2% of its height.
+ * THE LAPTOP'S PROPORTIONS ARE THE WHOLE ILLUSION. A first pass drew a deck
+ * only 5% wider than the lid and it read, correctly, as "a tablet on a
+ * plinth": a big slab balanced on a small base is a stand, not a computer.
+ * What says "laptop" before any material detail does is the WIDTH DELTA — on
+ * a real machine seen slightly from above the closed deck is far wider than
+ * the lid, because you are looking down the deck's foreshortened top surface
+ * and along the lid's face. So the desktop kind is laid out as a BLOCK whose
+ * width is the DECK's, with the lid centred inside it at 81.5%:
+ *
+ *   block   width 1, height 0.5866   → aspect ≈ 1.70 : 1
+ *   lid     width 0.815 (81.5% of the block), height 0.542 (92.4% of it)
+ *   deck    width 1.000, height 0.0446 (7.6% of the block)
+ *   ⇒ the deck overhangs the lid by 9.25% of the block on EACH side
+ *
+ * Laying the block out this way (rather than the lid at 100% and the deck on
+ * negative margins) means the width the composition hands us is the width of
+ * the whole laptop: nothing overflows its column, and `md:w-[82%]` means what
+ * it says. The lid's own aspect follows: 0.542/0.815 → 1000/665.
+ *
+ * Bezel derivations (LID width = 1):
+ *
+ * desktop  side bezel 1.175%, top 2.33%, chin 4.65% — the display fills
+ *          97.65% × 89.5% of the lid, sitting 3.5% of the lid's HEIGHT below
+ *          its top edge (that band is the camera strip). Thin sides, a
+ *          slightly deeper chin: that asymmetry is what a laptop lid actually
+ *          has, and a uniform bezel is exactly what makes one read as a
+ *          tablet. Screen 0.9765 × 0.5952 → 1.64:1.
+ *          Body radius 2.2% → 2.2/0.665 = 3.3% vertical.
+ *          Screen radius = 2.2 − 1.175 = 1.025% of the lid = 1.025/0.9765 ≈
+ *          1.05% of the screen's width, 1.025/0.5952 ≈ 1.7% of its height.
  * tablet   side bezel 3.6%, top/bottom 5.2%; screen 3/4 portrait →
  *          screen 0.928 × 1.237, body height 1.341 → aspect 1000/1341.
  *          Body radius 5.6% → 4.2% vertical. Screen radius 2.0% of body →
@@ -82,18 +107,24 @@ const { kind, src, alt, class: className = '', pose, sizes } = Astro.props;
  * The lens sits at `top-0` and is pushed down by a percentage of ITS OWN
  * height (percentage translate resolves against the element, so this survives
  * the width/height base mismatch): offset = (topBezel − lens) / 2, expressed
- * in lens-heights. desktop (2.6−0.8)/2 / 0.8 = 112%; tablet (5.2−2.2)/2 / 2.2
+ * in lens-heights. desktop (2.33−0.7)/2 / 0.7 = 116%; tablet (5.2−2.2)/2 / 2.2
  * = 68%; phone (6.4−3.0)/2 / 3.0 = 57%.
+ *
+ * `lid` is the shell's own layout box inside the frame's block — only the
+ * laptop needs one, because only the laptop has a part wider than its screen
+ * assembly.
  */
 const FRAME = {
   desktop: {
-    body: 'aspect-[1000/658] rounded-[2.2%/3.3%] px-[1.5%] py-[2.6%]',
-    screen: 'rounded-[0.7%/1.2%]',
-    lens: 'w-[0.8%] translate-y-[112%]',
-    ground: 'inset-x-[-1%]',
+    lid: 'mx-auto w-[81.5%]',
+    body: 'aspect-[1000/665] rounded-[2.2%/3.3%] px-[1.175%] pt-[2.33%] pb-[4.65%]',
+    screen: 'rounded-[1.05%/1.7%]',
+    lens: 'w-[0.7%] translate-y-[116%]',
+    ground: 'inset-x-[1%]',
     widths: [800, 1600],
   },
   tablet: {
+    lid: 'w-full',
     body: 'aspect-[1000/1341] rounded-[5.6%/4.2%] px-[3.6%] py-[5.2%]',
     screen: 'rounded-[2.2%/1.6%]',
     lens: 'w-[2.2%] translate-y-[68%]',
@@ -101,6 +132,7 @@ const FRAME = {
     widths: [320, 640],
   },
   phone: {
+    lid: 'w-full',
     body: 'aspect-[1000/2113] rounded-[13%/6.2%] px-[4.2%] py-[6.4%]',
     screen: 'rounded-[9.6%/4.4%]',
     lens: 'w-[3%] translate-y-[57%]',
@@ -141,7 +173,7 @@ const f = FRAME[kind];
     <div class="v8-device-cast">
       {/* Body. `origin-bottom` above means the tilts pivot on the device's
           feet, so a row of frames stays planted on one floor line. */}
-      <div class={`v8-device-shell relative ${f.body}`}>
+      <div class={`v8-device-shell relative ${f.lid} ${f.body}`}>
         <div class={`relative h-full w-full overflow-hidden bg-[#08080A] ${f.screen}`}>
           {/* The screenshot is the content: full colour, no duotone (unlike the
               cover panel). `object-top` so a tall page crops from the BOTTOM —
@@ -168,22 +200,28 @@ const f = FRAME[kind];
         <span class={`v8-device-lens absolute top-0 left-1/2 aspect-square -translate-x-1/2 rounded-full ${f.lens}`}></span>
       </div>
       {kind === 'desktop' && (
-        /* Deck: the closed base seen almost edge-on. Slightly wider than the
-           lid (105%, hence the -2.5% side margins), tapered by clip-path at
-           the top and by two-value bottom radii at the foot. Height is 3.05%
-           of its own width ≈ 3.2% of the lid's. The front face and the opener
-           scoops are children so `overflow-hidden` + the deck's radius clip
-           them to the wedge. */
-        <div class="v8-device-deck relative -mx-[2.5%] aspect-[328/10] overflow-hidden">
+        /* Deck: the closed base seen almost edge-on, and the widest thing in
+           the frame — it spans the WHOLE block while the lid above it spans
+           81.5%, so it overhangs by 9.25% a side. That delta, not the
+           material, is what makes the silhouette read as a laptop instead of
+           a slab on a stand. Height 4.46% of its own width (7.6% of the
+           block), tapered by clip-path at the top and by two-value bottom
+           radii at the foot. The front face and the opener scoops are
+           children so `overflow-hidden` + the deck's radius clip them to the
+           wedge. */
+        <div class="v8-device-deck relative aspect-[224/10] overflow-hidden">
           {/* Front face: the milled lip, bottom 38% of the deck. */}
           <div class="v8-device-edge absolute inset-x-0 bottom-0 h-[38%]"></div>
-          {/* Opener scoops: 5.5% of the deck's width each, meeting flush at
-              the centre, 30% of the deck's height deep. */}
+          {/* Opener scoops: 7% of the deck's width each, meeting flush at the
+              centre, 22% of the deck's height deep. Wider and shallower than
+              the first pass, which was tuned against a deck 1.5× thinner —
+              carried over unchanged onto the taller deck it stopped reading
+              as a dish and became a dark blob at 1×. */}
           <span
-            class="v8-device-scoop v8-device-scoop-l absolute bottom-0 left-[44.5%] h-[30%] w-[5.5%]"
+            class="v8-device-scoop v8-device-scoop-l absolute bottom-0 left-[43%] h-[22%] w-[7%]"
           ></span>
           <span
-            class="v8-device-scoop v8-device-scoop-r absolute bottom-0 left-1/2 h-[30%] w-[5.5%]"
+            class="v8-device-scoop v8-device-scoop-r absolute bottom-0 left-1/2 h-[22%] w-[7%]"
           ></span>
         </div>
       )}

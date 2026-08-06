@@ -32,7 +32,7 @@ export const enUs: Strings = {
   },
   logos: {
     workingWithLabel: 'Working with',
-    workingWith: ['Pool Position GmbH'],
+    workingWith: [],
     previouslyAtLabel: 'Previously at',
     previouslyAt: ['Jung von Matt', 'synvert', 'Granny & Smith', 'OFFIS'],
   },
@@ -196,12 +196,6 @@ export const enUs: Strings = {
         location: 'Hamburg, DE (remote)',
         description: 'AI Engineering, Software Development & Project Management for mid-sized companies and startups.',
         highlights: [
-          {
-            lead: 'Mobile app for Pool Position GmbH',
-            leadNote: 'Apr 2026 – present',
-            text: 'porting core web app features to mobile',
-            tech: ['TypeScript', 'React Native', 'AWS', 'Claude Code'],
-          },
           {
             lead: 'Digitalization project manager',
             leadNote: 'Oct 2025–Mar 2026',

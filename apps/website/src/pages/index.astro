@@ -8,7 +8,6 @@ import ThemeToggle from '@/components/theme-toggle.astro';
 import { Hero } from '../components/hero';
 import picture from '../assets/fb.jpg';
 import { LogoSection, type LogoAsset } from '../components/logo-section';
-import poolPositionLogo from '../assets/logos/pool-position.png';
 import jvmLogo from '../assets/logos/jvm.svg';
 import synvertLogo from '../assets/logos/synvert.png';
 import grannySmithLogo from '../assets/logos/granny-smith.jpg';
@@ -35,7 +34,6 @@ const heroPhoto = await getImage({ src: picture, width: 160, height: 160 });
 // spacing = vertical margin (px) in the mobile stacked layout — less for logos
 // with built-in whitespace, more for tightly cropped logos.
 const logoConfig: Array<{ name: string; src: ImageMetadata; height: number; spacing: number; noInvert?: boolean }> = [
-    { name: 'Pool Position GmbH', src: poolPositionLogo, height: 70, spacing: 0 },
     { name: 'Jung von Matt', src: jvmLogo, height: 24, spacing: 14 },
     { name: 'synvert', src: synvertLogo, height: 31, spacing: 10 },
     { name: 'Granny & Smith', src: grannySmithLogo, height: 53, spacing: 0, noInvert: true },

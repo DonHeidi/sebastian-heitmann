@@ -197,6 +197,12 @@ export const enUs: Strings = {
         description: 'AI Engineering, Software Development & Project Management for mid-sized companies and startups.',
         highlights: [
           {
+            lead: 'Mobile app for a music promotion agency',
+            leadNote: 'Apr 2026 – Aug 2026',
+            text: 'porting core web app features to mobile',
+            tech: ['TypeScript', 'React Native', 'AWS', 'Claude Code'],
+          },
+          {
             lead: 'Digitalization project manager',
             leadNote: 'Oct 2025–Mar 2026',
             text: 'advisory and delivery for a rental service',

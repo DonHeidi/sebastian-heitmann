@@ -111,6 +111,22 @@
  * boundaries — which is exactly why they never stepped. Measured for all of
  * them with `harness/mask33.mjs`; only the deck failed.
  *
+ * ─────────────────────────────────────────────────────────────────────────
+ * WHAT IS LEFT AFTER THAT IS TONE, NOT GEOMETRY (task 36)
+ * ─────────────────────────────────────────────────────────────────────────
+ * With the edge drawn correctly it still READS as steps at DPR 1, and that is
+ * not a bug to fix in the geometry — it is what a 0.72° diagonal looks like on
+ * a one-pixel grid: the boundary pixel's coverage runs 1 → 0 over ~94 device
+ * px, so its tone swings the whole machine↔page contrast and snaps back.
+ * Task 35 measured the two ways of buying resolution out of it; both failed.
+ *
+ * The cure is not on the edge, it is beside it: take the contrast away and the
+ * treads have nothing to be visible against. `.v8-device-veil` below is a soft
+ * contact occlusion laid along the laptop's projected foot, in PAGE space so
+ * it is ordinary antialiased 2D content rather than another 3D quad. That is
+ * the third rule this file now carries, and it generalises: an artefact that is
+ * a TONE artefact is fixed with light, not with more geometry.
+ *
  * Every class string is a complete literal (never assembled from parts) so
  * Tailwind's scanner sees it.
  */
@@ -617,4 +633,63 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
     </div>
   )}
   </div>
+
+  {/* CONTACT VEIL (task 36) — a soft dark line laid along the laptop's
+      PROJECTED bottom silhouette, painted in PAGE space.
+
+      WHY IT EXISTS. Tasks 32–34 took the silhouette as far as CSS geometry
+      goes: `mask33.mjs` puts the foot's worst step between adjacent columns at
+      0.05px and 97–100% of its boundary pixels carry partial coverage, i.e. it
+      is drawn correctly, not composited. Task 35 then measured the two ways of
+      buying more resolution and both came back no. What is LEFT is not a
+      geometry defect at all — it is tone. The foot runs at 0.72° (the pose's
+      `rotate-y-5` seen through the perspective), so at DPR 1 the true edge
+      takes ~94 device px to cross one device row; over that span the boundary
+      pixel's coverage runs 1 → 0 and its tone swings the whole machine↔page
+      contrast, then snaps back. Perfect antialiasing produces exactly that.
+      `harness/terrace36.mjs` measures the swing: 156/255 at 1440 DPR 1 light,
+      which is what the eye reads as terracing.
+
+      SO HIDE THE CONTRAST RATHER THAN THE EDGE. If the page immediately below
+      the foot is nearly as dark as the machine above it, the boundary pixel has
+      almost nothing to swing between and the treads stop reading — while the
+      edge itself has not moved by a hundredth of a pixel. That is what this is,
+      and it is a lighting element, not a patch: the front lip is the shadowed
+      side of the object (the key is above and to the LEFT and in front, see the
+      light block in `global.css`), and its own gradient already darkens into a
+      contact line at the foot. This continues that line onto the floor for a
+      few pixels, which is what a contact occlusion looks like.
+
+      WHY IT IS OUT HERE, not on the lip. Inside the 3D scene it would be a
+      facet of a `preserve-3d` subtree, and task 35 §7 established that such a
+      layer's own quad is composited WITHOUT antialiasing — it would arrive with
+      the same terracing it is meant to hide. Out here, as a plain page-space
+      sibling of the camera, it is ordinary 2D content that Skia antialiases,
+      and its 0.72° tilt is a plain `rotate()`, not a projection.
+
+      THE NUMBERS ARE MEASURED, NOT DERIVED. `harness/veil36.mjs` recovers the
+      foot's sub-pixel position per column from a coverage mask and reports it
+      in this container's own cqw: 76.36cqw at the left of the run, 75.50cqw at
+      the right, i.e. **75.92cqw at the frame's horizontal centre** with a slope
+      of 0.0125cqw per cqw = **0.72°**. Those figures are stable to 0.06cqw at
+      1440 / 768 / 375, which is why one pair of constants tracks the edge at
+      every breakpoint — the projection is scale-invariant, the frame is not.
+      (The obvious arithmetic, `57.4 + 4.5·cos81°`, is wrong by ~15cqw: the lip
+      hinges back to VERTICAL, so its 4.5cqw stands up in projection instead of
+      lying down. Measure it.)
+
+      The two insets are the LIP'S PROJECTED SPAN — 0.33cqw to 98.42cqw, from
+      the same probe — not `inset-x-0`. It is the same figure at 1440, 768 and
+      375, and it is what makes the `mask-image` fade in `global.css` a polish
+      rather than a load-bearing dependency: if the mask is ever dropped, the
+      band still ends exactly where the machine does.
+
+      LAPTOP ONLY, and that is a measurement too. The tablet's foot runs at
+      0.06° — 0.15px of drop across its whole width, so there is no tread to
+      hide — and the phone's 0.93px drop is a single step at the very edge of
+      the frame. `terrace36.mjs` on all three is in the task-36 report. A veil
+      on either would be a dark line drawn for its own sake. */}
+  {kind === 'desktop' && (
+    <div class="v8-device-veil pointer-events-none absolute left-[0.33cqw] right-[1.58cqw]"></div>
+  )}
 </div>

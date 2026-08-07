@@ -1384,6 +1384,112 @@
       );
   }
 
+  .v8-device-veil {
+    /* CONTACT VEIL (task 36) — the soft occlusion line along the laptop's
+       projected bottom silhouette. The full argument for why this exists, and
+       why it is in page space rather than on a facet, is at the element in
+       `device-frame.astro`; this rule is the geometry and the pigment.
+
+       ── GEOMETRY ────────────────────────────────────────────────────────
+       `--v8-veil-line` is the foot's projected position at the frame's
+       horizontal CENTRE, measured with `harness/veil36.mjs` (a coverage mask
+       read to a fraction of a pixel, converted to this container's cqw). The
+       `rotate` is the foot's projected slope, from the same fit. Rotation is
+       about the element's centre, and the centre is exactly where the line was
+       measured, so the band lands on the edge at every x — which a horizontal
+       band could not do: the foot drops 0.87cqw (4.8 CSS px at 1440) across the
+       machine, and a band tall enough to swallow that would be a stripe.
+
+       `--v8-veil-h` is `max(5px, …)` for the same reason `--v8-deck-corner` is:
+       the artefact is ONE DEVICE PIXEL tall whatever the machine's size, so
+       below ~370px of device the cqw term stops being able to cover it. The
+       core (28% → 58% of the height) is therefore never thinner than 1.5
+       device px at DPR 1, against an artefact one pixel tall.
+
+       The peak sits at 35% of the height, not at 50%: a contact occlusion is
+       denser on the floor side than up the face, and keeping the upper ramp
+       short is what stops this reaching the milled lip's chamfer — it dies
+       0.4cqw above the foot, and the chamfer is 6cqw further up.
+
+       ── THE END FADES ARE NOT OPTIONAL ──────────────────────────────────
+       `mask-image` takes the last 1.6% off each end. Without it the band stops
+       dead at the frame's edge, and on the cream page a near-opaque terminus is
+       a visible vertical tick — the exact kind of drawn artefact this is meant
+       to remove. The fade also thins the line across the silhouette's corner
+       radii, where the foot curves up off the straight line fitted here and a
+       contact occlusion genuinely does weaken.
+
+       1.6% ≈ 8.7px at 1440, against a 3.3px corner radius, so the line is back
+       to full strength within a few pixels of where the straight run starts.
+       It was 3% first and that was measurably worse: at 12× the fade was still
+       climbing a third of the way along the visible foot, which reads as a
+       wash rather than as a contact. (`task36-zoom-{after,m16}-left-light-z1`.)
+
+       The element's BOX is pinned to the lip's projected span (0.33cqw →
+       98.42cqw in the markup) rather than `inset-x-0`, and that is the mask's
+       safety net: Lightning CSS strips a hand-written `-webkit-mask-image`
+       at this project's targets, so on a browser that wants the prefix the
+       mask is simply gone. With the box on the silhouette, "gone" means the
+       band ends where the machine ends. With `inset-x-0` it would have meant
+       two near-opaque ticks sticking out onto the page.
+
+       ── THE PIGMENT IS `--v8-shadow`, AND THE CORE IS NEARLY OPAQUE ─────
+       Both follow from arithmetic rather than taste. Measured at 1440 DPR 1
+       light (`harness/dump36.mjs`), the lip's foot sits at luminance ~28 and
+       the page directly under it — already carrying the contact shadow — at
+       ~160. To stop a boundary pixel swinging between those two, the floor
+       side has to be brought down to within a few levels of the object side,
+       and no partial wash of a mid-tone can do it: at the theme's own darkest
+       ink (#2c2822, luminance 40) it still takes ~0.95 alpha. So the core is
+       essentially an opaque line of `--v8-shadow`, which is also what a total
+       contact occlusion physically IS — the floor at the contact line is as
+       dark as the object's own shadow side, and it is 12 levels off it here.
+       Lower the peak and the terracing comes back proportionally; the numbers
+       are in the task-36 report.
+
+       The ink is `--v8-shadow` RESTATED AS AN RGB TRIPLE rather than fed
+       through `color-mix()`, and that is deliberate: Lightning CSS emits its
+       own pre-`color-mix()` fallback resolving each mix to the FIRST colour in
+       it (see the ladder block above). For a tone rung that degrades to "not
+       lit"; here it would degrade to a fully opaque bar across the machine's
+       foot. `rgba()` over a triple has no such fallback and cannot.
+
+       ── IF IT EVER LOOKS LIKE A STRIPE ──────────────────────────────────
+       Reduce `--v8-veil-h` and widen the lower ramp. Do NOT raise the peak: it
+       is already at the point where the core matches the lip's own foot, and
+       past that the line starts reading darker than the object it belongs to. */
+    --v8-veil-line: 75.92cqw;
+    --v8-veil-h: max(5px, 1.35cqw);
+    --v8-veil-ink: 8, 8, 11; /* --v8-shadow, dark theme */
+    --v8-veil-peak: 0.95;
+    --v8-veil-mid: 0.42;
+    --v8-veil-up: 0.34;
+    top: calc(var(--v8-veil-line) - 0.35 * var(--v8-veil-h));
+    height: var(--v8-veil-h);
+    transform: rotate(-0.72deg);
+    background-image: linear-gradient(
+      to bottom,
+      rgba(var(--v8-veil-ink), 0) 0,
+      rgba(var(--v8-veil-ink), var(--v8-veil-up)) 15%,
+      rgba(var(--v8-veil-ink), var(--v8-veil-peak)) 28%,
+      rgba(var(--v8-veil-ink), var(--v8-veil-peak)) 58%,
+      rgba(var(--v8-veil-ink), var(--v8-veil-mid)) 78%,
+      rgba(var(--v8-veil-ink), 0) 100%
+    );
+    mask-image: linear-gradient(to right, transparent 0, #000 1.6%, #000 98.4%, transparent 100%);
+  }
+  .light .v8-device-veil {
+    /* Cream page: `--v8-shadow`'s warm brown-black (#2c2822) instead of the
+       dark theme's blue-black — a neutral black on #F5F1E8 reads as soot, and
+       this line has to belong to the same lamp as everything else. Same peak:
+       the contact line is opaque in both themes, because occlusion is
+       geometry and does not care what colour the room is. The falloff ends
+       are a little heavier here only because the cream has further to travel. */
+    --v8-veil-ink: 44, 40, 34; /* --v8-shadow, light theme */
+    --v8-veil-mid: 0.46;
+    --v8-veil-up: 0.36;
+  }
+
   /* Wrinkle morphism for the hero poster (spec amendment 2026-08-04): a
      theme-matched crumpled-paper texture blended over the whole poster block.
      Subtle physical print, NOT grunge — tuned low opacity, soft blends only.

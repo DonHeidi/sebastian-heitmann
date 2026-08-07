@@ -197,6 +197,12 @@ export const deDe: Strings = {
         description: 'AI Engineering, Software Development & Projektmanagement für mittelständische Unternehmen und Startups.',
         highlights: [
           {
+            lead: 'Mobile App für eine Musik-Promotion-Agentur',
+            leadNote: 'Apr 2026 – Aug 2026',
+            text: 'Portierung zentraler Web-App-Funktionen auf mobile Endgeräte',
+            tech: ['TypeScript', 'React Native', 'AWS', 'Claude Code'],
+          },
+          {
             lead: 'Projektmanager Digitalisierung',
             leadNote: 'Okt 2025–Mär 2026',
             text: 'Beratung und Begleitung eines Digitalisierungsvorhabens für einen Rental Service',

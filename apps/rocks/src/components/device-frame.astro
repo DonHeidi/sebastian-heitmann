@@ -424,7 +424,7 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
           So: anything added here that PAINTS belongs in the face, not on this
           element. The face is also why the radius moved down a level. */}
       <div
-        class="v8-device-bed absolute top-[53.8cqw] left-[6.4cqw] h-[57.9cqw] w-[81.5cqw] transform-3d origin-top [transform:rotateX(81deg)]"
+        class="v8-device-bed absolute top-[53.8cqw] left-[6.4cqw] h-[57.9cqw] w-[81.5cqw] transform-3d origin-top [--v8-deck-corner:max(3px,0.6cqw)] [transform:rotateX(81deg)]"
       >
         {/* The deck's surface. First child, so it paints under everything that
             sits ON the deck — exactly where the element's own background used
@@ -467,18 +467,35 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
             with the hinge-side shadow, and the two opener scoops notched down
             from its top edge.
 
-            `rounded-b-[0.35cqw]` is new in task 32 and is the one place a
-            radius was added for rasterisation reasons: these two are the
-            machine's front-bottom corners, they are the sharpest right angles
-            in the silhouette, and a right angle on a 3D-transformed layer
-            boundary stairsteps on BOTH of its edges at once. ~1.9px at 1440
-            and ~0.5px at 375 — below the threshold where it reads as a
-            rounded box, and a milled aluminium foot has a radius anyway. It
-            does NOT open the corner onto the page: the lip IS the silhouette
-            there, so what the radius takes away is silhouette, not a facet
-            junction (the flanks are behind, hinged off the deck plane). */}
+            THE FRONT-BOTTOM CORNERS (task 34). These two corners are the
+            machine's sharpest right angles, and they are shared: the lip's
+            bottom-left corner and the LEFT FLANK's front-bottom corner are
+            the same corner of the same slab, so they have to be cut to the
+            same radius or the silhouette is a step rather than a corner. The
+            radius is therefore a token on `.v8-device-bed`
+            (`--v8-deck-corner`), spent here and on the two flanks below, and
+            nowhere else.
+
+            It was `0.35cqw` (task 32) and that was too small to be a curve:
+            1.9px at 1440, 1.2px at 375, so the arc lived inside one or two
+            device pixels and whether it resolved at all came down to where
+            the pixel grid happened to fall. Measured with `harness/prof34.mjs`,
+            which reports the silhouette's left edge per row in CSS px: at DPR
+            1.25 the corner came back perfectly square (no ramp at all), at
+            DPR 2 it ramped over 1.0px. Same corner, two characters — which is
+            exactly the "sometimes smooth, sometimes not" the zoom exposes.
+
+            `max(3px, 0.6cqw)` is 3.3px at 1440 and clamps at 3px below a
+            ~500px machine, so the arc is never thinner than three device
+            pixels at DPR 1 and cannot vanish sub-pixel at any scale. It is
+            still a milled foot, not a rounded box: 3.3px on a 37px lip is
+            9% of its height.
+
+            It does NOT open the corner onto the page: the lip IS the
+            silhouette there, so what the radius takes away is silhouette,
+            not a facet junction. */}
         <div
-          class="v8-device-deck absolute inset-x-0 top-[57.4cqw] h-[4.5cqw] origin-top overflow-hidden rounded-b-[0.35cqw] [transform:rotateX(-81deg)]"
+          class="v8-device-deck absolute inset-x-0 top-[57.4cqw] h-[4.5cqw] origin-top overflow-hidden rounded-b-[var(--v8-deck-corner)] [transform:rotateX(-81deg)]"
         >
           {/* Top chamfer: the lit bevel along the lip's upper edge, where the
               deck's top surface turns down into the front face.
@@ -518,17 +535,44 @@ const ANSI_ROWS: readonly { readonly fn?: true; readonly keys: readonly number[]
           <span class="v8-device-scoop v8-device-scoop-r absolute -top-[0.15cqw] left-1/2 h-[calc(40%+0.15cqw)] w-[7%]"></span>
         </div>
 
-        {/* Deck side walls: the base's left and right flanks, running the full
-            depth. Each is hinged on its own edge and rotated straight down out
-            of the deck plane. Only one of the two can ever be visible, and
-            only once the pose turns past atan(half-width / perspective) — see
-            the header note. No underside and no back wall: the first is on the
-            table, the second is behind the lid. */}
+        {/* Deck side walls: the base's left and right flanks. Each is hinged
+            on its own edge and rotated straight down out of the deck plane.
+            Only one of the two can ever be visible, and only once the pose
+            turns past atan(half-width / perspective) — see the header note.
+            No underside and no back wall: the first is on the table, the
+            second is behind the lid.
+
+            THE FLANK IS THE SAME SLAB AS THE LIP (task 34), and until now it
+            disagreed with it twice over:
+
+              · `w-[4cqw]` made the slab 4cqw thick at the sides and 4.5cqw
+                thick at the front (the lip's height). Measured on screen the
+                flank's lower edge stopped 3.3px ABOVE the lip's — the base
+                was a wedge, and the front-bottom corner was a step.
+              · `inset-y-0` ran the flank to the bed's front edge (57.9cqw),
+                half a cqw PAST the fold line the lip hinges on (57.4cqw), so
+                the flank also poked forward of the face it is supposed to
+                meet.
+
+            Now `top-0 bottom-[0.5cqw]` ends the flank exactly on the fold
+            line and `w-[4.5cqw]` makes it exactly as deep as the lip is tall,
+            so the flank's front-bottom edge and the lip's side-bottom corner
+            are THE SAME 3D SEGMENT. `rounded-br` on the left flank and
+            `rounded-bl` on the right are that shared corner cut to the shared
+            radius: after the rotateY the flank's far edge (x = width) is the
+            underside of the slab and its bottom edge (y = 57.4cqw) is the
+            fold, so the corner between them is `br` on the left flank and
+            `bl` on the right, where the origin is on the other side.
+
+            At the rest pose both corners happen to sit behind the tablet and
+            the phone, so this costs nothing on screen today — it is the
+            geometry being true, which is what keeps it true if a pose ever
+            turns. */}
         <div
-          class="v8-device-wall pointer-events-none absolute inset-y-0 left-0 w-[4cqw] origin-left backface-hidden [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-lit)] [transform:rotateY(90deg)]"
+          class="v8-device-wall pointer-events-none absolute top-0 bottom-[0.5cqw] left-0 w-[4.5cqw] origin-left backface-hidden rounded-br-[var(--v8-deck-corner)] [--v8-wall-dir:to_right] [--v8-wall-tone:var(--v8-tone-lit)] [transform:rotateY(90deg)]"
         ></div>
         <div
-          class="v8-device-wall pointer-events-none absolute inset-y-0 right-0 w-[4cqw] origin-right backface-hidden [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-dim)] [transform:rotateY(-90deg)]"
+          class="v8-device-wall pointer-events-none absolute top-0 bottom-[0.5cqw] right-0 w-[4.5cqw] origin-right backface-hidden rounded-bl-[var(--v8-deck-corner)] [--v8-wall-dir:to_left] [--v8-wall-tone:var(--v8-tone-dim)] [transform:rotateY(-90deg)]"
         ></div>
       </div>
     </div>

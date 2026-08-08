@@ -42,7 +42,7 @@ describe.each(locales)('%s prices', (_name, s) => {
     for (const item of all) {
       if (item.priceMin === undefined) continue;
       const digits = (item.price ?? '').replace(/[^0-9]/g, '');
-      expect(digits).toContain(String(item.priceMin));
+      expect(digits).toBe(String(item.priceMin));
     }
   });
 });

@@ -127,9 +127,18 @@ Two constraints on that section, both deliberate:
 - **No outcome is claimed.** No signup counts, no validation results, no client. Job Directory
   is pre-launch, and the copy says the product behind the site is still in development.
 
-Note for whoever maintains this: Job Directory is now the example on two offer pages, this one
-and the AI page. Different facet each time, but it does signal a thin portfolio, and a second
-example would be worth having.
+Note for whoever maintains this. Job Directory appears on two offer pages, but they are not
+the same example. The AI page shows the **system**: automated capture of postings, AI scoring,
+briefings, human selection, feedback loops, a dashboard, REST/OpenAPI/MCP interfaces. This page
+shows the **website**: a proposition in one line, the problem, a four-step explanation, a
+capture form, bilingual, on its own domain. Same name and same URL, different artifact.
+
+**Do not cross-link the two example sections.** It is tempting, since together they happen to
+demonstrate the arc this page sells. But a link like "the system behind it" pointing at
+`/ai-process-automation` encodes an assumption about which example this page currently uses.
+Swap this page's example for a client project later and that sentence silently points at an
+unrelated page, with nothing in the build to catch it. Example content stays self-contained
+per page.
 
 ## 4. Route and file map
 

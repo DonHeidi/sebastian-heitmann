@@ -55,9 +55,10 @@ describe('breadcrumbs', () => {
     ]);
   });
 
-  test('includes the intermediate segment for a nested page', () => {
+  test('includes the intermediate segment for a nested page whose route is declared', () => {
     const node = breadcrumbs({
       pathname: '/articles/some-post/', title: 'Some Post', site: 'dev', locale: 'en-us',
+      routedSegments: ['articles'],
     })!;
     const items = node.itemListElement as Array<Record<string, unknown>>;
     expect(items.length).toBe(3);
@@ -66,6 +67,30 @@ describe('breadcrumbs', () => {
       item: 'https://www.sebastian-heitmann.dev/articles/',
     });
     expect(items[2]).toEqual({ '@type': 'ListItem', position: 3, name: 'Some Post' });
+  });
+
+  test('fails safe: an undeclared intermediate segment gets a name-only crumb, never a guessed URL', () => {
+    // Regression for apps/rocks emitting `item: ".../cases/"` with no
+    // cases/index.astro behind it — a real BreadcrumbList 404 in production.
+    const node = breadcrumbs({
+      pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
+    })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items.length).toBe(3);
+    expect(items[1]).toEqual({ '@type': 'ListItem', position: 2, name: 'Cases' });
+    expect('item' in items[1]!).toBe(false);
+  });
+
+  test('an explicitly declared segment still gets its item on a site with no routed segments by default', () => {
+    const node = breadcrumbs({
+      pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
+      routedSegments: ['cases'],
+    })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items[1]).toEqual({
+      '@type': 'ListItem', position: 2, name: 'Cases',
+      item: 'https://www.sebastian-heitmann.rocks/cases/',
+    });
   });
 
   test('strips the locale prefix so German trails do not carry a de-de crumb', () => {

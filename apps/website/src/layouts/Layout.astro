@@ -42,6 +42,14 @@ const siteOrigin = 'https://www.sebastian-heitmann.dev';
 const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
 const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-image.jpg` : undefined);
 
+// First-path-segment names this site actually routes with their own index
+// page, so breadcrumbs() can safely link an intermediate crumb to it. Only
+// this layout knows the route table, so it is the one place this is
+// declared (see breadcrumbs()'s routedSegments doc in
+// packages/structured-data/src/site.ts). 'articles' is routed
+// (src/pages/articles/index.astro); nothing else nests today.
+const ROUTED_BREADCRUMB_SEGMENTS = ['articles'];
+
 const s = getStrings(locale);
 
 // A page that supplies its own primary node (Service, BlogPosting, ProfilePage)
@@ -60,7 +68,10 @@ const structuredData = noStructuredData
         locale,
         type: pageType,
       }),
-      breadcrumbs({ pathname: Astro.url.pathname, title, site: 'dev', locale }),
+      breadcrumbs({
+        pathname: Astro.url.pathname, title, site: 'dev', locale,
+        routedSegments: ROUTED_BREADCRUMB_SEGMENTS,
+      }),
       ...nodes,
     );
 ---

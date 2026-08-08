@@ -63,10 +63,20 @@ export function breadcrumbs(input: {
   title: string;
   site: SiteKey;
   locale: Locale;
+  /** First-path-segment names (e.g. 'articles') that are genuinely routed —
+   *  have their own page, so linking to them cannot 404. Only the layout
+   *  reliably knows its own route table, so it is the one place this is
+   *  declared (see Layout.astro on each site). Defaults to none: an
+   *  undeclared segment fails safe by getting a name-only crumb rather than
+   *  a guessed URL that might not exist — the exact bug this parameter
+   *  fixes was apps/rocks emitting `item: ".../cases/"` with no
+   *  cases/index.astro behind it. */
+  routedSegments?: string[];
 }): Node | null {
   const origin = originFor(input.site);
   const localePrefix = input.locale === 'de-de' ? '/de-de' : '';
   const homeUrl = `${origin}${localePrefix}/`;
+  const routedSegments = new Set(input.routedSegments ?? []);
 
   const rest = input.pathname
     .replace(/^\/de-de/, '')
@@ -79,14 +89,19 @@ export function breadcrumbs(input: {
     { '@type': 'ListItem', position: 1, name: HOME_LABEL[input.locale], item: homeUrl },
   ];
 
-  // Every segment but the last is a real intermediate page with its own URL.
+  // Every segment but the last MIGHT be a real intermediate page with its own
+  // URL — only if the caller declared it in routedSegments. Otherwise this
+  // emits the same name-only shape as the final crumb below, which
+  // schema.org and Google both accept.
   rest.slice(0, -1).forEach((segment, index) => {
-    items.push({
+    items.push(compact({
       '@type': 'ListItem',
       position: index + 2,
       name: titleCase(segment),
-      item: `${origin}${localePrefix}/${rest.slice(0, index + 1).join('/')}/`,
-    });
+      item: routedSegments.has(segment)
+        ? `${origin}${localePrefix}/${rest.slice(0, index + 1).join('/')}/`
+        : undefined,
+    }));
   });
 
   // Google asks that the final crumb omit `item`: it is the current page.

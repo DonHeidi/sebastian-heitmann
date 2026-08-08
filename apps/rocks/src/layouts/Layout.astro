@@ -39,6 +39,15 @@ const htmlLang = localeConfig[locale].htmlLang;
 const siteOrigin = 'https://www.sebastian-heitmann.rocks';
 const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
 
+// First-path-segment names this site actually routes with their own index
+// page, so breadcrumbs() can safely link an intermediate crumb to it. Only
+// this layout knows the route table, so it is the one place this is
+// declared (see breadcrumbs()'s routedSegments doc in
+// packages/structured-data/src/site.ts). Empty: there is no
+// src/pages/cases/index.astro, so every case page's /cases/ intermediate
+// crumb must stay name-only until one exists.
+const ROUTED_BREADCRUMB_SEGMENTS: string[] = [];
+
 const s = getStrings(locale);
 
 // A page that supplies its own primary node still gets a WebPage: the WebPage
@@ -56,7 +65,10 @@ const structuredData = noStructuredData
         locale,
         type: pageType,
       }),
-      breadcrumbs({ pathname: Astro.url.pathname, title, site: 'rocks', locale }),
+      breadcrumbs({
+        pathname: Astro.url.pathname, title, site: 'rocks', locale,
+        routedSegments: ROUTED_BREADCRUMB_SEGMENTS,
+      }),
       ...nodes,
     );
 ---

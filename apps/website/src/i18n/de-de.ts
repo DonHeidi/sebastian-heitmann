@@ -1093,7 +1093,7 @@ export const deDe: Strings = {
       questions: [
         'Versteht die richtige Person, worum es geht?',
         'Ist ihr das Problem wichtig genug?',
-        'Macht das Angebot sie neugierig genug, um zu handeln?',
+        'Macht das Nutzenversprechen sie neugierig genug, um zu handeln?',
       ],
       closing: [
         'Eine Produktwebsite kann nicht belegen, dass ein Unternehmen erfolgreich sein wird. Sie kann aber eine schwache Positionierung, unklare Zielgruppen, fehlendes Interesse und falsche Annahmen sichtbar machen, bevor diese Annahmen zu Software werden.',
@@ -1108,7 +1108,7 @@ export const deDe: Strings = {
           title: 'Sie haben eine Idee',
           body: [
             'Sie wissen, was Sie schaffen möchten, aber es existiert bisher vor allem in Dokumenten, Gesprächen oder in Ihrem Kopf.',
-            'Wir machen daraus ein Angebot, das andere verstehen und auf das sie reagieren können.',
+            'Wir machen daraus ein Nutzenversprechen, das andere verstehen und auf das sie reagieren können.',
           ],
         },
         {
@@ -1129,7 +1129,7 @@ export const deDe: Strings = {
           title: 'Sie haben etwas gebaut, können es aber nicht erklären',
           body: [
             'Manchmal existiert die Technologie früher als die Positionierung.',
-            'Wir arbeiten uns vom Produkt zurück und übersetzen seine Fähigkeiten in ein Angebot, das Kunden verstehen.',
+            'Wir arbeiten uns vom Produkt zurück und übersetzen seine Fähigkeiten in ein Nutzenversprechen, das Kunden verstehen.',
           ],
         },
       ],
@@ -1148,7 +1148,7 @@ export const deDe: Strings = {
         {
           title: 'Positionieren',
           description: [
-            'Ich recherchiere Markt und relevante Wettbewerber und übersetze die Erkenntnisse in ein klares Angebot, eine Seitenstruktur, Botschaften und Handlungsaufforderungen.',
+            'Ich recherchiere Markt und relevante Wettbewerber und übersetze die Erkenntnisse in ein klares Nutzenversprechen, eine Seitenstruktur, Botschaften und Handlungsaufforderungen.',
             'Spätestens dann sollte sich das Produkt erklären lassen, ohne die dahinterliegende Technologie zu erklären.',
           ],
         },
@@ -1175,7 +1175,7 @@ export const deDe: Strings = {
         'Es gibt viele Menschen, die eine Landingpage bauen können.',
         'Die wichtigere Arbeit liegt davor: zu bestimmen, was die Seite sagen soll, wen sie überzeugen soll und welche Reaktion tatsächlich etwas Brauchbares aussagt.',
         'Mein Hintergrund verbindet Softwareentwicklung, Produkt- und Projektarbeit, technische Beratung, UX-Methoden und KI-gestützte Umsetzung.',
-        'Dadurch kann ich am Angebot arbeiten, ohne aus dem Blick zu verlieren, was später dahinter entwickelt werden müsste.',
+        'Dadurch kann ich am Nutzenversprechen arbeiten, ohne aus dem Blick zu verlieren, was später dahinter entwickelt werden müsste.',
         'Und wenn die Validierung trägt, muss das Projekt nicht bei der Website enden.',
       ],
     },
@@ -1197,7 +1197,7 @@ export const deDe: Strings = {
         },
         {
           title: 'MVP-Entwicklung',
-          body: 'Wenn genügend Belege für den nächsten Schritt vorliegen, kann aus dem Angebot funktionierende Software werden.',
+          body: 'Wenn genügend Belege für den nächsten Schritt vorliegen, kann das Projekt vom Nutzenversprechen zu funktionierender Software übergehen.',
         },
       ],
       journey: ['Produktidee', 'Validierung', 'Prototyp', 'MVP', 'Produkt'],
@@ -1232,14 +1232,14 @@ export const deDe: Strings = {
           question: 'Ist das nur eine Landingpage?',
           answer: [
             'Nein. Die Landingpage ist eines der Ergebnisse.',
-            'Dazu gehört die Arbeit, die nötig ist, um festzulegen, was sie vermitteln soll: Positionierung, Marktkontext, Angebot, Struktur, Botschaften, Design, Umsetzung und Messung.',
+            'Dazu gehört die Arbeit, die nötig ist, um festzulegen, was sie vermitteln soll: Positionierung, Marktkontext, Nutzenversprechen, Struktur, Botschaften, Design, Umsetzung und Messung.',
           ],
         },
         {
           question: 'Können Sie garantieren, dass meine Idee damit validiert wird?',
           answer: [
             'Nein. Validierung liefert Belege, keine Gewissheit.',
-            'Eine Website hilft, Interesse zu messen und Annahmen zu testen. Ausbleibende Anmeldungen können jedoch viele Ursachen haben: Angebot, Zielgruppe, Trafficquelle, Preis, Zeitpunkt oder die Idee selbst.',
+            'Eine Website hilft, Interesse zu messen und Annahmen zu testen. Ausbleibende Anmeldungen können jedoch viele Ursachen haben: Nutzenversprechen, Zielgruppe, Trafficquelle, Preis, Zeitpunkt oder die Idee selbst.',
             'Der Zweck ist, günstiger zu lernen, als sofort das vollständige Produkt zu entwickeln.',
           ],
         },

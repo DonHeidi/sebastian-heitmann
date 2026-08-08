@@ -1037,6 +1037,27 @@ export const enUs: Strings = {
         'The result is not a mock-up sitting in Figma. It is a real website, running on your domain, ready for customers.',
       ],
     },
+    example: {
+      eyebrow: 'Example',
+      headline: 'Job Directory',
+      intro:
+        'A product website on its own domain: a stated proposition, the problem it addresses, an explanation of how the product works, and a capture form collecting interest. It is live now, while the product behind it is still in development.',
+      components: [
+        'A proposition stated in one line',
+        'The problem, before the product',
+        'How the system works, in four steps',
+        'A walk through the actual interface',
+        'Email capture, framed as following the build',
+        'Bilingual, fast, and on its own domain',
+      ],
+      body: [
+        'I designed and built it end to end, from positioning through deployment.',
+        'It is one of my own products, which is rather the point: this is the sequence I run on my own bets before committing to a full build.',
+      ],
+      imageAlt: 'The Job Directory product website, showing its proposition and newsletter capture beside a view of the product interface.',
+      linkLabel: 'View Job Directory',
+      linkHref: 'https://www.job-directory.eu/',
+    },
     offer: {
       eyebrow: 'The offer',
       headline: 'One package. A clear outcome.',

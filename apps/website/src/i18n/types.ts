@@ -430,6 +430,19 @@ export interface Strings {
       headline: string;
       body: string[];
     };
+    example: {
+      eyebrow: string;
+      headline: string;
+      /** Leads with the artifact. Attribution lands in `body`, after the
+          example has done its work, so the section does not open on
+          "this is my own project". */
+      intro: string;
+      components: string[];
+      body: string[];
+      imageAlt: string;
+      linkLabel: string;
+      linkHref: string;
+    };
     offer: {
       eyebrow: string;
       headline: string;

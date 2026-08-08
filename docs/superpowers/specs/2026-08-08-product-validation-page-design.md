@@ -98,6 +98,39 @@ padding alone is 1,280px (15% of the page) and no single section is fat. The rem
 length is nine sections of genuine content, so further shortening means removing sections or
 changing the page's shape, not trimming more lists.
 
+### Second revision, 2026-08-08 (after comparing against a reference page)
+
+Compared against `featherflow.com/product-websites`, evidently the source of the original
+brief: same $4,900, same 3 to 4 weeks, same pre-MVP framing. Two things the comparison
+settled.
+
+**The offer block is a pricing card, not a scope table.** The reference states its
+deliverables as 3 to 6 word noun phrases in a narrow column. The first revision above had
+reduced 14 short items to 6 long ones, cutting the count while raising the density, which is
+why the card still read as broad. It is now a 420px column: name, price, timeline, eight
+short lines, CTA. Scope exclusions moved out beside it. They inform rather than sell, and
+they were most of what made the card feel wide.
+
+**The page needed something to look at.** Measured against the reference, this page had
+roughly half the copy (1,102 words against about 2,000) and more height. The reference is
+denser because it carries five portfolio cards and a testimonial. Section 6.2b now shows
+Job Directory: a live product website with positioning and a capture form, screenshotted and
+framed in the glass treatment, placed between "what this is" and the price so the reader sees
+the artifact before being asked to value it.
+
+Two constraints on that section, both deliberate:
+
+- **It is Sebastian's own product, and the copy says so** — but not in the opening line. The
+  section leads with the artifact and what it contains; attribution lands afterwards, framed
+  as method ("this is the sequence I run on my own bets"). Hiding the ownership was rejected;
+  so was opening on it, which weakens the pitch for no honesty gain.
+- **No outcome is claimed.** No signup counts, no validation results, no client. Job Directory
+  is pre-launch, and the copy says the product behind the site is still in development.
+
+Note for whoever maintains this: Job Directory is now the example on two offer pages, this one
+and the AI page. Different facet each time, but it does signal a thin portfolio, and a second
+example would be worth having.
+
 ## 4. Route and file map
 
 | Path | Purpose |

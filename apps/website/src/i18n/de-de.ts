@@ -1037,6 +1037,27 @@ export const deDe: Strings = {
         'Das Ergebnis ist kein Entwurf in Figma. Es ist eine echte Website, die unter Ihrer Domain läuft und für Kunden bereit ist.',
       ],
     },
+    example: {
+      eyebrow: 'Beispiel',
+      headline: 'Job Directory',
+      intro:
+        'Eine Produktwebsite unter eigener Domain: ein klar formuliertes Nutzenversprechen, das zugrunde liegende Problem, eine Erklärung der Funktionsweise und ein Formular, das Interesse einsammelt. Sie ist bereits online, während das Produkt dahinter noch entsteht.',
+      components: [
+        'Ein Nutzenversprechen in einem Satz',
+        'Das Problem, vor dem Produkt',
+        'Die Funktionsweise in vier Schritten',
+        'Ein Rundgang durch die tatsächliche Oberfläche',
+        'E-Mail-Erfassung, als Begleitung der Entwicklung',
+        'Zweisprachig, schnell und unter eigener Domain',
+      ],
+      body: [
+        'Ich habe sie vollständig selbst entwickelt, von der Positionierung bis zum Deployment.',
+        'Es ist eines meiner eigenen Produkte, und genau das ist der Punkt: Diese Abfolge nutze ich für meine eigenen Vorhaben, bevor ich mich auf eine vollständige Entwicklung festlege.',
+      ],
+      imageAlt: 'Die Produktwebsite von Job Directory mit Nutzenversprechen und Newsletter-Anmeldung neben einer Ansicht der Produktoberfläche.',
+      linkLabel: 'Job Directory ansehen',
+      linkHref: 'https://www.job-directory.eu/',
+    },
     offer: {
       eyebrow: 'Das Angebot',
       headline: 'Ein Paket. Ein klares Ergebnis.',

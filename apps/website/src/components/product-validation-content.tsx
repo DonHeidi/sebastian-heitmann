@@ -6,6 +6,12 @@ import type { Strings } from '@/i18n/types';
 
 export interface ProductValidationContentProps {
   content: Strings['productValidation'];
+  /**
+   * The example screenshot, already run through `getImage()` by the calling
+   * page. Passing the transformed result rather than the `ImageMetadata`
+   * keeps Astro from emitting the multi-megabyte source PNG into `dist/`.
+   */
+  exampleImage: { src: string; width: number; height: number };
 }
 
 const contactUrl = '#contact';
@@ -30,10 +36,21 @@ function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-function CtaLink({ href, children, className = '' }: { href: string; children: ReactNode; className?: string }) {
+function CtaLink({
+  href,
+  children,
+  external = false,
+  className = '',
+}: {
+  href: string;
+  children: ReactNode;
+  external?: boolean;
+  className?: string;
+}) {
   return (
     <a
       href={href}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className={cn(
         'group inline-flex items-center gap-3 self-start border-b border-primary py-4 no-underline transition-[gap] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:gap-5',
         className,
@@ -157,7 +174,7 @@ function DotBulletList({ items }: { items: string[] }) {
   );
 }
 
-export function ProductValidationContent({ content }: ProductValidationContentProps) {
+export function ProductValidationContent({ content, exampleImage }: ProductValidationContentProps) {
   return (
     <>
       {/* 1. Hero — unbanded, follows the page's ambient theme */}
@@ -204,6 +221,64 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
                 {p}
               </p>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 2b. Example — the proof for the claim the section above ends on
+          ("a real website, running on your domain"). Sits before the price so
+          the reader has seen the artifact before being asked to value it. */}
+      <section className="reveal">
+        <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
+          <Eyebrow>{content.example.eyebrow}</Eyebrow>
+          <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
+            {content.example.headline}
+          </h2>
+          <div className="flex max-w-[1180px] flex-col gap-10 lg:flex-row lg:items-start lg:gap-14">
+            {/* The captured site is light-themed, so on the dark page it would
+                read as a bare bright rectangle. The glass frame and inset border
+                seat it inside the design rather than letting it float. */}
+            <figure className={cn('relative m-0 w-full shrink-0 p-2 md:p-3 lg:w-[640px]', glassCard)}>
+              <CornerMarks />
+              {/* The captured site is a warm off-white, and so is this page's light
+                  theme, so a border alone barely separates them. The shadow lifts the
+                  image off the page in light and is invisible against the dark one. */}
+              <img
+                src={exampleImage.src}
+                width={exampleImage.width}
+                height={exampleImage.height}
+                alt={content.example.imageAlt}
+                loading="lazy"
+                decoding="async"
+                className="block h-auto w-full border border-[var(--v8-glass-border)] shadow-[0_10px_30px_-14px_rgba(0,0,0,0.45)]"
+              />
+            </figure>
+            <div className="max-w-[520px]">
+              <p className="mb-7 font-sans text-lg leading-[1.65] font-light text-text-secondary">
+                {content.example.intro}
+              </p>
+              <ul className="mb-8 flex list-none flex-col gap-0 p-0">
+                {content.example.components.map((item) => (
+                  <li
+                    key={item}
+                    className="relative border-b border-border py-2.5 pl-[22px] font-sans text-[15px] leading-[1.5] font-light text-text-secondary first:border-t"
+                  >
+                    <span aria-hidden="true" className="absolute top-3 left-0 text-[10px] text-primary">
+                      ✱
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              {content.example.body.map((p) => (
+                <p key={p} className="mb-4 font-sans text-base leading-[1.65] font-light text-text-secondary last:mb-0">
+                  {p}
+                </p>
+              ))}
+              <CtaLink href={content.example.linkHref} external className="mt-6">
+                {content.example.linkLabel}
+              </CtaLink>
+            </div>
           </div>
         </div>
       </section>

@@ -83,23 +83,14 @@ export function itemList(items: Array<{ url: string; name: string }>): Node {
   };
 }
 
-export function profilePage(input: {
-  url: string;
-  title: string;
-  description: string;
-  site: SiteKey;
-  locale: Locale;
-}): Node {
-  return compact({
-    '@type': 'ProfilePage',
-    '@id': input.url,
-    url: input.url,
-    name: input.title,
-    description: input.description,
-    inLanguage: BCP47[input.locale],
-    isPartOf: ref(siteId(input.site)),
-    mainEntity: ref(PERSON_ID),
-  });
+/** A partial node sharing the page's own @id — the WebPage/ProfilePage the
+ *  layout already emits via webPage({ pageType: 'ProfilePage', ... }). Adds
+ *  only what the layout cannot know: which Person this page is about. No
+ *  @type, name, description or isPartOf here — the layout's node already
+ *  carries those, and duplicating them would just be two nodes fighting over
+ *  one @id after graph consumers merge them. */
+export function profileMainEntity(url: string): Node {
+  return { '@id': url, mainEntity: ref(PERSON_ID) };
 }
 
 /** A partial node sharing the Person's @id. Consumers merge nodes by @id, so

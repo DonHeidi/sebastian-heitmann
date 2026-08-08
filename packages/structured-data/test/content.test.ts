@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import {
-  PERSON_ID, blog, blogPosting, creativeWork, itemList, profilePage,
+  PERSON_ID, blog, blogPosting, creativeWork, itemList, profileMainEntity,
   personOccupations, personKnowsAbout, siteId,
 } from '../src/index';
 
@@ -69,14 +69,16 @@ describe('itemList', () => {
   });
 });
 
-describe('profilePage and personOccupations', () => {
-  test('the profile page points at the canonical person', () => {
-    const node = profilePage({
-      url: 'https://www.sebastian-heitmann.dev/cv/', title: 'CV',
-      description: 'd', site: 'dev', locale: 'en-us',
-    });
-    expect(node['@type']).toBe('ProfilePage');
+describe('profileMainEntity and personOccupations', () => {
+  test('is a partial node sharing the page @id, pointing at the canonical person', () => {
+    const node = profileMainEntity('https://www.sebastian-heitmann.dev/cv/');
+    expect(node['@id']).toBe('https://www.sebastian-heitmann.dev/cv/');
     expect(node.mainEntity).toEqual({ '@id': PERSON_ID });
+  });
+
+  test('carries no @type — the layout webPage() node already owns that', () => {
+    const node = profileMainEntity('https://www.sebastian-heitmann.dev/cv/');
+    expect(node['@type']).toBeUndefined();
   });
 
   test('occupations are a partial node that merges into the person by @id', () => {

@@ -19,8 +19,16 @@ const contact = { ...s.contact, headline: s.productValidation.contact.headline, 
 
 // Transformed via getImage() rather than passing `.src`, which would make Astro
 // emit the full-size source PNG into dist/_astro (see AGENTS.md image gotchas).
-const exampleShot = await getImage({ src: jobDirectoryShot, width: 1280, format: 'webp' });
-const exampleImage = { src: exampleShot.src, width: 1280, height: 800 };
+// The height is derived from the source's own aspect ratio, never hardcoded:
+// a re-shoot at a different ratio would otherwise leave the <img> advertising
+// stale intrinsic dimensions, and the page would reflow once the webp decodes.
+const exampleWidth = 1280;
+const exampleShot = await getImage({ src: jobDirectoryShot, width: exampleWidth, format: 'webp' });
+const exampleImage = {
+    src: exampleShot.src,
+    width: exampleWidth,
+    height: Math.round(exampleWidth * (jobDirectoryShot.height / jobDirectoryShot.width)),
+};
 
 const alternates = getHreflangAlternates('/product-validation', '/de-de/produkt-validierung');
 ---

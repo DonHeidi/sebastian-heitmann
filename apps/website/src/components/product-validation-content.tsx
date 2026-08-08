@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { DotRule } from './dot-rule';
 import { FaqSection } from './faq-section';
@@ -88,7 +88,11 @@ function ChipRow({ items, connected = false, className = '' }: { items: string[]
   return (
     <div role="list" className={cn('flex flex-wrap items-center gap-2 md:gap-3', className)}>
       {items.map((label, i) => (
-        <Fragment key={label}>
+        // The connector belongs to the chip that follows it, so the two must be
+        // one flex item. As independent siblings a wrap could break between
+        // them, leaving a dotted run pointing at nothing at the end of a line
+        // and the next chip with no incoming connector.
+        <span key={label} role="listitem" className="inline-flex items-center gap-2 md:gap-3">
           {connected && i > 0 && (
             <span
               aria-hidden="true"
@@ -99,13 +103,10 @@ function ChipRow({ items, connected = false, className = '' }: { items: string[]
               }}
             />
           )}
-          <span
-            role="listitem"
-            className="border border-[var(--v8-glass-border)] bg-[var(--v8-glass-bg)] px-3 py-2 font-mono text-[11px] tracking-[0.08em] whitespace-normal text-text-secondary uppercase shadow-[0_1px_0_var(--v8-glass-highlight)_inset] backdrop-blur-[12px] backdrop-saturate-[1.4] md:px-4 md:py-2.5 md:whitespace-nowrap"
-          >
+          <span className="border border-[var(--v8-glass-border)] bg-[var(--v8-glass-bg)] px-3 py-2 font-mono text-[11px] tracking-[0.08em] whitespace-normal text-text-secondary uppercase shadow-[0_1px_0_var(--v8-glass-highlight)_inset] backdrop-blur-[12px] backdrop-saturate-[1.4] md:px-4 md:py-2.5 md:whitespace-nowrap">
             {label}
           </span>
-        </Fragment>
+        </span>
       ))}
     </div>
   );
@@ -154,14 +155,18 @@ function VerticalDotRule() {
 }
 
 // Emphasis list with the accent dot marker.
+//
+// No per-item transitionDelay here. That idiom belongs to `.reveal`, whose
+// stagger animates elements into view once; these rows are not `.reveal` and
+// their only transition is the hover colour, so a delay would just make the
+// highlight lag the cursor on the way in and linger on the way out.
 function DotBulletList({ items }: { items: string[] }) {
   return (
     <ul className="flex list-none flex-col gap-0 p-0">
-      {items.map((item, i) => (
+      {items.map((item) => (
         <li
           key={item}
           className="group relative border-b border-border py-6 pl-8 font-sans text-xl leading-[1.6] font-light text-text-tertiary transition-colors duration-300 first:border-t hover:text-foreground"
-          style={{ transitionDelay: `${i * 0.06}s` }}
         >
           <span
             aria-hidden="true"
@@ -234,11 +239,15 @@ export function ProductValidationContent({ content, exampleImage }: ProductValid
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
             {content.example.headline}
           </h2>
-          <div className="flex max-w-[1180px] flex-col gap-10 lg:flex-row lg:items-start lg:gap-14">
+          {/* Side by side only from xl. At lg the container is viewport - 160px,
+              so a 640px non-shrinking figure plus the gap left the copy column
+              around 170px wide. 1024 is a supported breakpoint (AGENTS.md), and
+              stacking there is the same layout already used below md. */}
+          <div className="flex max-w-[1180px] flex-col gap-10 xl:flex-row xl:items-start xl:gap-14">
             {/* The captured site is light-themed, so on the dark page it would
                 read as a bare bright rectangle. The glass frame and inset border
                 seat it inside the design rather than letting it float. */}
-            <figure className={cn('relative m-0 w-full shrink-0 p-2 md:p-3 lg:w-[640px]', glassCard)}>
+            <figure className={cn('relative m-0 w-full shrink-0 p-2 md:p-3 xl:w-[640px]', glassCard)}>
               <CornerMarks />
               {/* The captured site is a warm off-white, and so is this page's light
                   theme, so a border alone barely separates them. The shadow lifts the
@@ -295,10 +304,13 @@ export function ProductValidationContent({ content, exampleImage }: ProductValid
               the deliverables read as one scannable column. Scope boundaries live
               below it: they inform, they do not sell, and putting them inside the
               card was what made it read as broad. */}
-          <div className="flex max-w-[1040px] flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
+          {/* Side by side only from xl, for the same reason as the example row
+              above. When stacked the card keeps a 520px cap so it stays a card
+              rather than widening back into the full-bleed band this replaced. */}
+          <div className="flex max-w-[1040px] flex-col gap-10 xl:flex-row xl:items-start xl:gap-16">
             <div
               className={cn(
-                'relative flex w-full shrink-0 flex-col border border-border-accent py-7 px-6 md:py-9 md:px-8 lg:w-[420px]',
+                'relative flex w-full max-w-[520px] shrink-0 flex-col border border-border-accent py-7 px-6 md:py-9 md:px-8 xl:w-[420px]',
                 glassCard,
               )}
             >

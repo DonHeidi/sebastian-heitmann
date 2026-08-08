@@ -60,7 +60,8 @@ bun install                          # Install all workspace dependencies (incl.
 # Website
 cd apps/website
 bun run dev                          # Start dev server
-bun run build                        # Production build
+bun run check                        # Type-check .astro + .tsx (astro check)
+bun run build                        # astro check, then production build
 bun run preview                      # Preview production build
 
 # Rocks (portfolio)
@@ -285,3 +286,4 @@ Uses conventional commits:
 - Components accept typed string props — no hardcoded user-visible text
 - Components are `.tsx`, styled with Tailwind utilities — there are no `<style>` blocks and no SCSS. Decorative CSS that utilities cannot express (grain overlays, the `.bd-*` backdrop vocabulary, the reveal animation) lives in `src/styles/global.css` under `@layer components`, documented in place
 - **No React ships to the client.** React/TSX is a build-time templating layer only: components render to static HTML and there are no `client:*` directives anywhere. Interactive components (`theme-toggle.astro`, `contact-form.astro`) are `.astro` files whose markup lifts the design-system classes verbatim and whose behavior lives in a colocated `<script>` (plain TypeScript, bundled by Astro). The shadcn/React components in the v8-asterisk registry are for other projects — do not reintroduce them as hydrated islands here
+- **Props crossing the `.astro` → `.tsx` boundary are checked by `astro check`, not `tsc`.** `bunx tsc --noEmit` cannot parse `.astro` files, and the Astro compiler strips prop types rather than validating them, so before this gate a renamed or misspelled prop built green and silently rendered nothing. `bun run build` now runs `astro check` first. Run `bun run check` on its own for a fast pass without the build

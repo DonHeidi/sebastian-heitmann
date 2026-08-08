@@ -5,10 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "varlock run -- astro dev",
-    "build": "varlock run -- astro build",
+    "check": "astro check",
+    "build": "astro check && varlock run -- astro build",
     "preview": "astro preview"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@types/bun": "latest"
   },
   "peerDependencies": {

@@ -72,6 +72,21 @@ describe('blogPosting', () => {
     expect(node.author).toEqual({ '@id': guestId });
     expect(node.publisher).toEqual({ '@id': PERSON_ID });
   });
+
+  test('a guest author can also be an inline Person node, embedded verbatim, publisher still the Person', () => {
+    // Finding 4: the author param must accept either a reference to an
+    // already-typed node elsewhere in the graph, or a self-defining inline
+    // node — most call sites want the latter, since it needs no companion
+    // node in the layout's `nodes` array.
+    const guest = { '@type': 'Person', name: 'Guest Author', sameAs: ['https://example.com/guest'] };
+    const node = blogPosting({
+      url: 'https://www.sebastian-heitmann.dev/articles/x/',
+      headline: 'X', description: 'd', datePublished: '2026-01-01', locale: 'en-us',
+      author: guest,
+    });
+    expect(node.author).toEqual(guest);
+    expect(node.publisher).toEqual({ '@id': PERSON_ID });
+  });
 });
 
 describe('creativeWork', () => {

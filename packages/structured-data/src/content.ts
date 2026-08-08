@@ -38,14 +38,31 @@ export function blogPosting(input: {
   keywords?: string[];
   locale: Locale;
   blogId?: string;
-  /** The article's author, by @id reference. Defaults to the canonical
-   *  Person (Finding F) so every call site that never sees a guest byline
-   *  keeps working unchanged. Pass an explicit `ref(...)` when the resolved
-   *  author entry is not Sebastian, so the JSON-LD credits the same person
-   *  the rendered byline names. `publisher` always stays the canonical
-   *  Person regardless — this package has no notion of a guest's publisher
-   *  identity, and the site is still published by Sebastian. */
-  author?: Ref;
+  /** The article's author. Defaults to the canonical Person (Finding F) so
+   *  every call site that never sees a guest byline keeps working unchanged.
+   *
+   *  Finding 4: this accepts either shape, because "the resolved author
+   *  entry is not Sebastian" and "there is already a Person node for them
+   *  elsewhere in this page's graph" are two different situations:
+   *    - `ref(someId)` — a bare reference. Use this only when a typed
+   *      `{'@type': 'Person', '@id': someId, ...}` node for that guest is
+   *      also present somewhere in the page's graph (e.g. passed via the
+   *      layout's `nodes`), or validateGraph's dangling-reference check
+   *      rejects it.
+   *    - an inline node, e.g. `{'@type': 'Person', name: 'Guest Name',
+   *      sameAs: [...]}` — self-defining, no separate graph entry needed.
+   *      This is the shape most call sites want: build it straight from the
+   *      resolved author entry and pass it here.
+   *  Either way, the guest is a Person distinct from PERSON_ID — the "no
+   *  Organization" rule forbids a second *Organization*, not a second
+   *  *person* — and `validateGraph`'s "exactly one Person" check only ever
+   *  counts nodes carrying PERSON_ID, so a second Person with a different
+   *  (or absent) @id does not trip it.
+   *
+   *  `publisher` always stays the canonical Person regardless — this
+   *  package has no notion of a guest's publisher identity, and the site is
+   *  still published by Sebastian. */
+  author?: Ref | Node;
 }): Node {
   return compact({
     '@type': 'BlogPosting',

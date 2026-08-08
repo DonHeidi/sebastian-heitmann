@@ -45,6 +45,25 @@ fi
 
 cd "$WEBSITE_DIR"
 
+# apps/website/test/i18n-prices.test.ts is the only thing keeping a structured
+# priceMin (packages/structured-data's offer()) in sync with the price string
+# the page actually renders (apps/website/src/i18n/en-us.ts et al) — see
+# AGENTS.md's "Prices are 'from' prices". Nothing else runs it: this repo has
+# no CI, and `bun run build` below is a bare `astro build`, which strips types
+# rather than checking them. Also run packages/structured-data's own suite,
+# since a broken builder there breaks both sites. Run both here, before the
+# build, so a drifted price or a broken builder aborts the deploy the same way
+# the structured-data gate (further below) aborts on an invalid graph.
+( cd "$ROOT_DIR/packages/structured-data" && bun test )
+bun test
+
+# `astro build` never type-checks (see above), so a ServiceKey left out of
+# services.ts's `LISTED_ORDER` (typed `satisfies Record<Exclude<ServiceKey,
+# 'umbrella'>, true>`, see AGENTS.md's "Adding a service") would otherwise
+# ship silently. Run the real type-checker before the build so that guard,
+# and every other `satisfies`/exhaustiveness check in this app, is enforced.
+bunx tsc --noEmit
+
 # The endpoint is committed in apps/website/.env.schema so that `bun run build`
 # and this script produce byte-identical output. Terraform stays the source of
 # truth for the value, so verify the two agree and abort on drift rather than
@@ -66,6 +85,12 @@ if [[ "$RESOLVED_ENDPOINT" != "https://${FUNCTION_ENDPOINT}" ]]; then
 fi
 
 bun run build
+
+# Structured data is emitted by a shared package and referenced across pages by
+# @id; a broken graph is invisible in the rendered page and in the build output.
+# Gate it here, the same way PUBLIC_MAIL_ENDPOINT drift is gated above. This
+# repo has no CI, so the deploy scripts are the only enforcement point.
+bun "$ROOT_DIR/scripts/check-structured-data.ts" dist
 
 # Astro's content-collection image() schema imports each source asset via Vite,
 # which emits the originals to dist/_astro/ even when only transformed variants

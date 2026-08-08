@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { creativeWork } from '@sh/structured-data';
 import Layout from '../../../layouts/Layout.astro';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
 import { Navigation } from '../../../components/navigation';
@@ -36,6 +37,22 @@ const showcase =
   entry.data.showcase?.desktop || entry.data.showcase?.tablet || entry.data.showcase?.phone
     ? entry.data.showcase
     : undefined;
+
+const siteOrigin = 'https://www.sebastian-heitmann.rocks';
+const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
+
+const structuredNodes = [
+  creativeWork({
+    url: canonicalUrl,
+    name: entry.data.title,
+    description: entry.data.summary,
+    dateCreated: entry.data.startDate.toISOString().slice(0, 10),
+    keywords: entry.data.stack,
+    genre: entry.data.kind,
+    sameAs: entry.data.links.map((link) => link.url),
+    locale,
+  }),
+];
 ---
 
 <Layout
@@ -44,6 +61,9 @@ const showcase =
   description={entry.data.summary}
   alternates={getHreflangAlternates(`/cases/${slug}/`)}
   ogType="article"
+  canonical={canonicalUrl}
+  breadcrumbLabel={entry.data.title}
+  nodes={structuredNodes}
 >
   <Navigation nav={t.nav} languagePicker={t.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
     <ThemeToggle client:load labels={t.themeToggle} />

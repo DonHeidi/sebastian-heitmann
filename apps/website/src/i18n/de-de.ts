@@ -4,6 +4,7 @@ export const deDe: Strings = {
   meta: {
     title: 'Sebastian Heitmann \u2014 Technology Consultant',
     description: 'Technology Consultant. KI-gestützte Produkte & Prozesse, vom Prototyp bis zur Produktion.',
+    serviceName: 'Technologieberatung',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -430,6 +431,7 @@ export const deDe: Strings = {
     meta: {
       title: 'Webprojekte — Sebastian Heitmann',
       description: 'Professionelle Webpräsenz für lokale Unternehmen und Mittelstand. Konzeptionell durchdacht, technisch sauber, effizient umgesetzt.',
+      serviceName: 'Webprojekte',
     },
     hero: {
       eyebrow: 'Webprojekte',
@@ -497,6 +499,9 @@ export const deDe: Strings = {
         {
           name: 'Kompakt',
           price: 'ab 549\u00A0\u20AC',
+          priceMin: 549,
+          currency: 'EUR',
+          billing: 'one-time',
           audience: 'Handwerker, lokale Dienstleister, Praxen — wer eine professionelle Visitenkarte im Netz braucht und keinen Schnickschnack.',
           features: [
             'One-Page-Webauftritt (eine durchgängige Seite mit Abschnitten)',
@@ -513,6 +518,9 @@ export const deDe: Strings = {
         {
           name: 'Business',
           price: 'ab 749\u00A0\u20AC',
+          priceMin: 749,
+          currency: 'EUR',
+          billing: 'one-time',
           audience: 'Unternehmen mit mehreren Leistungsbereichen, Standorten oder dem Bedarf, Vertrauen über Inhalte aufzubauen.',
           features: [
             'Multi-Page-Webauftritt (bis 7 Unterseiten)',
@@ -529,6 +537,9 @@ export const deDe: Strings = {
         {
           name: 'Professional',
           price: 'ab 949\u00A0\u20AC',
+          priceMin: 949,
+          currency: 'EUR',
+          billing: 'one-time',
           audience: 'Unternehmen mit spezifischen Anforderungen — Buchungssysteme, mehrsprachige Inhalte, CMS-Integration oder individuelle Funktionen.',
           features: [
             'Multi-Page-Webauftritt (flexibler Umfang)',
@@ -564,6 +575,9 @@ export const deDe: Strings = {
         {
           name: 'Kompakt Support',
           price: 'ab 39\u00A0\u20AC/Monat',
+          priceMin: 39,
+          currency: 'EUR',
+          billing: 'monthly',
           description: 'Monatliche Betreuung für Ihren Kompakt-Webauftritt. Alles, was nötig ist, damit eine One-Page-Seite zuverlässig läuft — ohne dass Sie sich darum kümmern müssen.',
           features: [
             'Domain- und DNS-Management',
@@ -576,6 +590,9 @@ export const deDe: Strings = {
         {
           name: 'Business Support',
           price: 'ab 69\u00A0\u20AC/Monat',
+          priceMin: 69,
+          currency: 'EUR',
+          billing: 'monthly',
           description: 'Monatliche Betreuung für Ihren Business-Webauftritt. Für Multi-Page-Seiten mit erweiterter SEO und mehr beweglichen Teilen.',
           features: [
             'Domain- und DNS-Management',
@@ -588,6 +605,9 @@ export const deDe: Strings = {
         {
           name: 'Professional Support',
           price: 'ab 99\u00A0\u20AC/Monat',
+          priceMin: 99,
+          currency: 'EUR',
+          billing: 'monthly',
           description: 'Monatliche Betreuung für Ihren Professional-Webauftritt. Für komplexe Seiten mit CMS-Anbindung, individuellen Funktionen oder mehrsprachigen Inhalten.',
           features: [
             'Domain- und DNS-Management',
@@ -659,6 +679,7 @@ export const deDe: Strings = {
     meta: {
       title: 'Technisches Projektmanagement — Sebastian Heitmann',
       description: 'Technisches Projektmanagement für digitale Projekte. Stundenbasierte Beratung mit Struktur, Koordination und technischem Urteilsvermögen für Software-, Web-, KI- und Digitalisierungsprojekte.',
+      serviceName: 'Technisches Projektmanagement',
     },
     hero: {
       eyebrow: 'Technisches Projektmanagement',
@@ -798,6 +819,7 @@ export const deDe: Strings = {
     meta: {
       title: 'KI-gestützte Produkte & Prozesse — Sebastian Heitmann',
       description: 'Ich entwickle gemeinsam mit Unternehmen KI-gestützte Prozesse und Softwareprodukte: Prototypen, produktive erste Releases und individuelle KI-Systeme, die KI, Automatisierung, bestehende Systeme und menschliche Entscheidungen verbinden.',
+      serviceName: 'KI-Produkte & Prozesse',
     },
     hero: {
       eyebrow: 'KI-Produkte & Prozesse',
@@ -851,6 +873,9 @@ export const deDe: Strings = {
           ],
           price: 'ab 4.200 € netto',
           priceNote: 'Der konkrete Preis richtet sich nach Datenlage, Integrationen und Umfang des zu überprüfenden Prozessabschnitts.',
+          priceMin: 4200,
+          currency: 'EUR',
+          vatIncluded: false,
         },
         {
           name: 'KI-Produkt',
@@ -886,6 +911,9 @@ export const deDe: Strings = {
           ],
           price: 'ab 10.990 € netto',
           priceNote: 'Die Umsetzung innerhalb von vier Wochen setzt voraus, dass der Anwendungsfall ausreichend klar begrenzt ist, notwendige Daten und Zugänge verfügbar sind und Entscheidungen während der Entwicklung kurzfristig getroffen werden können.',
+          priceMin: 10990,
+          currency: 'EUR',
+          vatIncluded: false,
           featured: true,
         },
         {

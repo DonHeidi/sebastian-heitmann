@@ -1,8 +1,9 @@
 {
   "name": "sebastian-heitmann",
   "private": true,
-  "workspaces": ["apps/*"],
+  "workspaces": ["apps/*", "packages/*"],
   "devDependencies": {
+    "@sh/structured-data": "workspace:*",
     "@varlock/proton-pass-plugin": "^1.0.2",
     "varlock": "^1.6.1"
   }

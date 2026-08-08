@@ -8,12 +8,30 @@ import { Footer } from '../../components/footer';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
 import '../../styles/cv-print.css';
+import { profileMainEntity, personOccupations } from '@sh/structured-data';
+import { absoluteUrl } from '../../i18n/utils';
+import { enUs } from '../../i18n/en-us';
 
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates('/cv');
+
+const cvUrl = absoluteUrl('/de-de/cv');
+// hasOccupation is derived from the English strings regardless of the
+// current page's locale: role names are localized, so deriving from
+// whichever locale is rendering would attach different hasOccupation
+// bodies to the same canonical Person @id across /cv/ and /de-de/cv/,
+// which the deploy gate cannot detect (it only diffs the typed Person
+// node, not this partial). English is the site's default locale and job
+// titles are largely English already.
+const structuredNodes = [
+    profileMainEntity(cvUrl),
+    personOccupations(
+        enUs.cv.experience.filter((e) => e.company !== undefined).map((e) => ({ role: e.role }))
+    ),
+];
 ---
-<Layout locale={locale} title={s.cv.meta.title} description={s.cv.meta.description} alternates={alternates}>
+<Layout locale={locale} title={s.cv.meta.title} description={s.cv.meta.description} alternates={alternates} pageType="ProfilePage" breadcrumbLabel={s.nav.cvLabel} nodes={structuredNodes}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
         <ThemeToggle labels={s.nav.themeToggle} />
     </Navigation>

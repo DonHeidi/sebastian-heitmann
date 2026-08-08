@@ -9,6 +9,7 @@ import { Footer } from '../../../components/footer';
 import { ArticleView } from '../../../components/article-view';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
 import type { Locale } from '../../../i18n/utils';
+import { blogPosting, blogId } from '@sh/structured-data';
 
 export async function getStaticPaths() {
   const allArticles = await getCollection('articles', ({ data }) => !data.draft);
@@ -64,13 +65,22 @@ const articleDetailImage = entry.data.headerDetailImage
   : undefined;
 
 const siteOrigin = 'https://www.sebastian-heitmann.dev';
+// This document's own URL — always the German route being rendered here,
+// regardless of what it canonicalizes to. Finding 1: a fallback page used
+// to hand its canonical (English) URL to blogPosting()'s `url`, so its
+// BlogPosting `@id` collided with the English page's, merging two nodes
+// that declare different `inLanguage`. Node identity must track the actual
+// document, not the canonical assertion, so this is what blogPosting() gets.
+const documentUrl = `${siteOrigin}${Astro.url.pathname}`;
 // A fallback page serves the untranslated English article verbatim, so its
 // canonical is the English URL (self-canonicalizing it makes Google flag
 // "Duplicate, Google chose different canonical than user"). Real translations
-// self-canonicalize and declare the hreflang pair.
+// self-canonicalize and declare the hreflang pair. This drives only the
+// rendered <link rel=canonical> (via Layout's `canonical` prop) — it is a
+// separate concern from the document's own identity above.
 const canonicalUrl = fallback
   ? `${siteOrigin}/articles/${currentSlug}/`
-  : `${siteOrigin}${Astro.url.pathname}`;
+  : documentUrl;
 const alternates = fallback ? [] : getHreflangAlternates(`/articles/${currentSlug}`);
 const ogImage = entry.data.headerImage
   ? await getImage({
@@ -83,38 +93,36 @@ const ogImage = entry.data.headerImage
   : undefined;
 const heroImageUrl = ogImage ? `${siteOrigin}${ogImage.src}` : undefined;
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
-  headline: entry.data.title,
-  description: entry.data.abstract,
-  ...(heroImageUrl ? { image: [heroImageUrl] } : {}),
-  datePublished: publishedISO,
-  ...(modifiedISO ? { dateModified: modifiedISO } : {}),
-  author: authorEntry
-    ? {
-        '@type': 'Person',
-        name: authorEntry.data.name,
-        url: siteOrigin,
-      }
-    : undefined,
-  publisher: {
-    '@type': 'Organization',
-    name: 'Sebastian Heitmann',
-    logo: {
-      '@type': 'ImageObject',
-      url: `${siteOrigin}/og-image.jpg`,
-    },
-  },
-  mainEntityOfPage: {
-    '@type': 'WebPage',
-    '@id': canonicalUrl,
-  },
-  inLanguage: 'de-DE',
-  ...(entry.data.tags && entry.data.tags.length > 0
-    ? { keywords: entry.data.tags.join(', ') }
-    : {}),
-};
+// A fallback page serves the untranslated English article verbatim and
+// canonicalizes to the English URL (see canonicalUrl above), which the
+// sitemap also excludes it in favor of. The canonical English page already
+// publishes the BlogPosting for this article; emitting a second one here,
+// on a URL the site itself disowns, would give Google two BlogPosting
+// entities with identical headline/description/image for one article. So a
+// fallback page emits no BlogPosting at all and defers entirely to the
+// canonical page. Translated German articles are unaffected.
+const structuredNodes = fallback
+  ? []
+  : [
+      blogPosting({
+        url: documentUrl,
+        headline: entry.data.title,
+        description: entry.data.abstract,
+        datePublished: publishedISO,
+        dateModified: modifiedISO,
+        image: heroImageUrl,
+        keywords: entry.data.tags,
+        locale,
+        blogId: blogId('dev', locale),
+        author: authorEntry && authorEntry.id !== 'sebastian-heitmann'
+          ? {
+              '@type': 'Person',
+              name: authorEntry.data.name,
+              sameAs: authorEntry.data.socials?.map((social) => social.url),
+            }
+          : undefined,
+      }),
+    ];
 
 // Series lookup — prefer German articles, fall back to English
 let seriesParts: Array<{ slug: string; title: string; part: number }> = [];
@@ -142,8 +150,9 @@ if (entry.data.series) {
   ogImage={heroImageUrl}
   canonical={canonicalUrl}
   alternates={alternates}
+  breadcrumbLabel={entry.data.title}
+  nodes={structuredNodes}
 >
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <meta slot="head" property="article:published_time" content={publishedISO} />
   {modifiedISO && <meta slot="head" property="article:modified_time" content={modifiedISO} />}
   {authorEntry && <meta slot="head" property="article:author" content={authorEntry.data.name} />}

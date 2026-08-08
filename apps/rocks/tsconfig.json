@@ -21,7 +21,6 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
     "jsxImportSource": "react",
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }

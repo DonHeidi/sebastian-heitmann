@@ -11,7 +11,7 @@ const locale: Locale = 'en-us';
 const t = getStrings(locale);
 ---
 
-<Layout locale={locale} title={t.meta.notFoundTitle} description={t.notFound.body}>
+<Layout locale={locale} title={t.meta.notFoundTitle} description={t.notFound.body} noStructuredData>
   <main class="relative mx-auto flex min-h-[80vh] max-w-[90rem] flex-col items-start justify-center overflow-hidden px-6 md:px-20">
     <div aria-hidden="true" class="pointer-events-none absolute -right-10 -bottom-8 -z-10 opacity-80 md:hidden">
       <AsteriskMark size={150} misregister />

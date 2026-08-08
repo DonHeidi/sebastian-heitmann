@@ -21,6 +21,8 @@ import ContactForm from '@/components/contact-form.astro';
 import { Footer } from '../components/footer';
 import { getStrings, getHreflangAlternates } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
+import { itemList, personKnowsAbout } from '@sh/structured-data';
+import { serviceNode, serviceListItems } from '../data/services';
 
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
@@ -71,8 +73,17 @@ const featured: FeaturedArticleItem[] = await Promise.all(
 );
 
 const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
+
+const structuredNodes = [
+    // Capabilities enrich the canonical Person from the home page alone, as a
+    // partial node sharing its @id. Keeping them out of person() is what lets
+    // .dev and .rocks emit that node byte-identically.
+    personKnowsAbout(s.capabilities.categories.flatMap((category) => category.items)),
+    serviceNode('umbrella', locale, s),
+    itemList(serviceListItems(locale, s)),
+];
 ---
-<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true}>
+<Layout locale={locale} title={s.meta.title} description={s.meta.description} alternates={alternates} includeRedirectScript={true} nodes={structuredNodes}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
         <ThemeToggle labels={s.nav.themeToggle} />
     </Navigation>

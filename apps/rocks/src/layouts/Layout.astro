@@ -2,6 +2,9 @@
 import '../styles/global.css';
 import { localeConfig } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
+import {
+  breadcrumbs, graph, person, webPage, website, type Node,
+} from '@sh/structured-data';
 
 type Props = {
   locale: Locale;
@@ -11,6 +14,17 @@ type Props = {
   includeRedirectScript?: boolean;
   ogType?: string;
   canonical?: string;
+  /** Page-specific schema.org nodes, merged into this page's single @graph.
+   *  The identity, site, page and breadcrumb nodes are added automatically. */
+  nodes?: Node[];
+  /** Narrower schema.org type for this document, e.g. 'CollectionPage'. */
+  pageType?: string;
+  /** 404 opts out of structured data entirely: there is no entity to describe. */
+  noStructuredData?: boolean;
+  /** Short label for this page's own breadcrumb crumb (Finding D: `title`
+   *  here is `${entry.data.title} — ${t.meta.title}`, and Google renders the
+   *  crumb verbatim). Falls back to `title` when omitted. */
+  breadcrumbLabel?: string;
 };
 
 const {
@@ -21,10 +35,50 @@ const {
   includeRedirectScript = false,
   ogType = 'website',
   canonical,
+  nodes = [],
+  pageType,
+  noStructuredData = false,
+  breadcrumbLabel,
 } = Astro.props;
 const htmlLang = localeConfig[locale].htmlLang;
 const siteOrigin = 'https://www.sebastian-heitmann.rocks';
-const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
+// The document's own URL, always derived from the actual route being
+// rendered — this identifies *this* HTML document in the graph (the
+// WebPage `@id`), kept distinct from `canonicalUrl` (a separate assertion
+// about which URL search engines should prefer). No rocks page diverges
+// the two today, but the website's German fallback article pages do (see
+// Finding 1 in the 2026-08-08 PR review) — keeping both layouts structured
+// the same way avoids reintroducing that bug here later.
+const documentUrl = `${siteOrigin}${Astro.url.pathname}`;
+const canonicalUrl = canonical ?? documentUrl;
+
+// This site routes no first-path segment that also needs a non-default
+// label, so breadcrumbs() below gets no `segments` map: 'cases' has no
+// src/pages/cases/index.astro behind it, and an unrouted segment is dropped
+// from the trail entirely regardless of any label supplied for it (see
+// breadcrumbs()'s `segments` doc in packages/structured-data/src/site.ts) —
+// a `{ label }`-only entry here would be dead configuration.
+
+// A page that supplies its own primary node still gets a WebPage: the WebPage
+// describes the document, the other node describes the thing it's about.
+const structuredData = noStructuredData
+  ? null
+  : graph(
+      person(locale),
+      website('rocks', Astro.url.pathname),
+      webPage({
+        url: documentUrl,
+        title,
+        description,
+        site: 'rocks',
+        locale,
+        type: pageType,
+      }),
+      breadcrumbs({
+        pathname: Astro.url.pathname, title, label: breadcrumbLabel, site: 'rocks', locale,
+      }),
+      ...nodes,
+    );
 ---
 
 <html lang={htmlLang}>
@@ -52,20 +106,9 @@ const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
         {alternates.map(alt => (
             <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
         ))}
-        <script type="application/ld+json" set:html={JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Person",
-            "name": "Sebastian Heitmann",
-            "jobTitle": "Technology Consultant",
-            "description": description,
-            "url": "https://www.sebastian-heitmann.rocks",
-            "sameAs": [
-                "https://www.sebastian-heitmann.dev",
-                "https://www.linkedin.com/in/sebastian-heitmann/",
-                "https://github.com/DonHeidi"
-            ],
-            "knowsLanguage": ["de", "en"]
-        })} />
+        {structuredData && (
+            <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+        )}
         <script is:inline>
             (function() {
                 var stored = localStorage.getItem('theme');

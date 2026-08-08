@@ -34,7 +34,29 @@ export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
 
 cd "$ROCKS_DIR"
 
+# packages/structured-data's own test suite is the only thing keeping the
+# shared schema.org builders (both sites' Layout.astro call into them)
+# correct. Nothing else runs it: this repo has no CI, and `bun run build`
+# below is a bare `astro build`, which strips types rather than checking
+# them. apps/rocks has no test suite of its own (it renders no prices,
+# unlike apps/website — see scripts/deploy-website.sh), so only the shared
+# package's tests run here. Run it before the build, so a broken builder
+# aborts the deploy the same way the structured-data gate (further below)
+# aborts on an invalid graph.
+( cd "$ROOT_DIR/packages/structured-data" && bun test )
+
+# `astro build` never type-checks (see above). Run the real type-checker
+# before the build so any `satisfies`/exhaustiveness guard in this app is
+# actually enforced rather than decorative.
+bunx tsc --noEmit
+
 bun run build
+
+# Structured data is emitted by a shared package and referenced across pages by
+# @id; a broken graph is invisible in the rendered page and in the build output.
+# Gate it here, the same way PUBLIC_MAIL_ENDPOINT drift is gated above. This
+# repo has no CI, so the deploy scripts are the only enforcement point.
+bun "$ROOT_DIR/scripts/check-structured-data.ts" dist
 
 # Astro's content-collection image() schema imports each source asset via Vite,
 # which emits the originals to dist/_astro/ even when only transformed variants

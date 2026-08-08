@@ -9,6 +9,7 @@ import ContactForm from '@/components/contact-form.astro';
 import { Footer } from '../components/footer';
 import { getStrings, getHreflangAlternates } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
+import { serviceNode } from '../data/services';
 
 const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
@@ -23,6 +24,8 @@ const alternates = getHreflangAlternates('/web-development', '/de-de/web-entwick
     title={s.webProjects.meta.title}
     description={s.webProjects.meta.description}
     alternates={alternates}
+    breadcrumbLabel={s.webProjects.meta.serviceName}
+    nodes={[serviceNode('web', locale, s)]}
 >
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
         <ThemeToggle labels={s.nav.themeToggle} />

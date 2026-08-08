@@ -24,6 +24,8 @@ export interface Strings {
   meta: {
     title: string;
     description: string;
+    /** Clean noun phrase for schema.org Service.name — no site-name suffix. */
+    serviceName: string;
   };
   nav: {
     logo: string;
@@ -205,7 +207,7 @@ export interface Strings {
     downloadLabel: string;
   };
   webProjects: {
-    meta: { title: string; description: string };
+    meta: { title: string; description: string; serviceName: string };
     hero: { eyebrow: string; headline: string; subline: string; cta: string };
     problem: { eyebrow: string; intro: string; items: string[] };
     approach: { eyebrow: string; headline: string; body: string[] };
@@ -232,6 +234,12 @@ export interface Strings {
       items: Array<{
         name: string;
         price: string;
+        /** Structured mirror of `price` for JSON-LD. Display strings differ by
+         *  locale ("from €549" vs "ab 549 €"); this does not. */
+        priceMin?: number;
+        currency?: 'EUR';
+        vatIncluded?: boolean;
+        billing?: 'one-time' | 'monthly';
         audience: string;
         features: string[];
         delivery: string;
@@ -244,6 +252,10 @@ export interface Strings {
       items: Array<{
         name: string;
         price?: string;
+        priceMin?: number;
+        currency?: 'EUR';
+        vatIncluded?: boolean;
+        billing?: 'one-time' | 'monthly';
         description: string;
         features: string[];
       }>;
@@ -278,7 +290,7 @@ export interface Strings {
     };
   };
   technicalProjectManagement: {
-    meta: { title: string; description: string };
+    meta: { title: string; description: string; serviceName: string };
     hero: { eyebrow: string; headline: string; subline: string; cta: string; ctaSecondary: string };
     definition: {
       eyebrow: string;
@@ -338,7 +350,7 @@ export interface Strings {
     };
   };
   aiProcessAutomation: {
-    meta: { title: string; description: string };
+    meta: { title: string; description: string; serviceName: string };
     hero: { eyebrow: string; headline: string; subline: string; cta: string; flow: string[] };
     approach: { eyebrow: string; headline: string; body: string[] };
     offerings: {
@@ -356,6 +368,10 @@ export interface Strings {
         outcomes?: string[];
         price: string;
         priceNote?: string;
+        priceMin?: number;
+        currency?: 'EUR';
+        vatIncluded?: boolean;
+        billing?: 'one-time' | 'monthly';
         featured?: boolean;
       }>;
     };

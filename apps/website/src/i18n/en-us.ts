@@ -4,6 +4,7 @@ export const enUs: Strings = {
   meta: {
     title: 'Sebastian Heitmann \u2014 Technology Consultant',
     description: 'Technology Consultant. AI-powered products & processes, from prototype to production.',
+    serviceName: 'Technology Consulting',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -430,6 +431,7 @@ export const enUs: Strings = {
     meta: {
       title: 'Web Projects — Sebastian Heitmann',
       description: 'Professional web presence for local businesses and SMBs. Conceptually strong, technically solid, efficiently executed.',
+      serviceName: 'Web Projects',
     },
     hero: {
       eyebrow: 'Web Projects',
@@ -677,6 +679,7 @@ export const enUs: Strings = {
     meta: {
       title: 'Technical Project Management — Sebastian Heitmann',
       description: 'Technical project management for digital projects. Hourly consulting that brings structure, coordination, and technical judgement to software, web, AI, and digitalisation initiatives.',
+      serviceName: 'Technical Project Management',
     },
     hero: {
       eyebrow: 'Technical Project Management',
@@ -816,6 +819,7 @@ export const enUs: Strings = {
     meta: {
       title: 'AI-Powered Products & Processes \u2014 Sebastian Heitmann',
       description: 'I build AI-powered processes and software products with companies: prototypes, production-ready first releases, and custom AI systems that connect AI, automation, existing systems, and human decisions.',
+      serviceName: 'AI Products & Processes',
     },
     hero: {
       eyebrow: 'AI Products & Processes',

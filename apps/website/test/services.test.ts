@@ -30,6 +30,7 @@ describe('serviceNode', () => {
     const offers = (serviceNode('ai', 'en-us', enUs).hasOfferCatalog as any).itemListElement;
     expect(offers.length).toBe(3);
     expect(offers[0].priceSpecification.valueAddedTaxIncluded).toBe(false);
+    expect(offers[1].priceSpecification.valueAddedTaxIncluded).toBe(false);
     expect(offers[2].priceSpecification).toBeUndefined();
   });
 
@@ -46,6 +47,30 @@ describe('serviceNode', () => {
   test('German ids live on German URLs', () => {
     expect(serviceNode('web', 'de-de', deDe)['@id'])
       .toBe('https://www.sebastian-heitmann.dev/de-de/web-entwicklung/#service');
+  });
+
+  test('service names are clean noun phrases, not page titles', () => {
+    const expected: Record<'en-us' | 'de-de', Record<'umbrella' | 'web' | 'tpm' | 'ai', string>> = {
+      'en-us': {
+        umbrella: 'Technology Consulting',
+        web: 'Web Projects',
+        tpm: 'Technical Project Management',
+        ai: 'AI Products & Processes',
+      },
+      'de-de': {
+        umbrella: 'Technologieberatung',
+        web: 'Webprojekte',
+        tpm: 'Technisches Projektmanagement',
+        ai: 'KI-Produkte & Prozesse',
+      },
+    };
+    for (const [locale, strings] of [['en-us', enUs], ['de-de', deDe]] as const) {
+      for (const key of ['umbrella', 'web', 'tpm', 'ai'] as const) {
+        const name = serviceNode(key, locale, strings).name as string;
+        expect(name).toBe(expected[locale][key]);
+        expect(name).not.toContain('Sebastian Heitmann');
+      }
+    }
   });
 
   test('every service is reachable from the home list', () => {

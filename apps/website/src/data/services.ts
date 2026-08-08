@@ -6,8 +6,10 @@ const ORIGIN = 'https://www.sebastian-heitmann.dev';
 
 export type ServiceKey = 'umbrella' | 'web' | 'tpm' | 'ai';
 
-/** The single declaration of where each service lives. Adding a fourth offering
- *  means one entry here plus its page: it cannot be forgotten in the home list. */
+/** The single declaration of where each service lives. Adding a fifth
+ *  `ServiceKey` requires an entry here (required by `Record<ServiceKey, ...>`)
+ *  and, for anything other than `umbrella`, an entry in `LISTED_ORDER` below —
+ *  see that comment for how omitting the second one now fails to compile. */
 export const SERVICE_PATHS: Record<ServiceKey, Record<Locale, string>> = {
   umbrella: { 'en-us': '/', 'de-de': '/de-de/' },
   web: { 'en-us': '/web-development/', 'de-de': '/de-de/web-entwicklung/' },
@@ -18,8 +20,20 @@ export const SERVICE_PATHS: Record<ServiceKey, Record<Locale, string>> = {
   ai: { 'en-us': '/ai-process-automation/', 'de-de': '/de-de/ki-prozess-automation/' },
 };
 
-/** Services that have their own page, in the order the home page lists them. */
-const LISTED: ServiceKey[] = ['web', 'tpm', 'ai'];
+/** Services that have their own page, in the order the home page lists them.
+ *  `umbrella` has no page of its own, so every other `ServiceKey` must appear
+ *  here exactly once. The `satisfies` check enforces that at compile time: add
+ *  a fifth `ServiceKey` without adding it below and this object literal stops
+ *  satisfying `Record<Exclude<ServiceKey, 'umbrella'>, true>` (a required key is
+ *  missing), so `tsc` fails the build instead of silently dropping the service
+ *  from the home list. */
+const LISTED_ORDER = {
+  web: true,
+  tpm: true,
+  ai: true,
+} as const satisfies Record<Exclude<ServiceKey, 'umbrella'>, true>;
+
+const LISTED = Object.keys(LISTED_ORDER) as Array<keyof typeof LISTED_ORDER>;
 
 export function serviceId(key: ServiceKey, locale: Locale): string {
   return `${ORIGIN}${SERVICE_PATHS[key][locale]}#service`;
@@ -31,10 +45,10 @@ export function serviceUrl(key: ServiceKey, locale: Locale): string {
 
 function serviceName(key: ServiceKey, s: Strings): string {
   switch (key) {
-    case 'umbrella': return s.meta.title;
-    case 'web': return s.webProjects.meta.title;
-    case 'tpm': return s.technicalProjectManagement.meta.title;
-    case 'ai': return s.aiProcessAutomation.meta.title;
+    case 'umbrella': return s.meta.serviceName;
+    case 'web': return s.webProjects.meta.serviceName;
+    case 'tpm': return s.technicalProjectManagement.meta.serviceName;
+    case 'ai': return s.aiProcessAutomation.meta.serviceName;
   }
 }
 

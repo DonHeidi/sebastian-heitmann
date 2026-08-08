@@ -4,6 +4,7 @@ export const deDe: Strings = {
   meta: {
     title: 'Sebastian Heitmann \u2014 Technology Consultant',
     description: 'Technology Consultant. KI-gestützte Produkte & Prozesse, vom Prototyp bis zur Produktion.',
+    serviceName: 'Technologieberatung',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -430,6 +431,7 @@ export const deDe: Strings = {
     meta: {
       title: 'Webprojekte — Sebastian Heitmann',
       description: 'Professionelle Webpräsenz für lokale Unternehmen und Mittelstand. Konzeptionell durchdacht, technisch sauber, effizient umgesetzt.',
+      serviceName: 'Webprojekte',
     },
     hero: {
       eyebrow: 'Webprojekte',
@@ -677,6 +679,7 @@ export const deDe: Strings = {
     meta: {
       title: 'Technisches Projektmanagement — Sebastian Heitmann',
       description: 'Technisches Projektmanagement für digitale Projekte. Stundenbasierte Beratung mit Struktur, Koordination und technischem Urteilsvermögen für Software-, Web-, KI- und Digitalisierungsprojekte.',
+      serviceName: 'Technisches Projektmanagement',
     },
     hero: {
       eyebrow: 'Technisches Projektmanagement',
@@ -816,6 +819,7 @@ export const deDe: Strings = {
     meta: {
       title: 'KI-gestützte Produkte & Prozesse — Sebastian Heitmann',
       description: 'Ich entwickle gemeinsam mit Unternehmen KI-gestützte Prozesse und Softwareprodukte: Prototypen, produktive erste Releases und individuelle KI-Systeme, die KI, Automatisierung, bestehende Systeme und menschliche Entscheidungen verbinden.',
+      serviceName: 'KI-Produkte & Prozesse',
     },
     hero: {
       eyebrow: 'KI-Produkte & Prozesse',

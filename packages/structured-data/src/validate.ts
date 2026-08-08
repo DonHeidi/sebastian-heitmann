@@ -1,8 +1,26 @@
-import { PERSON_ID } from './person';
+import { PERSON_ID, person } from './person';
 import type { Node } from './types';
 
-const FORBIDDEN_TYPES = ['ProfessionalService', 'LocalBusiness', 'PostalAddress'];
-const FORBIDDEN_KEYS = ['priceRange', 'address', 'streetAddress'];
+// Finding 3: Organization is forbidden everywhere — the plan's global
+// constraint is "no Organization node anywhere" (an inlined anonymous
+// Organization publisher was a motivating defect this package replaced).
+// Exact string equality only: OrganizationRole (emitted by personOccupations
+// on the CV pages) must never match this list.
+const FORBIDDEN_TYPES = ['ProfessionalService', 'LocalBusiness', 'PostalAddress', 'Organization'];
+// Finding 1: `price` asserts an exact cost; every price this site publishes is
+// a "from" price via priceSpecification.minPrice, so a bare `price` key is
+// forbidden regardless of which node it appears on, not just inside an Offer's
+// priceSpecification.
+const FORBIDDEN_KEYS = ['priceRange', 'address', 'streetAddress', 'price'];
+
+// The two locale variants the shared Person builder can produce. Both sites
+// call this exact function with only a locale, and TypeScript's signature
+// (`person(locale: Locale): Node`) admits no other parameter, so these are the
+// only two shapes a correct call site can ever emit.
+const CANONICAL_PERSON_JSON = new Set([
+  JSON.stringify(person('en-us')),
+  JSON.stringify(person('de-de')),
+]);
 
 export function validateGraph(input: unknown, opts: { path: string }): string[] {
   const errors: string[] = [];
@@ -19,6 +37,41 @@ export function validateGraph(input: unknown, opts: { path: string }): string[] 
   const people = nodes.filter((n) => n['@id'] === PERSON_ID && n['@type'] === 'Person');
   if (people.length !== 1) {
     errors.push(at(`expected exactly one Person node with ${PERSON_ID}, found ${people.length}`));
+  } else if (!CANONICAL_PERSON_JSON.has(JSON.stringify(people[0]))) {
+    // Finding 5: the plan's central invariant is that the Person node is
+    // byte-identical on both domains. A per-page structural check cannot
+    // compare across a dist tree it never sees (dev's build never sees
+    // rocks' dist, and vice versa), so instead this compares the one Person
+    // node this page emits against the only two shapes person() can ever
+    // legitimately produce, using the same JSON.stringify(...) call both
+    // layouts use to serialize the <script> tag. If every page on both sites
+    // passes this, every page's Person node is byte-identical to one of these
+    // two canonical strings, which makes them byte-identical to each other —
+    // transitively closing the cross-site invariant without ever needing a
+    // literal cross-dist diff.
+    errors.push(at('Person node does not match the canonical person() output for either locale'));
+  }
+
+  // Finding 2: a duplicate @id carrying two different @type values (e.g. a
+  // WebPage and a ProfilePage sharing one @id — the exact defect that shipped
+  // on the CV pages in Task 8). Partial merge nodes (personKnowsAbout,
+  // personOccupations, profileMainEntity) share an @id with a typed node but
+  // carry no @type of their own, so they never enter this map — that sharing
+  // is the deliberate merge-by-@id pattern and must stay legal.
+  const typesById = new Map<string, Set<string>>();
+  walk(nodes, (node) => {
+    const id = node['@id'];
+    const type = node['@type'];
+    if (typeof id === 'string' && typeof type === 'string') {
+      const seen = typesById.get(id) ?? new Set<string>();
+      seen.add(type);
+      typesById.set(id, seen);
+    }
+  });
+  for (const [id, types] of typesById) {
+    if (types.size > 1) {
+      errors.push(at(`@id ${id} carries multiple @type values: ${[...types].sort().join(', ')}`));
+    }
   }
 
   // Every @id defined anywhere in the graph, including nested nodes.
@@ -59,7 +112,6 @@ export function validateGraph(input: unknown, opts: { path: string }): string[] 
       if (spec) {
         if (typeof spec.minPrice !== 'number') errors.push(at(`Offer "${node.name}": non-numeric minPrice`));
         if (typeof spec.priceCurrency !== 'string') errors.push(at(`Offer "${node.name}": missing priceCurrency`));
-        if ('price' in spec) errors.push(at(`Offer "${node.name}": use minPrice, not price`));
       }
     }
   });
@@ -84,8 +136,12 @@ function isCrossPage(id: string): boolean {
   if (!id.startsWith('https://www.sebastian-heitmann.dev') && !id.startsWith('https://www.sebastian-heitmann.rocks')) {
     return false;
   }
+  // Every suffix here is the FULL expected suffix (mirrors blog() in
+  // content.ts: `${siteId(site)}-blog` === `${origin}/#website-blog`), not a
+  // bare substring — a typo like "#wbsite-blog" or "#service-ish" must still
+  // be reported dangling, the same way a typo'd "#personn" or "#websites" is.
   return id.endsWith('/#person') || id.endsWith('/#website')
-    || id.endsWith('-blog') || id.endsWith('#service');
+    || id.endsWith('/#website-blog') || id.endsWith('/#service');
 }
 
 function walk(value: unknown, visit: (node: Node) => void): void {

@@ -42,6 +42,28 @@ describe('offer', () => {
   test('a priceMin without a currency is a programming error', () => {
     expect(() => offer({ name: 'Broken', priceMin: 100 })).toThrow(/currency/i);
   });
+
+  test('a priceMin with a whitespace-only currency is a programming error', () => {
+    expect(() => offer({ name: 'Broken', priceMin: 100, currency: ' ' })).toThrow(/currency/i);
+  });
+
+  test('a one-time price produces a plain PriceSpecification with no referenceQuantity', () => {
+    const node = offer({ name: 'Setup', priceMin: 1200, currency: 'EUR', billing: 'one-time' });
+    const spec = node.priceSpecification as Record<string, unknown>;
+    expect(spec['@type']).toBe('PriceSpecification');
+    expect(spec.minPrice).toBe(1200);
+    expect(spec.priceCurrency).toBe('EUR');
+    expect(spec.referenceQuantity).toBeUndefined();
+  });
+
+  test('a per-cycle price produces a plain PriceSpecification with no referenceQuantity', () => {
+    const node = offer({ name: 'Maintenance', priceMin: 2500, currency: 'EUR', billing: 'per-cycle' });
+    const spec = node.priceSpecification as Record<string, unknown>;
+    expect(spec['@type']).toBe('PriceSpecification');
+    expect(spec.minPrice).toBe(2500);
+    expect(spec.priceCurrency).toBe('EUR');
+    expect(spec.referenceQuantity).toBeUndefined();
+  });
 });
 
 describe('service', () => {

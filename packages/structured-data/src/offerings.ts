@@ -20,7 +20,7 @@ export type OfferInput = {
 const UNIT_CODE: Partial<Record<Billing, string>> = { monthly: 'MON', hourly: 'HUR' };
 
 export function offer(input: OfferInput): Node {
-  if (input.priceMin !== undefined && !input.currency) {
+  if (input.priceMin !== undefined && (!input.currency || !input.currency.trim())) {
     throw new Error(`offer "${input.name}": priceMin requires a currency`);
   }
 

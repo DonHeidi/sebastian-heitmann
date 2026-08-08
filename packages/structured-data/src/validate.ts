@@ -4,8 +4,8 @@ import type { Node } from './types';
 // Finding 3: Organization is forbidden everywhere — the plan's global
 // constraint is "no Organization node anywhere" (an inlined anonymous
 // Organization publisher was a motivating defect this package replaced).
-// Exact string equality only: OrganizationRole (emitted by personOccupations
-// on the CV pages) must never match this list.
+// Exact string equality only: a type like OrganizationRole would contain the
+// substring "Organization" but must never match this list.
 const FORBIDDEN_TYPES = ['ProfessionalService', 'LocalBusiness', 'PostalAddress', 'Organization'];
 // Finding 1: `price` asserts an exact cost; every price this site publishes is
 // a "from" price via priceSpecification.minPrice, so a bare `price` key is
@@ -74,12 +74,15 @@ export function validateGraph(input: unknown, opts: { path: string }): string[] 
     }
   }
 
-  // Every @id defined anywhere in the graph, including nested nodes.
-  const defined = new Set<string>();
-  walk(nodes, (node) => {
-    const id = node['@id'];
-    if (typeof id === 'string' && Object.keys(node).length > 1) defined.add(id);
-  });
+  // Every @id that is actually *typed* somewhere in the graph — i.e. the id
+  // of a real node, not a partial contributor. This is the same map built
+  // above, just narrowed to its keys. Finding A: a node with no @type is
+  // never itself the thing that "defines" an @id, no matter how many keys it
+  // carries — it is either a bare reference ({"@id": "..."}) or a partial
+  // node (personKnowsAbout, personOccupations, profileMainEntity) that
+  // contributes fields to a node typed elsewhere in this same graph. Both
+  // shapes must resolve to a typed id, or be one of the known cross-page ids.
+  const typedIds = new Set(typesById.keys());
 
   walk(nodes, (node) => {
     const type = node['@type'];
@@ -96,12 +99,15 @@ export function validateGraph(input: unknown, opts: { path: string }): string[] 
       if (value === undefined) errors.push(at(`undefined value on "${key}"`));
     }
 
-    // A bare {"@id": "..."} is a reference. It must resolve to a node defined
-    // in this graph, or be one of the stable ids that legitimately live on
-    // another page of the same site.
+    // An untyped node carrying an @id is either a bare {"@id": "..."}
+    // reference or a partial merge node (@id plus payload keys, no @type).
+    // Either way it names an id it does not itself define, so that id must
+    // resolve to a typed node somewhere in this graph, or be one of the
+    // stable ids that legitimately live on another page of the same site.
+    // A typed node's own @id is exempt: it defines itself.
     const id = node['@id'];
-    if (typeof id === 'string' && Object.keys(node).length === 1) {
-      if (!defined.has(id) && !isCrossPage(id)) {
+    if (typeof id === 'string' && typeof type !== 'string') {
+      if (!typedIds.has(id) && !isCrossPage(id)) {
         errors.push(at(`dangling reference to ${id}`));
       }
     }
@@ -120,8 +126,8 @@ export function validateGraph(input: unknown, opts: { path: string }): string[] 
 }
 
 /** Ids that legitimately live on another page of the same site: the person, the
- *  website, the blog, and any #service anchor. Anything else must be defined in
- *  the same graph, or it is a typo.
+ *  website, the blog (one per locale), and any #service anchor. Anything else
+ *  must be defined in the same graph, or it is a typo.
  *
  *  Both sites' origins must be covered: PERSON_ID always points at the .dev
  *  origin (the canonical identity is hosted there and referenced verbatim from
@@ -136,12 +142,16 @@ function isCrossPage(id: string): boolean {
   if (!id.startsWith('https://www.sebastian-heitmann.dev') && !id.startsWith('https://www.sebastian-heitmann.rocks')) {
     return false;
   }
-  // Every suffix here is the FULL expected suffix (mirrors blog() in
-  // content.ts: `${siteId(site)}-blog` === `${origin}/#website-blog`), not a
-  // bare substring — a typo like "#wbsite-blog" or "#service-ish" must still
-  // be reported dangling, the same way a typo'd "#personn" or "#websites" is.
+  // Every suffix here is the FULL expected suffix (mirrors blogId() in
+  // content.ts: `${siteId(site)}-blog-${locale}` === `${origin}/#website-blog-${locale}`),
+  // not a bare substring — a typo like "#wbsite-blog" or "#service-ish" must
+  // still be reported dangling, the same way a typo'd "#personn" or
+  // "#websites" is. The Blog node is locale-scoped (Finding B: en-us and
+  // de-de are distinct entities), so both locale suffixes are listed
+  // explicitly rather than matching "#website-blog" as a prefix.
   return id.endsWith('/#person') || id.endsWith('/#website')
-    || id.endsWith('/#website-blog') || id.endsWith('/#service');
+    || id.endsWith('/#website-blog-en-us') || id.endsWith('/#website-blog-de-de')
+    || id.endsWith('/#service');
 }
 
 function walk(value: unknown, visit: (node: Node) => void): void {

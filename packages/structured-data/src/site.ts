@@ -55,28 +55,40 @@ export function webPage(input: {
   });
 }
 
-/** Derived from the pathname, so a page added later needs no route table.
- *  Intermediate segments are title-cased from the slug; only /articles/ and
- *  /cases/ are ever nested today, and both title-case cleanly. */
+/** Derived from the pathname, so a page added later needs no route table. */
 export function breadcrumbs(input: {
   pathname: string;
   title: string;
   site: SiteKey;
   locale: Locale;
-  /** First-path-segment names (e.g. 'articles') that are genuinely routed —
-   *  have their own page, so linking to them cannot 404. Only the layout
-   *  reliably knows its own route table, so it is the one place this is
-   *  declared (see Layout.astro on each site). Defaults to none: an
-   *  undeclared segment fails safe by getting a name-only crumb rather than
-   *  a guessed URL that might not exist — the exact bug this parameter
-   *  fixes was apps/rocks emitting `item: ".../cases/"` with no
-   *  cases/index.astro behind it. */
-  routedSegments?: string[];
+  /** Finding C: an explicit label for the current page's own (final) crumb.
+   *  Falls back to `title` when omitted. `title` is usually a `<title>` tag
+   *  value dressed up with a site-name suffix
+   *  ("CV — Sebastian Heitmann", "Blickwerk — ... — Portfolio") — Google
+   *  renders this crumb verbatim in the SERP breadcrumb trail, so that
+   *  suffix must not leak in. Pass a short crumb label ("CV", "Blickwerk")
+   *  instead; do not try to strip the suffix by splitting on a separator,
+   *  since titles are authored freely and that would break silently. */
+  label?: string;
+  /** Finding D: per-segment metadata for every intermediate path segment
+   *  (all but the last), keyed by the raw URL slug (e.g. 'articles').
+   *  Bundles the two things breadcrumbs() cannot infer from the URL alone
+   *  and that belong together: `routed` (does this segment have its own
+   *  indexed page, so the crumb may safely link to it — see the historical
+   *  apps/rocks bug of emitting `item: ".../cases/"` with no
+   *  cases/index.astro behind it) and `label` (what the segment is actually
+   *  called in this locale — a raw slug like 'articles' title-cases to
+   *  'Articles' on every locale, which is wrong on a German page whose own
+   *  nav says 'Artikel'). Only the layout reliably knows its own route
+   *  table and copy, so it is the one place this is declared. An
+   *  undeclared segment, or one with no `label`, fails safe: a title-cased,
+   *  unlocalized slug and no link. */
+  segments?: Record<string, { label?: string; routed?: boolean }>;
 }): Node | null {
   const origin = originFor(input.site);
   const localePrefix = input.locale === 'de-de' ? '/de-de' : '';
   const homeUrl = `${origin}${localePrefix}/`;
-  const routedSegments = new Set(input.routedSegments ?? []);
+  const segments = input.segments ?? {};
 
   const rest = input.pathname
     .replace(/^\/de-de/, '')
@@ -90,22 +102,23 @@ export function breadcrumbs(input: {
   ];
 
   // Every segment but the last MIGHT be a real intermediate page with its own
-  // URL — only if the caller declared it in routedSegments. Otherwise this
-  // emits the same name-only shape as the final crumb below, which
-  // schema.org and Google both accept.
+  // URL and its own localized label — only if the caller declared it in
+  // segments. Otherwise this emits the same name-only, title-cased-slug
+  // shape as before, which schema.org and Google both accept.
   rest.slice(0, -1).forEach((segment, index) => {
+    const meta = segments[segment];
     items.push(compact({
       '@type': 'ListItem',
       position: index + 2,
-      name: titleCase(segment),
-      item: routedSegments.has(segment)
+      name: meta?.label ?? titleCase(segment),
+      item: meta?.routed
         ? `${origin}${localePrefix}/${rest.slice(0, index + 1).join('/')}/`
         : undefined,
     }));
   });
 
   // Google asks that the final crumb omit `item`: it is the current page.
-  items.push({ '@type': 'ListItem', position: items.length + 1, name: input.title });
+  items.push({ '@type': 'ListItem', position: items.length + 1, name: input.label ?? input.title });
 
   return { '@type': 'BreadcrumbList', itemListElement: items };
 }

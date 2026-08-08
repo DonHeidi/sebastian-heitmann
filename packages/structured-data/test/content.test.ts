@@ -1,11 +1,33 @@
 import { describe, expect, test } from 'bun:test';
 import {
-  PERSON_ID, blog, blogPosting, creativeWork, itemList, profileMainEntity,
+  PERSON_ID, blog, blogId, blogPosting, creativeWork, itemList, profileMainEntity,
   personOccupations, personKnowsAbout, siteId,
 } from '../src/index';
 
+describe('blog', () => {
+  test('is locale-scoped, so en-us and de-de are distinct entities', () => {
+    const en = blog({ site: 'dev', locale: 'en-us', name: 'Articles', url: 'https://www.sebastian-heitmann.dev/articles/' });
+    const de = blog({ site: 'dev', locale: 'de-de', name: 'Artikel', url: 'https://www.sebastian-heitmann.dev/de-de/articles/' });
+    expect(en['@id']).not.toBe(de['@id']);
+    expect(en['@id']).toBe(blogId('dev', 'en-us'));
+    expect(de['@id']).toBe(blogId('dev', 'de-de'));
+  });
+
+  test('carries an inLanguage tag and a url', () => {
+    const node = blog({ site: 'dev', locale: 'de-de', name: 'Artikel', url: 'https://www.sebastian-heitmann.dev/de-de/articles/' });
+    expect(node.inLanguage).toBe('de-DE');
+    expect(node.url).toBe('https://www.sebastian-heitmann.dev/de-de/articles/');
+  });
+
+  test('is published by the one person and part of its site', () => {
+    const node = blog({ site: 'dev', locale: 'en-us', name: 'Articles', url: 'https://www.sebastian-heitmann.dev/articles/' });
+    expect(node.publisher).toEqual({ '@id': PERSON_ID });
+    expect(node.isPartOf).toEqual({ '@id': siteId('dev') });
+  });
+});
+
 describe('blogPosting', () => {
-  test('author and publisher are the same single person, by reference', () => {
+  test('author and publisher default to the same single person, by reference', () => {
     const node = blogPosting({
       url: 'https://www.sebastian-heitmann.dev/articles/x/',
       headline: 'X', description: 'd', datePublished: '2026-01-01', locale: 'en-us',
@@ -26,10 +48,10 @@ describe('blogPosting', () => {
     const node = blogPosting({
       url: 'https://www.sebastian-heitmann.dev/articles/x/',
       headline: 'X', description: 'd', datePublished: '2026-01-01', locale: 'en-us',
-      keywords: ['astro', 'seo'], blogId: `${siteId('dev')}-blog`,
+      keywords: ['astro', 'seo'], blogId: blogId('dev', 'en-us'),
     });
     expect(node.keywords).toBe('astro, seo');
-    expect(node.isPartOf).toEqual({ '@id': `${siteId('dev')}-blog` });
+    expect(node.isPartOf).toEqual({ '@id': blogId('dev', 'en-us') });
   });
 
   test('omits dateModified when the article was never revised', () => {
@@ -38,6 +60,17 @@ describe('blogPosting', () => {
       headline: 'X', description: 'd', datePublished: '2026-01-01', locale: 'en-us',
     });
     expect('dateModified' in node).toBe(false);
+  });
+
+  test('a guest author overrides the default canonical Person, publisher stays the Person', () => {
+    const guestId = 'https://www.sebastian-heitmann.dev/authors/guest#person';
+    const node = blogPosting({
+      url: 'https://www.sebastian-heitmann.dev/articles/x/',
+      headline: 'X', description: 'd', datePublished: '2026-01-01', locale: 'en-us',
+      author: { '@id': guestId },
+    });
+    expect(node.author).toEqual({ '@id': guestId });
+    expect(node.publisher).toEqual({ '@id': PERSON_ID });
   });
 });
 
@@ -99,15 +132,20 @@ describe('profileMainEntity and personOccupations', () => {
   });
 
   test('occupations are a partial node that merges into the person by @id', () => {
+    // Finding E: no `company` — namedPosition is the name of the position
+    // held, not the employer, so there is nowhere faithful to put an
+    // employer without a forbidden Organization node. Each entry is a plain
+    // Occupation carrying only the role name; the employer stays on the
+    // rendered CV page.
     const node = personOccupations([
-      { role: 'Fractional CTO', company: 'Independent' },
+      { role: 'Fractional CTO' },
       { role: 'Sabbatical' },
     ]);
     expect(node['@id']).toBe(PERSON_ID);
     expect(node['@type']).toBeUndefined();
     expect(node.hasOccupation).toEqual([
-      { '@type': 'OrganizationRole', roleName: 'Fractional CTO', namedPosition: 'Independent' },
-      { '@type': 'Role', roleName: 'Sabbatical' },
+      { '@type': 'Occupation', name: 'Fractional CTO' },
+      { '@type': 'Occupation', name: 'Sabbatical' },
     ]);
   });
 

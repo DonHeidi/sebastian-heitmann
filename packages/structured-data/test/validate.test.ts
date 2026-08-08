@@ -1,5 +1,8 @@
 import { describe, expect, test } from 'bun:test';
-import { PERSON_ID, person, validateGraph } from '../src/index';
+import {
+  PERSON_ID, person, validateGraph, webPage,
+  profileMainEntity, personOccupations, personKnowsAbout,
+} from '../src/index';
 
 // The real person() output, not a hand-rolled stand-in: validateGraph now
 // checks the Person node against the canonical shape (Finding 5), so a fixture
@@ -120,18 +123,18 @@ describe('validateGraph', () => {
       ...valid,
       '@graph': [
         ...valid['@graph'],
-        { '@type': 'BlogPosting', isPartOf: { '@id': 'https://www.sebastian-heitmann.dev/#wbsite-blog' } },
+        { '@type': 'BlogPosting', isPartOf: { '@id': 'https://www.sebastian-heitmann.dev/#wbsite-blog-en-us' } },
       ],
     };
-    expect(validateGraph(bad, { path: 'x' })[0]).toMatch(/dangling reference to .*#wbsite-blog/);
+    expect(validateGraph(bad, { path: 'x' })[0]).toMatch(/dangling reference to .*#wbsite-blog-en-us/);
   });
 
-  test('accepts the real blog cross-page reference', () => {
+  test('accepts the real, locale-scoped blog cross-page reference', () => {
     const ok = {
       ...valid,
       '@graph': [
         ...valid['@graph'],
-        { '@type': 'BlogPosting', isPartOf: { '@id': 'https://www.sebastian-heitmann.dev/#website-blog' } },
+        { '@type': 'BlogPosting', isPartOf: { '@id': 'https://www.sebastian-heitmann.dev/#website-blog-en-us' } },
       ],
     };
     expect(validateGraph(ok, { path: 'x' })).toEqual([]);
@@ -151,5 +154,55 @@ describe('validateGraph', () => {
   test('accepts either locale variant of the canonical Person node', () => {
     const deVariant = { ...valid, '@graph': [person('de-de'), valid['@graph'][1]] };
     expect(validateGraph(deVariant, { path: 'x' })).toEqual([]);
+  });
+
+  describe('partial nodes (Finding A)', () => {
+    // Regression: `defined` used to register any node with more than one
+    // key, so a partial node (no @type) self-registered as "defining" its
+    // own @id regardless of whether any typed node in the graph actually
+    // carried it. Concretely: rename cv.astro's url from '/cv' to
+    // '/curriculum-vitae' and profileMainEntity('.../cv') would still pass,
+    // even though it no longer points at any real node — exactly the class
+    // of defect this gate exists to catch.
+
+    test('rejects a partial node whose @id matches no typed node in the graph', () => {
+      const cvUrl = 'https://www.sebastian-heitmann.dev/cv';
+      const staleUrl = 'https://www.sebastian-heitmann.dev/curriculum-vitae';
+      const bad = {
+        ...valid,
+        '@graph': [
+          ...valid['@graph'],
+          webPage({ url: staleUrl, title: 'CV', description: 'd', site: 'dev', locale: 'en-us', type: 'ProfilePage' }),
+          profileMainEntity(cvUrl), // stale — the page's own node moved to staleUrl
+        ],
+      };
+      const errors = validateGraph(bad, { path: 'x' }).join(' ');
+      expect(errors).toMatch(new RegExp(`dangling reference to ${cvUrl}`));
+    });
+
+    test('accepts profileMainEntity sharing an @id with the page node actually typed in this graph', () => {
+      const cvUrl = 'https://www.sebastian-heitmann.dev/cv';
+      const ok = {
+        ...valid,
+        '@graph': [
+          ...valid['@graph'],
+          webPage({ url: cvUrl, title: 'CV', description: 'd', site: 'dev', locale: 'en-us', type: 'ProfilePage' }),
+          profileMainEntity(cvUrl),
+        ],
+      };
+      expect(validateGraph(ok, { path: 'x' })).toEqual([]);
+    });
+
+    test('accepts personOccupations and personKnowsAbout, since PERSON_ID is always typed on every page', () => {
+      const ok = {
+        ...valid,
+        '@graph': [
+          ...valid['@graph'],
+          personOccupations([{ role: 'Fractional CTO' }]),
+          personKnowsAbout(['System Architecture']),
+        ],
+      };
+      expect(validateGraph(ok, { path: 'x' })).toEqual([]);
+    });
   });
 });

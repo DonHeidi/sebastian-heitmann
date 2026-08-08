@@ -58,7 +58,7 @@ describe('breadcrumbs', () => {
   test('includes the intermediate segment for a nested page whose route is declared', () => {
     const node = breadcrumbs({
       pathname: '/articles/some-post/', title: 'Some Post', site: 'dev', locale: 'en-us',
-      routedSegments: ['articles'],
+      segments: { articles: { label: 'Articles', routed: true } },
     })!;
     const items = node.itemListElement as Array<Record<string, unknown>>;
     expect(items.length).toBe(3);
@@ -69,7 +69,7 @@ describe('breadcrumbs', () => {
     expect(items[2]).toEqual({ '@type': 'ListItem', position: 3, name: 'Some Post' });
   });
 
-  test('fails safe: an undeclared intermediate segment gets a name-only crumb, never a guessed URL', () => {
+  test('fails safe: an undeclared intermediate segment gets a name-only, title-cased crumb, never a guessed URL', () => {
     // Regression for apps/rocks emitting `item: ".../cases/"` with no
     // cases/index.astro behind it — a real BreadcrumbList 404 in production.
     const node = breadcrumbs({
@@ -81,16 +81,48 @@ describe('breadcrumbs', () => {
     expect('item' in items[1]!).toBe(false);
   });
 
-  test('an explicitly declared segment still gets its item on a site with no routed segments by default', () => {
+  test('a segment declared routed without a label still title-cases the fallback name', () => {
     const node = breadcrumbs({
       pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
-      routedSegments: ['cases'],
+      segments: { cases: { routed: true } },
     })!;
     const items = node.itemListElement as Array<Record<string, unknown>>;
     expect(items[1]).toEqual({
       '@type': 'ListItem', position: 2, name: 'Cases',
       item: 'https://www.sebastian-heitmann.rocks/cases/',
     });
+  });
+
+  test('a segment with a label but not routed gets the label with no item', () => {
+    const node = breadcrumbs({
+      pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
+      segments: { cases: { label: 'Cases' } },
+    })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items[1]).toEqual({ '@type': 'ListItem', position: 2, name: 'Cases' });
+    expect('item' in items[1]!).toBe(false);
+  });
+
+  test('a nested German path gets a localized intermediate label, not the English title-cased slug', () => {
+    // Regression: titleCase(segment) used to derive the crumb from the raw
+    // URL slug with no reference to locale, so a German page emitted the
+    // English 'Articles' crumb even though its own nav says 'Artikel'. No
+    // prior test exercised a nested German path at all.
+    const node = breadcrumbs({
+      pathname: '/de-de/articles/irgendein-post/', title: 'Irgendein Post', site: 'dev', locale: 'de-de',
+      segments: { articles: { label: 'Artikel', routed: true } },
+    })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items.length).toBe(3);
+    expect(items[0]).toEqual({
+      '@type': 'ListItem', position: 1, name: 'Start',
+      item: 'https://www.sebastian-heitmann.dev/de-de/',
+    });
+    expect(items[1]).toEqual({
+      '@type': 'ListItem', position: 2, name: 'Artikel',
+      item: 'https://www.sebastian-heitmann.dev/de-de/articles/',
+    });
+    expect(items[2]).toEqual({ '@type': 'ListItem', position: 3, name: 'Irgendein Post' });
   });
 
   test('strips the locale prefix so German trails do not carry a de-de crumb', () => {
@@ -109,5 +141,22 @@ describe('breadcrumbs', () => {
     const node = breadcrumbs({ pathname: '/cv/', title: 'CV', site: 'dev', locale: 'en-us' })!;
     const items = node.itemListElement as Array<Record<string, unknown>>;
     expect(items[items.length - 1]!.item).toBeUndefined();
+  });
+
+  test('uses the explicit label for the leaf crumb instead of the full <title>', () => {
+    // Finding C: `title` is a <title> tag value dressed up with a site-name
+    // suffix ("CV — Sebastian Heitmann"), which Google renders verbatim as
+    // the SERP breadcrumb. `label` lets a caller supply a short crumb name.
+    const node = breadcrumbs({
+      pathname: '/cv/', title: 'CV — Sebastian Heitmann', label: 'CV', site: 'dev', locale: 'en-us',
+    })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items[items.length - 1]).toEqual({ '@type': 'ListItem', position: 2, name: 'CV' });
+  });
+
+  test('falls back to the full title when no label is given', () => {
+    const node = breadcrumbs({ pathname: '/cv/', title: 'CV — Sebastian Heitmann', site: 'dev', locale: 'en-us' })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items[items.length - 1]!.name).toBe('CV — Sebastian Heitmann');
   });
 });

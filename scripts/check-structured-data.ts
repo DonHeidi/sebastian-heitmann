@@ -31,7 +31,11 @@ for (const file of htmlFiles(dist)) {
   const blocks = [...html.matchAll(SCRIPT_RE)];
 
   // 404 has no entity to describe and is excluded from indexing anyway.
-  if (rel === '404.html') {
+  // Finding G: match the file name at any depth (e.g. `de-de/404.html`), not
+  // just the literal root path — AGENTS.md documents `noStructuredData` as
+  // the convention for "404 pages", plural, and both layouts already honor
+  // it per-locale.
+  if (rel === '404.html' || rel.endsWith('/404.html')) {
     if (blocks.length > 0) errors.push(`${rel}: expected no JSON-LD, found ${blocks.length}`);
     continue;
   }

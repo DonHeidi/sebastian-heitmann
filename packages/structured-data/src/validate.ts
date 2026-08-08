@@ -34,7 +34,17 @@ export function validateGraph(input: unknown, opts: { path: string }): string[] 
 
   const nodes = doc['@graph'] as Node[];
 
-  const people = nodes.filter((n) => n['@id'] === PERSON_ID && n['@type'] === 'Person');
+  // Finding 2: this must walk the whole graph, not just filter the top-level
+  // @graph array. A Person node nested inside another node (e.g. an inline
+  // guest author's `{"@type":"Person","@id":PERSON_ID,"name":"Guest"}` on a
+  // BlogPosting) carries PERSON_ID but never appears at the top level, so a
+  // shallow filter is blind to it — the gate would report "OK" while two
+  // conflicting bodies for one @id ship on the same page, which is exactly
+  // the defect this check exists to catch.
+  const people: Node[] = [];
+  walk(nodes, (node) => {
+    if (node['@id'] === PERSON_ID && node['@type'] === 'Person') people.push(node);
+  });
   if (people.length !== 1) {
     errors.push(at(`expected exactly one Person node with ${PERSON_ID}, found ${people.length}`));
   } else if (!CANONICAL_PERSON_JSON.has(JSON.stringify(people[0]))) {

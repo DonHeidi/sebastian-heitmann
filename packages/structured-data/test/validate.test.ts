@@ -32,6 +32,51 @@ describe('validateGraph', () => {
       .toMatch(/exactly one/);
   });
 
+  test('rejects a Person node carrying PERSON_ID nested inside another node, not just at the top level of @graph', () => {
+    // Finding 2: the "exactly one Person" and canonical byte-identity checks
+    // used to filter only the top-level @graph array, so a Person nested
+    // inside e.g. a BlogPosting's `author` field was invisible to them — the
+    // gate reported OK while two conflicting bodies shipped for one @id.
+    const bad = {
+      ...valid,
+      '@graph': [
+        ...valid['@graph'],
+        {
+          '@type': 'BlogPosting',
+          author: { '@type': 'Person', '@id': PERSON_ID, name: 'Guest' },
+        },
+      ],
+    };
+    expect(validateGraph(bad, { path: 'x' })[0]).toMatch(/exactly one Person node/);
+  });
+
+  test('does not flag a nested guest Person with a different, or absent, @id', () => {
+    // Finding 4: an inline non-canonical author is a legitimate second
+    // Person, not a second body for PERSON_ID, so it must not trip the
+    // "exactly one Person" rule, which only ever counts nodes carrying
+    // PERSON_ID.
+    const withId = {
+      ...valid,
+      '@graph': [
+        ...valid['@graph'],
+        {
+          '@type': 'BlogPosting',
+          author: { '@type': 'Person', '@id': 'https://example.com/#guest', name: 'Guest' },
+        },
+      ],
+    };
+    expect(validateGraph(withId, { path: 'x' })).toEqual([]);
+
+    const withoutId = {
+      ...valid,
+      '@graph': [
+        ...valid['@graph'],
+        { '@type': 'BlogPosting', author: { '@type': 'Person', name: 'Guest' } },
+      ],
+    };
+    expect(validateGraph(withoutId, { path: 'x' })).toEqual([]);
+  });
+
   test('rejects the deleted vocabulary', () => {
     const bad = { ...valid, '@graph': [...valid['@graph'], { '@type': 'ProfessionalService', priceRange: '$$' }] };
     const errors = validateGraph(bad, { path: 'x' }).join(' ');

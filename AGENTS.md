@@ -189,6 +189,14 @@ The fix was to narrow the layout's own `WebPage` to `ProfilePage` via the
 `pageType` prop (see below) and add only the missing fact,
 `mainEntity`, as a partial node.
 
+**Operational rule:** because `person(locale)` must be byte-identical on
+both `.dev` and `.rocks`, changing it requires deploying both sites, not
+just the one you edited. `scripts/check-structured-data.ts` validates one
+built `dist/` tree at a time (it runs at the end of each site's own deploy
+script), so a deploy of `.dev` alone passes even if `.rocks` is still
+serving the previous `person()` body: the gate has no way to see the other
+domain's live output, only the tree in front of it.
+
 ### No address, no price range
 
 `ProfessionalService`, `LocalBusiness`, `PostalAddress` and `Organization`
@@ -223,10 +231,16 @@ copy but no rate) still gets a plain `Offer` node with a `name` and
 ### A new page needs no structured-data work
 
 Both layouts build the graph automatically: `person(locale)`,
-`website(site, locale, description)`, `webPage({ ..., type: pageType })` and
-`breadcrumbs(...)` are always included, and any nodes passed via the `nodes`
-prop are appended. A new page gets a correct baseline `WebPage` for free.
-Three props tune it:
+`webPage({ ..., type: pageType })` and `breadcrumbs(...)` are always
+included, and any nodes passed via the `nodes` prop are appended.
+`website(site, pathname)` is called on every page too, but it only returns a
+`WebSite` node when `pathname === '/'`; everywhere else (including
+`/de-de/`, which is a path on this domain, not a root of its own) it returns
+`null`, which `graph()` drops silently. Google documents the `WebSite` node
+as belonging on "the domain or subdomain level root URI" and ignores copies
+elsewhere, so it is emitted once per domain, never once per locale or per
+page. A new page still gets a correct baseline `WebPage` for free. Three
+props tune it:
 
 - **`nodes`**: page-specific nodes to merge in (a `Service` node, a
   `BlogPosting`, `personKnowsAbout`, etc.). Most pages set this.
@@ -239,6 +253,28 @@ Three props tune it:
   on both sites, which have no entity to describe;
   `scripts/check-structured-data.ts` asserts `404.html` has *zero* JSON-LD
   blocks.
+
+### Breadcrumbs
+
+`breadcrumbs(...)` (`packages/structured-data/src/site.ts`) derives the
+trail from `pathname`, so a new routed page needs no route-table entry to
+get a correct breadcrumb. An intermediate path segment (everything but the
+current page's own, final crumb) gets a linked `ListItem` only if the
+caller's optional `segments` map declares it `{ routed: true }` — meaning it
+has its own indexed page a link can safely point at. A segment that is
+either undeclared, or declared with only a `label` and no `routed: true`,
+is **dropped from the trail entirely**, not emitted name-only. This follows
+Google's breadcrumb documentation directly: `item` is a required property on
+every `ListItem` except the trail's last ("If the breadcrumb is the last
+item in the breadcrumb trail, `item` is not required" —
+`developers.google.com/search/docs/appearance/structured-data/breadcrumb`),
+so a name-only intermediate `ListItem` would invalidate the whole
+`BreadcrumbList`, worse than omitting the segment. Positions are assigned
+from the running item count, so they stay contiguous and 1-based regardless
+of how many segments get dropped. `apps/rocks/src/layouts/Layout.astro` has
+no segment that is both routed and needs a label override, so it passes no
+`segments` map at all — a `{ label }`-only entry for an unrouted segment
+would be dead configuration, since the label is never reached.
 
 ### Adding a service
 
@@ -288,10 +324,20 @@ wrapper calls once per page on the parsed JSON:
 - None of the forbidden `@type`s or keys appear anywhere in the graph.
 - No key holds an empty string or `undefined`.
 - Every bare `{"@id": "..."}` reference resolves to a node defined in the
-  same graph, or to one of a known set of cross-page ids on either origin
-  (`#person`, `#website`, `#website-blog`, `#service` suffixes).
+  same graph, or to one of a known set of cross-page ids on either origin:
+  `#person`, `#website`, `#website-blog-en-us`, `#website-blog-de-de`, or a
+  `#service` suffix. The Blog node is locale-scoped (`blogId()` in
+  `content.ts` builds `` `${siteId(site)}-blog-${locale}` ``, i.e.
+  `.../#website-blog-en-us`), so the bare `#website-blog` form (without the
+  locale suffix) does not resolve anything and is rejected as dangling.
 - Every `Offer` has a non-empty `name`; if it has a `priceSpecification`,
   `minPrice` is numeric and `priceCurrency` is a string.
+
+Both deploy scripts also run `bunx tsc --noEmit` before `bun run build`
+(`astro build` alone strips types rather than checking them), so the
+`satisfies` guard in "Adding a service" below and every other compile-time
+check in the apps are enforced for real, not just decoratively present in
+source that nothing type-checks.
 
 ---
 

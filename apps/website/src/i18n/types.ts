@@ -232,6 +232,12 @@ export interface Strings {
       items: Array<{
         name: string;
         price: string;
+        /** Structured mirror of `price` for JSON-LD. Display strings differ by
+         *  locale ("from €549" vs "ab 549 €"); this does not. */
+        priceMin?: number;
+        currency?: 'EUR';
+        vatIncluded?: boolean;
+        billing?: 'one-time' | 'monthly';
         audience: string;
         features: string[];
         delivery: string;
@@ -244,6 +250,10 @@ export interface Strings {
       items: Array<{
         name: string;
         price?: string;
+        priceMin?: number;
+        currency?: 'EUR';
+        vatIncluded?: boolean;
+        billing?: 'one-time' | 'monthly';
         description: string;
         features: string[];
       }>;
@@ -356,6 +366,10 @@ export interface Strings {
         outcomes?: string[];
         price: string;
         priceNote?: string;
+        priceMin?: number;
+        currency?: 'EUR';
+        vatIncluded?: boolean;
+        billing?: 'one-time' | 'monthly';
         featured?: boolean;
       }>;
     };

@@ -497,6 +497,9 @@ export const enUs: Strings = {
         {
           name: 'Kompakt',
           price: 'from \u20AC549',
+          priceMin: 549,
+          currency: 'EUR',
+          billing: 'one-time',
           audience: 'Tradespeople, local service providers, practices — anyone who needs a professional calling card online without the bells and whistles.',
           features: [
             'One-page web presence (single continuous page with sections)',
@@ -513,6 +516,9 @@ export const enUs: Strings = {
         {
           name: 'Business',
           price: 'from \u20AC749',
+          priceMin: 749,
+          currency: 'EUR',
+          billing: 'one-time',
           audience: 'Businesses with multiple service areas, locations, or the need to build trust through content.',
           features: [
             'Multi-page web presence (up to 7 subpages)',
@@ -529,6 +535,9 @@ export const enUs: Strings = {
         {
           name: 'Professional',
           price: 'from \u20AC949',
+          priceMin: 949,
+          currency: 'EUR',
+          billing: 'one-time',
           audience: 'Businesses with specific requirements — booking systems, multilingual content, CMS integration, or custom functionality.',
           features: [
             'Multi-page web presence (flexible scope)',
@@ -564,6 +573,9 @@ export const enUs: Strings = {
         {
           name: 'Compact Support',
           price: 'from \u20AC39/month',
+          priceMin: 39,
+          currency: 'EUR',
+          billing: 'monthly',
           description: 'Monthly support for your Kompakt web presence. Everything you need to keep a single-page site running without thinking about it.',
           features: [
             'Domain and DNS management',
@@ -576,6 +588,9 @@ export const enUs: Strings = {
         {
           name: 'Business Support',
           price: 'from \u20AC69/month',
+          priceMin: 69,
+          currency: 'EUR',
+          billing: 'monthly',
           description: 'Monthly support for your Business web presence. Covers multi-page sites with extended SEO and more moving parts.',
           features: [
             'Domain and DNS management',
@@ -588,6 +603,9 @@ export const enUs: Strings = {
         {
           name: 'Professional Support',
           price: 'from \u20AC99/month',
+          priceMin: 99,
+          currency: 'EUR',
+          billing: 'monthly',
           description: 'Monthly support for your Professional web presence. For complex sites with CMS integration, custom functionality, or multilingual content.',
           features: [
             'Domain and DNS management',
@@ -851,6 +869,9 @@ export const enUs: Strings = {
           ],
           price: 'From \u20ac4,200 net',
           priceNote: 'The exact price depends on the data situation, the integrations involved, and the size of the process segment under test.',
+          priceMin: 4200,
+          currency: 'EUR',
+          vatIncluded: false,
         },
         {
           name: 'AI Product',
@@ -886,6 +907,9 @@ export const enUs: Strings = {
           ],
           price: 'From \u20ac10,990 net',
           priceNote: 'Delivery within four weeks requires that the use case is sufficiently bounded, the necessary data and access are available, and decisions can be made quickly during development.',
+          priceMin: 10990,
+          currency: 'EUR',
+          vatIncluded: false,
           featured: true,
         },
         {

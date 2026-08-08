@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { localeConfig, getStrings } from '../i18n/utils';
+import { localeConfig } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
 import {
   breadcrumbs, graph, person, webPage, website, type Node,
@@ -52,19 +52,12 @@ const siteOrigin = 'https://www.sebastian-heitmann.rocks';
 const documentUrl = `${siteOrigin}${Astro.url.pathname}`;
 const canonicalUrl = canonical ?? documentUrl;
 
-const s = getStrings(locale);
-
-// First-path-segment names this site actually routes with their own index
-// page and/or has its own localized label, so breadcrumbs() can render a
-// correct intermediate crumb. Only this layout knows the route table and
-// copy, so it is the one place this is declared (see breadcrumbs()'s
-// `segments` doc in packages/structured-data/src/site.ts). 'cases' is NOT
-// routed — there is no src/pages/cases/index.astro, so its crumb must stay
-// link-free — but it still needs the localized label this site's own home
-// page heading gives it (`t.cases.sectionTitle`).
-const BREADCRUMB_SEGMENTS: Record<string, { label?: string; routed?: boolean }> = {
-  cases: { label: s.cases.sectionTitle },
-};
+// This site routes no first-path segment that also needs a non-default
+// label, so breadcrumbs() below gets no `segments` map: 'cases' has no
+// src/pages/cases/index.astro behind it, and an unrouted segment is dropped
+// from the trail entirely regardless of any label supplied for it (see
+// breadcrumbs()'s `segments` doc in packages/structured-data/src/site.ts) —
+// a `{ label }`-only entry here would be dead configuration.
 
 // A page that supplies its own primary node still gets a WebPage: the WebPage
 // describes the document, the other node describes the thing it's about.
@@ -83,7 +76,6 @@ const structuredData = noStructuredData
       }),
       breadcrumbs({
         pathname: Astro.url.pathname, title, label: breadcrumbLabel, site: 'rocks', locale,
-        segments: BREADCRUMB_SEGMENTS,
       }),
       ...nodes,
     );

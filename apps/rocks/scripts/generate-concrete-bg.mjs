@@ -22,17 +22,14 @@
 //      that keeps body-text contrast comfortable (see the task report for
 //      measured ratios). It also reads as "poured concrete", not "cracked
 //      concrete": a shallower, evener texture.
-//   3. Make it seamlessly tileable via a torus roll + seam-hiding blur, the
-//      "offset/mirror-blend" technique: shift the tile by half its size in
-//      both axes (wrapping). The rolled tile's own edges are now two columns
-//      (rows) that were ADJACENT in the source, so they already tile
-//      losslessly — the roll only relocates the source's original,
-//      non-matching left/right and top/bottom edges to a cross seam through
-//      the middle. That seam is then hidden by compositing in a heavily
-//      blurred copy of the same rolled tile, but only along a feathered
-//      plus-sign band centered on the seam — far from the seam the sharp
-//      rolled pixels are untouched, so the tile's outer edges (the ones that
-//      actually matter for tiling) are never blurred.
+//   3. Make it seamlessly tileable by MIRRORING the crop into a 2x2 block
+//      (see mirrorTile). Opposite edges are then the same source column
+//      or row, so the joint is pixel-exact by construction and needs no
+//      healing. An earlier version rolled the crop and hid the relocated
+//      seam under a feathered blur; the joints were fine, but the blur cut
+//      a smooth plus-shaped band through every tile and, repeated, those
+//      bands formed a visible lattice of "gaps" in the grain. Mirroring
+//      trades that for four-fold symmetry, invisible at this contrast.
 //   4. Tint: alpha-composite the tile over the theme's flat --v8-bg color
 //      (TINT_ALPHA) — "an overlay tint toward the theme bg" per the spec.
 //      The tint is baked into the pixels here (not applied as a CSS
@@ -84,14 +81,12 @@ const CROP_SIZE = 900;
 // Shipped tile resolution. Small enough to keep the file light and to blur
 // out photographic grain; large enough that the repeat isn't obvious at
 // typical viewport widths.
-const TILE = 640;
-// Seam-hiding blur: wide enough to fully dissolve the relocated cross seam
-// against this texture's low local contrast.
-const SEAM_BLUR_SIGMA = 18;
-// Half-width of the feathered band (in tile px) around the seam that blends
-// toward the blurred copy; 0 at the band's outer edge, 1 exactly on the seam.
-const SEAM_FEATHER = 70;
+const TILE = 320; // quarter tile; mirrorTile() doubles it to a 640 pitch
 const WEBP_QUALITY = 82;
+// Mirroring makes opposite edges pixel-identical; lossy WebP would encode
+// them in separate blocks and reintroduce a faint joint, so keep the encode
+// near-lossless. The texture is smooth, so the files stay ~200KB.
+const WEBP_NEAR_LOSSLESS = true;
 
 async function loadSquareTile(srcPath) {
   if (!existsSync(srcPath)) {
@@ -112,24 +107,6 @@ async function loadSquareTile(srcPath) {
   return { data, width: info.width, height: info.height, channels: info.channels };
 }
 
-/** Torus roll by (w/2, h/2): moves the crop's non-matching outer edges to a
- * cross seam through the middle; the rolled tile's own outer edges become two
- * source columns/rows that were adjacent pre-roll, so they already tile. */
-function rollHalf(data, w, h, channels) {
-  const out = new Uint8Array(data.length);
-  const sx = Math.floor(w / 2);
-  const sy = Math.floor(h / 2);
-  for (let y = 0; y < h; y++) {
-    const srcY = (y + sy) % h;
-    for (let x = 0; x < w; x++) {
-      const srcX = (x + sx) % w;
-      const srcI = (srcY * w + srcX) * channels;
-      const dstI = (y * w + x) * channels;
-      for (let c = 0; c < channels; c++) out[dstI + c] = data[srcI + c];
-    }
-  }
-  return out;
-}
 
 /** Pulls each pixel toward the buffer's own per-channel mean by factor k
  * (0 = flat mean, 1 = untouched) — tames highlight/shadow extremes. */
@@ -146,46 +123,49 @@ function compressTowardMean(data, channels, k) {
   return out;
 }
 
-/** 0 on the seam (x=w/2 or y=h/2), rising linearly to 1 at SEAM_FEATHER px
- * away, clamped — a feathered plus-sign mask, zero at the tile's own edges. */
-function seamMask(w, h) {
-  const cx = w / 2;
-  const cy = h / 2;
-  const mask = new Float64Array(w * h);
-  for (let y = 0; y < h; y++) {
-    const dy = Math.abs(y - cy);
-    for (let x = 0; x < w; x++) {
-      const dx = Math.abs(x - cx);
-      const d = Math.min(dx, dy); // distance to the nearer seam line
-      mask[y * w + x] = Math.min(1, d / SEAM_FEATHER);
+
+
+/** Builds a seamless tile by MIRRORING the quarter tile into a 2x2 block.
+ *
+ * Replaces the earlier roll + seam-blur approach. That one produced genuinely
+ * seamless joints (measured: joint delta ≈ the texture's own neighbour delta),
+ * but healing the relocated cross seam with a feathered blur left a smooth
+ * plus-shaped band through every tile — and repeated, those bands formed a
+ * visible lattice of "gaps" in the grain, which is what the owner reported.
+ *
+ * Mirroring needs no healing: column 0 and column 2w-1 are both source column
+ * 0, so opposite edges are pixel-identical BY CONSTRUCTION, and every pixel
+ * keeps its original sharpness. The cost is four-fold symmetry, which on a
+ * low-contrast concrete grain reads as far less than a lattice did. */
+function mirrorTile(data, w, h, channels) {
+  const W = w * 2;
+  const H = h * 2;
+  const out = new Uint8Array(W * H * channels);
+  for (let y = 0; y < H; y++) {
+    const sy = y < h ? y : H - 1 - y;
+    for (let x = 0; x < W; x++) {
+      const sx = x < w ? x : W - 1 - x;
+      const src = (sy * w + sx) * channels;
+      const dst = (y * W + x) * channels;
+      for (let c = 0; c < channels; c++) out[dst + c] = data[src + c];
     }
   }
-  return mask;
+  return { data: out, width: W, height: H };
 }
 
 async function processTheme({ name, srcPath, outPath, bg, compressK, tintAlpha }) {
-  const { data, width: w, height: h, channels } = await loadSquareTile(srcPath);
+  const { data, width: qw, height: qh, channels } = await loadSquareTile(srcPath);
   const compressed = compressTowardMean(data, channels, compressK);
-  const rolled = rollHalf(compressed, w, h, channels);
+  const { data: mirrored, width: w, height: h } = mirrorTile(compressed, qw, qh, channels);
 
-  const blurred = await sharp(rolled, { raw: { width: w, height: h, channels } })
-    .blur(SEAM_BLUR_SIGMA)
-    .raw()
-    .toBuffer();
-
-  const mask = seamMask(w, h);
   const final = new Uint8Array(w * h * channels);
-  for (let p = 0; p < w * h; p++) {
-    const keepSharp = mask[p]; // 1 = far from seam, keep the rolled pixel
-    for (let c = 0; c < channels; c++) {
-      const i = p * channels + c;
-      const blended = rolled[i] * keepSharp + blurred[i] * (1 - keepSharp);
-      final[i] = Math.max(0, Math.min(255, Math.round(bg[c] * (1 - tintAlpha) + blended * tintAlpha)));
-    }
+  for (let i = 0; i < final.length; i++) {
+    const c = i % channels;
+    final[i] = Math.max(0, Math.min(255, Math.round(bg[c] * (1 - tintAlpha) + mirrored[i] * tintAlpha)));
   }
 
   await sharp(final, { raw: { width: w, height: h, channels } })
-    .webp({ quality: WEBP_QUALITY })
+    .webp(WEBP_NEAR_LOSSLESS ? { nearLossless: true, quality: 100 } : { quality: WEBP_QUALITY })
     .toFile(outPath);
 
   // Diagnostics: min/mean/max luminance of the shipped tile, for the

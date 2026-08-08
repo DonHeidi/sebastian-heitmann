@@ -2184,7 +2184,22 @@ git commit -m "docs: document the shared structured data package and its deploy 
 - [ ] `cd apps/rocks && bun run build` succeeds
 - [ ] `bun scripts/check-structured-data.ts apps/website/dist` exits 0
 - [ ] `bun scripts/check-structured-data.ts apps/rocks/dist` exits 0
-- [ ] `! grep -rq "ProfessionalService\|priceRange\|Kastanienallee" apps/website/dist apps/rocks/dist`
+- [ ] No forbidden vocabulary **inside the JSON-LD payloads** of either `dist/`. A plain `grep` over the HTML is wrong: `Kastanienallee` legitimately appears as visible legal copy on the imprint, privacy and CV pages. Extract each `ld+json` block and check only those, e.g.
+
+```bash
+bun -e '
+const { readdirSync, statSync, readFileSync } = require("fs");
+const walk = (d) => readdirSync(d).flatMap((e) => { const p = d + "/" + e;
+  return statSync(p).isDirectory() ? walk(p) : (p.endsWith(".html") ? [p] : []); });
+const bad = [];
+for (const dir of ["apps/website/dist", "apps/rocks/dist"])
+  for (const f of walk(dir))
+    for (const m of readFileSync(f, "utf8").matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g))
+      for (const t of ["ProfessionalService","PostalAddress","priceRange","streetAddress","Kastanienallee","Organization"])
+        if (m[1].includes(t)) bad.push(`${t} in ${f}`);
+console.log(bad.length ? bad.join("\n") : "clean");
+'
+```
 - [ ] The `Person` node in `apps/website/dist/index.html` and `apps/rocks/dist/index.html` are byte-identical
 - [ ] Paste `apps/website/dist/web-development/index.html` into the Google Rich Results Test and confirm no errors
 - [ ] Paste `apps/website/dist/articles/<any>/index.html` into the Rich Results Test and confirm the Article result is detected

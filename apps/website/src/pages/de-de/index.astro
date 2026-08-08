@@ -88,7 +88,11 @@ const featuredArticlesViewAllHref = getRelativeLocaleUrl(locale, 'articles');
         <LogoSection logos={s.logos} logoAssets={logoAssets} />
         <CapabilitiesSection capabilities={s.capabilities} />
         <SituationsSection situations={s.situations} />
-        <ProofSection proof={s.proof} aiLink={{ label: 'KI-gestützte Produkte & Prozesse', href: '/de-de/ki-prozess-automation' }} webDevLink={{ label: 'Webentwicklung für lokale Unternehmen', href: '/de-de/web-entwicklung' }} tpmLink={{ label: 'Technisches Projektmanagement', href: '/de-de/technisches-projektmanagement' }} />
+        <ProofSection proof={s.proof} tpmLink={{ label: 'Technisches Projektmanagement', href: '/de-de/technisches-projektmanagement' }} deliverLinks={[
+            { label: 'KI-gestützte Produkte & Prozesse', href: '/de-de/ki-prozess-automation' },
+            { label: 'Webentwicklung für lokale Unternehmen', href: '/de-de/web-entwicklung' },
+            { label: 'Produktvalidierung für Startups', href: '/de-de/produkt-validierung' },
+        ]} />
         <FeaturedArticlesSection articles={featured} strings={s.featuredArticles} locale={locale} viewAllHref={featuredArticlesViewAllHref} totalCount={totalArticleCount} />
         <ContactSection contact={s.contact} showBackdropMoment={true}>
             <ContactForm strings={s.contact} endpoint={mailEndpoint} />

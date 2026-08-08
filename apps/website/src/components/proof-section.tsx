@@ -4,9 +4,9 @@ import type { Strings } from '@/i18n/types';
 
 export interface ProofSectionProps {
   proof: Strings['proof'];
-  webDevLink?: { label: string; href: string };
   tpmLink?: { label: string; href: string };
-  aiLink?: { label: string; href: string };
+  /** Links shown on the featured "Deliver" card, in order. */
+  deliverLinks?: Array<{ label: string; href: string }>;
 }
 
 const CORNERS = [
@@ -16,7 +16,7 @@ const CORNERS = [
   { key: 'br', pos: 'bottom-4 right-4 md:bottom-6 md:right-6 lg:bottom-10 lg:right-10', border: 'border-b border-r' },
 ];
 
-export function ProofSection({ proof, webDevLink, tpmLink, aiLink }: ProofSectionProps) {
+export function ProofSection({ proof, tpmLink, deliverLinks }: ProofSectionProps) {
   return (
     <section
       id="proof"
@@ -114,30 +114,21 @@ export function ProofSection({ proof, webDevLink, tpmLink, aiLink }: ProofSectio
                     </span>
                   </a>
                 )}
-                {e.featured && aiLink && (
-                  <a
-                    href={aiLink.href}
-                    className="group mt-auto inline-flex items-center gap-2.5 border-t border-border pt-4 font-mono text-[10px] tracking-[0.08em] text-primary uppercase no-underline transition-[gap] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:gap-4"
-                  >
-                    <span>{aiLink.label}</span>
-                    <span className="text-[13px] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[3px]">
-                      &rarr;
-                    </span>
-                  </a>
-                )}
-                {e.featured && webDevLink && (
-                  <a
-                    href={webDevLink.href}
-                    className={`group inline-flex items-center gap-2.5 font-mono text-[10px] tracking-[0.08em] text-primary uppercase no-underline transition-[gap] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:gap-4 ${
-                      aiLink ? 'pt-3' : 'mt-auto border-t border-border pt-4'
-                    }`}
-                  >
-                    <span>{webDevLink.label}</span>
-                    <span className="text-[13px] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[3px]">
-                      &rarr;
-                    </span>
-                  </a>
-                )}
+                {e.featured &&
+                  deliverLinks?.map((link, li) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className={`group inline-flex items-center gap-2.5 font-mono text-[10px] tracking-[0.08em] text-primary uppercase no-underline transition-[gap] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:gap-4 ${
+                        li === 0 ? 'mt-auto border-t border-border pt-4' : 'pt-3'
+                      }`}
+                    >
+                      <span>{link.label}</span>
+                      <span className="text-[13px] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[3px]">
+                        &rarr;
+                      </span>
+                    </a>
+                  ))}
               </div>
             ))}
           </div>

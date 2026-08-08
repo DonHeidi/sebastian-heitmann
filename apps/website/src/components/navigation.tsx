@@ -39,6 +39,14 @@ const routeMap: Record<string, Record<string, string>> = {
     'en-us': '/ai-process-automation',
     'de-de': '/ki-prozess-automation',
   },
+  '/product-validation': {
+    'en-us': '/product-validation',
+    'de-de': '/produkt-validierung',
+  },
+  '/produkt-validierung': {
+    'en-us': '/product-validation',
+    'de-de': '/produkt-validierung',
+  },
 };
 
 function getPagePathForLocale(rawPagePath: string, loc: Locale): string {

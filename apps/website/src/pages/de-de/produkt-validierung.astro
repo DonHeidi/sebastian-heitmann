@@ -22,10 +22,25 @@ const contact = { ...s.contact, headline: s.productValidation.contact.headline, 
 // The height is derived from the source's own aspect ratio, never hardcoded:
 // a re-shoot at a different ratio would otherwise leave the <img> advertising
 // stale intrinsic dimensions, and the page would reflow once the webp decodes.
+// `widths` emits a srcset so a phone fetches the 480px variant instead of the
+// desktop one; this is the page's largest asset. `sizes` mirrors the figure's
+// layout: full column width until the xl breakpoint splits the row, 640px after.
+//
+// Height is derived from the source's aspect ratio, never hardcoded. A re-shoot
+// at another ratio would otherwise leave the <img> advertising stale intrinsic
+// dimensions and the page would reflow once the webp decodes.
 const exampleWidth = 1280;
-const exampleShot = await getImage({ src: jobDirectoryShot, width: exampleWidth, format: 'webp' });
+const exampleShot = await getImage({
+    src: jobDirectoryShot,
+    width: exampleWidth,
+    widths: [480, 800, exampleWidth],
+    sizes: '(min-width: 1280px) 640px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)',
+    format: 'webp',
+});
 const exampleImage = {
     src: exampleShot.src,
+    srcset: exampleShot.srcSet.attribute,
+    sizes: exampleShot.attributes.sizes,
     width: exampleWidth,
     height: Math.round(exampleWidth * (jobDirectoryShot.height / jobDirectoryShot.width)),
 };

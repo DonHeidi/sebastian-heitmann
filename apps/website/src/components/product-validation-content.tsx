@@ -11,7 +11,7 @@ export interface ProductValidationContentProps {
    * page. Passing the transformed result rather than the `ImageMetadata`
    * keeps Astro from emitting the multi-megabyte source PNG into `dist/`.
    */
-  exampleImage: { src: string; width: number; height: number };
+  exampleImage: { src: string; srcset: string; sizes: string; width: number; height: number };
 }
 
 const contactUrl = '#contact';
@@ -139,6 +139,27 @@ function RuledList({ items }: { items: string[] }) {
   );
 }
 
+// The same list with the accent asterisk marker, used for the package's included
+// lines and the example's components. Shared so the marker's offset cannot drift
+// between the two.
+function MarkerList({ items, className = '' }: { items: string[]; className?: string }) {
+  return (
+    <ul className={cn('flex list-none flex-col gap-0 p-0', className)}>
+      {items.map((item) => (
+        <li
+          key={item}
+          className="relative border-b border-border py-2.5 pl-[22px] font-sans text-[15px] leading-[1.5] font-light text-text-secondary first:border-t"
+        >
+          <span aria-hidden="true" className="absolute top-3 left-0 text-[10px] text-primary">
+            ✱
+          </span>
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 // Vertical dotted spine for the process steps; horizontal counterpart is `DotRule`.
 function VerticalDotRule() {
   return (
@@ -254,6 +275,8 @@ export function ProductValidationContent({ content, exampleImage }: ProductValid
                   image off the page in light and is invisible against the dark one. */}
               <img
                 src={exampleImage.src}
+                srcSet={exampleImage.srcset}
+                sizes={exampleImage.sizes}
                 width={exampleImage.width}
                 height={exampleImage.height}
                 alt={content.example.imageAlt}
@@ -266,19 +289,7 @@ export function ProductValidationContent({ content, exampleImage }: ProductValid
               <p className="mb-7 font-sans text-lg leading-[1.65] font-light text-text-secondary">
                 {content.example.intro}
               </p>
-              <ul className="mb-8 flex list-none flex-col gap-0 p-0">
-                {content.example.components.map((item) => (
-                  <li
-                    key={item}
-                    className="relative border-b border-border py-2.5 pl-[22px] font-sans text-[15px] leading-[1.5] font-light text-text-secondary first:border-t"
-                  >
-                    <span aria-hidden="true" className="absolute top-3 left-0 text-[10px] text-primary">
-                      ✱
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <MarkerList items={content.example.components} className="mb-8" />
               {content.example.body.map((p) => (
                 <p key={p} className="mb-4 font-sans text-base leading-[1.65] font-light text-text-secondary last:mb-0">
                   {p}
@@ -329,19 +340,7 @@ export function ProductValidationContent({ content, exampleImage }: ProductValid
               <h4 className="mt-8 mb-4 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
                 {content.offer.includedLabel}
               </h4>
-              <ul className="flex list-none flex-col gap-0 p-0">
-                {content.offer.included.map((item) => (
-                  <li
-                    key={item}
-                    className="relative border-b border-border py-2.5 pl-[22px] font-sans text-[15px] leading-[1.5] font-light text-text-secondary first:border-t"
-                  >
-                    <span aria-hidden="true" className="absolute top-3 left-0 text-[10px] text-primary">
-                      ✱
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <MarkerList items={content.offer.included} />
               <CtaLink href={contactUrl} className="mt-8">
                 {content.offer.cta}
               </CtaLink>

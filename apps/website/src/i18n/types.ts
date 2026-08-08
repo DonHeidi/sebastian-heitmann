@@ -20,6 +20,18 @@ export interface CvHighlight {
   tech?: string[];
 }
 
+export interface FaqItem {
+  question: string;
+  /** One entry per rendered paragraph. */
+  answer: string[];
+}
+
+export interface FaqContent {
+  eyebrow: string;
+  headline: string;
+  items: FaqItem[];
+}
+
 export interface Strings {
   meta: {
     title: string;
@@ -393,6 +405,82 @@ export interface Strings {
       bullets: string[];
       closing: string;
     };
+    contact: {
+      headline: string;
+      intro: string;
+    };
+  };
+  productValidation: {
+    meta: {
+      title: string;
+      description: string;
+    };
+    hero: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      supporting: string;
+      /** Price and timeline, rendered as glass chips. */
+      meta: string[];
+      cta: string;
+      secondaryCta: string;
+    };
+    whatThisIs: {
+      eyebrow: string;
+      headline: string;
+      body: string[];
+      capabilities: string[];
+    };
+    offer: {
+      eyebrow: string;
+      headline: string;
+      name: string;
+      price: string;
+      description: string;
+      includedLabel: string;
+      included: string[];
+      excludedLabel: string;
+      excluded: string[];
+      /** Timeline and pricing conditions, rendered as mono metadata. */
+      meta: string[];
+      legalNote: string;
+      cta: string;
+    };
+    whyStartHere: {
+      eyebrow: string;
+      headline: string;
+      intro: string;
+      questionsLead: string;
+      questions: string[];
+      closing: string[];
+    };
+    situations: {
+      eyebrow: string;
+      headline: string;
+      items: Array<{ title: string; body: string[] }>;
+    };
+    process: {
+      eyebrow: string;
+      headline: string;
+      steps: Array<{ title: string; description: string[] }>;
+    };
+    differentiation: {
+      eyebrow: string;
+      headline: string;
+      body: string[];
+    };
+    whatComesNext: {
+      eyebrow: string;
+      headline: string;
+      intro: string[];
+      items: Array<{ title: string; body: string }>;
+      journey: string[];
+      journeyNote: string;
+      addOnsIntro: string;
+      addOns: string[];
+      addOnsNote: string;
+    };
+    faq: FaqContent;
     contact: {
       headline: string;
       intro: string;

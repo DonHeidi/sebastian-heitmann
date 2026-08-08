@@ -1013,4 +1013,270 @@ export const deDe: Strings = {
       intro: 'Beschreiben Sie ihn in wenigen Sätzen. Ich melde mich innerhalb eines Werktags mit einer ehrlichen Einschätzung zum sinnvollsten Einstieg.',
     },
   },
+  productValidation: {
+    meta: {
+      title: 'Produktvalidierung für Startups — Sebastian Heitmann',
+      description: 'Testen Sie Ihre Produktidee, bevor Sie sich auf einen MVP festlegen. Positionierung, Recherche, Produktwebsite, Lead-Erfassung und Analytics in einem Product Validation Sprint zum Festpreis.',
+    },
+    hero: {
+      eyebrow: 'Produktvalidierung',
+      headline: 'Finden Sie heraus, ob Interesse besteht, bevor Sie das ganze Produkt entwickeln.',
+      intro: 'Machen Sie aus Ihrer Produktidee einen echten Markttest: klare Positionierung, eine professionelle Produktwebsite, Lead-Erfassung und die Infrastruktur, um Interesse messbar zu machen.',
+      supporting: 'Produktvalidierung zum Festpreis für Startups und neue digitale Produkte.',
+      meta: ['ab 4.900 € netto', '3–4 Wochen'],
+      cta: 'Über Ihr Produkt sprechen',
+      secondaryCta: 'Leistungsumfang ansehen',
+    },
+    whatThisIs: {
+      eyebrow: 'Worum es geht',
+      headline: 'Die Idee vor echte Kunden bringen.',
+      body: [
+        'Sie brauchen kein fertiges Produkt, um herauszufinden, ob Ihre Idee auf Resonanz stößt.',
+        'Ein Product Validation Sprint macht aus einem frühen Konzept etwas, das Sie tatsächlich veröffentlichen, teilen, bewerben und potenziellen Kunden zeigen können.',
+        'Gemeinsam erarbeiten wir, was Sie verkaufen, für wen es gedacht ist und warum es jemanden interessieren sollte. Daraus entwickle ich eine vollständige Produktwebsite, die messbares Interesse erzeugen soll.',
+        'Das Ergebnis ist kein Entwurf in Figma. Es ist eine echte Website, die unter Ihrer Domain läuft und für Kunden bereit ist.',
+      ],
+      capabilities: [
+        'Produktpositionierung und Nutzenversprechen',
+        'Wettbewerbs- und Marktrecherche',
+        'Struktur und Botschaften der Website',
+        'Individuelles visuelles Design',
+        'Responsive Umsetzung',
+        'Warteliste, Anmeldung oder Lead-Erfassung',
+        'Analytics und Conversion-Tracking',
+        'Technisches SEO und Einrichtung der Social-Media-Vorschau',
+        'Begleitung beim Launch',
+      ],
+    },
+    offer: {
+      eyebrow: 'Das Angebot',
+      headline: 'Ein Paket. Ein klares Ergebnis.',
+      name: 'Product Validation Sprint',
+      price: 'ab 4.900 € netto',
+      description: 'Für Gründer und Teams, die eine Produktidee haben, sich aber noch nicht auf die Entwicklung des vollständigen Produkts festlegen müssen oder wollen.',
+      includedLabel: 'Enthalten',
+      included: [
+        'Einstiegsworkshop zu Produkt und Positionierung',
+        'Wettbewerbs- und Marktbetrachtung',
+        'Definition der Zielgruppe und des zentralen Nutzenversprechens',
+        'Websitekonzept und Informationsarchitektur',
+        'Entwicklung und Überarbeitung der Texte',
+        'Individuelles visuelles Design',
+        'Responsive Entwicklung der Website',
+        'Formular für Leads, Warteliste oder Early Access',
+        'Analytics und Conversion-Events',
+        'Technische SEO-Grundlagen',
+        'Darstellung in sozialen Netzwerken und Open Graph',
+        'Deployment und produktives Setup',
+        'Zwei strukturierte Korrekturschleifen',
+        'Übergabe des Quellcodes',
+      ],
+      excludedLabel: 'Nicht enthalten, sofern nicht separat beauftragt',
+      excluded: [
+        'Entwicklung einer vollständigen Anwendung oder eines MVP',
+        'Bezahlte Werbung oder Mediabudget',
+        'Laufendes Performance-Marketing',
+        'Umfangreiche Kundenforschung oder Rekrutierung von Teilnehmern',
+        'Entwicklung einer vollständigen Corporate Identity',
+        'Professionelle Fotografie oder Videoproduktion',
+        'Rechtsberatung oder Erstellung von Rechtstexten',
+      ],
+      meta: ['Typischer Zeitraum: 3–4 Wochen', 'Festpreis nach Abstimmung des Leistungsumfangs'],
+      legalNote: 'Datenschutz, Impressum, AGB und vergleichbare Seiten können technisch eingebunden werden, sofern die entsprechenden Texte vorliegen.',
+      cta: 'Über Ihr Produkt sprechen',
+    },
+    whyStartHere: {
+      eyebrow: 'Warum hier beginnen',
+      headline: 'Ein MVP ist ein teurer Weg, um einen einzigen Satz zu testen.',
+      intro: 'Erstaunlich viel lässt sich klären, bevor Dashboards, Authentifizierung, Abrechnung, Schnittstellen und Anwendungslogik entwickelt werden.',
+      questionsLead: 'Die ersten Fragen sind meist deutlich einfacher:',
+      questions: [
+        'Versteht die richtige Person, worum es geht?',
+        'Ist ihr das Problem wichtig genug?',
+        'Macht das Angebot sie neugierig genug, um zu handeln?',
+      ],
+      closing: [
+        'Eine Produktwebsite kann nicht belegen, dass ein Unternehmen erfolgreich sein wird. Sie kann aber eine schwache Positionierung, unklare Zielgruppen, fehlendes Interesse und falsche Annahmen sichtbar machen, bevor diese Annahmen zu Software werden.',
+        'Das ist hilfreich, ganz gleich ob der nächste Schritt die Entwicklung, eine Finanzierungsrunde, Kundeninterviews oder die Entscheidung gegen die Idee ist.',
+      ],
+    },
+    situations: {
+      eyebrow: 'Wann das sinnvoll ist',
+      headline: 'Für die Phase vor der großen Entwicklung.',
+      items: [
+        {
+          title: 'Sie haben eine Idee',
+          body: [
+            'Sie wissen, was Sie schaffen möchten, aber es existiert bisher vor allem in Dokumenten, Gesprächen oder in Ihrem Kopf.',
+            'Wir machen daraus ein Angebot, das andere verstehen und auf das sie reagieren können.',
+          ],
+        },
+        {
+          title: 'Sie bereiten einen MVP vor',
+          body: [
+            'Bevor Sie Entwicklungsbudget binden, möchten Sie eine öffentliche Präsenz, erste Leads und ein klareres Bild vom Markt.',
+            'Die Validierungsseite wird zur ersten Ebene des späteren Produkt-Launches.',
+          ],
+        },
+        {
+          title: 'Sie sprechen mit Investoren oder Partnern',
+          body: [
+            'Sie brauchen etwas Überzeugenderes als ein Pitch Deck, haben aber noch kein fertiges Produkt.',
+            'Eine echte Produktpräsenz gibt der Idee einen Rahmen und macht sie leichter vorzeigbar.',
+          ],
+        },
+        {
+          title: 'Sie haben etwas gebaut, können es aber nicht erklären',
+          body: [
+            'Manchmal existiert die Technologie früher als die Positionierung.',
+            'Wir arbeiten uns vom Produkt zurück und übersetzen seine Fähigkeiten in ein Angebot, das Kunden verstehen.',
+          ],
+        },
+      ],
+    },
+    process: {
+      eyebrow: 'Ablauf',
+      headline: 'In vier Schritten von der Idee in den Markt.',
+      steps: [
+        {
+          title: 'Verstehen',
+          description: [
+            'Wir beginnen mit dem Produkt, den Kunden, dem Problem, den Alternativen und den Annahmen hinter der Idee.',
+            'Ziel ist keine Dokumentation, sondern die Klärung, was tatsächlich kommuniziert und getestet werden muss.',
+          ],
+        },
+        {
+          title: 'Positionieren',
+          description: [
+            'Ich recherchiere Markt und relevante Wettbewerber und übersetze die Erkenntnisse in ein klares Angebot, eine Seitenstruktur, Botschaften und Handlungsaufforderungen.',
+            'Spätestens dann sollte sich das Produkt erklären lassen, ohne die dahinterliegende Technologie zu erklären.',
+          ],
+        },
+        {
+          title: 'Umsetzen',
+          description: [
+            'Ich gestalte und entwickle die vollständige Website.',
+            'Keine Übergaben zwischen Strategie, Design, Entwicklung und Projektleitung. Das Konzept bleibt mit der Umsetzung verbunden.',
+          ],
+        },
+        {
+          title: 'Launchen und lernen',
+          description: [
+            'Die Website geht mit Lead-Erfassung und Analytics live.',
+            'Sie können Interessenten, Communities, Investoren, Kampagnen oder erste Kunden darauf leiten und beobachten, was passiert.',
+          ],
+        },
+      ],
+    },
+    differentiation: {
+      eyebrow: 'Mehr als Landingpage-Entwicklung',
+      headline: 'Die Website ist das Experiment, nicht das verkaufte Produkt.',
+      body: [
+        'Es gibt viele Menschen, die eine Landingpage bauen können.',
+        'Die wichtigere Arbeit liegt davor: zu bestimmen, was die Seite sagen soll, wen sie überzeugen soll und welche Reaktion tatsächlich etwas Brauchbares aussagt.',
+        'Mein Hintergrund verbindet Softwareentwicklung, Produkt- und Projektarbeit, technische Beratung, UX-Methoden und KI-gestützte Umsetzung.',
+        'Dadurch kann ich am Angebot arbeiten, ohne aus dem Blick zu verlieren, was später dahinter entwickelt werden müsste.',
+        'Und wenn die Validierung trägt, muss das Projekt nicht bei der Website enden.',
+      ],
+    },
+    whatComesNext: {
+      eyebrow: 'Was danach kommen kann',
+      headline: 'Erst validieren. Entwickeln, wenn es einen Grund dafür gibt.',
+      intro: [
+        'Der Product Validation Sprint ist so angelegt, dass er für sich allein steht.',
+        'Er kann aber auch die erste Stufe einer umfassenderen Produktentwicklung sein.',
+      ],
+      items: [
+        {
+          title: 'Interaktiver Prototyp',
+          body: 'Für Konzepte, die mehr als statische Ansichten benötigen, lassen sich ausgewählte Interaktionen oder ein realistischer Produktprototyp entwickeln.',
+        },
+        {
+          title: 'MVP-Definition',
+          body: 'Die Erkenntnisse aus der Validierung werden zu Prioritäten, Anforderungen, technischen Entscheidungen und einem realistischen ersten Produktumfang.',
+        },
+        {
+          title: 'MVP-Entwicklung',
+          body: 'Wenn genügend Belege für den nächsten Schritt vorliegen, kann aus dem Angebot funktionierende Software werden.',
+        },
+      ],
+      journey: ['Produktidee', 'Validierung', 'Prototyp', 'MVP', 'Produkt'],
+      journeyNote: 'Sie müssen sich nicht von Anfang an auf diesen gesamten Weg festlegen.',
+      addOnsIntro: 'Je nach Produkt lässt sich der Product Validation Sprint erweitern um:',
+      addOns: [
+        'Interaktiver Produktprototyp',
+        'Fake-Door- oder simulierte Produktabläufe',
+        'Zusätzliche Landingpage-Varianten',
+        'A/B-Testing',
+        'Newsletter- oder CRM-Integration',
+        'Buchungs- oder Demo-Abläufe',
+        'Begleitung von Gründer- und Kundeninterviews',
+        'Weitergehende Marktrecherche',
+        'Entwicklung einer Markenidentität',
+        'Produktarchitektur und MVP-Scoping',
+      ],
+      addOnsNote: 'Diese Leistungen werden separat beauftragt, weil nicht jedes Produkt sie benötigt.',
+    },
+    faq: {
+      eyebrow: 'Fragen',
+      headline: 'Häufige Fragen',
+      items: [
+        {
+          question: 'Brauche ich ein fertiges Produkt?',
+          answer: [
+            'Nein. Genau das ist der Punkt.',
+            'Das Angebot passt am besten, wenn bereits eine einigermaßen konkrete Produktidee besteht, aber noch keine nennenswerte Entwicklung stattgefunden hat.',
+          ],
+        },
+        {
+          question: 'Ist das nur eine Landingpage?',
+          answer: [
+            'Nein. Die Landingpage ist eines der Ergebnisse.',
+            'Dazu gehört die Arbeit, die nötig ist, um festzulegen, was sie vermitteln soll: Positionierung, Marktkontext, Angebot, Struktur, Botschaften, Design, Umsetzung und Messung.',
+          ],
+        },
+        {
+          question: 'Können Sie garantieren, dass meine Idee damit validiert wird?',
+          answer: [
+            'Nein. Validierung liefert Belege, keine Gewissheit.',
+            'Eine Website hilft, Interesse zu messen und Annahmen zu testen. Ausbleibende Anmeldungen können jedoch viele Ursachen haben: Angebot, Zielgruppe, Trafficquelle, Preis, Zeitpunkt oder die Idee selbst.',
+            'Der Zweck ist, günstiger zu lernen, als sofort das vollständige Produkt zu entwickeln.',
+          ],
+        },
+        {
+          question: 'Entwickeln Sie auch den MVP?',
+          answer: [
+            'Ja, wenn das sinnvoll ist.',
+            'Die MVP-Entwicklung ist ein eigenes Projekt, weil ihr Umfang stark davon abhängt, was gebaut wird. Der Product Validation Sprint kann genutzt werden, um diesen Umfang zu definieren.',
+          ],
+        },
+        {
+          question: 'Welche Technologie setzen Sie ein?',
+          answer: [
+            'Ich baue in der Regel schlanke, schnelle Websites mit modernen Webtechnologien, statt das Projekt an einen visuellen Website-Baukasten zu binden.',
+            'Sie erhalten den Quellcode und können mit mir oder einem anderen Entwickler weiterarbeiten.',
+          ],
+        },
+        {
+          question: 'Kann ich die Website für die Finanzierung nutzen?',
+          answer: [
+            'Ja.',
+            'Sie kann gleichzeitig als öffentliche Produktpräsenz, als Validierungskanal und als etwas Konkretes dienen, das Sie Investoren, Partnern und ersten Kunden zeigen können.',
+          ],
+        },
+        {
+          question: 'Warum 4.900 €, wenn ich eine Landingpage deutlich günstiger bekomme?',
+          answer: [
+            'Weil Sie das können.',
+            'Wenn Sie genau wissen, was das Produkt ist und wie es positioniert werden soll, fertige Texte und ein fertiges Design haben und nur noch jemanden für die Umsetzung brauchen, ist dieses Angebot vermutlich das falsche.',
+            'Dieses Angebot richtet sich an die Phase, in der diese Fragen noch zu klären sind.',
+          ],
+        },
+      ],
+    },
+    contact: {
+      headline: 'Stellen Sie Ihre Idee dem Markt vor.',
+      intro: 'Erzählen Sie mir, was Sie entwickeln möchten, wo Sie gerade stehen und was Sie herausfinden wollen, bevor Sie sich auf das vollständige Produkt festlegen.',
+    },
+  },
 };

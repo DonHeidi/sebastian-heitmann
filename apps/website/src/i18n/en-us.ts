@@ -1013,4 +1013,270 @@ export const enUs: Strings = {
       intro: 'Describe it in a few sentences. I will get back to you within one business day with a candid view on the most sensible way to start.',
     },
   },
+  productValidation: {
+    meta: {
+      title: 'Product Validation for Startups — Sebastian Heitmann',
+      description: 'Test your product idea before committing to an MVP. Positioning, research, product website, lead capture and analytics in a fixed-price Product Validation Sprint.',
+    },
+    hero: {
+      eyebrow: 'Product Validation',
+      headline: 'Find out whether people want it before you build the whole thing.',
+      intro: 'Turn your product idea into a real market test: clear positioning, a professional product website, lead collection, and the infrastructure to measure whether people are interested.',
+      supporting: 'Fixed-price product validation for startups and new digital products.',
+      meta: ['From €4,900 net', '3–4 weeks'],
+      cta: 'Discuss your product',
+      secondaryCta: 'See what\'s included',
+    },
+    whatThisIs: {
+      eyebrow: 'What this is',
+      headline: 'Put the idea in front of customers.',
+      body: [
+        'You do not need a finished product to find out whether your idea resonates.',
+        'A Product Validation Sprint turns an early concept into something you can actually launch, share, advertise, and put in front of potential customers.',
+        'Together, we work out what you are selling, who it is for, and why somebody should care. I then turn that into a complete product website designed to generate measurable interest.',
+        'The result is not a mock-up sitting in Figma. It is a real website, running on your domain, ready for customers.',
+      ],
+      capabilities: [
+        'Product positioning and value proposition',
+        'Competitor and market research',
+        'Website structure and messaging',
+        'Custom visual design',
+        'Responsive implementation',
+        'Waitlist, signup, or lead capture',
+        'Analytics and conversion tracking',
+        'Technical SEO and social sharing setup',
+        'Launch support',
+      ],
+    },
+    offer: {
+      eyebrow: 'The offer',
+      headline: 'One package. A clear outcome.',
+      name: 'Product Validation Sprint',
+      price: 'From €4,900 net',
+      description: 'For founders and teams who have a product idea but do not yet need, or want, to commit to building the complete product.',
+      includedLabel: 'Included',
+      included: [
+        'Initial product and positioning workshop',
+        'Competitor and market review',
+        'Definition of target users and core proposition',
+        'Website concept and information architecture',
+        'Copy development and refinement',
+        'Custom visual design',
+        'Responsive website development',
+        'Lead, waitlist, or early-access form',
+        'Analytics and conversion events',
+        'Technical SEO fundamentals',
+        'Social and Open Graph presentation',
+        'Deployment and production setup',
+        'Two structured revision rounds',
+        'Source code handover',
+      ],
+      excludedLabel: 'Not included unless scoped separately',
+      excluded: [
+        'Full application or MVP development',
+        'Paid advertising or media budget',
+        'Ongoing performance marketing',
+        'Large-scale customer research or participant recruitment',
+        'Full corporate identity development',
+        'Professional photography or video production',
+        'Legal advice or preparation of legal documents',
+      ],
+      meta: ['Typical timeline: 3–4 weeks', 'Fixed price once scope is agreed'],
+      legalNote: 'Privacy, imprint, terms, and similar pages can be technically integrated when the appropriate texts are provided.',
+      cta: 'Discuss your product',
+    },
+    whyStartHere: {
+      eyebrow: 'Why start here',
+      headline: 'An MVP is an expensive way to test a sentence.',
+      intro: 'A surprising amount can be learned before building dashboards, authentication, billing systems, APIs, and application logic.',
+      questionsLead: 'The first questions are usually much simpler:',
+      questions: [
+        'Does the right person understand what this is?',
+        'Does the problem matter enough to them?',
+        'Does the proposition make them curious enough to act?',
+      ],
+      closing: [
+        'A product website cannot prove that a company will succeed. But it can expose weak positioning, unclear audiences, lack of interest, and incorrect assumptions before those assumptions become software.',
+        'That makes it useful whether the next step is development, fundraising, customer interviews, or deciding not to pursue the idea at all.',
+      ],
+    },
+    situations: {
+      eyebrow: 'When this makes sense',
+      headline: 'Built for the stage before the big build.',
+      items: [
+        {
+          title: 'You have an idea',
+          body: [
+            'You know what you want to create, but it still mostly exists in documents, conversations, or your head.',
+            'We turn it into a proposition other people can understand and react to.',
+          ],
+        },
+        {
+          title: 'You are preparing an MVP',
+          body: [
+            'Before committing development budget, you want a public presence, early leads, and a clearer view of the market.',
+            'The validation site becomes the first layer of the eventual product launch.',
+          ],
+        },
+        {
+          title: 'You are talking to investors or partners',
+          body: [
+            'You need something more convincing than a pitch deck but do not yet have a finished product.',
+            'A real product presence gives the idea context and makes it easier to demonstrate.',
+          ],
+        },
+        {
+          title: 'You built something but cannot explain it',
+          body: [
+            'Sometimes the technology exists before the positioning does.',
+            'We work backwards from the product and turn its capabilities into a proposition customers can understand.',
+          ],
+        },
+      ],
+    },
+    process: {
+      eyebrow: 'Process',
+      headline: 'From idea to market in four steps.',
+      steps: [
+        {
+          title: 'Understand',
+          description: [
+            'We start with the product, customer, problem, alternatives, and assumptions behind the idea.',
+            'The goal is not to produce documentation. It is to identify what actually needs to be communicated and tested.',
+          ],
+        },
+        {
+          title: 'Position',
+          description: [
+            'I research the market and relevant competitors and turn what we learn into a clear proposition, page structure, messaging, and calls to action.',
+            'At this point, we should be able to explain the product without explaining the technology behind it.',
+          ],
+        },
+        {
+          title: 'Build',
+          description: [
+            'I design and develop the complete website.',
+            'No handover between strategist, designer, developer, and project manager. The concept stays connected to the implementation.',
+          ],
+        },
+        {
+          title: 'Launch and learn',
+          description: [
+            'The site goes live with lead capture and analytics in place.',
+            'You can start sending prospects, communities, investors, campaigns, or early customers to it and see what happens.',
+          ],
+        },
+      ],
+    },
+    differentiation: {
+      eyebrow: 'More than landing-page development',
+      headline: 'The website is the experiment. Not the product being sold.',
+      body: [
+        'There are plenty of people who can build a landing page.',
+        'The more important work happens before that: determining what the page should say, whom it should convince, and what response would actually tell you something useful.',
+        'My background combines software development, product and project work, technical consulting, UX methods, and AI-supported execution.',
+        'That means I can work on the proposition without losing sight of what would eventually have to be built behind it.',
+        'And if the validation works, the project does not have to stop at the website.',
+      ],
+    },
+    whatComesNext: {
+      eyebrow: 'What can come next',
+      headline: 'Validate first. Build when there is a reason to.',
+      intro: [
+        'The Product Validation Sprint is designed to stand on its own.',
+        'But it can become the first stage of a larger product engagement.',
+      ],
+      items: [
+        {
+          title: 'Interactive prototype',
+          body: 'For concepts that need more than static screens, selected interactions or a realistic product prototype can be built.',
+        },
+        {
+          title: 'MVP definition',
+          body: 'Turn what was learned during validation into priorities, requirements, technical decisions, and a realistic first product scope.',
+        },
+        {
+          title: 'MVP development',
+          body: 'If there is enough evidence to proceed, the project can move from proposition into working software.',
+        },
+      ],
+      journey: ['Product idea', 'Validation', 'Prototype', 'MVP', 'Product'],
+      journeyNote: 'You do not need to commit to that entire path upfront.',
+      addOnsIntro: 'Depending on the product, the validation sprint can be extended with:',
+      addOns: [
+        'Interactive product prototype',
+        'Fake-door or simulated product flows',
+        'Additional landing-page variants',
+        'A/B testing',
+        'Newsletter or CRM integration',
+        'Booking or demo flows',
+        'Founder and customer interview support',
+        'Additional market research',
+        'Brand identity development',
+        'Product architecture and MVP scoping',
+      ],
+      addOnsNote: 'These are scoped separately because not every product needs them.',
+    },
+    faq: {
+      eyebrow: 'Questions',
+      headline: 'Common questions',
+      items: [
+        {
+          question: 'Do I need to have a finished product?',
+          answer: [
+            'No. That is precisely the point.',
+            'The service works best when there is already a reasonably concrete product idea, but substantial development has not yet taken place.',
+          ],
+        },
+        {
+          question: 'Is this just a landing page?',
+          answer: [
+            'No. The landing page is one deliverable.',
+            'The engagement includes the work required to determine what it should communicate: positioning, market context, proposition, structure, messaging, design, implementation, and measurement.',
+          ],
+        },
+        {
+          question: 'Can you guarantee that this validates my idea?',
+          answer: [
+            'No. Validation is evidence, not certainty.',
+            'A website can help measure interest and test assumptions, but lack of signups can have many causes: proposition, audience, traffic source, pricing, timing, or the idea itself.',
+            'The purpose is to learn more cheaply than by immediately building the complete product.',
+          ],
+        },
+        {
+          question: 'Do you also build the MVP?',
+          answer: [
+            'Yes, when that makes sense.',
+            'MVP development is a separate engagement because its scope depends heavily on what is being built. The validation sprint can be used to define that scope.',
+          ],
+        },
+        {
+          question: 'What technology do you use?',
+          answer: [
+            'I generally build lightweight, fast websites using modern web technologies rather than locking the project into a visual website builder.',
+            'You receive the source code and can continue working with me or another developer.',
+          ],
+        },
+        {
+          question: 'Can I use the website for fundraising?',
+          answer: [
+            'Yes.',
+            'The site can serve simultaneously as your public product presence, validation channel, and something concrete to show investors, partners, and early customers.',
+          ],
+        },
+        {
+          question: 'Why €4,900 when I can get a landing page much cheaper?',
+          answer: [
+            'Because you can.',
+            'If you already know exactly what the product is, exactly how it should be positioned, have finished copy and design, and only need somebody to implement a page, this is probably the wrong service.',
+            'This engagement is for the stage where those questions still need to be resolved.',
+          ],
+        },
+      ],
+    },
+    contact: {
+      headline: 'Put your idea in front of the market.',
+      intro: 'Tell me what you are thinking about building, where you currently are, and what you want to learn before committing to the full product.',
+    },
+  },
 };

@@ -1,7 +1,10 @@
 ---
 import '../styles/global.css';
-import { localeConfig } from '../i18n/utils';
+import { localeConfig, getStrings } from '../i18n/utils';
 import type { Locale } from '../i18n/utils';
+import {
+  breadcrumbs, graph, person, webPage, website, type Node,
+} from '@sh/structured-data';
 
 type Props = {
   locale: Locale;
@@ -12,6 +15,13 @@ type Props = {
   ogType?: string;
   ogImage?: string;
   canonical?: string;
+  /** Page-specific schema.org nodes, merged into this page's single @graph.
+   *  The identity, site, page and breadcrumb nodes are added automatically. */
+  nodes?: Node[];
+  /** Narrower schema.org type for this document, e.g. 'CollectionPage'. */
+  pageType?: string;
+  /** 404 opts out of structured data entirely: there is no entity to describe. */
+  noStructuredData?: boolean;
 };
 
 const {
@@ -23,11 +33,36 @@ const {
   ogType = 'website',
   ogImage,
   canonical,
+  nodes = [],
+  pageType,
+  noStructuredData = false,
 } = Astro.props;
 const htmlLang = localeConfig[locale].htmlLang;
 const siteOrigin = 'https://www.sebastian-heitmann.dev';
 const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
 const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-image.jpg` : undefined);
+
+const s = getStrings(locale);
+
+// A page that supplies its own primary node (Service, BlogPosting, ProfilePage)
+// still gets a WebPage: the WebPage describes the document, the other node
+// describes the thing the document is about.
+const structuredData = noStructuredData
+  ? null
+  : graph(
+      person(locale),
+      website('dev', locale, s.meta.description),
+      webPage({
+        url: canonicalUrl,
+        title,
+        description,
+        site: 'dev',
+        locale,
+        type: pageType,
+      }),
+      breadcrumbs({ pathname: Astro.url.pathname, title, site: 'dev', locale }),
+      ...nodes,
+    );
 ---
 
 <html lang={htmlLang}>
@@ -58,34 +93,9 @@ const resolvedOgImage = ogImage ?? (ogType === 'website' ? `${siteOrigin}/og-ima
         {alternates.map(alt => (
             <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
         ))}
-        <script type="application/ld+json" set:html={JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ProfessionalService",
-            "name": "Sebastian Heitmann",
-            "description": description,
-            "url": "https://www.sebastian-heitmann.dev",
-            "founder": {
-                "@type": "Person",
-                "name": "Sebastian Heitmann",
-                "jobTitle": "Technology Consultant",
-                "url": "https://www.sebastian-heitmann.dev",
-                "sameAs": [
-                    "https://www.linkedin.com/in/sebastian-heitmann/",
-                    "https://github.com/DonHeidi"
-                ]
-            },
-            "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Kastanienallee 24",
-                "addressLocality": "Tostedt",
-                "postalCode": "21255",
-                "addressCountry": "DE"
-            },
-            "email": "me@sebastian-heitmann.dev",
-            "areaServed": ["DE", "AT", "CH", "EU"],
-            "knowsLanguage": ["de", "en"],
-            "priceRange": "$$"
-        })} />
+        {structuredData && (
+            <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+        )}
         <script is:inline>
             (function() {
                 var stored = localStorage.getItem('theme');

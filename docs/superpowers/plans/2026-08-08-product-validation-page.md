@@ -690,8 +690,8 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
       </section>
 
       {/* 3. Offer — single corner-framed package card with scope boundaries */}
-      <section className="reveal" id="package">
-        <div className={`mx-auto max-w-[1440px] ${sectionBase} scroll-mt-[100px]`}>
+      <section className="reveal">
+        <div id="package" className={`mx-auto max-w-[1440px] ${sectionBase} scroll-mt-[100px]`}>
           <Eyebrow>{content.offer.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
             {content.offer.headline}
@@ -798,7 +798,7 @@ Start the dev server if it is not running: `bun run dev` (Astro 7 daemonizes; ch
 Visit `http://localhost:4321/product-validation` and `http://localhost:4321/de-de/produkt-validierung`. Confirm:
 - The hero fits above the fold at 1440x900 with the headline, intro, both chips, and both CTAs visible.
 - `From €4,900 net` and `3–4 weeks` are both readable.
-- "See what's included" scrolls to the package card and the card is not hidden behind the sticky nav.
+- "See what's included" scrolls to the package card, which lands with the `scroll-mt-[100px]` breathing room above it rather than flush against the viewport edge. (This site has no sticky header, so the offset is cosmetic, not an occlusion fix.)
 - The package card shows both the Included and the Not-included columns side by side at desktop width and stacked at 375px.
 
 - [ ] **Step 6: Commit**

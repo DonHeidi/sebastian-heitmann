@@ -194,26 +194,17 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
             {content.whatThisIs.headline}
           </h2>
-          <div className="mb-10 max-w-[640px]">
+          {/* Prose only. This section used to carry a nine-item capability list,
+              but eight of those items restated the package's Included list one
+              section below, so the page announced its deliverables twice before
+              naming a price. The offer card is the single place scope lives. */}
+          <div className="max-w-[640px]">
             {content.whatThisIs.body.map((p) => (
               <p key={p} className="mb-5 font-sans text-[17px] leading-[1.65] font-light text-text-secondary last:mb-0">
                 {p}
               </p>
             ))}
           </div>
-          <ul className="grid grid-cols-1 gap-0 p-0 lg:grid-cols-2 lg:gap-x-12">
-            {content.whatThisIs.capabilities.map((item) => (
-              <li
-                key={item}
-                className="relative border-b border-border py-2.5 pl-[22px] font-mono text-xs leading-[1.5] tracking-[0.04em] text-text-secondary transition-colors hover:text-foreground"
-              >
-                <span aria-hidden="true" className="absolute top-2.5 left-0 text-[10px] text-primary">
-                  ✱
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
@@ -403,22 +394,21 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
           <p className="mb-12 max-w-[640px] font-sans text-[17px] leading-[1.65] font-light text-text-secondary">
             {content.whatComesNext.journeyNote}
           </p>
-          <p className="mb-6 max-w-[640px] font-sans text-[17px] leading-[1.65] font-light text-text-secondary">
-            {content.whatComesNext.addOnsIntro}
-          </p>
-          <ul className="mb-8 flex max-w-[900px] list-none flex-wrap gap-2.5 p-0">
-            {content.whatComesNext.addOns.map((item) => (
-              <li
-                key={item}
-                className="border border-border px-4 py-2.5 font-mono text-xs tracking-[0.04em] text-text-secondary transition-colors hover:border-muted-foreground hover:text-foreground"
+          {/* Prose, not a tag grid. Ten tags here read as a fourth inventory on a
+              page that already carries three; the same options fit in a sentence. */}
+          <div className="max-w-[640px]">
+            {content.whatComesNext.addOns.map((p, i) => (
+              <p
+                key={p}
+                className={cn(
+                  'mb-4 font-sans text-[17px] leading-[1.65] font-light last:mb-0',
+                  i === 0 ? 'text-text-secondary' : 'text-muted-foreground italic',
+                )}
               >
-                {item}
-              </li>
+                {p}
+              </p>
             ))}
-          </ul>
-          <p className="max-w-[640px] font-sans text-[17px] leading-[1.65] font-light text-muted-foreground italic">
-            {content.whatComesNext.addOnsNote}
-          </p>
+          </div>
         </div>
       </section>
 

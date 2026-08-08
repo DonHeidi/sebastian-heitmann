@@ -429,7 +429,6 @@ export interface Strings {
       eyebrow: string;
       headline: string;
       body: string[];
-      capabilities: string[];
     };
     offer: {
       eyebrow: string;
@@ -476,9 +475,9 @@ export interface Strings {
       items: Array<{ title: string; body: string }>;
       journey: string[];
       journeyNote: string;
-      addOnsIntro: string;
+      /** The optional extensions, as prose. A tag grid here restated the
+          package scope a third time; one sentence carries the same information. */
       addOns: string[];
-      addOnsNote: string;
     };
     faq: FaqContent;
     contact: {

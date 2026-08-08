@@ -73,6 +73,31 @@ Five points where the source specification met the repository, and how each was 
 5. **Homepage entry point added.** The page gets a link from `ProofSection` so it is not
    orphaned in site navigation.
 
+### Revision, 2026-08-08 (after first build)
+
+The page as first built read as an inventory: nine sections, each one eyebrow, headline,
+list, and roughly 50 discrete list items across ten screens. The deliverables in particular
+appeared three times, since section 6.2's capability list restated 8 of its 9 items from the
+package's Included list. Decision 3 above removed one duplication; it missed the larger one.
+
+Cut, on the rule that anything already stated elsewhere goes:
+
+- **Section 6.2 loses its capability list entirely.** It is a subset of the Included list one
+  section below. Section 6.2 is now prose only.
+- **The Included list groups 14 atoms into 6 lines**, by phase rather than by deliverable. As
+  a side effect the included and excluded columns now balance rather than leaving a void.
+- **The add-on tag grid becomes two sentences.** Ten tags were a fourth inventory.
+- **The FAQ drops from 7 questions to 5.** "What technology do you use?" duplicates the
+  package's source-code-handover promise; "Can I use the website for fundraising?" duplicates
+  situation card 3. The five that remain each answer an objection nothing else on the page
+  answers.
+
+Measured result: 9,205px to 8,326px at 1440, about 10%. Worth recording that this was far
+less than the 40% estimated before the cut. Per-section measurement shows why: section
+padding alone is 1,280px (15% of the page) and no single section is fat. The remaining
+length is nine sections of genuine content, so further shortening means removing sections or
+changing the page's shape, not trimming more lists.
+
 ## 4. Route and file map
 
 | Path | Purpose |

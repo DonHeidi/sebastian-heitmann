@@ -1,8 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { itemList } from '@sh/structured-data';
 import Layout from '../layouts/Layout.astro';
-import { getStrings, getHreflangAlternates } from '../i18n/utils';
+import { getStrings, getHreflangAlternates, absoluteUrl } from '../i18n/utils';
 import { Navigation } from '../components/navigation';
 import { Footer } from '../components/footer';
 import { ThemeToggle } from '../components/theme-toggle';
@@ -24,6 +25,25 @@ const caseStudies = entries.filter((e) => e.data.kind === 'case-study');
 const projects = entries.filter((e) => e.data.kind === 'project');
 const caseHref = (e: (typeof entries)[number]) =>
   getRelativeLocaleUrl(locale, `/cases/${e.id.split('/').slice(1).join('/')}`);
+
+const caseSlug = (e: (typeof entries)[number]) => e.id.split('/').slice(1).join('/');
+
+// Mirrors CaseCard's own linkHref logic (case-card.tsx): only case-study
+// entries get a first-party detail page — /cases/[slug].astro only generates
+// static paths for that kind. A project entry links out to its first external
+// link if it has one, or renders no link at all (both current project entries
+// have an empty `links` array). Building `/cases/${slug}` for every entry
+// regardless of kind would advertise 404s for those in the JSON-LD.
+const itemUrl = (e: (typeof entries)[number]) =>
+  e.data.kind === 'case-study' ? absoluteUrl(`/cases/${caseSlug(e)}`) : e.data.links[0]?.url;
+
+const structuredNodes = [
+  itemList(
+    entries
+      .filter((e) => itemUrl(e))
+      .map((e) => ({ url: itemUrl(e)!, name: e.data.title }))
+  ),
+];
 ---
 
 <Layout
@@ -32,6 +52,8 @@ const caseHref = (e: (typeof entries)[number]) =>
   description={t.meta.description}
   alternates={getHreflangAlternates('/')}
   includeRedirectScript={true}
+  pageType="CollectionPage"
+  nodes={structuredNodes}
 >
   {/* `min-h-svh flex flex-col` (task 18): the nav's height is measured by
       layout, not assumed — it can wrap to 2 or 3 rows on narrow widths (de-de's

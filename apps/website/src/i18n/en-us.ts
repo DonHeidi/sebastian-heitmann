@@ -3,7 +3,7 @@ import type { Strings } from './types';
 export const enUs: Strings = {
   meta: {
     title: 'Sebastian Heitmann \u2014 Technology Consultant',
-    description: 'Technology Consultant. Architecture, Delivery, Teams.',
+    description: 'Technology Consultant. AI-powered products & processes, from prototype to production.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -19,13 +19,13 @@ export const enUs: Strings = {
   hero: {
     firstName: 'Sebastian',
     lastName: 'Heitmann',
-    pitchLead: 'I replace technical complexity with individual leverage.',
-    pitch: 'Developer, project manager, consultant. I\'ve been all three. Now I deliver all three at once, with AI as a force multiplier. One person replacing a team at a fraction of the cost and twice the speed.',
+    pitchLead: 'Output is cheap now. Outcomes are not.',
+    pitch: 'AI made producing software easy. Deciding what to build, judging what\'s good, and carrying it into production didn\'t get easier. Developer, project manager, consultant: I\'ve been all three. Today they\'re one role. I build AI-powered products and processes and own them from first prototype to production.',
     cta: 'Send a Message',
     ctaNote: 'Direct to my inbox. No funnel. I read every message.',
     photoAlt: 'Sebastian Heitmann',
     role: { label: 'Role', value: 'Technology Consultant' },
-    focus: { label: 'Focus', value: 'Architecture, Delivery, Teams' },
+    focus: { label: 'Focus', value: 'AI, Architecture, Delivery' },
     experience: { label: 'Experience', value: '10+ years' },
     projects: { label: 'Projects', value: '20+ delivered' },
     status: { label: 'Status', value: 'Available' },

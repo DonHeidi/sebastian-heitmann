@@ -3,7 +3,7 @@ import type { Strings } from './types';
 export const deDe: Strings = {
   meta: {
     title: 'Sebastian Heitmann \u2014 Technology Consultant',
-    description: 'Technology Consultant. Architektur, Entwicklung, Teams.',
+    description: 'Technology Consultant. KI-gestützte Produkte & Prozesse, vom Prototyp bis zur Produktion.',
   },
   nav: {
     logo: 'sebastian-heitmann',
@@ -19,13 +19,13 @@ export const deDe: Strings = {
   hero: {
     firstName: 'Sebastian',
     lastName: 'Heitmann',
-    pitchLead: 'Ich ersetze technische Komplexit\u00E4t durch individuellen Hebel.',
-    pitch: 'Entwickler, Projektmanager, Berater. Ich war jedes davon. Heute bin ich alle drei gleichzeitig. Mit KI als Hebel liefere ich, wofür andere ein ganzes Team brauchen. Zum Bruchteil der Kosten, in halber Zeit.',
+    pitchLead: 'Output ist billig geworden. Outcome nicht.',
+    pitch: 'KI hat es leicht gemacht, Software zu produzieren. Zu entscheiden, was gebaut wird, zu beurteilen, was gut ist, und es in Produktion zu bringen: das ist nicht leichter geworden. Entwickler, Projektmanager, Berater. Ich war jedes davon. Heute sind sie eine Rolle. Ich entwickle KI-gestützte Produkte und Prozesse und verantworte sie vom ersten Prototyp bis in die Produktion.',
     cta: 'Nachricht senden',
     ctaNote: 'Direkt in mein Postfach. Kein Funnel. Ich lese jede Nachricht.',
     photoAlt: 'Sebastian Heitmann',
     role: { label: 'Rolle', value: 'Technology Consultant' },
-    focus: { label: 'Fokus', value: 'Architektur, Entwicklung, Teams' },
+    focus: { label: 'Fokus', value: 'KI, Architektur, Entwicklung' },
     experience: { label: 'Erfahrung', value: '10+ Jahre' },
     projects: { label: 'Projekte', value: '20+ umgesetzt' },
     status: { label: 'Status', value: 'Verf\u00FCgbar' },

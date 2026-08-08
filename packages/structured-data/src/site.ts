@@ -98,9 +98,11 @@ export function breadcrumbs(input: {
    *  called in this locale — a raw slug like 'articles' title-cases to
    *  'Articles' on every locale, which is wrong on a German page whose own
    *  nav says 'Artikel'). Only the layout reliably knows its own route
-   *  table and copy, so it is the one place this is declared. An
-   *  undeclared segment, or one with no `label`, fails safe: a title-cased,
-   *  unlocalized slug and no link. */
+   *  table and copy, so it is the one place this is declared. A segment not
+   *  declared `routed: true` here (whether entirely undeclared, or declared
+   *  with only a `label`) is OMITTED from the trail entirely — see the
+   *  fails-safe comment at its call site below for why a name-only crumb is
+   *  not a safe fallback. */
   segments?: Record<string, { label?: string; routed?: boolean }>;
 }): Node | null {
   const origin = originFor(input.site);
@@ -120,19 +122,28 @@ export function breadcrumbs(input: {
   ];
 
   // Every segment but the last MIGHT be a real intermediate page with its own
-  // URL and its own localized label — only if the caller declared it in
-  // segments. Otherwise this emits the same name-only, title-cased-slug
-  // shape as before, which schema.org and Google both accept.
+  // URL and its own localized label — only if the caller declared it
+  // `routed` in segments. An undeclared or unrouted segment is OMITTED FROM
+  // THE TRAIL ENTIRELY rather than emitted name-only. Google's breadcrumb
+  // docs make `item` required on every ListItem except the trail's last
+  // ("If the breadcrumb is the last item in the breadcrumb trail, `item` is
+  // not required"), so a name-only intermediate ListItem invalidates the
+  // whole BreadcrumbList — worse than the 404-linking bug this shape was
+  // originally built to avoid.
+  // https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
+  // Positions are assigned from the running `items.length`, so they stay
+  // contiguous and 1-based no matter how many segments get dropped (e.g. an
+  // apps/rocks case page: Home, then the case, at positions 1 and 2 — the
+  // unrouted `cases` segment never appears).
   rest.slice(0, -1).forEach((segment, index) => {
     const meta = segments[segment];
-    items.push(compact({
+    if (!meta?.routed) return;
+    items.push({
       '@type': 'ListItem',
-      position: index + 2,
-      name: meta?.label ?? titleCase(segment),
-      item: meta?.routed
-        ? `${origin}${localePrefix}/${rest.slice(0, index + 1).join('/')}/`
-        : undefined,
-    }));
+      position: items.length + 1,
+      name: meta.label ?? titleCase(segment),
+      item: `${origin}${localePrefix}/${rest.slice(0, index + 1).join('/')}/`,
+    });
   });
 
   // Google asks that the final crumb omit `item`: it is the current page.

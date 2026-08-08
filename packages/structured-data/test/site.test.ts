@@ -86,38 +86,62 @@ describe('breadcrumbs', () => {
     expect(items[2]).toEqual({ '@type': 'ListItem', position: 3, name: 'Some Post' });
   });
 
-  test('fails safe: an undeclared intermediate segment gets a name-only, title-cased crumb, never a guessed URL', () => {
-    // Regression for apps/rocks emitting `item: ".../cases/"` with no
-    // cases/index.astro behind it — a real BreadcrumbList 404 in production.
+  // Finding 1 (regression): a name-only intermediate ListItem still makes
+  // Google reject the whole BreadcrumbList — `item` is required on every
+  // ListItem except the last one.
+  // https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
+  // So an unrouted intermediate segment must be dropped from the trail
+  // entirely, not degraded to a link-free crumb. This is also the regression
+  // for the earlier apps/rocks bug that emitted `item: ".../cases/"` with no
+  // cases/index.astro behind it: two 404-adjacent shapes, two fixes.
+  test('omits an undeclared intermediate segment from the trail entirely, rather than emitting it name-only', () => {
     const node = breadcrumbs({
       pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
     })!;
     const items = node.itemListElement as Array<Record<string, unknown>>;
-    expect(items.length).toBe(3);
-    expect(items[1]).toEqual({ '@type': 'ListItem', position: 2, name: 'Cases' });
-    expect('item' in items[1]!).toBe(false);
+    expect(items).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.sebastian-heitmann.rocks/' },
+      { '@type': 'ListItem', position: 2, name: 'Blickwerk' },
+    ]);
   });
 
-  test('a segment declared routed without a label still title-cases the fallback name', () => {
-    const node = breadcrumbs({
-      pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
-      segments: { cases: { routed: true } },
-    })!;
-    const items = node.itemListElement as Array<Record<string, unknown>>;
-    expect(items[1]).toEqual({
-      '@type': 'ListItem', position: 2, name: 'Cases',
-      item: 'https://www.sebastian-heitmann.rocks/cases/',
-    });
-  });
-
-  test('a segment with a label but not routed gets the label with no item', () => {
+  test('omits an intermediate segment declared with a label but not routed', () => {
     const node = breadcrumbs({
       pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
       segments: { cases: { label: 'Cases' } },
     })!;
     const items = node.itemListElement as Array<Record<string, unknown>>;
-    expect(items[1]).toEqual({ '@type': 'ListItem', position: 2, name: 'Cases' });
-    expect('item' in items[1]!).toBe(false);
+    expect(items.map((item) => item.name)).toEqual(['Home', 'Blickwerk']);
+    expect(items.map((item) => item.position)).toEqual([1, 2]);
+  });
+
+  test('a segment declared routed without a label still title-cases the fallback name, and keeps a contiguous position', () => {
+    const node = breadcrumbs({
+      pathname: '/cases/blickwerk/', title: 'Blickwerk', site: 'rocks', locale: 'en-us',
+      segments: { cases: { routed: true } },
+    })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.sebastian-heitmann.rocks/' },
+      { '@type': 'ListItem', position: 2, name: 'Cases', item: 'https://www.sebastian-heitmann.rocks/cases/' },
+      { '@type': 'ListItem', position: 3, name: 'Blickwerk' },
+    ]);
+  });
+
+  test('positions stay contiguous when a segment is dropped between a routed segment and the leaf', () => {
+    // Three path segments, only the first ('a') is routed: 'b' must vanish
+    // from the trail, and the leaf's position must still follow immediately
+    // after 'a' rather than leaving a gap for the dropped segment.
+    const node = breadcrumbs({
+      pathname: '/a/b/leaf/', title: 'Leaf', site: 'dev', locale: 'en-us',
+      segments: { a: { label: 'A', routed: true } },
+    })!;
+    const items = node.itemListElement as Array<Record<string, unknown>>;
+    expect(items).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.sebastian-heitmann.dev/' },
+      { '@type': 'ListItem', position: 2, name: 'A', item: 'https://www.sebastian-heitmann.dev/a/' },
+      { '@type': 'ListItem', position: 3, name: 'Leaf' },
+    ]);
   });
 
   test('a nested German path gets a localized intermediate label, not the English title-cased slug', () => {

@@ -63,7 +63,7 @@ function catalogFor(key: ServiceKey, s: Strings): Node | undefined {
       ));
 
     case 'web':
-      return offerCatalog(s.webProjects.meta.title, [
+      return offerCatalog(s.webProjects.meta.serviceName, [
         offerCatalog(s.webProjects.packages.eyebrow, s.webProjects.packages.items.map((i) =>
           offer({
             name: i.name, description: i.audience,

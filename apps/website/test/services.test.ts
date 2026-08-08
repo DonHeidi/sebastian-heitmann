@@ -73,6 +73,34 @@ describe('serviceNode', () => {
     }
   });
 
+  test('no published name anywhere in the graph carries the site-name suffix', () => {
+    // Walks every node recursively so it catches Service.name, every nested
+    // OfferCatalog.name, and every Offer.name at once — a single line of copy
+    // reverting to `meta.title` anywhere in the tree fails this, not just the
+    // one property a narrower assertion happens to check.
+    function collectNames(value: unknown, out: string[]): void {
+      if (Array.isArray(value)) {
+        for (const item of value) collectNames(item, out);
+        return;
+      }
+      if (value && typeof value === 'object') {
+        for (const [key, val] of Object.entries(value)) {
+          if (key === 'name' && typeof val === 'string') out.push(val);
+          collectNames(val, out);
+        }
+      }
+    }
+
+    for (const [locale, strings] of [['en-us', enUs], ['de-de', deDe]] as const) {
+      for (const key of ['umbrella', 'web', 'tpm', 'ai'] as const) {
+        const names: string[] = [];
+        collectNames(serviceNode(key, locale, strings), names);
+        expect(names.length).toBeGreaterThan(0);
+        for (const name of names) expect(name).not.toContain('Sebastian Heitmann');
+      }
+    }
+  });
+
   test('every service is reachable from the home list', () => {
     expect(serviceListItems('en-us', enUs).map((i) => i.url)).toEqual([
       'https://www.sebastian-heitmann.dev/web-development/',

@@ -23,6 +23,7 @@ const alternates = getHreflangAlternates('/ai-process-automation', '/de-de/ki-pr
     title={s.aiProcessAutomation.meta.title}
     description={s.aiProcessAutomation.meta.description}
     alternates={alternates}
+    breadcrumbLabel={s.aiProcessAutomation.meta.serviceName}
     nodes={[serviceNode('ai', locale, s)]}
 >
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>

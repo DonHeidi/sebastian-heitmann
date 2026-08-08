@@ -11,7 +11,7 @@ const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates('/imprint');
 ---
-<Layout locale={locale} title="Impressum — Sebastian Heitmann" description="Impressum und Kontaktinformationen." alternates={alternates}>
+<Layout locale={locale} title="Impressum — Sebastian Heitmann" description="Impressum und Kontaktinformationen." alternates={alternates} breadcrumbLabel={s.footer.imprintLabel}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
         <ThemeToggle labels={s.nav.themeToggle} />
     </Navigation>

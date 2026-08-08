@@ -24,6 +24,7 @@ const alternates = getHreflangAlternates('/web-development', '/de-de/web-entwick
     title={s.webProjects.meta.title}
     description={s.webProjects.meta.description}
     alternates={alternates}
+    breadcrumbLabel={s.webProjects.meta.serviceName}
     nodes={[serviceNode('web', locale, s)]}
 >
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>

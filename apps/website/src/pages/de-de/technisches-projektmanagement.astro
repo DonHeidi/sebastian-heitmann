@@ -23,6 +23,7 @@ const alternates = getHreflangAlternates('/technical-project-management', '/de-d
     title={s.technicalProjectManagement.meta.title}
     description={s.technicalProjectManagement.meta.description}
     alternates={alternates}
+    breadcrumbLabel={s.technicalProjectManagement.meta.serviceName}
     nodes={[serviceNode('tpm', locale, s)]}
 >
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>

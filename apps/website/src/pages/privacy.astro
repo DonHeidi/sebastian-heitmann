@@ -11,7 +11,7 @@ const locale = Astro.currentLocale as Locale;
 const s = getStrings(locale);
 const alternates = getHreflangAlternates('/privacy');
 ---
-<Layout locale={locale} title="Privacy Policy — Sebastian Heitmann" description="Privacy policy and data protection information." alternates={alternates}>
+<Layout locale={locale} title="Privacy Policy — Sebastian Heitmann" description="Privacy policy and data protection information." alternates={alternates} breadcrumbLabel={s.footer.privacyLabel}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
         <ThemeToggle labels={s.nav.themeToggle} />
     </Navigation>

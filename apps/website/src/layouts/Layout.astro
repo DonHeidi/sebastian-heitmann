@@ -77,7 +77,7 @@ const structuredData = noStructuredData
   ? null
   : graph(
       person(locale),
-      website('dev'),
+      website('dev', Astro.url.pathname),
       webPage({
         url: documentUrl,
         title,

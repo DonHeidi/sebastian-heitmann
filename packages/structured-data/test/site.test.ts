@@ -3,7 +3,7 @@ import { PERSON_ID, website, webPage, breadcrumbs, siteId } from '../src/index';
 
 describe('website', () => {
   test('is about and published by the one person, by reference', () => {
-    const node = website('dev');
+    const node = website('dev', '/')!;
     expect(node.about).toEqual({ '@id': PERSON_ID });
     expect(node.publisher).toEqual({ '@id': PERSON_ID });
   });
@@ -11,24 +11,29 @@ describe('website', () => {
   test('each domain gets its own id', () => {
     expect(siteId('dev')).toBe('https://www.sebastian-heitmann.dev/#website');
     expect(siteId('rocks')).toBe('https://www.sebastian-heitmann.rocks/#website');
-    expect(website('rocks')['@id']).toBe(siteId('rocks'));
+    expect(website('rocks', '/')!['@id']).toBe(siteId('rocks'));
   });
 
-  // /de-de/ is a path on the same domain, not a domain of its own, so a site is
-  // one entity spanning both locales. The node must therefore not carry
-  // anything that varies per page, or one @id ends up with two bodies.
-  test('declares both locales rather than the current one', () => {
-    expect(website('dev').inLanguage).toEqual(['en-US', 'de-DE']);
+  // Google: the WebSite node belongs on "the domain or subdomain level root
+  // URI". Copies elsewhere are ignored, so emitting it site-wide is redundant.
+  test('is emitted on the domain root only', () => {
+    expect(website('dev', '/')).not.toBeNull();
+    expect(website('dev', '/cv/')).toBeNull();
+    expect(website('dev', '/articles/some-post/')).toBeNull();
   });
 
-  test('carries no per-page description', () => {
-    expect('description' in website('dev')).toBe(false);
-    expect('description' in website('rocks')).toBe(false);
+  // /de-de/ is a path on the same domain, not a root of its own, so a site
+  // publishes this node once per domain rather than once per locale.
+  test('is not emitted on the German home page, which is not a domain root', () => {
+    expect(website('dev', '/de-de/')).toBeNull();
+    expect(website('rocks', '/de-de/')).toBeNull();
   });
 
-  test('takes no page-varying input, so it cannot drift between pages', () => {
-    expect(JSON.stringify(website('dev'))).toBe(JSON.stringify(website('dev')));
-    expect(website).toHaveLength(1);
+  // One @id must never have two bodies, the same rule the Person node follows.
+  test('carries nothing that varies by page', () => {
+    expect('description' in website('dev', '/')!).toBe(false);
+    expect('inLanguage' in website('dev', '/')!).toBe(false);
+    expect(JSON.stringify(website('dev', '/'))).toBe(JSON.stringify(website('dev', '/')));
   });
 });
 

@@ -23,20 +23,32 @@ export function siteId(site: SiteKey): string {
   return `${originFor(site)}/#website`;
 }
 
-/** Every locale of a site is one website: German lives at /de-de/ on the same
- *  domain, not on a domain of its own. So there is one WebSite node per domain,
- *  and it must be byte-identical on every page of that domain, for the same
- *  reason the Person node is. That rules out a per-locale `description` or a
- *  single-locale `inLanguage`: both would give one @id two different bodies
- *  depending on which page a crawler happened to fetch. Per-page descriptions
- *  live on the WebPage node, which is where they belong. */
-export function website(site: SiteKey): Node {
+/** Returns the site's WebSite node on the domain root, and null everywhere else,
+ *  so callers can pass the result straight to graph(), which drops nulls.
+ *
+ *  Google requires this node on the home page and defines home page as "the
+ *  domain or subdomain level root URI"; copies on other pages are ignored, so
+ *  emitting it site-wide is redundant payload.
+ *  https://developers.google.com/search/docs/appearance/site-names
+ *
+ *  Note /de-de/ is a path on the same domain, not a root of its own, so a site
+ *  publishes this node exactly once per domain rather than once per locale.
+ *  Other pages link to it by @id via webPage()'s isPartOf.
+ *
+ *  It carries nothing that varies by page, for the same reason the Person node
+ *  doesn't: one @id must never have two bodies. Per-page descriptions and
+ *  languages live on the WebPage node, which is where Google reads them.
+ *  Google documents only name, url and alternateName here; `about` and
+ *  `publisher` are undocumented but valid schema.org, and they are what tie the
+ *  two domains to one person. */
+export function website(site: SiteKey, pathname: string): Node | null {
+  if (pathname !== '/') return null;
+
   return compact({
     '@type': 'WebSite',
     '@id': siteId(site),
     name: SITE_NAME[site],
     url: `${originFor(site)}/`,
-    inLanguage: Object.values(BCP47),
     about: ref(PERSON_ID),
     publisher: ref(PERSON_ID),
   });

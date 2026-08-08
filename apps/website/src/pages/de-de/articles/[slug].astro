@@ -9,6 +9,7 @@ import { Footer } from '../../../components/footer';
 import { ArticleView } from '../../../components/article-view';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
 import type { Locale } from '../../../i18n/utils';
+import { blogPosting, siteId } from '@sh/structured-data';
 
 export async function getStaticPaths() {
   const allArticles = await getCollection('articles', ({ data }) => !data.draft);
@@ -83,38 +84,19 @@ const ogImage = entry.data.headerImage
   : undefined;
 const heroImageUrl = ogImage ? `${siteOrigin}${ogImage.src}` : undefined;
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
-  headline: entry.data.title,
-  description: entry.data.abstract,
-  ...(heroImageUrl ? { image: [heroImageUrl] } : {}),
-  datePublished: publishedISO,
-  ...(modifiedISO ? { dateModified: modifiedISO } : {}),
-  author: authorEntry
-    ? {
-        '@type': 'Person',
-        name: authorEntry.data.name,
-        url: siteOrigin,
-      }
-    : undefined,
-  publisher: {
-    '@type': 'Organization',
-    name: 'Sebastian Heitmann',
-    logo: {
-      '@type': 'ImageObject',
-      url: `${siteOrigin}/og-image.jpg`,
-    },
-  },
-  mainEntityOfPage: {
-    '@type': 'WebPage',
-    '@id': canonicalUrl,
-  },
-  inLanguage: 'de-DE',
-  ...(entry.data.tags && entry.data.tags.length > 0
-    ? { keywords: entry.data.tags.join(', ') }
-    : {}),
-};
+const structuredNodes = [
+  blogPosting({
+    url: canonicalUrl,
+    headline: entry.data.title,
+    description: entry.data.abstract,
+    datePublished: publishedISO,
+    dateModified: modifiedISO,
+    image: heroImageUrl,
+    keywords: entry.data.tags,
+    locale,
+    blogId: `${siteId('dev')}-blog`,
+  }),
+];
 
 // Series lookup — prefer German articles, fall back to English
 let seriesParts: Array<{ slug: string; title: string; part: number }> = [];
@@ -142,8 +124,8 @@ if (entry.data.series) {
   ogImage={heroImageUrl}
   canonical={canonicalUrl}
   alternates={alternates}
+  nodes={structuredNodes}
 >
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <meta slot="head" property="article:published_time" content={publishedISO} />
   {modifiedISO && <meta slot="head" property="article:modified_time" content={modifiedISO} />}
   {authorEntry && <meta slot="head" property="article:author" content={authorEntry.data.name} />}

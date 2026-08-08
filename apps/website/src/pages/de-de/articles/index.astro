@@ -9,6 +9,8 @@ import { ArticleCard } from '../../../components/article-card';
 import { Footer } from '../../../components/footer';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
 import type { Locale } from '../../../i18n/utils';
+import { blog, itemList } from '@sh/structured-data';
+import { absoluteUrl } from '../../../i18n/utils';
 
 const locale = (Astro.currentLocale ?? 'de-de') as Locale;
 const s = getStrings(locale);
@@ -26,6 +28,16 @@ const articles = [
 const sorted = articles.sort((a, b) =>
   b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
 );
+
+const structuredNodes = [
+  // The Blog node is the parent every BlogPosting points at via isPartOf.
+  blog('dev', 'Artikel'),
+  itemList(sorted.map((article) => ({
+    url: absoluteUrl(`/de-de/articles/${article.id.replace(/^de-de\//, '')}`),
+    name: article.data.title,
+  }))),
+];
+
 const editorialArticles = sorted.filter((article) => article.data.type !== 'service-description');
 const serviceDescriptions = sorted.filter((article) => article.data.type === 'service-description');
 
@@ -50,6 +62,8 @@ const serviceImageSrcs = await Promise.all(
   title={`Artikel — Sebastian Heitmann`}
   description={s.meta.description}
   alternates={alternates}
+  pageType="CollectionPage"
+  nodes={structuredNodes}
 >
   <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
     <ThemeToggle labels={s.nav.themeToggle} />

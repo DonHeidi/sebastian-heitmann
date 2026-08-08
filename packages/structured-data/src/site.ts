@@ -23,14 +23,20 @@ export function siteId(site: SiteKey): string {
   return `${originFor(site)}/#website`;
 }
 
-export function website(site: SiteKey, locale: Locale, description: string): Node {
+/** Every locale of a site is one website: German lives at /de-de/ on the same
+ *  domain, not on a domain of its own. So there is one WebSite node per domain,
+ *  and it must be byte-identical on every page of that domain, for the same
+ *  reason the Person node is. That rules out a per-locale `description` or a
+ *  single-locale `inLanguage`: both would give one @id two different bodies
+ *  depending on which page a crawler happened to fetch. Per-page descriptions
+ *  live on the WebPage node, which is where they belong. */
+export function website(site: SiteKey): Node {
   return compact({
     '@type': 'WebSite',
     '@id': siteId(site),
     name: SITE_NAME[site],
-    description,
     url: `${originFor(site)}/`,
-    inLanguage: BCP47[locale],
+    inLanguage: Object.values(BCP47),
     about: ref(PERSON_ID),
     publisher: ref(PERSON_ID),
   });

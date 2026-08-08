@@ -93,19 +93,36 @@ const ogImage = entry.data.headerImage
   : undefined;
 const heroImageUrl = ogImage ? `${siteOrigin}${ogImage.src}` : undefined;
 
-const structuredNodes = [
-  blogPosting({
-    url: documentUrl,
-    headline: entry.data.title,
-    description: entry.data.abstract,
-    datePublished: publishedISO,
-    dateModified: modifiedISO,
-    image: heroImageUrl,
-    keywords: entry.data.tags,
-    locale,
-    blogId: blogId('dev', locale),
-  }),
-];
+// A fallback page serves the untranslated English article verbatim and
+// canonicalizes to the English URL (see canonicalUrl above), which the
+// sitemap also excludes it in favor of. The canonical English page already
+// publishes the BlogPosting for this article; emitting a second one here,
+// on a URL the site itself disowns, would give Google two BlogPosting
+// entities with identical headline/description/image for one article. So a
+// fallback page emits no BlogPosting at all and defers entirely to the
+// canonical page. Translated German articles are unaffected.
+const structuredNodes = fallback
+  ? []
+  : [
+      blogPosting({
+        url: documentUrl,
+        headline: entry.data.title,
+        description: entry.data.abstract,
+        datePublished: publishedISO,
+        dateModified: modifiedISO,
+        image: heroImageUrl,
+        keywords: entry.data.tags,
+        locale,
+        blogId: blogId('dev', locale),
+        author: authorEntry && authorEntry.id !== 'sebastian-heitmann'
+          ? {
+              '@type': 'Person',
+              name: authorEntry.data.name,
+              sameAs: authorEntry.data.socials?.map((social) => social.url),
+            }
+          : undefined,
+      }),
+    ];
 
 // Series lookup — prefer German articles, fall back to English
 let seriesParts: Array<{ slug: string; title: string; part: number }> = [];

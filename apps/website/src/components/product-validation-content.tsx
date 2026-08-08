@@ -215,7 +215,17 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
             {content.offer.headline}
           </h2>
-          <div className={cn('relative flex flex-col border border-border-accent py-7 px-6 md:py-11 md:px-10', glassCard)}>
+          {/* Capped well below the 1440px container. Full-bleed, this was the only
+              element on a page whose prose sits at 640px, so it read as a band
+              rather than an object, and it stranded the price ~700px from the
+              package name. Left-aligned with the section's eyebrow and headline,
+              keeping the page's ragged-right rhythm. */}
+          <div
+            className={cn(
+              'relative flex max-w-[1040px] flex-col border border-border-accent py-7 px-6 md:py-11 md:px-10',
+              glassCard,
+            )}
+          >
             <CornerMarks accent />
             <div className="mb-7 flex flex-wrap items-baseline gap-3 border-b border-border pb-5 md:flex-nowrap md:gap-5">
               <h3 className="font-display text-[clamp(26px,2.4vw,32px)] leading-[1.1] text-foreground italic">

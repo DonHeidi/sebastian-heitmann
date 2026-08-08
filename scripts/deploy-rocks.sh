@@ -37,12 +37,18 @@ cd "$ROCKS_DIR"
 # packages/structured-data's own test suite is the only thing keeping the
 # shared schema.org builders (both sites' Layout.astro call into them)
 # correct. Nothing else runs it: this repo has no CI, and `bun run build`
-# below is a bare `astro build` with no type-check. apps/rocks has no test
-# suite of its own (it renders no prices, unlike apps/website — see
-# scripts/deploy-website.sh), so only the shared package's tests run here.
-# Run it before the build, so a broken builder aborts the deploy the same way
-# the structured-data gate (further below) aborts on an invalid graph.
+# below is a bare `astro build`, which strips types rather than checking
+# them. apps/rocks has no test suite of its own (it renders no prices,
+# unlike apps/website — see scripts/deploy-website.sh), so only the shared
+# package's tests run here. Run it before the build, so a broken builder
+# aborts the deploy the same way the structured-data gate (further below)
+# aborts on an invalid graph.
 ( cd "$ROOT_DIR/packages/structured-data" && bun test )
+
+# `astro build` never type-checks (see above). Run the real type-checker
+# before the build so any `satisfies`/exhaustiveness guard in this app is
+# actually enforced rather than decorative.
+bunx tsc --noEmit
 
 bun run build
 

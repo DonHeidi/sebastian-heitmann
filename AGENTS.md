@@ -12,13 +12,15 @@ apps/
 ├── rocks/            # Astro 7 portfolio site (sebastian-heitmann.rocks)
 ├── mail-service/     # Scaleway serverless contact form handler
 └── apex-redirect/    # Scaleway serverless apex → www 301 redirect (path + query preserved)
+packages/
+└── structured-data/  # @sh/structured-data — shared schema.org node builders for both sites
 infra/                # Terraform — Scaleway project, function, object storage, CDN
 docs/                 # Shared project documentation
 ```
 
 ## Tech Stack
 
-- **Runtime/Package Manager:** Bun (managed via mise) with workspaces
+- **Runtime/Package Manager:** Bun (managed via mise) with workspaces covering `apps/*` and `packages/*`
 - **Toolchain:** mise pins `bun`, `terraform`, `scaleway` (the `scw` CLI), `aws`, and `jq` — run `mise install`. The mail-service build also needs system **`zip`** (preinstalled on macOS; `sudo apt install zip` on Debian/Ubuntu/WSL).
 - **Secrets:** [varlock](https://varlock.dev) (`.env.schema` per workspace) + [Proton Pass](https://protonpass.github.io/pass-cli/) via `@varlock/proton-pass-plugin`
 - **Website:** Astro 7, Tailwind v4 + shadcn (--v8-asterisk design system), React/TSX as build-time templating only (no client-side React), TypeScript
@@ -139,6 +141,148 @@ of duplicating them. Case entries must exist in both
 `src/content/cases/en-us/` and `src/content/cases/de-de/` under the same
 slug. Infrastructure lives in `infra/rocks-*.tf`, with the DNS onboarding
 runbook in `docs/runbooks/2026-08-03-rocks-dns-onboarding.md`.
+
+---
+
+## Structured Data (`packages/structured-data/`)
+
+`@sh/structured-data` is a shared, typed package of schema.org node builders
+(`packages/structured-data/src/`) that both `apps/website/src/layouts/Layout.astro`
+and `apps/rocks/src/layouts/Layout.astro` call to emit each page's single
+`<script type="application/ld+json">` block. It is a normal workspace member
+(covered by the root `workspaces` glob) and is also listed as a root
+`devDependency` (`"@sh/structured-data": "workspace:*"` in the root
+`package.json`), so `scripts/check-structured-data.ts`, which is not itself
+inside a workspace app, can still resolve it.
+
+### One Person, no Organization
+
+Both sites describe exactly one entity, `Person` at
+`https://www.sebastian-heitmann.dev/#person` (`PERSON_ID` in
+`packages/structured-data/src/person.ts`). `person(locale)` takes only a
+locale and must be emitted byte-identically by both `.dev` and `.rocks`.
+There is no `Organization` node anywhere in either site; an inlined anonymous
+`Organization` publisher was a defect this package was built to remove, and
+`validate.ts` forbids the type outright.
+
+Anything a single page knows that `person()` does not (skills on the home
+page, employment history on the CV page, "this page is about the Person" on
+the profile page) must **not** be added as a field on `person()` itself, or
+every other page's copy of the Person node stops matching and the deploy gate
+fails. Instead it goes in a **partial node**: an object sharing the same
+`@id` but carrying no `@type` of its own, which graph consumers merge into
+the typed node rather than treat as a second, conflicting node. The package
+exports three of these from `content.ts`:
+
+| Builder | Shares `@id` with | Adds |
+|---|---|---|
+| `personKnowsAbout(items)` | `PERSON_ID` | `knowsAbout` (home page only) |
+| `personOccupations(entries)` | `PERSON_ID` | `hasOccupation` (CV page only) |
+| `profileMainEntity(url)` | the page's own `WebPage` node | `mainEntity: ref(PERSON_ID)` |
+
+This pattern replaced an earlier `profilePage()` builder that emitted a full
+`ProfilePage` node alongside the layout's `WebPage` node. Both nodes shared
+the CV page's URL as `@id` but disagreed on `@type`, and `validateGraph`
+rejects any `@id` that carries more than one distinct `@type` for exactly
+this reason (partial, untyped nodes are exempt from that check by design).
+The fix was to narrow the layout's own `WebPage` to `ProfilePage` via the
+`pageType` prop (see below) and add only the missing fact,
+`mainEntity`, as a partial node.
+
+### No address, no price range
+
+`ProfessionalService`, `LocalBusiness`, `PostalAddress` and `Organization`
+are forbidden `@type`s; `address`, `streetAddress`, `priceRange` and (see
+next section) `price` are forbidden keys anywhere in the graph
+(`FORBIDDEN_TYPES` / `FORBIDDEN_KEYS` in `validate.ts`). The postal address
+exists only in the rendered HTML of the imprint pages
+(`apps/website/src/pages/imprint.astro`, `apps/website/src/pages/de-de/impressum.astro`),
+where German law (Impressumspflicht) requires it. It is deliberately never
+structured data.
+
+### Prices are "from" prices
+
+Every price this site publishes is a floor, never an exact cost, so
+`offer()` (`packages/structured-data/src/offerings.ts`) only ever emits
+`priceSpecification.minPrice`, never a bare `price` key, and `price` is
+forbidden globally, not just inside `priceSpecification`. The numbers come
+from `priceMin` / `currency` / `vatIncluded` fields that sit next to (not
+inside) the display strings in the i18n files, e.g.
+`apps/website/src/i18n/en-us.ts`. They are never parsed out of the display
+string: English renders `from €549`, German renders `ab 549 €` with a
+non-breaking space, and a parser tuned to one format would fail silently on
+the other. If `priceMin` is set without `currency`, `offer()` throws at
+build time rather than emit an ambiguous number.
+
+An offering with no published figure (e.g. the hourly-billed TPM service, or
+the umbrella page's engagement models, which state a billing arrangement in
+copy but no rate) still gets a plain `Offer` node with a `name` and
+`description`, just no `priceSpecification`. `offer()` never omits the
+`Offer` itself for a missing price.
+
+### A new page needs no structured-data work
+
+Both layouts build the graph automatically: `person(locale)`,
+`website(site, locale, description)`, `webPage({ ..., type: pageType })` and
+`breadcrumbs(...)` are always included, and any nodes passed via the `nodes`
+prop are appended. A new page gets a correct baseline `WebPage` for free.
+Three props tune it:
+
+- **`nodes`** — page-specific nodes to merge in (a `Service` node, a
+  `BlogPosting`, `personKnowsAbout`, etc.). Most pages set this.
+- **`pageType`** — narrows the page's own node past the default `WebPage`
+  (`'ProfilePage'` on the CV pages, `'CollectionPage'` on the articles index
+  and both `apps/rocks` home pages; `apps/website`'s home pages stay plain
+  `WebPage` and add their `Service`/`ItemList`/`personKnowsAbout` facts via
+  `nodes` instead).
+- **`noStructuredData`** — opts a page out entirely. Used only on `404.astro`
+  on both sites, which have no entity to describe;
+  `scripts/check-structured-data.ts` asserts `404.html` has *zero* JSON-LD
+  blocks.
+
+### Adding a service
+
+`apps/website/src/data/services.ts` is the single registry. Add a
+`ServiceKey` and an entry in `SERVICE_PATHS` (required: it is typed
+`Record<ServiceKey, Record<Locale, string>>`). If the service gets its own
+page, also add it to `LISTED_ORDER`: that object is typed with `satisfies
+Record<Exclude<ServiceKey, 'umbrella'>, true>`, so a `ServiceKey` missing
+from it fails `tsc` at build time instead of silently missing from the home
+page's service list.
+
+Service names come from dedicated `serviceName` i18n fields
+(`s.webProjects.meta.serviceName`, etc. — see `serviceName()` in
+`services.ts`), never from page titles. This was a deliberate choice by the
+site owner: titles and structured-data names are allowed to diverge.
+
+### The deploy gate
+
+`scripts/check-structured-data.ts` walks a built `dist/` tree, extracts the
+one `<script type="application/ld+json">` block per HTML page, parses it,
+and runs `validateGraph` from `packages/structured-data/src/validate.ts`. It
+is invoked at the end of both `scripts/deploy-website.sh` and
+`scripts/deploy-rocks.sh` and aborts the deploy (exit 1) on any violation.
+**This repo has no CI**, so these two call sites are the only place any of
+this is enforced.
+
+`validateGraph` asserts, per page:
+
+- `@context` is `https://schema.org` and `@graph` is an array.
+- Exactly one `Person` node with `@id` equal to `PERSON_ID`, and its JSON
+  matches `person('en-us')` or `person('de-de')` byte-for-byte. Comparing
+  against these two canonical strings (rather than diffing across dist
+  trees, which no single build can see) is how the cross-site
+  byte-identity requirement is enforced.
+- No `@id` carries more than one distinct `@type` (the CV-page defect
+  described above). Untyped partial nodes are exempt.
+- None of the forbidden `@type`s or keys appear anywhere in the graph.
+- No key holds an empty string or `undefined`.
+- Every bare `{"@id": "..."}` reference resolves to a node defined in the
+  same graph, or to one of a known set of cross-page ids on either origin
+  (`#person`, `#website`, `#website-blog`, `#service` suffixes).
+- Every `Offer` has a non-empty `name`; if it has a `priceSpecification`,
+  `minPrice` is numeric and `priceCurrency` is a string.
+- `404.html` has zero JSON-LD blocks; every other page has exactly one.
 
 ---
 

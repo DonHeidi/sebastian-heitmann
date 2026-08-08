@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { DotRule } from './dot-rule';
+import { FaqSection } from './faq-section';
 import type { Strings } from '@/i18n/types';
 
 export interface ProductValidationContentProps {
@@ -416,6 +417,9 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
           </p>
         </div>
       </section>
+
+      {/* 9. FAQ */}
+      <FaqSection faq={content.faq} />
     </>
   );
 }

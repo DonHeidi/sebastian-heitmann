@@ -120,6 +120,42 @@ function RuledList({ items }: { items: string[] }) {
   );
 }
 
+// Vertical dotted spine for the process steps; horizontal counterpart is `DotRule`.
+function VerticalDotRule() {
+  return (
+    <span
+      aria-hidden="true"
+      className="absolute top-4 bottom-4 left-[3px] w-2 bg-repeat-y opacity-85"
+      style={{
+        backgroundImage: 'radial-gradient(circle, var(--v8-text-muted) 0.85px, transparent 1.4px)',
+        backgroundSize: '8px 6px',
+        backgroundPosition: '50% 0',
+      }}
+    />
+  );
+}
+
+// Emphasis list with the accent dot marker.
+function DotBulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="flex list-none flex-col gap-0 p-0">
+      {items.map((item, i) => (
+        <li
+          key={item}
+          className="group relative border-b border-border py-6 pl-8 font-sans text-xl leading-[1.6] font-light text-text-tertiary transition-colors duration-300 first:border-t hover:text-foreground"
+          style={{ transitionDelay: `${i * 0.06}s` }}
+        >
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 left-0 h-2 w-2 -translate-y-1/2 rounded-full bg-primary transition-transform duration-300 group-hover:scale-[1.3]"
+          />
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function ProductValidationContent({ content }: ProductValidationContentProps) {
   return (
     <>
@@ -216,6 +252,168 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
               {content.offer.cta}
             </CtaLink>
           </div>
+        </div>
+      </section>
+
+      {/* 4. Why start here */}
+      <section className="reveal">
+        <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
+          <Eyebrow>{content.whyStartHere.eyebrow}</Eyebrow>
+          <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
+            {content.whyStartHere.headline}
+          </h2>
+          <p className="mb-6 max-w-[640px] font-sans text-xl leading-[1.65] font-light text-text-secondary">
+            {content.whyStartHere.intro}
+          </p>
+          <p className="mb-8 max-w-[640px] font-sans text-[17px] leading-[1.65] font-light text-text-tertiary">
+            {content.whyStartHere.questionsLead}
+          </p>
+          <DotBulletList items={content.whyStartHere.questions} />
+          <div className="mt-10 max-w-[640px]">
+            {content.whyStartHere.closing.map((p) => (
+              <p key={p} className="mb-5 font-sans text-[17px] leading-[1.65] font-light text-text-secondary last:mb-0">
+                {p}
+              </p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. When this makes sense — 2x2 situation cards */}
+      <section className="reveal">
+        <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
+          <Eyebrow>{content.situations.eyebrow}</Eyebrow>
+          <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
+            {content.situations.headline}
+          </h2>
+          <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:gap-x-4 lg:gap-y-7">
+            {content.situations.items.map((item) => (
+              <article
+                key={item.title}
+                className={cn(
+                  'relative flex flex-col gap-5 border border-[var(--v8-glass-border)] py-7 px-6 transition-colors duration-300 hover:border-muted-foreground md:gap-6 md:py-9 md:px-8',
+                  glassCard,
+                )}
+              >
+                <CornerMarks />
+                <h3 className="font-display text-[clamp(22px,2.2vw,28px)] leading-[1.15] text-foreground italic">
+                  {item.title}
+                </h3>
+                <div>
+                  {item.body.map((p) => (
+                    <p key={p} className="mb-4 font-sans text-base leading-[1.65] font-light text-text-secondary last:mb-0">
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Process — dotted spine */}
+      <section className="reveal">
+        <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
+          <Eyebrow>{content.process.eyebrow}</Eyebrow>
+          <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
+            {content.process.headline}
+          </h2>
+          <ol className="relative flex flex-col gap-2 pl-7 md:pl-9">
+            <VerticalDotRule />
+            {content.process.steps.map((step, i) => (
+              <li key={step.title} className="relative grid grid-cols-[36px_1fr] gap-4 py-5 md:grid-cols-[48px_1fr] md:gap-6">
+                <span
+                  aria-hidden="true"
+                  className="absolute top-[27px] left-[-25px] h-2 w-2 rounded-full bg-primary md:left-[-33px]"
+                />
+                <span className="pt-1.5 font-mono text-xs tracking-[0.14em] text-primary">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div className="max-w-[640px]">
+                  <h3 className="mb-2 font-display text-[clamp(20px,2.2vw,26px)] leading-[1.2] text-foreground italic">
+                    {step.title}
+                  </h3>
+                  {step.description.map((p) => (
+                    <p key={p} className="mb-4 font-sans text-base leading-[1.65] font-light text-text-secondary last:mb-0">
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* 7. Differentiation */}
+      <section className="reveal">
+        <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
+          <Eyebrow>{content.differentiation.eyebrow}</Eyebrow>
+          <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
+            {content.differentiation.headline}
+          </h2>
+          <div className="max-w-[640px]">
+            {content.differentiation.body.map((p) => (
+              <p key={p} className="mb-5 font-sans text-[17px] leading-[1.65] font-light text-text-secondary last:mb-0">
+                {p}
+              </p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. What comes next — follow-on cards, journey line, optional add-ons */}
+      <section className="reveal">
+        <div className={`mx-auto max-w-[1440px] ${sectionBase}`}>
+          <Eyebrow>{content.whatComesNext.eyebrow}</Eyebrow>
+          <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
+            {content.whatComesNext.headline}
+          </h2>
+          <div className="mb-10 max-w-[640px]">
+            {content.whatComesNext.intro.map((p) => (
+              <p key={p} className="mb-5 font-sans text-xl leading-[1.65] font-light text-text-secondary last:mb-0">
+                {p}
+              </p>
+            ))}
+          </div>
+          <div className="mb-12 flex flex-col gap-6 lg:grid lg:grid-cols-3 lg:gap-x-4">
+            {content.whatComesNext.items.map((item) => (
+              <article
+                key={item.title}
+                className={cn(
+                  'relative flex flex-col gap-4 border border-[var(--v8-glass-border)] py-7 px-6 transition-colors duration-300 hover:border-muted-foreground md:py-9 md:px-8',
+                  glassCard,
+                )}
+              >
+                <CornerMarks />
+                <h3 className="font-display text-[clamp(20px,2vw,24px)] leading-[1.15] text-foreground italic">
+                  {item.title}
+                </h3>
+                <p className="font-sans text-base leading-[1.65] font-light text-text-secondary">{item.body}</p>
+              </article>
+            ))}
+          </div>
+          <ChipRow items={content.whatComesNext.journey} connected className="mb-6" />
+          <p className="mb-12 max-w-[640px] font-sans text-[17px] leading-[1.65] font-light text-text-secondary">
+            {content.whatComesNext.journeyNote}
+          </p>
+          <p className="mb-6 max-w-[640px] font-sans text-[17px] leading-[1.65] font-light text-text-secondary">
+            {content.whatComesNext.addOnsIntro}
+          </p>
+          <ul className="mb-8 flex max-w-[900px] list-none flex-wrap gap-2.5 p-0">
+            {content.whatComesNext.addOns.map((item) => (
+              <li
+                key={item}
+                className="border border-border px-4 py-2.5 font-mono text-xs tracking-[0.04em] text-text-secondary transition-colors hover:border-muted-foreground hover:text-foreground"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p className="max-w-[640px] font-sans text-[17px] leading-[1.65] font-light text-muted-foreground italic">
+            {content.whatComesNext.addOnsNote}
+          </p>
         </div>
       </section>
     </>

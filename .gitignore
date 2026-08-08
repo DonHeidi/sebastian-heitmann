@@ -49,3 +49,6 @@ routeTree.gen.ts
 
 # local screenshots
 /tmp-screenshots/
+
+# superpowers subagent-driven-development scratch
+.superpowers/

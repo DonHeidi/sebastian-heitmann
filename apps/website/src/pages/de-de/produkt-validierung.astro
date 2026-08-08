@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Navigation } from '../../components/navigation';
+import ThemeToggle from '@/components/theme-toggle.astro';
+import { ProductValidationContent } from '../../components/product-validation-content';
+import { ContactSection } from '../../components/contact-section';
+import ContactForm from '@/components/contact-form.astro';
+import { Footer } from '../../components/footer';
+import { getImage } from 'astro:assets';
+import jobDirectoryShot from '../../assets/job-directory.png';
+import { getStrings, getHreflangAlternates } from '../../i18n/utils';
+import type { Locale } from '../../i18n/utils';
+
+const locale = Astro.currentLocale as Locale;
+const s = getStrings(locale);
+const mailEndpoint = import.meta.env.PUBLIC_MAIL_ENDPOINT || '';
+const contact = { ...s.contact, headline: s.productValidation.contact.headline, intro: s.productValidation.contact.intro };
+
+// Transformed via getImage() rather than passing `.src`, which would make Astro
+// emit the full-size source PNG into dist/_astro (see AGENTS.md image gotchas).
+// The height is derived from the source's own aspect ratio, never hardcoded:
+// a re-shoot at a different ratio would otherwise leave the <img> advertising
+// stale intrinsic dimensions, and the page would reflow once the webp decodes.
+// `widths` emits a srcset so a phone fetches the 480px variant instead of the
+// desktop one; this is the page's largest asset. `sizes` mirrors the figure's
+// layout: full column width until the xl breakpoint splits the row, 640px after.
+//
+// Height is derived from the source's aspect ratio, never hardcoded. A re-shoot
+// at another ratio would otherwise leave the <img> advertising stale intrinsic
+// dimensions and the page would reflow once the webp decodes.
+const exampleWidth = 1280;
+const exampleShot = await getImage({
+    src: jobDirectoryShot,
+    width: exampleWidth,
+    widths: [480, 800, exampleWidth],
+    sizes: '(min-width: 1280px) 640px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)',
+    format: 'webp',
+});
+const exampleImage = {
+    src: exampleShot.src,
+    srcset: exampleShot.srcSet.attribute,
+    sizes: exampleShot.attributes.sizes,
+    width: exampleWidth,
+    height: Math.round(exampleWidth * (jobDirectoryShot.height / jobDirectoryShot.width)),
+};
+
+const alternates = getHreflangAlternates('/product-validation', '/de-de/produkt-validierung');
+---
+<Layout
+    locale={locale}
+    title={s.productValidation.meta.title}
+    description={s.productValidation.meta.description}
+    alternates={alternates}
+>
+    <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+        <ThemeToggle labels={s.nav.themeToggle} />
+    </Navigation>
+    <main>
+        <ProductValidationContent content={s.productValidation} exampleImage={exampleImage} />
+        <ContactSection contact={contact}>
+            <ContactForm strings={contact} endpoint={mailEndpoint} />
+        </ContactSection>
+    </main>
+    <Footer footer={s.footer} privacyHref={getRelativeLocaleUrl(locale, 'privacy')} imprintHref={getRelativeLocaleUrl(locale, 'imprint')} />
+</Layout>

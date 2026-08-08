@@ -1,0 +1,32 @@
+{
+  "en-us": {
+    "@type": "Person",
+    "@id": "https://www.sebastian-heitmann.dev/#person",
+    "name": "Sebastian Heitmann",
+    "jobTitle": "Technology Consultant",
+    "url": "https://www.sebastian-heitmann.dev",
+    "email": "me@sebastian-heitmann.dev",
+    "knowsLanguage": ["de", "en"],
+    "sameAs": [
+      "https://www.sebastian-heitmann.dev",
+      "https://www.sebastian-heitmann.rocks",
+      "https://www.linkedin.com/in/sebastian-heitmann/",
+      "https://github.com/DonHeidi"
+    ]
+  },
+  "de-de": {
+    "@type": "Person",
+    "@id": "https://www.sebastian-heitmann.dev/#person",
+    "name": "Sebastian Heitmann",
+    "jobTitle": "Technology Consultant",
+    "url": "https://www.sebastian-heitmann.dev",
+    "email": "me@sebastian-heitmann.dev",
+    "knowsLanguage": ["de", "en"],
+    "sameAs": [
+      "https://www.sebastian-heitmann.dev",
+      "https://www.sebastian-heitmann.rocks",
+      "https://www.linkedin.com/in/sebastian-heitmann/",
+      "https://github.com/DonHeidi"
+    ]
+  }
+}

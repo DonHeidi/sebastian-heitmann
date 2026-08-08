@@ -177,8 +177,8 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
       </section>
 
       {/* 3. Offer — single corner-framed package card with scope boundaries */}
-      <section className="reveal" id="package">
-        <div className={`mx-auto max-w-[1440px] ${sectionBase} scroll-mt-[100px]`}>
+      <section className="reveal">
+        <div id="package" className={`mx-auto max-w-[1440px] ${sectionBase} scroll-mt-[100px]`}>
           <Eyebrow>{content.offer.eyebrow}</Eyebrow>
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
             {content.offer.headline}

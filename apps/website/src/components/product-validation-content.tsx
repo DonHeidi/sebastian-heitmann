@@ -177,8 +177,12 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
           </p>
           <ChipRow items={content.hero.meta} className="mt-4" />
           <div className="mt-8 flex flex-col items-start gap-4 md:flex-row md:items-center md:gap-10">
-            <CtaLink href={contactUrl}>{content.hero.cta}</CtaLink>
-            <JumpLink href="#package">{content.hero.secondaryCta}</JumpLink>
+            <CtaLink href={contactUrl} className="md:self-center">
+              {content.hero.cta}
+            </CtaLink>
+            <JumpLink href="#package" className="md:self-center">
+              {content.hero.secondaryCta}
+            </JumpLink>
           </div>
         </div>
       </section>

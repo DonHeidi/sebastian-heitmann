@@ -49,3 +49,9 @@ routeTree.gen.ts
 
 # local screenshots
 /tmp-screenshots/
+
+# rocks: raw concrete background photographs (~2.5MB each, owner-supplied
+# local-only sources). Only the processed derivatives from
+# apps/rocks/scripts/generate-concrete-bg.mjs are committed.
+/apps/rocks/src/assets/concrete-dark.png
+/apps/rocks/src/assets/concrete-light.png

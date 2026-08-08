@@ -67,6 +67,23 @@ describe('itemList', () => {
       { '@type': 'ListItem', position: 2, name: 'CV', url: 'https://www.sebastian-heitmann.dev/cv/' },
     ]);
   });
+
+  test('an entry with no url gets a name-only ListItem instead of being dropped', () => {
+    // Regression: apps/rocks used to filter out project entries with no
+    // resolvable link (sub-tracker, typescript-best-practices) entirely,
+    // which erased them from the site's structured data. They should be
+    // represented, just without a url that might 404 — the same fail-safe
+    // shape breadcrumbs() uses for its final crumb.
+    const node = itemList([
+      { url: 'https://www.sebastian-heitmann.rocks/cases/blickwerk/', name: 'Blickwerk' },
+      { name: 'sub-tracker' },
+    ]);
+    expect(node.itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Blickwerk', url: 'https://www.sebastian-heitmann.rocks/cases/blickwerk/' },
+      { '@type': 'ListItem', position: 2, name: 'sub-tracker' },
+    ]);
+    expect('url' in (node.itemListElement as Array<Record<string, unknown>>)[1]!).toBe(false);
+  });
 });
 
 describe('profileMainEntity and personOccupations', () => {

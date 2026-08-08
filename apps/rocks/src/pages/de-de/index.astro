@@ -31,18 +31,17 @@ const caseSlug = (e: (typeof entries)[number]) => e.id.split('/').slice(1).join(
 // Mirrors CaseCard's own linkHref logic (case-card.tsx): only case-study
 // entries get a first-party detail page — /cases/[slug].astro only generates
 // static paths for that kind. A project entry links out to its first external
-// link if it has one, or renders no link at all (both current project entries
-// have an empty `links` array). Building `/de-de/cases/${slug}` for every entry
-// regardless of kind would advertise 404s for those in the JSON-LD.
+// link if it has one; building `/de-de/cases/${slug}` for every entry
+// regardless of kind would advertise 404s for those in the JSON-LD. An entry
+// with neither (both current project entries have an empty `links` array)
+// gets a name-only ListItem via itemList()'s optional `url` — this site's
+// whole purpose is to enumerate the work, so an unlinked entry is still
+// listed, just without an `item`/`url` that would 404.
 const itemUrl = (e: (typeof entries)[number]) =>
   e.data.kind === 'case-study' ? absoluteUrl(`/de-de/cases/${caseSlug(e)}`) : e.data.links[0]?.url;
 
 const structuredNodes = [
-  itemList(
-    entries
-      .filter((e) => itemUrl(e))
-      .map((e) => ({ url: itemUrl(e)!, name: e.data.title }))
-  ),
+  itemList(entries.map((e) => ({ url: itemUrl(e), name: e.data.title }))),
 ];
 ---
 

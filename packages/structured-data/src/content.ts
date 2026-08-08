@@ -71,15 +71,21 @@ export function creativeWork(input: {
   });
 }
 
-export function itemList(items: Array<{ url: string; name: string }>): Node {
+/** `url` is optional: an entry with no resolvable link (e.g. an unlinked
+ *  apps/rocks portfolio project) still gets a name-only ListItem, the same
+ *  fail-safe shape breadcrumbs() uses for its final crumb, rather than being
+ *  dropped from the list entirely or advertising a URL that 404s. */
+export function itemList(items: Array<{ url?: string; name: string }>): Node {
   return {
     '@type': 'ItemList',
-    itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      url: item.url,
-    })),
+    itemListElement: items.map((item, index) =>
+      compact({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: item.url,
+      })
+    ),
   };
 }
 

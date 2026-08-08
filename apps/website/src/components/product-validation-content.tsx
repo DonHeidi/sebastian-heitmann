@@ -215,48 +215,62 @@ export function ProductValidationContent({ content }: ProductValidationContentPr
           <h2 className="mb-8 font-display text-[clamp(32px,4vw,48px)] leading-[1.1] tracking-[-0.01em] text-foreground">
             {content.offer.headline}
           </h2>
-          {/* Capped well below the 1440px container. Full-bleed, this was the only
-              element on a page whose prose sits at 640px, so it read as a band
-              rather than an object, and it stranded the price ~700px from the
-              package name. Left-aligned with the section's eyebrow and headline,
-              keeping the page's ragged-right rhythm. */}
-          <div
-            className={cn(
-              'relative flex max-w-[1040px] flex-col border border-border-accent py-7 px-6 md:py-11 md:px-10',
-              glassCard,
-            )}
-          >
-            <CornerMarks accent />
-            <div className="mb-7 flex flex-wrap items-baseline gap-3 border-b border-border pb-5 md:flex-nowrap md:gap-5">
-              <h3 className="font-display text-[clamp(26px,2.4vw,32px)] leading-[1.1] text-foreground italic">
+          {/* A pricing card, not a scope table. It sits beside the description
+              rather than spanning the container, so the price, the timeline, and
+              the deliverables read as one scannable column. Scope boundaries live
+              below it: they inform, they do not sell, and putting them inside the
+              card was what made it read as broad. */}
+          <div className="flex max-w-[1040px] flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
+            <div
+              className={cn(
+                'relative flex w-full shrink-0 flex-col border border-border-accent py-7 px-6 md:py-9 md:px-8 lg:w-[420px]',
+                glassCard,
+              )}
+            >
+              <CornerMarks accent />
+              <h3 className="font-display text-[clamp(24px,2.2vw,30px)] leading-[1.1] text-foreground italic">
                 {content.offer.name}
               </h3>
-              <span className="ml-auto font-mono text-sm tracking-[0.04em] text-primary">{content.offer.price}</span>
+              <p className="mt-4 font-mono text-xl tracking-[0.02em] text-primary">{content.offer.price}</p>
+              <ul className="mt-3 flex list-none flex-col gap-1 p-0">
+                {content.offer.meta.map((m) => (
+                  <li key={m} className="font-mono text-[11px] tracking-[0.06em] text-muted-foreground uppercase">
+                    {m}
+                  </li>
+                ))}
+              </ul>
+              <h4 className="mt-8 mb-4 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+                {content.offer.includedLabel}
+              </h4>
+              <ul className="flex list-none flex-col gap-0 p-0">
+                {content.offer.included.map((item) => (
+                  <li
+                    key={item}
+                    className="relative border-b border-border py-2.5 pl-[22px] font-sans text-[15px] leading-[1.5] font-light text-text-secondary first:border-t"
+                  >
+                    <span aria-hidden="true" className="absolute top-3 left-0 text-[10px] text-primary">
+                      ✱
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <CtaLink href={contactUrl} className="mt-8">
+                {content.offer.cta}
+              </CtaLink>
             </div>
-            <p className="mb-9 max-w-[640px] font-sans text-lg leading-[1.65] font-light text-text-secondary">
-              {content.offer.description}
-            </p>
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12">
-              <div className="flex flex-col">
-                <h4 className="mb-5 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
-                  {content.offer.includedLabel}
-                </h4>
-                <RuledList items={content.offer.included} />
-              </div>
-              <div className="flex flex-col">
-                <h4 className="mb-5 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
-                  {content.offer.excludedLabel}
-                </h4>
-                <RuledList items={content.offer.excluded} />
-              </div>
+            <div className="max-w-[520px] lg:pt-2">
+              <p className="font-sans text-lg leading-[1.65] font-light text-text-secondary">
+                {content.offer.description}
+              </p>
+              <h4 className="mt-10 mb-4 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+                {content.offer.excludedLabel}
+              </h4>
+              <RuledList items={content.offer.excluded} />
+              <p className="mt-7 font-sans text-sm leading-[1.6] font-light text-muted-foreground italic">
+                {content.offer.legalNote}
+              </p>
             </div>
-            <ChipRow items={content.offer.meta} className="mt-9" />
-            <p className="mt-7 max-w-[640px] font-sans text-sm leading-[1.6] font-light text-muted-foreground italic">
-              {content.offer.legalNote}
-            </p>
-            <CtaLink href={contactUrl} className="mt-6">
-              {content.offer.cta}
-            </CtaLink>
           </div>
         </div>
       </section>

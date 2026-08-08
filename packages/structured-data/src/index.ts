@@ -5,3 +5,7 @@ export type { SiteKey } from './site';
 export { website, webPage, breadcrumbs, siteId, originFor } from './site';
 export type { Billing, OfferInput } from './offerings';
 export { offer, offerCatalog, service } from './offerings';
+export {
+  blog, blogPosting, creativeWork, itemList, profilePage,
+  personOccupations, personKnowsAbout,
+} from './content';

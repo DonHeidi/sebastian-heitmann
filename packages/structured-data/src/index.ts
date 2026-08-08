@@ -9,3 +9,4 @@ export {
   blog, blogPosting, creativeWork, itemList, profileMainEntity,
   personOccupations, personKnowsAbout,
 } from './content';
+export { validateGraph } from './validate';

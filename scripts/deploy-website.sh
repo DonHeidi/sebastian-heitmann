@@ -67,6 +67,12 @@ fi
 
 bun run build
 
+# Structured data is emitted by a shared package and referenced across pages by
+# @id; a broken graph is invisible in the rendered page and in the build output.
+# Gate it here, the same way PUBLIC_MAIL_ENDPOINT drift is gated above. This
+# repo has no CI, so the deploy scripts are the only enforcement point.
+bun "$ROOT_DIR/scripts/check-structured-data.ts" dist
+
 # Astro's content-collection image() schema imports each source asset via Vite,
 # which emits the originals to dist/_astro/ even when only transformed variants
 # (webp/jpg) are referenced. Prune any IMAGE in dist/_astro/ that isn't

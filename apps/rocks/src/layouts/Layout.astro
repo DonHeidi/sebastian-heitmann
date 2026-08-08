@@ -21,6 +21,10 @@ type Props = {
   pageType?: string;
   /** 404 opts out of structured data entirely: there is no entity to describe. */
   noStructuredData?: boolean;
+  /** Short label for this page's own breadcrumb crumb (Finding D: `title`
+   *  here is `${entry.data.title} — ${t.meta.title}`, and Google renders the
+   *  crumb verbatim). Falls back to `title` when omitted. */
+  breadcrumbLabel?: string;
 };
 
 const {
@@ -34,21 +38,33 @@ const {
   nodes = [],
   pageType,
   noStructuredData = false,
+  breadcrumbLabel,
 } = Astro.props;
 const htmlLang = localeConfig[locale].htmlLang;
 const siteOrigin = 'https://www.sebastian-heitmann.rocks';
-const canonicalUrl = canonical ?? `${siteOrigin}${Astro.url.pathname}`;
-
-// First-path-segment names this site actually routes with their own index
-// page, so breadcrumbs() can safely link an intermediate crumb to it. Only
-// this layout knows the route table, so it is the one place this is
-// declared (see breadcrumbs()'s routedSegments doc in
-// packages/structured-data/src/site.ts). Empty: there is no
-// src/pages/cases/index.astro, so every case page's /cases/ intermediate
-// crumb must stay name-only until one exists.
-const ROUTED_BREADCRUMB_SEGMENTS: string[] = [];
+// The document's own URL, always derived from the actual route being
+// rendered — this identifies *this* HTML document in the graph (the
+// WebPage `@id`), kept distinct from `canonicalUrl` (a separate assertion
+// about which URL search engines should prefer). No rocks page diverges
+// the two today, but the website's German fallback article pages do (see
+// Finding 1 in the 2026-08-08 PR review) — keeping both layouts structured
+// the same way avoids reintroducing that bug here later.
+const documentUrl = `${siteOrigin}${Astro.url.pathname}`;
+const canonicalUrl = canonical ?? documentUrl;
 
 const s = getStrings(locale);
+
+// First-path-segment names this site actually routes with their own index
+// page and/or has its own localized label, so breadcrumbs() can render a
+// correct intermediate crumb. Only this layout knows the route table and
+// copy, so it is the one place this is declared (see breadcrumbs()'s
+// `segments` doc in packages/structured-data/src/site.ts). 'cases' is NOT
+// routed — there is no src/pages/cases/index.astro, so its crumb must stay
+// link-free — but it still needs the localized label this site's own home
+// page heading gives it (`t.cases.sectionTitle`).
+const BREADCRUMB_SEGMENTS: Record<string, { label?: string; routed?: boolean }> = {
+  cases: { label: s.cases.sectionTitle },
+};
 
 // A page that supplies its own primary node still gets a WebPage: the WebPage
 // describes the document, the other node describes the thing it's about.
@@ -58,7 +74,7 @@ const structuredData = noStructuredData
       person(locale),
       website('rocks', locale, s.meta.description),
       webPage({
-        url: canonicalUrl,
+        url: documentUrl,
         title,
         description,
         site: 'rocks',
@@ -66,8 +82,8 @@ const structuredData = noStructuredData
         type: pageType,
       }),
       breadcrumbs({
-        pathname: Astro.url.pathname, title, site: 'rocks', locale,
-        routedSegments: ROUTED_BREADCRUMB_SEGMENTS,
+        pathname: Astro.url.pathname, title, label: breadcrumbLabel, site: 'rocks', locale,
+        segments: BREADCRUMB_SEGMENTS,
       }),
       ...nodes,
     );

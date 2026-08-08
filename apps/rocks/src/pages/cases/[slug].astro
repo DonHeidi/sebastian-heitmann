@@ -62,6 +62,7 @@ const structuredNodes = [
   alternates={getHreflangAlternates(`/cases/${slug}/`)}
   ogType="article"
   canonical={canonicalUrl}
+  breadcrumbLabel={entry.data.title}
   nodes={structuredNodes}
 >
   <Navigation nav={t.nav} languagePicker={t.languagePicker} locale={locale} currentPath={Astro.url.pathname}>

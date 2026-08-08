@@ -9,7 +9,7 @@ import { Footer } from '../../components/footer';
 import { ArticleView } from '../../components/article-view';
 import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import type { Locale } from '../../i18n/utils';
-import { blogPosting, siteId } from '@sh/structured-data';
+import { blogPosting, blogId } from '@sh/structured-data';
 
 export async function getStaticPaths() {
   const allArticles = await getCollection('articles', ({ data }) => !data.draft);
@@ -84,7 +84,7 @@ const structuredNodes = [
     image: heroImageUrl,
     keywords: entry.data.tags,
     locale,
-    blogId: `${siteId('dev')}-blog`,
+    blogId: blogId('dev', locale),
   }),
 ];
 

@@ -9,7 +9,7 @@ import { Footer } from '../../../components/footer';
 import { ArticleView } from '../../../components/article-view';
 import { getStrings, getHreflangAlternates } from '../../../i18n/utils';
 import type { Locale } from '../../../i18n/utils';
-import { blogPosting, siteId } from '@sh/structured-data';
+import { blogPosting, blogId } from '@sh/structured-data';
 
 export async function getStaticPaths() {
   const allArticles = await getCollection('articles', ({ data }) => !data.draft);
@@ -65,13 +65,22 @@ const articleDetailImage = entry.data.headerDetailImage
   : undefined;
 
 const siteOrigin = 'https://www.sebastian-heitmann.dev';
+// This document's own URL — always the German route being rendered here,
+// regardless of what it canonicalizes to. Finding 1: a fallback page used
+// to hand its canonical (English) URL to blogPosting()'s `url`, so its
+// BlogPosting `@id` collided with the English page's, merging two nodes
+// that declare different `inLanguage`. Node identity must track the actual
+// document, not the canonical assertion, so this is what blogPosting() gets.
+const documentUrl = `${siteOrigin}${Astro.url.pathname}`;
 // A fallback page serves the untranslated English article verbatim, so its
 // canonical is the English URL (self-canonicalizing it makes Google flag
 // "Duplicate, Google chose different canonical than user"). Real translations
-// self-canonicalize and declare the hreflang pair.
+// self-canonicalize and declare the hreflang pair. This drives only the
+// rendered <link rel=canonical> (via Layout's `canonical` prop) — it is a
+// separate concern from the document's own identity above.
 const canonicalUrl = fallback
   ? `${siteOrigin}/articles/${currentSlug}/`
-  : `${siteOrigin}${Astro.url.pathname}`;
+  : documentUrl;
 const alternates = fallback ? [] : getHreflangAlternates(`/articles/${currentSlug}`);
 const ogImage = entry.data.headerImage
   ? await getImage({
@@ -86,7 +95,7 @@ const heroImageUrl = ogImage ? `${siteOrigin}${ogImage.src}` : undefined;
 
 const structuredNodes = [
   blogPosting({
-    url: canonicalUrl,
+    url: documentUrl,
     headline: entry.data.title,
     description: entry.data.abstract,
     datePublished: publishedISO,
@@ -94,7 +103,7 @@ const structuredNodes = [
     image: heroImageUrl,
     keywords: entry.data.tags,
     locale,
-    blogId: `${siteId('dev')}-blog`,
+    blogId: blogId('dev', locale),
   }),
 ];
 

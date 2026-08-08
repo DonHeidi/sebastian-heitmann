@@ -25,7 +25,7 @@ const sorted = articles.sort((a, b) =>
 
 const structuredNodes = [
   // The Blog node is the parent every BlogPosting points at via isPartOf.
-  blog('dev', 'Articles'),
+  blog({ site: 'dev', locale, name: 'Articles', url: absoluteUrl('/articles') }),
   itemList(sorted.map((article) => ({
     url: absoluteUrl(`/articles/${article.id}`),
     name: article.data.title,
@@ -50,6 +50,7 @@ const editorialImageSrcs = await Promise.all(
   description={s.meta.description}
   alternates={alternates}
   pageType="CollectionPage"
+  breadcrumbLabel="Articles"
   nodes={structuredNodes}
 >
   <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>

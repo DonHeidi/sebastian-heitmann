@@ -18,10 +18,10 @@ const alternates = getHreflangAlternates('/cv');
 const cvUrl = absoluteUrl('/de-de/cv');
 const structuredNodes = [
     profileMainEntity(cvUrl),
-    personOccupations(s.cv.experience.map((e) => ({ role: e.role, company: e.company }))),
+    personOccupations(s.cv.experience.map((e) => ({ role: e.role }))),
 ];
 ---
-<Layout locale={locale} title={s.cv.meta.title} description={s.cv.meta.description} alternates={alternates} pageType="ProfilePage" nodes={structuredNodes}>
+<Layout locale={locale} title={s.cv.meta.title} description={s.cv.meta.description} alternates={alternates} pageType="ProfilePage" breadcrumbLabel={s.nav.cvLabel} nodes={structuredNodes}>
     <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
         <ThemeToggle labels={s.nav.themeToggle} />
     </Navigation>

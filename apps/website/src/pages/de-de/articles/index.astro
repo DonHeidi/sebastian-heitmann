@@ -31,11 +31,22 @@ const sorted = articles.sort((a, b) =>
 
 const structuredNodes = [
   // The Blog node is the parent every BlogPosting points at via isPartOf.
-  blog('dev', 'Artikel'),
-  itemList(sorted.map((article) => ({
-    url: absoluteUrl(`/de-de/articles/${article.id.replace(/^de-de\//, '')}`),
-    name: article.data.title,
-  }))),
+  blog({ site: 'dev', locale, name: 'Artikel', url: absoluteUrl('/de-de/articles') }),
+  // Finding 2: an entry with no German translation is a fallback page that
+  // self-canonicalizes to the English URL (see de-de/articles/[slug].astro
+  // and astro.config.mjs's sitemap filter, which excludes those very URLs
+  // with the comment "a sitemap should only list canonical URLs"). Listing
+  // the /de-de/articles/<slug>/ URL here for those entries would re-advertise
+  // exactly the non-canonical URLs the sitemap was changed to suppress, so
+  // each entry must point at its own canonical URL, not always the German one.
+  itemList(sorted.map((article) => {
+    const slug = article.id.replace(/^de-de\//, '');
+    const isTranslated = article.id.startsWith('de-de/');
+    return {
+      url: isTranslated ? absoluteUrl(`/de-de/articles/${slug}`) : absoluteUrl(`/articles/${slug}`),
+      name: article.data.title,
+    };
+  })),
 ];
 
 const editorialArticles = sorted.filter((article) => article.data.type !== 'service-description');
@@ -63,6 +74,7 @@ const serviceImageSrcs = await Promise.all(
   description={s.meta.description}
   alternates={alternates}
   pageType="CollectionPage"
+  breadcrumbLabel="Artikel"
   nodes={structuredNodes}
 >
   <Navigation nav={s.nav} languagePicker={s.languagePicker} locale={locale} currentPath={Astro.url.pathname}>

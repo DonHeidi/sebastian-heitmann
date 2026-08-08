@@ -85,6 +85,13 @@ const structuredNodes = [
     keywords: entry.data.tags,
     locale,
     blogId: blogId('dev', locale),
+    author: authorEntry && authorEntry.id !== 'sebastian-heitmann'
+      ? {
+          '@type': 'Person',
+          name: authorEntry.data.name,
+          sameAs: authorEntry.data.socials?.map((social) => social.url),
+        }
+      : undefined,
   }),
 ];
 

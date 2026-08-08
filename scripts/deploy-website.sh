@@ -45,6 +45,18 @@ fi
 
 cd "$WEBSITE_DIR"
 
+# apps/website/test/i18n-prices.test.ts is the only thing keeping a structured
+# priceMin (packages/structured-data's offer()) in sync with the price string
+# the page actually renders (apps/website/src/i18n/en-us.ts et al) — see
+# AGENTS.md's "Prices are 'from' prices". Nothing else runs it: this repo has
+# no CI, and `bun run build` below is a bare `astro build` with no type-check.
+# Also run packages/structured-data's own suite, since a broken builder there
+# breaks both sites. Run both here, before the build, so a drifted price or a
+# broken builder aborts the deploy the same way the structured-data gate
+# (further below) aborts on an invalid graph.
+( cd "$ROOT_DIR/packages/structured-data" && bun test )
+bun test
+
 # The endpoint is committed in apps/website/.env.schema so that `bun run build`
 # and this script produce byte-identical output. Terraform stays the source of
 # truth for the value, so verify the two agree and abort on drift rather than

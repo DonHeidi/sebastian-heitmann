@@ -56,6 +56,38 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  /* Concrete ground plane (owner: "give a rougher texture for the
+     background... at the moment the background is slightly clean").
+     `background-image` painted directly on `body` sits BELOW every section
+     (sections render with no background of their own — see index.astro/
+     about-section/footer), so this shows through everywhere, including the
+     band right below the hero's torn bottom edge, where the poster now
+     reads as pasted onto a concrete wall.
+     Sources: scripts/generate-concrete-bg.mjs turns the owner's two
+     photographs into a small (640×640), seamlessly tileable, pre-tinted
+     WEBP per theme — see that file's header for the full pipeline and the
+     task report for measured tiling + contrast checks. The tint (blend
+     toward each theme's --v8-bg) is baked into the shipped pixels rather
+     than applied as a runtime CSS opacity/blend-mode (the tear-mask/
+     tear-fiber precedent): `opacity` can't be used here anyway, since it
+     would fade body's real children, not just this background.
+     Plain `background-repeat` (no `fixed` attachment): the texture scrolls
+     with the page like any other background-image, so there's no extra
+     compositing/repaint cost on scroll — `background-attachment: fixed` is
+     a known perf hazard on mobile and isn't needed since the point is a
+     ground plane, not a parallax effect.
+     Theme-scoped the same way as `.v8-wrinkle` below: `html` carries the
+     `light`/`dark` class pre-paint, so only the active theme's file is ever
+     requested. */
+  .dark body {
+    background-image: url('../assets/concrete-tile-dark.webp');
+    background-repeat: repeat;
+  }
+  .light body {
+    background-image: url('../assets/concrete-tile-light.webp');
+    background-repeat: repeat;
+  }
+
   img,
   picture,
   video,

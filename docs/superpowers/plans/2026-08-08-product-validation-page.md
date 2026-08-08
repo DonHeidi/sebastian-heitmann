@@ -504,7 +504,7 @@ Delivers a reachable page whose hero and price block are complete. This is the c
 
 **Interfaces:**
 - Consumes: `Strings['productValidation']` from Task 1.
-- Produces: `ProductValidationContent` (named export) taking `{ content: Strings['productValidation'] }`, and the local helpers `Eyebrow`, `CtaLink`, `JumpLink`, `ChipRow`, `CornerMarks`, `GlassCardShell`, plus the `sectionBase` and `glassCard` class constants. Tasks 3 and 4 add sections to this same file and reuse these helpers verbatim.
+- Produces: `ProductValidationContent` (named export) taking `{ content: Strings['productValidation'] }`, and the local helpers `Eyebrow`, `CtaLink`, `JumpLink`, `ChipRow`, `CornerMarks`, `RuledList`, plus the `sectionBase` and `glassCard` class constants. Tasks 3 and 4 add sections to this same file and reuse these helpers verbatim.
 
 - [ ] **Step 1: Create the content component with helpers and sections 1 to 3**
 

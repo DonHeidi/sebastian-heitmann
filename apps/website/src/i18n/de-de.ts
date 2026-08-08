@@ -1076,7 +1076,7 @@ export const deDe: Strings = {
         'Entwicklung einer vollständigen Anwendung oder eines MVP',
         'Bezahlte Werbung oder Mediabudget',
         'Laufendes Performance-Marketing',
-        'Umfangreiche Kundenforschung oder Rekrutierung von Teilnehmern',
+        'Umfangreiche Nutzerforschung oder Rekrutierung von Teilnehmern',
         'Entwicklung einer vollständigen Corporate Identity',
         'Professionelle Fotografie oder Videoproduktion',
         'Rechtsberatung oder Erstellung von Rechtstexten',
@@ -1173,7 +1173,7 @@ export const deDe: Strings = {
       headline: 'Die Website ist das Experiment, nicht das verkaufte Produkt.',
       body: [
         'Es gibt viele Menschen, die eine Landingpage bauen können.',
-        'Die wichtigere Arbeit liegt davor: zu bestimmen, was die Seite sagen soll, wen sie überzeugen soll und welche Reaktion tatsächlich etwas Brauchbares aussagt.',
+        'Die wichtigere Arbeit liegt davor: zu bestimmen, was die Seite sagen soll, wen sie überzeugen soll und welche Reaktion tatsächlich aussagekräftig ist.',
         'Mein Hintergrund verbindet Softwareentwicklung, Produkt- und Projektarbeit, technische Beratung, UX-Methoden und KI-gestützte Umsetzung.',
         'Dadurch kann ich am Nutzenversprechen arbeiten, ohne aus dem Blick zu verlieren, was später dahinter entwickelt werden müsste.',
         'Und wenn die Validierung trägt, muss das Projekt nicht bei der Website enden.',
@@ -1202,7 +1202,7 @@ export const deDe: Strings = {
       ],
       journey: ['Produktidee', 'Validierung', 'Prototyp', 'MVP', 'Produkt'],
       journeyNote: 'Sie müssen sich nicht von Anfang an auf diesen gesamten Weg festlegen.',
-      addOnsIntro: 'Je nach Produkt lässt sich der Product Validation Sprint erweitern um:',
+      addOnsIntro: 'Je nach Produkt sind zusätzliche Leistungen möglich:',
       addOns: [
         'Interaktiver Produktprototyp',
         'Fake-Door- oder simulierte Produktabläufe',
@@ -1267,7 +1267,7 @@ export const deDe: Strings = {
         {
           question: 'Warum 4.900 €, wenn ich eine Landingpage deutlich günstiger bekomme?',
           answer: [
-            'Weil Sie das können.',
+            'Das stimmt: Eine reine Landingpage bekommen Sie auch günstiger.',
             'Wenn Sie genau wissen, was das Produkt ist und wie es positioniert werden soll, fertige Texte und ein fertiges Design haben und nur noch jemanden für die Umsetzung brauchen, ist dieses Angebot vermutlich das falsche.',
             'Dieses Angebot richtet sich an die Phase, in der diese Fragen noch zu klären sind.',
           ],

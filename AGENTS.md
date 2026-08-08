@@ -13,7 +13,7 @@ apps/
 ├── mail-service/     # Scaleway serverless contact form handler
 └── apex-redirect/    # Scaleway serverless apex → www 301 redirect (path + query preserved)
 packages/
-└── structured-data/  # @sh/structured-data — shared schema.org node builders for both sites
+└── structured-data/  # @sh/structured-data: shared schema.org node builders for both sites
 infra/                # Terraform — Scaleway project, function, object storage, CDN
 docs/                 # Shared project documentation
 ```
@@ -196,7 +196,7 @@ are forbidden `@type`s; `address`, `streetAddress`, `priceRange` and (see
 next section) `price` are forbidden keys anywhere in the graph
 (`FORBIDDEN_TYPES` / `FORBIDDEN_KEYS` in `validate.ts`). The postal address
 exists only in the rendered HTML of the imprint pages
-(`apps/website/src/pages/imprint.astro`, `apps/website/src/pages/de-de/impressum.astro`),
+(`apps/website/src/pages/imprint.astro`, `apps/website/src/pages/de-de/imprint.astro`),
 where German law (Impressumspflicht) requires it. It is deliberately never
 structured data.
 
@@ -228,14 +228,14 @@ Both layouts build the graph automatically: `person(locale)`,
 prop are appended. A new page gets a correct baseline `WebPage` for free.
 Three props tune it:
 
-- **`nodes`** — page-specific nodes to merge in (a `Service` node, a
+- **`nodes`**: page-specific nodes to merge in (a `Service` node, a
   `BlogPosting`, `personKnowsAbout`, etc.). Most pages set this.
-- **`pageType`** — narrows the page's own node past the default `WebPage`
+- **`pageType`**: narrows the page's own node past the default `WebPage`
   (`'ProfilePage'` on the CV pages, `'CollectionPage'` on the articles index
   and both `apps/rocks` home pages; `apps/website`'s home pages stay plain
   `WebPage` and add their `Service`/`ItemList`/`personKnowsAbout` facts via
   `nodes` instead).
-- **`noStructuredData`** — opts a page out entirely. Used only on `404.astro`
+- **`noStructuredData`**: opts a page out entirely. Used only on `404.astro`
   on both sites, which have no entity to describe;
   `scripts/check-structured-data.ts` asserts `404.html` has *zero* JSON-LD
   blocks.
@@ -251,7 +251,7 @@ from it fails `tsc` at build time instead of silently missing from the home
 page's service list.
 
 Service names come from dedicated `serviceName` i18n fields
-(`s.webProjects.meta.serviceName`, etc. — see `serviceName()` in
+(`s.webProjects.meta.serviceName`, etc., see `serviceName()` in
 `services.ts`), never from page titles. This was a deliberate choice by the
 site owner: titles and structured-data names are allowed to diverge.
 
@@ -265,7 +265,17 @@ is invoked at the end of both `scripts/deploy-website.sh` and
 **This repo has no CI**, so these two call sites are the only place any of
 this is enforced.
 
-`validateGraph` asserts, per page:
+The two components split the checking differently. The wrapper,
+`scripts/check-structured-data.ts`, asserts block-level and file-level facts
+before it ever calls into the package:
+
+- Every page has exactly one `<script type="application/ld+json">` block,
+  except `404.html`, which must have zero.
+- That block, where present, is valid JSON.
+
+Everything about the *content* of a parsed graph is asserted inside
+`validateGraph` (`packages/structured-data/src/validate.ts`), which the
+wrapper calls once per page on the parsed JSON:
 
 - `@context` is `https://schema.org` and `@graph` is an array.
 - Exactly one `Person` node with `@id` equal to `PERSON_ID`, and its JSON
@@ -282,7 +292,6 @@ this is enforced.
   (`#person`, `#website`, `#website-blog`, `#service` suffixes).
 - Every `Offer` has a non-empty `name`; if it has a `priceSpecification`,
   `minPrice` is numeric and `priceCurrency` is a string.
-- `404.html` has zero JSON-LD blocks; every other page has exactly one.
 
 ---
 

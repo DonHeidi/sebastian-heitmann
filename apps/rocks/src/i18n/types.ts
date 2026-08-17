@@ -16,6 +16,9 @@ export interface Strings {
     tagline: string;
     intro: { before: string; struck: string; replacement: string; after: string };
     artAlt: string;
+    /** Anchor under the billing block pulling into #cases — the poster's one
+     * pointer toward the work (the nav CTA points away, at contact). */
+    setlistCue: string;
   };
   credits: {
     label: string;
@@ -42,6 +45,10 @@ export interface Strings {
   /** Labels printed on the case tile's flip side (the CD back inlay).
    * The role line reuses `cases.roleLabel` — no duplicate here. */
   caseBack: {
+    /** Visible link row on the case's BACK face — the card's only navigation
+     * (the front face is deliberately inert; see case-card.tsx). */
+    openCase: string;
+    openProject: string;
     tracksLabel: string;
     yearLabel: string;
   };
@@ -63,6 +70,8 @@ export interface Strings {
     readOn: string;
   };
   about: {
+    /** aria-label of the CRT's power button (it toggles the screen). */
+    powerLabel: string;
     sectionTitle: string;
     body: string;
     avatarAlt: string;

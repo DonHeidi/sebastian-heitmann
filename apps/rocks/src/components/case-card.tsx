@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { Strings } from '../i18n/types';
 import { AsteriskMark } from './asterisk-mark';
 
@@ -98,18 +98,21 @@ export interface CaseCardProps {
  * spins the other way when picked up. The pose lives entirely inside this
  * absolutely-positioned scene, so the article's layout box never moves.
  *
- * A11y contract: the whole 3D scene is one `aria-hidden`, pointer-inert
- * layer — purely presentational, so nothing on either face duplicates into
- * the a11y tree. The real semantics live beside it: a single `<h3>` holding
- * ONE stretched anchor whose sr-only text is the title (accessible name
- * unchanged), clickable from both faces at every point of the flip. The
- * anchor's focus drives the flip via `group-focus-within`. The front stays
- * permanently duotone: the anchor overlay means the pointer never reaches
- * the `.v8-duotone` wrapper, and the tile no longer opts into the
- * `v8-duotone-host` reveal (that stays a hero behavior). Tailwind's `hover:`
- * variants are `(hover: hover)`-gated, so touch devices keep the front face
- * and tap-to-navigate; `motion-reduce` swaps faces without animating the
- * rotation.
+ * A11y + interaction contract (owner rework: "remove the click handler ...
+ * a link on the back of the case ... on touch, it should rotate as well"):
+ * the whole 3D scene is one `aria-hidden`, pointer-inert layer — purely
+ * presentational, so nothing on either face duplicates into the a11y tree.
+ * The card's ONLY navigation is the link row on the BACK face: a visual row
+ * painted inside the scene (so it rotates with the case) plus its real,
+ * focusable twin `<h3><a>` outside the scene at matching card-anchored
+ * coordinates, pointer-gated to the flipped states. The front face is inert —
+ * a resting card responds to hover/tap by FLIPPING, never by navigating.
+ * Flip triggers: hover (desktop), focus-within (keyboard — tabbing to the
+ * anchor turns the case over), and `.is-flipped`, toggled per tap by the
+ * touch script in Layout.astro (hover:none devices only). The front stays
+ * permanently duotone, and the tile no longer opts into the
+ * `v8-duotone-host` reveal (that stays a hero behavior); `motion-reduce`
+ * swaps faces without animating the rotation.
  */
 /** Resting-pose variants (task 26) — full static class strings so Tailwind's
  * scanner sees every utility. rotY spans -18..+28 (two variants turned the
@@ -118,19 +121,23 @@ export interface CaseCardProps {
  * horizontal or vertical neighbors share a pose at either column count with
  * the current six tiles. Each variant carries its own back-settle sign
  * (±170°, see the pose notes in the component doc block). */
+/* Each pose carries THREE flip triggers with a matching sign: hover (desktop),
+ * focus-within (keyboard reaches the back link), and `.is-flipped` — a class
+ * the touch script in Layout.astro toggles per tap, because touch has no hover
+ * and the owner wants tap-to-flip there rather than tap-to-navigate. */
 const POSES = [
   /* strong spine-forward — the original task-24 pose */
-  'rotate-x-8 rotate-y-22 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+  'rotate-x-8 rotate-y-22 group-hover:rotate-y-170 group-focus-within:rotate-y-170 group-[.is-flipped]:rotate-y-170',
   /* gentle opening-edge-forward (turned the other way) */
-  'rotate-x-6 -rotate-y-14 group-hover:-rotate-y-170 group-focus-within:-rotate-y-170',
+  'rotate-x-6 -rotate-y-14 group-hover:-rotate-y-170 group-focus-within:-rotate-y-170 group-[.is-flipped]:-rotate-y-170',
   /* strongest spine-forward */
-  'rotate-x-9 rotate-y-28 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+  'rotate-x-9 rotate-y-28 group-hover:rotate-y-170 group-focus-within:rotate-y-170 group-[.is-flipped]:rotate-y-170',
   /* near-square, barely turned */
-  'rotate-x-5 rotate-y-12 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+  'rotate-x-5 rotate-y-12 group-hover:rotate-y-170 group-focus-within:rotate-y-170 group-[.is-flipped]:rotate-y-170',
   /* strong opening-edge-forward (turned the other way) */
-  'rotate-x-7 -rotate-y-18 group-hover:-rotate-y-170 group-focus-within:-rotate-y-170',
+  'rotate-x-7 -rotate-y-18 group-hover:-rotate-y-170 group-focus-within:-rotate-y-170 group-[.is-flipped]:-rotate-y-170',
   /* medium spine-forward, steepest lean-back */
-  'rotate-x-10 rotate-y-17 group-hover:rotate-y-170 group-focus-within:rotate-y-170',
+  'rotate-x-10 rotate-y-17 group-hover:rotate-y-170 group-focus-within:rotate-y-170 group-[.is-flipped]:rotate-y-170',
 ];
 
 export function CaseCard({
@@ -148,10 +155,22 @@ export function CaseCard({
   const linkHref = data.kind === 'case-study' ? href : external?.url;
   const number = String(index + 1).padStart(2, '0');
   const pose = POSES[(index + poseOffset) % POSES.length];
+  const openLabel = data.kind === 'case-study' ? backStrings.openCase : backStrings.openProject;
   const faceChrome =
     'absolute inset-0 overflow-hidden rounded-[3px] border border-border bg-surface backface-hidden [outline:1px_solid_transparent] transition-colors group-hover:border-muted-foreground group-focus-within:border-primary';
+  /* Cast shadow (owner: "a shadow that moves with the shape"): a drop-shadow
+     FILTER on the article, not a shadow layer under it. A static blob can't
+     know the slab's projected outline, so it read as a hole punched in the
+     concrete; the filter runs after the 3D scene is composited, so it
+     shadows the actual projected silhouette — spine, tilt, mid-flip edge-on
+     state and all — and tracks it frame by frame through the flip. (Same
+     mechanism as the hero sheet's lip shadow: filter on a parent shadows the
+     child's finished silhouette.) The filter sits on the ARTICLE, outside
+     the perspective'd scene, so it rasterizes the projection without
+     disturbing the 3D context inside. Heavier in dark: the concrete
+     swallows timid shadows (the magnet-button lesson). */
   return (
-    <article className="reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10">
+    <article className="v8-jewel-card reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10 [filter:drop-shadow(0_6px_7px_rgb(0_0_0/0.45))_drop-shadow(0_18px_26px_rgb(0_0_0/0.3))] dark:[filter:drop-shadow(0_6px_7px_rgb(0_0_0/0.75))_drop-shadow(0_20px_30px_rgb(0_0_0/0.55))]">
       <div
         aria-hidden="true"
         className={`pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] ${pose} motion-reduce:transition-none`}
@@ -200,8 +219,11 @@ export function CaseCard({
                  aria-hidden scene). Scales with the TILE, not the viewport
                  (@container on the article): at md the viewport grows but the
                  2-col tiles shrink, so a viewport-based bump would wrap long
-                 titles up past the scrim. */
-              className={`font-[family-name:var(--v8-font-poster)] text-2xl leading-[1.08] tracking-[0.02em] uppercase @sm:text-[1.75rem] ${
+                 titles up past the scrim. The @[30rem] step exists for the
+                 desktop 2-col grid (~630px tiles): without it the poster
+                 title keeps its 3-col size and the big case reads as a large
+                 photo with small print instead of a poster. */
+              className={`font-[family-name:var(--v8-font-poster)] text-2xl leading-[1.08] tracking-[0.02em] uppercase @sm:text-[1.75rem] @[30rem]:text-[2.5rem] ${
                 hasCover ? 'text-white' : 'text-foreground'
               }`}
             >
@@ -289,7 +311,7 @@ export function CaseCard({
               back inlay's credits line. Dark translucent regardless of theme
               or ground (it is printed ink, not themed UI); text tones tuned
               for AA over black/75 even on the light sleeve ground. */}
-          <div className="absolute inset-0 flex items-center p-4 pr-[calc(8%+1rem)] @sm:p-5 @sm:pr-[calc(8%+1.25rem)]">
+          <div className="absolute inset-0 flex items-center p-4 pr-[calc(8%+1rem)] pb-12 @sm:p-5 @sm:pr-[calc(8%+1.25rem)] @sm:pb-12">
             {/* Content-hugging (not full-height) so the full-color art stays
                 visible above and below the printed panel. */}
             {/* Sizes step with the TILE via @container (like the front title):
@@ -316,7 +338,32 @@ export function CaseCard({
                 <span className="tracking-[0.14em] uppercase text-white/70">{backStrings.yearLabel}</span>{' '}
                 {data.startDate.getUTCFullYear()}
               </div>
+          </div>
+          {/* Visible link row (owner: "a link on the back of the case") — the
+              VISUAL half only, painted inside the aria-hidden scene so it
+              rotates with the case. Its real, focusable twin sits OUTSIDE the
+              scene at matching coordinates (see the h3 at the bottom of this
+              component); both are anchored to the card box, so they align by
+              construction at the settled flip. Same printed-ink chip language
+              as the inlay panel above; the pb-12 on that panel's wrapper is
+              what reserves this strip. */}
+          {linkHref && (
+            <div className="absolute inset-x-0 bottom-3 flex justify-center pr-[8%]">
+              {/* Metal object like the CTAs (owner request) — the full .v8-metal
+                  treatment (flank, float, glint) with its own cut of the brush
+                  sheet. Static: this chip is the VISUAL half only, inside the
+                  aria-hidden scene; the interaction lives on the invisible
+                  anchor band outside (see the h3 below), so the magnet script
+                  never binds here and the glint rests at its top-center
+                  default. */}
+              <span
+                className="v8-metal border px-3 py-1.5 font-mono text-[0.625rem] tracking-[0.14em] text-primary uppercase"
+                style={{ '--v8-brush-offset': `${((index + poseOffset) * 601) % 1254}px ${((index + poseOffset) * 449) % 1254}px` } as CSSProperties}
+              >
+                {openLabel} {external ? '↗' : '→'}
+              </span>
             </div>
+          )}
           </div>
           {/* Back chrome: the SAME spine + teeth, mirrored via -scale-x-100 and
               parked on the right edge — a horizontally flipped case's spine
@@ -369,17 +416,31 @@ export function CaseCard({
         <div className="v8-jewel-wall-lid v8-jewel-wall-lid-top absolute inset-x-0 top-0 h-[var(--case-depth)] backface-hidden [outline:1px_solid_transparent] [transform:translateY(calc(var(--case-depth)/-2))_translateZ(calc(var(--case-depth)/-2))_rotateX(90deg)]" />
         <div className="v8-jewel-wall-lid absolute inset-x-0 bottom-0 h-[var(--case-depth)] backface-hidden [outline:1px_solid_transparent] [transform:translateY(calc(var(--case-depth)/2))_translateZ(calc(var(--case-depth)/-2))_rotateX(-90deg)]" />
       </div>
-      {/* The ONE real link, outside the 3D scene so it stays hit-testable from
-          both faces (a backface-hidden front would swallow a stretched ::after
-          mid-flip). sr-only text keeps the accessible name = title. */}
+      {/* The ONE real link — the focusable twin of the visual row painted on
+          the back face (owner: "remove the click handler ... a link on the
+          back of the case"). It lives OUTSIDE the aria-hidden scene (a link
+          inside it would be tabbable yet invisible to AT), as a band over the
+          row's coordinates rather than the whole card: the front face is
+          deliberately inert now, so a resting card responds to nothing.
+          `pointer-events` gates when it is hittable at all — flipped states
+          only (hover / keyboard focus / the touch script's .is-flipped). It
+          stays a STATIC overlay on purpose: mid-flip the scene rotates while
+          this band doesn't, which is fine because it is invisible and only
+          interactable at settled states — the same reasoning the old
+          stretched anchor relied on. Keyboard order still works: the anchor
+          is always tabbable (pointer-events doesn't affect focus), and
+          focusing it flips the case via group-focus-within, revealing the
+          row it points at. */}
       {linkHref ? (
-        <h3 className="absolute inset-0 z-10">
+        <h3 className="pointer-events-none absolute inset-x-[15%] bottom-1.5 z-10 h-10 group-hover:pointer-events-auto group-focus-within:pointer-events-auto group-[.is-flipped]:pointer-events-auto">
           <a
             href={linkHref}
             {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             className="block h-full w-full outline-none"
           >
-            <span className="sr-only">{data.title}</span>
+            <span className="sr-only">
+              {openLabel}: {data.title}
+            </span>
           </a>
         </h3>
       ) : (

@@ -255,6 +255,21 @@ export function Hero({ hero, credits, nameFirst, nameLast, art }: HeroProps) {
               </span>
             ))}
           </p>
+          {/* Setlist cue: the poster's one pointer toward the work. Every
+              other affordance points away (the nav CTA goes to contact), so
+              without this the strongest screen on the site hands off to
+              nothing. It joins the billing-block lockup deliberately: the
+              block already clears the tear-fiber band at every width (task
+              20's valley construction), so the cue inherits that clearance
+              instead of needing its own. Styled as the kicker's sibling —
+              accent mono, wide tracking — with a plain text arrow; no motion,
+              a printed poster doesn't animate. */}
+          <a
+            href="#cases"
+            className="mt-3 font-mono text-[0.6875rem] tracking-[0.3em] text-primary uppercase no-underline transition-colors hover:text-foreground"
+          >
+            {hero.setlistCue} ↓
+          </a>
         </div>
       </div>
       {/* Wrinkle morphism (owner directive): a theme-matched crumpled-paper

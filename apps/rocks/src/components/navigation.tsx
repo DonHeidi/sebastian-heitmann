@@ -45,11 +45,19 @@ export function Navigation({ nav, languagePicker, locale, currentPath, children 
       <div className="flex w-full flex-wrap items-center justify-start gap-2.5 min-[400px]:w-auto min-[400px]:flex-nowrap md:gap-4">
         <LanguagePicker links={languageLinks} label={languagePicker.label} />
         {children}
-        <a
-          className="border border-border px-3.5 py-2 font-mono text-[0.625rem] tracking-[0.06em] text-foreground uppercase transition-colors hover:border-primary hover:text-primary md:px-6 md:py-2.5 md:text-xs md:tracking-[0.08em]"
-          href="https://www.sebastian-heitmann.dev/#contact"
-        >
-          {nav.contactCta}
+        {/* Magnetic metal CTA (see .v8-magnet/.v8-metal in global.css): the
+            anchor is the tilting 3D layer and stays visually empty; the span
+            is the machined face. Border and colors live on the SPAN so its
+            antialiased edges are what the eye sees — the layer's own quad
+            edge is transparent (the ticket-tilt aliasing lesson). Hover
+            colors move to group-* since the pointer state belongs to the
+            anchor. */}
+        <a className="v8-magnet group" href="https://www.sebastian-heitmann.dev/#contact">
+          <span className="v8-magnet-tilt">
+            <span className="v8-metal [--v8-brush-offset:412px_233px] block px-3.5 py-2 font-mono text-[0.625rem] tracking-[0.06em] text-foreground uppercase group-hover:text-primary md:px-6 md:py-2.5 md:text-xs md:tracking-[0.08em]">
+              {nav.contactCta}
+            </span>
+          </span>
         </a>
       </div>
     </nav>

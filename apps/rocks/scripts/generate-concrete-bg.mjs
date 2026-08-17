@@ -1,198 +1,182 @@
-// Generates src/assets/concrete-tile-dark.webp and concrete-tile-light.webp —
-// seamlessly tileable, contrast-tamed page-background textures for the `body`
-// ground plane (owner: "I added the concrete dark and light to give a
-// rougher texture for the background... the background is slightly clean
-// which doesn't necessarily fit the theme").
+// Converts the owner's pre-made seamless concrete tiles
+// (src/assets/dark-concrete-tile.png / light-concrete-tile.png, 1254×1254,
+// local-only, gitignored) into the shipped page-ground textures
+// src/assets/concrete-tile-dark.webp / concrete-tile-light.webp.
 //
-// Sources: src/assets/concrete-dark.png / concrete-light.png — poured-concrete
-// wall photographs supplied by the owner (1672×941, ~2.5MB each). These are
-// NOT committed (see .gitignore) — only the processed derivatives below are.
-// Regenerating requires the two source PNGs to be present locally.
+// DELIBERATELY UNPROCESSED (owner: "I like the original image way more than
+// the processed version"). Two earlier regimes shaped the ground — first
+// synthesising tileable concrete from wall photographs (crop → torus-quilt →
+// band-split; see git history), then re-centring the owner's tiles onto the
+// --v8-bg tokens with a worst-pixel contrast clamp. Both subordinated the
+// texture to the token system; the owner chose the texture. So the tiles ship
+// at their AUTHORED tone and amplitude, and the token relationships invert
+// where they invert:
 //
-// Pipeline, deterministic (same input bytes, same constants, same output):
-//   1. Crop a square region from the source, centered and clear of the
-//      photograph's vignetted corners, then downscale to TILE px. The
-//      downscale itself softens photographic grain to a "reads as
-//      roughness, not a photo" level appropriate for a background that must
-//      never compete with the hero poster, jewel-case tiles or device
-//      showcase.
-//   2. Contrast-compress the crop toward its own mean by COMPRESS_K. This
-//      pulls in local highlight/shadow mottling so no patch of the tiled
-//      background strays far from the theme's base color — the mechanism
-//      that keeps body-text contrast comfortable (see the task report for
-//      measured ratios). It also reads as "poured concrete", not "cracked
-//      concrete": a shallower, evener texture.
-//   3. Make it seamlessly tileable by MIRRORING the crop into a 2x2 block
-//      (see mirrorTile). Opposite edges are then the same source column
-//      or row, so the joint is pixel-exact by construction and needs no
-//      healing. An earlier version rolled the crop and hid the relocated
-//      seam under a feathered blur; the joints were fine, but the blur cut
-//      a smooth plus-shaped band through every tile and, repeated, those
-//      bands formed a visible lattice of "gaps" in the grain. Mirroring
-//      trades that for four-fold symmetry, invisible at this contrast.
-//   4. Tint: alpha-composite the tile over the theme's flat --v8-bg color
-//      (TINT_ALPHA) — "an overlay tint toward the theme bg" per the spec.
-//      The tint is baked into the pixels here (not applied as a CSS
-//      blend/opacity at runtime, the tear-mask/tear-fiber precedent) so the
-//      shipped file's pixels ARE the final on-page color and contrast is a
-//      measurable property of the file, not a runtime blend-mode guess.
-//   5. Export as WEBP (lossy) — a background texture tolerates aggressive
-//      compression; it only needs to read as roughness.
+//   - The dark ground (mean ≈ RGB 53) sits ABOVE --v8-bg-surface (#1e1e1e):
+//     surface panels read as dark plaques set INTO the wall, not raised off
+//     it. Physical, but the opposite of the old elevation direction.
+//   - #FF3B00 accent text directly on the dark ground measures ≈ 3.5:1 —
+//     under WCAG AA for body-size text. Accent ON PANELS (ticket stubs, the
+//     case backs' chip) is unaffected; the exposure is prose links on the
+//     bare ground (.case-prose a). If that ever needs fixing, fix it at the
+//     component (chip/underline/size), not by darkening this tile.
+//
+// The old guard math therefore still RUNS but only REPORTS — the numbers stay
+// on every regeneration so the tradeoff stays a decision instead of becoming
+// a surprise, and the seam/grain checks still hard-verify what must never
+// regress (a broken wrap is the "gaps in the background" this pipeline once
+// shipped).
+//
+// Encoding: lossy q90. Measured on the dark tile against fully lossless —
+// adjacent-pixel grain delta 3.77 vs 3.98 (imperceptible; "grain intact" by
+// a wide margin) at roughly half the bytes. Lower presets start visibly
+// waxing the grain (q75 → 2.48).
 //
 // Run from apps/rocks:  bun scripts/generate-concrete-bg.mjs
-import { existsSync } from 'node:fs';
+import { existsSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const THEMES = [
   {
     name: 'dark',
-    srcPath: fileURLToPath(new URL('../src/assets/concrete-dark.png', import.meta.url)),
+    srcPath: fileURLToPath(new URL('../src/assets/dark-concrete-tile.png', import.meta.url)),
     outPath: fileURLToPath(new URL('../src/assets/concrete-tile-dark.webp', import.meta.url)),
-    // --v8-bg, dark theme (src/styles/v8-theme.css) — near-black.
+    // Reporting references (src/styles/v8-theme.css): the theme's flat bg
+    // token, its surface token, and the text that sits on the bare ground.
     bg: [0x0c, 0x0c, 0x0c],
-    // Dark theme has huge headroom (near-black bg vs near-white text), so the
-    // texture can sit fairly strong and still read as "texture, not stain".
-    // (The photographed concrete's own local contrast is quite low —
-    // measured stdev ≈5.6/255 on the source crop — so compression stays
-    // mild; tintAlpha carries most of the visible strength.)
-    compressK: 0.85,
-    tintAlpha: 0.75,
+    surface: [0x1e, 0x1e, 0x1e],
+    guards: [{ label: 'accent #FF3B00 on ground', rgb: [0xff, 0x3b, 0x00], min: 4.5 }],
+    // EXPOSURE, not re-centring (owner: "can you darken it?" after choosing
+    // the authored tile over the token-fitted one). A straight multiply
+    // darkens the tile the way stopping a camera down would — every tonal
+    // relationship inside the texture keeps its proportion, so the material
+    // reads the same, just in less light. 0.5 lands the mean at ≈ RGB 27:
+    // accent text clears AA again and --v8-bg-surface (#1e1e1e = 30) sits
+    // just above the ground, so panels read raised. This is the taste knob.
+    exposure: 0.5,
   },
   {
     name: 'light',
-    srcPath: fileURLToPath(new URL('../src/assets/concrete-light.png', import.meta.url)),
+    srcPath: fileURLToPath(new URL('../src/assets/light-concrete-tile.png', import.meta.url)),
     outPath: fileURLToPath(new URL('../src/assets/concrete-tile-light.webp', import.meta.url)),
-    // --v8-bg, light theme (src/styles/v8-theme.css) — warm cream.
     bg: [0xfa, 0xf7, 0xf0],
-    // Light theme is the contrast risk (spec): cream-to-concrete is a bigger
-    // luminance jump than dark's, and muted-foreground text is already close
-    // to the AA floor against the plain cream bg (measured baseline 4.70:1).
-    // tintAlpha is kept low so the shipped background never drags that below
-    // ~4.5:1 (see the task report for the full measured range).
-    compressK: 0.85,
-    tintAlpha: 0.25,
+    surface: [0xf5, 0xf0, 0xe6],
+    // --v8-text-muted rgba(20,20,19,0.7) composited over the cream token.
+    guards: [{ label: 'muted text on ground', rgb: [89, 88, 85], min: 4.5 }],
+    // Authored tone, untouched.
+    exposure: 1,
   },
 ];
 
-// Crop is square (so the tile repeats identically in both axes) and centered,
-// staying inside the source's mild vignette rather than reaching into it.
-const CROP_SIZE = 900;
-// Shipped tile resolution. Small enough to keep the file light and to blur
-// out photographic grain; large enough that the repeat isn't obvious at
-// typical viewport widths.
-const TILE = 320; // quarter tile; mirrorTile() doubles it to a 640 pitch
-const WEBP_QUALITY = 82;
-// Mirroring makes opposite edges pixel-identical; lossy WebP would encode
-// them in separate blocks and reintroduce a faint joint, so keep the encode
-// near-lossless. The texture is smooth, so the files stay ~200KB.
-const WEBP_NEAR_LOSSLESS = true;
+const WEBP_QUALITY = 90;
 
-async function loadSquareTile(srcPath) {
+const srgbToLin = (c) => {
+  c /= 255;
+  return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+};
+const lumOf = (r, g, b) => 0.2126 * srgbToLin(r) + 0.7152 * srgbToLin(g) + 0.0722 * srgbToLin(b);
+const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+
+async function processTheme({ name, srcPath, outPath, bg, surface, guards, exposure }) {
   if (!existsSync(srcPath)) {
     throw new Error(
-      `missing source ${srcPath} — the raw concrete photographs are local-only ` +
-        '(gitignored, ~2.5MB each) and must be placed in src/assets/ before running this script.'
+      `missing source ${srcPath} — the concrete tiles are local-only (gitignored, ~3MB each) ` +
+        'and must be placed in src/assets/ before running this script.'
     );
   }
-  const meta = await sharp(srcPath).metadata();
-  const left = Math.round((meta.width - CROP_SIZE) / 2);
-  const top = Math.round((meta.height - CROP_SIZE) / 2);
-  const { data, info } = await sharp(srcPath)
-    .extract({ left, top, width: CROP_SIZE, height: CROP_SIZE })
-    .resize(TILE, TILE)
-    .removeAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  return { data, width: info.width, height: info.height, channels: info.channels };
-}
+  const { data, info } = await sharp(srcPath).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const w = info.width;
+  const h = info.height;
+  const channels = info.channels;
 
-
-/** Pulls each pixel toward the buffer's own per-channel mean by factor k
- * (0 = flat mean, 1 = untouched) — tames highlight/shadow extremes. */
-function compressTowardMean(data, channels, k) {
-  const mean = new Float64Array(channels);
-  const n = data.length / channels;
-  for (let i = 0; i < data.length; i++) mean[i % channels] += data[i];
-  for (let c = 0; c < channels; c++) mean[c] /= n;
-  const out = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) {
-    const c = i % channels;
-    out[i] = Math.max(0, Math.min(255, Math.round(mean[c] + (data[i] - mean[c]) * k)));
-  }
-  return out;
-}
-
-
-
-/** Builds a seamless tile by MIRRORING the quarter tile into a 2x2 block.
- *
- * Replaces the earlier roll + seam-blur approach. That one produced genuinely
- * seamless joints (measured: joint delta ≈ the texture's own neighbour delta),
- * but healing the relocated cross seam with a feathered blur left a smooth
- * plus-shaped band through every tile — and repeated, those bands formed a
- * visible lattice of "gaps" in the grain, which is what the owner reported.
- *
- * Mirroring needs no healing: column 0 and column 2w-1 are both source column
- * 0, so opposite edges are pixel-identical BY CONSTRUCTION, and every pixel
- * keeps its original sharpness. The cost is four-fold symmetry, which on a
- * low-contrast concrete grain reads as far less than a lattice did. */
-function mirrorTile(data, w, h, channels) {
-  const W = w * 2;
-  const H = h * 2;
-  const out = new Uint8Array(W * H * channels);
-  for (let y = 0; y < H; y++) {
-    const sy = y < h ? y : H - 1 - y;
-    for (let x = 0; x < W; x++) {
-      const sx = x < w ? x : W - 1 - x;
-      const src = (sy * w + sx) * channels;
-      const dst = (y * W + x) * channels;
-      for (let c = 0; c < channels; c++) out[dst + c] = data[src + c];
-    }
-  }
-  return { data: out, width: W, height: H };
-}
-
-async function processTheme({ name, srcPath, outPath, bg, compressK, tintAlpha }) {
-  const { data, width: qw, height: qh, channels } = await loadSquareTile(srcPath);
-  const compressed = compressTowardMean(data, channels, compressK);
-  const { data: mirrored, width: w, height: h } = mirrorTile(compressed, qw, qh, channels);
-
-  const final = new Uint8Array(w * h * channels);
-  for (let i = 0; i < final.length; i++) {
-    const c = i % channels;
-    final[i] = Math.max(0, Math.min(255, Math.round(bg[c] * (1 - tintAlpha) + mirrored[i] * tintAlpha)));
+  // Exposure (see THEMES): plain per-channel multiply, texture untouched.
+  if (exposure !== 1) {
+    for (let i = 0; i < data.length; i++) data[i] = Math.round(data[i] * exposure);
   }
 
-  await sharp(final, { raw: { width: w, height: h, channels } })
-    .webp(WEBP_NEAR_LOSSLESS ? { nearLossless: true, quality: 100 } : { quality: WEBP_QUALITY })
+  await sharp(data, { raw: { width: w, height: h, channels } })
+    .webp({ quality: WEBP_QUALITY })
     .toFile(outPath);
 
-  // Diagnostics: min/mean/max luminance of the shipped tile, for the
-  // contrast-ratio report (WCAG relative luminance, sRGB).
-  const srgbToLin = (c) => {
-    c /= 255;
-    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-  };
-  const lum = (r, g, b) => 0.2126 * srgbToLin(r) + 0.7152 * srgbToLin(g) + 0.0722 * srgbToLin(b);
+  const kb = (statSync(outPath).size / 1024).toFixed(0);
+  console.log(
+    `[${name}] wrote ${outPath} (${w}×${h}, ${kb}KB, authored texture at ${exposure}x exposure)`
+  );
+
+  // ---- Tone report (informational — see header). Mean AND worst pixel,
+  // because prose sits over whole regions (mean matters) while a guard
+  // failure only at rare pore/chip pixels is cosmetic. ----
+  let meanL = 0;
   let minL = Infinity;
   let maxL = -Infinity;
-  let sumL = 0;
-  let sumL2 = 0;
   for (let p = 0; p < w * h; p++) {
     const i = p * channels;
-    const l = lum(final[i], final[i + 1], final[i + 2]);
+    const l = lumOf(data[i], data[i + 1], data[i + 2]);
+    meanL += l;
     minL = Math.min(minL, l);
     maxL = Math.max(maxL, l);
-    sumL += l;
-    sumL2 += l * l;
   }
-  const n = w * h;
-  const meanL = sumL / n;
-  const sdL = Math.sqrt(sumL2 / n - meanL * meanL);
-  console.log(`[${name}] wrote ${outPath}`);
+  meanL /= w * h;
+  const bgL = lumOf(...bg);
+  const surfaceL = lumOf(...surface);
   console.log(
-    `[${name}] tile ${w}×${h}, luminance min/mean/max/stdev = ${minL.toFixed(4)}/${meanL.toFixed(4)}/${maxL.toFixed(4)}/${sdL.toFixed(4)}`
+    `[${name}] ground luminance min/mean/max = ${minL.toFixed(4)}/${meanL.toFixed(4)}/${maxL.toFixed(4)}` +
+      ` (flat --v8-bg token: ${bgL.toFixed(4)})`
+  );
+  const elevation =
+    surfaceL > bgL
+      ? meanL < surfaceL
+        ? 'surface still reads raised'
+        : 'surface reads RECESSED into the ground (owner-accepted)'
+      : meanL > surfaceL
+        ? 'surface still reads raised'
+        : 'surface reads RECESSED into the ground (owner-accepted)';
+  console.log(`[${name}] elevation vs --v8-bg-surface: ${elevation}`);
+  for (const g of guards) {
+    const gL = lumOf(...g.rgb);
+    console.log(
+      `[${name}] ${g.label}: ${ratio(gL, meanL).toFixed(2)}:1 vs mean, ` +
+        `${Math.min(ratio(gL, minL), ratio(gL, maxL)).toFixed(2)}:1 worst-pixel ` +
+        `(AA floor ${g.min}:1 — informational)`
+    );
+  }
+
+  // ---- Hard checks: these DO gate quality, encoder included. ----
+  const shipped = await sharp(outPath).removeAlpha().raw().toBuffer();
+  const chanAt = (x, y) => shipped[(y * w + x) * channels];
+
+  // Grain survival: adjacent-pixel delta near zero means the encoder waxed
+  // the texture into fabric-like fuzz.
+  let adj = 0;
+  for (let y = 0; y < h; y++) {
+    for (let x = 1; x < w; x++) adj += Math.abs(chanAt(x, y) - chanAt(x - 1, y));
+  }
+  adj /= h * (w - 1);
+  console.log(
+    `[${name}] adjacent-pixel delta ${adj.toFixed(2)} levels — ${adj > 1 ? 'grain intact' : 'GRAIN SMEARED'}`
+  );
+
+  // Wrap check on both axes: the tiles are authored seamless; this proves the
+  // encoder kept them that way.
+  const avg = (a) => a.reduce((s, v) => s + v, 0) / a.length;
+  const jointX = [];
+  const jointY = [];
+  const neighbour = [];
+  for (let y = 0; y < h; y++) {
+    jointX.push(Math.abs(chanAt(w - 1, y) - chanAt(0, y)));
+    neighbour.push(Math.abs(chanAt(w >> 2, y) - chanAt((w >> 2) - 1, y)));
+  }
+  for (let x = 0; x < w; x++) jointY.push(Math.abs(chanAt(x, h - 1) - chanAt(x, 0)));
+  const jointDelta = Math.max(avg(jointX), avg(jointY));
+  const neighbourDelta = avg(neighbour);
+  // Threshold 2.0, not 1.5: the authored tiles' own wrap sits at ~1.45-1.66x
+  // their interior neighbour delta, and a 10x contrast-boosted crop across
+  // the live joint shows no visible line — 1.5 flagged the source's normal
+  // state after the exposure multiply halved both deltas into rounding range.
+  const verdict = jointDelta <= neighbourDelta * 2.0 ? 'ok' : 'SEAM';
+  console.log(
+    `[${name}] joint delta ${jointDelta.toFixed(2)} vs neighbour delta ${neighbourDelta.toFixed(2)} — ${verdict}`
   );
 }
 

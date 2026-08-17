@@ -23,6 +23,7 @@ export const deDe: Strings = {
       after: ' unten: komplett selbst gebaut, in Produktion feinjustiert.',
     },
     artAlt: 'Behelmte Figur, die ein Keyboard wie eine Gitarre spielt, in Flammen gehüllt',
+    setlistCue: 'Zur Setlist',
   },
   credits: {
     label: 'Zuvor bei',
@@ -47,6 +48,8 @@ export const deDe: Strings = {
     backToOverview: 'Zurück zur Übersicht',
   },
   caseBack: {
+    openCase: 'Fallstudie öffnen',
+    openProject: 'Zum Projekt',
     tracksLabel: 'Stack',
     yearLabel: 'Jahr',
   },
@@ -65,6 +68,7 @@ export const deDe: Strings = {
     readOn: 'Auf sebastian-heitmann.dev lesen',
   },
   about: {
+    powerLabel: 'Monitor ein-/ausschalten',
     sectionTitle: 'Über mich',
     body: 'Sebastian Heitmann. Technologieberater, End-to-End-Entwickler: Produkt, Code, Infrastruktur, Delivery. Die Business-Seite lebt auf sebastian-heitmann.dev.',
     avatarAlt: 'Porträt von Sebastian Heitmann',

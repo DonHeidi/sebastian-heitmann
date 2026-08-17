@@ -79,13 +79,22 @@
      Theme-scoped the same way as `.v8-wrinkle` below: `html` carries the
      `light`/`dark` class pre-paint, so only the active theme's file is ever
      requested. */
+  /* The owner-authored tiles ship at their native 1254px and paint 1:1 —
+     the texture is grain-scale material, so painting at authored size is what
+     keeps the grain crisp. Do not scale it here: an earlier version painted a
+     tile at 2x with `image-rendering: pixelated` to enlarge the pattern,
+     which turned it into 8-bit staircases (and, since `image-rendering` is
+     INHERITED, silently nearest-neighboured every <img> on the page). */
+  body {
+    background-repeat: repeat;
+    background-size: 1254px 1254px;
+  }
+
   .dark body {
     background-image: url('../assets/concrete-tile-dark.webp');
-    background-repeat: repeat;
   }
   .light body {
     background-image: url('../assets/concrete-tile-light.webp');
-    background-repeat: repeat;
   }
 
   img,
@@ -1547,5 +1556,535 @@
     background-image: url('../assets/wrinkle-dark.jpg');
     mix-blend-mode: screen;
     opacity: 0.35;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Ticket silhouette (owner reference: classic admission ticket —     */
+  /* left stub with vertical serial, punched perforation line, notched  */
+  /* corners). The punches are REAL holes: a multi-layer mask subtracts */
+  /* them from the card, so the concrete ground shows through the       */
+  /* perforation and the notches bite into the border itself, exactly   */
+  /* like die-cut paper. Layers, in order: opaque base; a repeat-y      */
+  /* column of punch holes centred on --ticket-perf-x; half-punches at  */
+  /* the perforation's top and bottom ends; and four corner scallops.   */
+  /* Everything after the base uses mask-composite: subtract.           */
+  /* --ticket-perf-x must match the stub width in teaser-card.tsx.      */
+  /* ------------------------------------------------------------------ */
+  .v8-ticket {
+    --ticket-perf-x: 24%;
+    border-radius: 8px;
+    mask-image:
+      linear-gradient(#fff, #fff),
+      radial-gradient(circle 3px at 50% 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 6px at 50% 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 6px at 50% 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%);
+    mask-size:
+      auto,
+      12px 16px,
+      12px 12px,
+      12px 12px,
+      16px 16px,
+      16px 16px,
+      16px 16px,
+      16px 16px;
+    mask-position:
+      0 0,
+      calc(var(--ticket-perf-x) - 6px) 8px,
+      calc(var(--ticket-perf-x) - 6px) -6px,
+      calc(var(--ticket-perf-x) - 6px) calc(100% + 6px),
+      -8px -8px,
+      calc(100% + 8px) -8px,
+      -8px calc(100% + 8px),
+      calc(100% + 8px) calc(100% + 8px);
+    mask-repeat:
+      no-repeat,
+      repeat-y,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat;
+    /* Layer order gotcha: the FIRST mask-image layer is the TOPMOST, and each
+       layer's operator composites it against the accumulated layers BELOW it
+       in the list. So the punches carry `add` (they union among themselves)
+       and the base carries `subtract` — base minus the union of every punch.
+       The intuitive-looking inverse (base add, punches subtract) composites
+       to a fully opaque mask and cuts nothing. */
+    mask-composite: subtract, add, add, add, add, add, add, add;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Magnetic metal controls (owner directive: "give the buttons and    */
+  /* links a metal optic ... let them float like a magnet ... hovering  */
+  /* puts pressure at that part of the magnet and lets it tilt ... a    */
+  /* click pushes the magnet down and lets it snap back on a spring").  */
+  /*                                                                    */
+  /* Two classes, two jobs:                                             */
+  /*   .v8-magnet — the PHYSICS. Owns the perspective tilt (driven by   */
+  /*     --v8-magnet-rx/-ry, written per pointermove by the script in   */
+  /*     Layout.astro), the press-down translate, and the spring snap.  */
+  /*     It is deliberately VISUALLY EMPTY with 1px of padding: a       */
+  /*     perspective transform makes the element a 3D layer, and        */
+  /*     Chromium never antialiases a 3D layer's own quad edges (the    */
+  /*     device-facet finding — and the same jaggies that killed the    */
+  /*     ticket tilts). Content INSIDE the layer IS antialiased, so the */
+  /*     visible face is the child below, inset behind a transparent    */
+  /*     rim; the layer's aliased silhouette has nothing to show.       */
+  /*   .v8-metal — the FINISH, on that child. Machined gunmetal (dark)  */
+  /*     / polished steel (light): a base vertical sheen and a specular */
+  /*     hotspot that FOLLOWS THE                                       */
+  /*     POINTER via the same --v8-magnet-x/-y the tilt reads — the     */
+  /*     reflection sliding against the tilt is most of what sells      */
+  /*     "metal object", not the grays. Floats on a real drop shadow    */
+  /*     that tightens while pressed (the magnet lands on the surface). */
+  /* Tilt angles stay small (≤6deg, script-side) — a heavy magnet       */
+  /* yields, it doesn't flap.                                           */
+  /* ------------------------------------------------------------------ */
+  .v8-magnet {
+    /* The MOVER: attraction lean + press travel only — pure translate, no
+       3D (owner: "detach the tilt and the movement and compose them"). The
+       tilt lives on the nested .v8-magnet-tilt layer, so each motion owns
+       its transition curves and the two compose by nesting instead of
+       sharing one property list. */
+    display: inline-block;
+    translate: var(--v8-magnet-tx, 0px) var(--v8-magnet-ty, 0px);
+    transition: translate 130ms ease-out;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .v8-magnet-tilt {
+    /* The TILTER: the 3D layer. Deliberately VISUALLY EMPTY with 1px of
+       padding: a perspective transform makes this element a 3D layer, and
+       Chromium never antialiases a 3D layer's own quad edges (the
+       device-facet finding). Content INSIDE the layer IS antialiased, so
+       the visible face is the child below, inset behind a transparent rim.
+       The follow easing is a light underdamped spring (owner: "a bit more
+       wiggly"): every pointermove retargets it, so the tilt trails the
+       cursor with a lively rubbery lag and wobbles around the resting
+       pressure when the cursor pauses. */
+    display: block;
+    padding: 1px;
+    transform: perspective(22rem) translateZ(var(--v8-magnet-press, 0px))
+      rotateX(var(--v8-magnet-rx, 0deg)) rotateY(var(--v8-magnet-ry, 0deg));
+    transition:
+      transform 460ms
+        linear(
+          0,
+          0.37 8%,
+          0.72 16%,
+          0.95 24%,
+          1.08 33%,
+          1.1 38%,
+          1.055 46%,
+          1 56%,
+          0.985 65%,
+          0.998 80%,
+          1
+        );
+  }
+  .v8-magnet-pressed {
+    /* The press is a RECESSION (owner correction: the floating magnet gets
+       "pushed into the depth, not down") — a negative translateZ inside the
+       tilter's perspective, so the whole slab moves away from the viewer,
+       thickness intact. The flank bands deliberately survive the press (see
+       the pressed .v8-metal rule); only the float shadow tightens, because
+       approaching the wall is what a shadow knows about. */
+    --v8-magnet-press: -14px;
+  }
+  /* The big ticket sheets sit in a much longer perspective, so they need a
+     deeper push for the same visible recession. */
+  .v8-magnet-pressed.v8-magnet-sheet {
+    --v8-magnet-press: -22px;
+  }
+  /* Spring return (owner: "move back to their original position ... more
+     like a spring"): applied by the script on pointer-leave, removed on the
+     next pointermove, so the fast ease-out keeps handling cursor FOLLOWING
+     and only the release swings. The linear() curve is a damped spring —
+     progress overshoots 1.0 by ~14% (the magnet tips past rest to the other
+     side), falls back through, and settles with one small counter-wobble.
+     Values above 1 are what make it a spring rather than a snap: a bezier
+     can only approach rest from one side. */
+  .v8-magnet.v8-magnet-return {
+    transition:
+      translate 560ms
+        linear(
+          0,
+          0.29 7%,
+          0.6 14%,
+          0.87 21.5%,
+          1.06 29.5%,
+          1.13 36%,
+          1.14 40%,
+          1.1 47%,
+          1.03 57%,
+          0.985 67%,
+          0.972 75%,
+          0.996 87%,
+          1.004 94%,
+          1
+        );
+  }
+  .v8-magnet-return .v8-magnet-tilt {
+    transition:
+      transform 680ms
+        linear(
+          0,
+          0.29 7%,
+          0.6 14%,
+          0.87 21.5%,
+          1.06 29.5%,
+          1.13 36%,
+          1.14 40%,
+          1.1 47%,
+          1.03 57%,
+          0.985 67%,
+          0.972 75%,
+          0.996 87%,
+          1.004 94%,
+          1
+        );
+  }
+  @keyframes v8-magnet-snap {
+    /* `scale` is an independent transform property, so the spring rides on
+       top of the tilt/press transforms without fighting them. */
+    0% {
+      scale: 0.965;
+    }
+    55% {
+      scale: 1.02;
+    }
+    100% {
+      scale: 1;
+    }
+  }
+
+  .v8-metal {
+    display: block;
+    /* Two anti-aliasing measures for the tilted state, on top of the
+       transparent-rim layer split (see .v8-magnet): the transparent outline
+       nudges Chromium's rasterization the same way it does on the jewel-case
+       walls, and the shadow veil below feathers whatever stepping survives. */
+    outline: 1px solid transparent;
+    border: 1px solid var(--v8-metal-edge);
+    /* Machined-corner radius. Cosmetically a chamfer; functionally the last
+       anti-aliasing measure: corner pixels are where a tilted quad's
+       stepping is most visible in every engine (the owner hit it in Gecko,
+       where the outline trick alone didn't finish the job), and a small
+       round-off removes exactly those pixels. All box-shadows — veil, flank
+       bands, float — follow the radius automatically. */
+    border-radius: 2px;
+    /* Lighting model (owner correction: the pressed part must NOT catch the
+       glint — pressure tilts that corner AWAY from the light). The light is
+       environmental and fixed at the viewer, like the jewel cases' top-left
+       key that "does not flip with the object". The cursor at (x, y) presses
+       that corner down, so:
+         - a soft SHADE sits at the cursor — the dipped corner falls off the
+           light, and
+         - the specular GLINT renders at the MIRRORED position (100% - x/y) —
+           the corner that rises toward the viewer is the one that catches
+           the reflection.
+       Both read the same --v8-magnet-x/-y the tilt uses, so light and
+       geometry can never disagree; the resting default (50%, 80%) puts the
+       glint at top-center and the shade harmlessly low. */
+    background-image:
+      radial-gradient(
+        6rem circle at var(--v8-magnet-x, 50%) var(--v8-magnet-y, 80%),
+        var(--v8-metal-shade),
+        transparent 72%
+      ),
+      radial-gradient(
+        6rem circle at calc(100% - var(--v8-magnet-x, 50%)) calc(100% - var(--v8-magnet-y, 80%)),
+        var(--v8-metal-glint),
+        transparent 72%
+      ),
+      url('../assets/metal-brush.webp'),
+      linear-gradient(180deg, var(--v8-metal-hi) 0%, var(--v8-metal-mid) 55%, var(--v8-metal-lo) 100%);
+    /* The brush layer is the owner's brushed-metal photograph, recentred to
+       mid-gray by scripts/generate-metal-brush.mjs and overlay-blended onto
+       the sheen below, so one tile brushes both themes' metals. A repeating
+       1px gradient sat here first and read as scanlines — real brushing has
+       streaks of varying length and brightness, which only a texture gives. */
+    background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+    background-size: auto, auto, 1254px 1254px, auto;
+    /* Every metal piece samples its own region of the brush sheet via
+       --v8-brush-offset (set per element, SSR-deterministic) — identical
+       grain on every part is what breaks the material illusion; real pieces
+       are cut from different stock. */
+    background-position:
+      0 0,
+      0 0,
+      var(--v8-brush-offset, 0px 0px),
+      0 0;
+    background-blend-mode: normal, normal, overlay, normal;
+    /* Four shadow groups, top to bottom:
+       1. inset bevel — the face's chamfered lip.
+       2. the SHADOW VEIL — a tight dark halo hugging every edge. Two jobs:
+          it feathers the stair-stepping a tilted layer's hairlines can show
+          (the deck's shadow-veil finding, reapplied), and it grounds the
+          slab against the busy concrete regardless of tilt direction.
+       3. the EXTRUDED SIDE (owner: "more 3D") — four hard 0-blur bands
+          painting the slab's machined flank below the face, keycap/footswitch
+          style. Real 3D walls would be invisible here (a 6-8deg tilt exposes
+          under a pixel of wall), so the thickness is painted where a
+          near-frontal view actually shows it: under the bottom edge.
+       4. the float shadow (owner: "apply shadow") — sized to actually
+          register on the near-black concrete, which swallows timid black
+          shadows; light mode needs far less. */
+    box-shadow:
+      inset 0 1px 0 var(--v8-metal-lip),
+      inset 0 -2px 3px rgb(0 0 0 / 0.28),
+      0 0 3px var(--v8-metal-veil),
+      0 1px 0 var(--v8-metal-side-hi),
+      0 2px 0 var(--v8-metal-side),
+      0 3px 0 var(--v8-metal-side),
+      0 4px 0 var(--v8-metal-side),
+      0 5px 0 var(--v8-metal-side),
+      0 6px 0 var(--v8-metal-side-lo),
+      0 15px 24px -4px var(--v8-metal-shadow),
+      0 7px 11px -2px var(--v8-metal-shadow);
+    transition:
+      box-shadow 160ms ease-out,
+      color 160ms ease-out,
+      border-color 160ms ease-out;
+  }
+  /* Pressed: the face sinks the full height of the side (the press translate
+     below matches the 4px extrusion), so the slab reads as pushed flush into
+     its own flank; the float collapses to a contact shadow. The machined face
+     itself doesn't change — metal doesn't dent. */
+  .v8-magnet-pressed .v8-metal {
+    box-shadow:
+      inset 0 1px 0 var(--v8-metal-lip),
+      inset 0 -2px 3px rgb(0 0 0 / 0.28),
+      0 0 3px var(--v8-metal-veil),
+      0 1px 0 var(--v8-metal-side-hi),
+      0 2px 0 var(--v8-metal-side),
+      0 3px 0 var(--v8-metal-side),
+      0 4px 0 var(--v8-metal-side),
+      0 5px 0 var(--v8-metal-side),
+      0 6px 0 var(--v8-metal-side-lo),
+      0 8px 12px -3px var(--v8-metal-shadow),
+      0 4px 6px -2px var(--v8-metal-shadow);
+  }
+  .dark .v8-metal,
+  .dark .v8-metal-sheet {
+    --v8-metal-hi: #34383e;
+    --v8-metal-mid: #24262b;
+    --v8-metal-lo: #1a1c1f;
+    --v8-metal-edge: #43474e;
+    --v8-metal-lip: rgb(255 255 255 / 0.18);
+    --v8-metal-glint: rgb(255 255 255 / 0.14);
+    --v8-metal-shade: rgb(0 0 0 / 0.22);
+    --v8-metal-shadow: rgb(0 0 0 / 0.8);
+    --v8-metal-veil: rgb(0 0 0 / 0.6);
+    --v8-metal-side-hi: #303439;
+    --v8-metal-side: #121316;
+    --v8-metal-side-lo: #0b0c0e;
+  }
+  .light .v8-metal,
+  .light .v8-metal-sheet {
+    --v8-metal-hi: #f1f2f3;
+    --v8-metal-mid: #d9dcdf;
+    --v8-metal-lo: #c7cbcf;
+    --v8-metal-edge: #9aa0a6;
+    --v8-metal-lip: rgb(255 255 255 / 0.85);
+    --v8-metal-glint: rgb(255 255 255 / 0.55);
+    --v8-metal-shade: rgb(20 20 19 / 0.12);
+    --v8-metal-shadow: rgb(20 20 19 / 0.32);
+    --v8-metal-veil: rgb(20 20 19 / 0.22);
+    --v8-metal-side-hi: #b3b8bd;
+    --v8-metal-side: #9aa0a6;
+    --v8-metal-side-lo: #82888f;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Metal SHEET variant (owner: "make the tickets look metallic ...    */
+  /* apply a similar effect as the magnets"): the same machined finish  */
+  /* and pointer-lit model as .v8-metal, minus everything that says     */
+  /* "thick slab" — no painted flank, no float stack; a stamped sheet   */
+  /* has an inset bevel and lets the die-cut's drop-shadow filter       */
+  /* (.v8-ticket below) do the grounding, since the mask would clip     */
+  /* outer box-shadows anyway. Background layers are a copy of          */
+  /* .v8-metal's (canonical comments live there): shade at the cursor,  */
+  /* glint mirrored to the raised corner, base sheen — all              */
+  /* reading the same inherited --v8-magnet-x/-y custom properties, so  */
+  /* the wrapper's tilt script lights the sheet for free.               */
+  /* ------------------------------------------------------------------ */
+  .v8-metal-sheet {
+    outline: 1px solid transparent;
+    border-color: var(--v8-metal-edge);
+    background-image:
+      radial-gradient(
+        14rem circle at var(--v8-magnet-x, 50%) var(--v8-magnet-y, 80%),
+        var(--v8-metal-shade),
+        transparent 72%
+      ),
+      radial-gradient(
+        14rem circle at calc(100% - var(--v8-magnet-x, 50%)) calc(100% - var(--v8-magnet-y, 80%)),
+        var(--v8-metal-glint),
+        transparent 72%
+      ),
+      url('../assets/metal-brush.webp'),
+      linear-gradient(180deg, var(--v8-metal-hi) 0%, var(--v8-metal-mid) 55%, var(--v8-metal-lo) 100%);
+    /* Same aperiodic brush grain as .v8-metal — see the note there. */
+    background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+    background-size: auto, auto, 1254px 1254px, auto;
+    /* Every metal piece samples its own region of the brush sheet via
+       --v8-brush-offset (set per element, SSR-deterministic) — identical
+       grain on every part is what breaks the material illusion; real pieces
+       are cut from different stock. */
+    background-position:
+      0 0,
+      0 0,
+      var(--v8-brush-offset, 0px 0px),
+      0 0;
+    background-blend-mode: normal, normal, overlay, normal;
+    box-shadow:
+      inset 0 1px 0 var(--v8-metal-lip),
+      inset 0 -2px 3px rgb(0 0 0 / 0.28);
+  }
+
+  /* Magnet modifier for large sheet elements: block layout for the grid,
+     and a much longer perspective than the button's 22rem — at ticket size
+     the button's foreshortening reads as the sheet lunging at the viewer.
+     Tilt degrees are also reduced per element via data-magnet-tilt (read by
+     the script in Layout.astro). */
+  .v8-magnet.v8-magnet-sheet {
+    display: block;
+    height: 100%;
+  }
+  .v8-magnet-sheet .v8-magnet-tilt {
+    height: 100%;
+    transform: perspective(60rem) translateZ(var(--v8-magnet-press, 0px))
+      rotateX(var(--v8-magnet-rx, 0deg)) rotateY(var(--v8-magnet-ry, 0deg));
+  }
+
+  /* The ticket's cast shadow lives HERE (a filter, not Tailwind arbitrary
+     classes) so the pressed state can tighten it: filters run after the
+     die-cut mask, so the shadow traces the punched silhouette. */
+  .v8-ticket {
+    /* Two layers, sized to actually register (owner: "the tickets are
+       missing a shadow" — a single timid layer computed fine but visually
+       drowned against the concrete): a close contact shadow plus a broad
+       soft float, the same recipe the jewel cases use. */
+    filter: drop-shadow(0 5px 6px rgb(0 0 0 / 0.42)) drop-shadow(0 16px 24px rgb(0 0 0 / 0.3));
+    transition: filter 160ms ease-out;
+  }
+  .dark .v8-ticket {
+    filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.7)) drop-shadow(0 18px 28px rgb(0 0 0 / 0.5));
+  }
+  .v8-magnet-pressed .v8-ticket {
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.45));
+  }
+  .dark .v8-magnet-pressed .v8-ticket {
+    filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.7));
+  }
+
+  /* CRT phosphor flicker (about section's monitor): imperceptible most of
+     the time, a brief dip every few seconds — aging hardware, not a strobe.
+     Gated for reduced motion below with the magnet transforms. */
+  @keyframes v8-crt-flicker {
+    0%,
+    91%,
+    94%,
+    100% {
+      opacity: 1;
+    }
+    92% {
+      opacity: 0.955;
+    }
+    97% {
+      opacity: 0.985;
+    }
+  }
+  .v8-crt-flicker {
+    animation: v8-crt-flicker 7s linear infinite;
+  }
+  /* CRT power toggle (the About monitor's power button is a real control):
+     off collapses the picture to a bright horizontal line, then black —
+     the way tubes died; on is the same story backwards. `forwards` holds
+     the dark state; reduced motion swaps instantly. */
+  .v8-crt-content {
+    transform-origin: 50% 50%;
+  }
+  .v8-crt-content-off {
+    animation: v8-crt-collapse 420ms cubic-bezier(0.7, 0, 0.9, 0.4) forwards;
+  }
+  .v8-crt-content-on {
+    animation: v8-crt-boot 420ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  /* The wrapper fills the screen, so its background IS the beam: lighting
+     it up while squished paints a full-width line instead of a smear of
+     scaled-down text. */
+  @keyframes v8-crt-collapse {
+    0% {
+      transform: scaleY(1);
+      filter: brightness(1);
+      background-color: transparent;
+    }
+    55% {
+      transform: scaleY(0.012) scaleX(0.98);
+      filter: brightness(2.6);
+      opacity: 1;
+      background-color: rgb(214 255 224 / 0.95);
+    }
+    100% {
+      transform: scaleY(0.002) scaleX(0.55);
+      filter: brightness(0);
+      opacity: 0;
+      background-color: rgb(214 255 224 / 0.95);
+    }
+  }
+  @keyframes v8-crt-boot {
+    0% {
+      transform: scaleY(0.002) scaleX(0.55);
+      filter: brightness(2.2);
+      opacity: 1;
+      background-color: rgb(214 255 224 / 0.95);
+    }
+    45% {
+      transform: scaleY(0.012) scaleX(1);
+      filter: brightness(2.6);
+      background-color: rgb(214 255 224 / 0.95);
+    }
+    100% {
+      transform: scaleY(1);
+      filter: brightness(1);
+      background-color: transparent;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v8-crt-content-off {
+      animation: none;
+      opacity: 0;
+    }
+    .v8-crt-content-on {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v8-crt-flicker {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v8-magnet,
+    .v8-magnet.v8-magnet-sheet,
+    .v8-magnet.v8-magnet-return,
+    .v8-magnet-tilt,
+    .v8-magnet-sheet .v8-magnet-tilt,
+    .v8-magnet-return .v8-magnet-tilt {
+      transition: none;
+      transform: none;
+      translate: none;
+    }
+    .v8-magnet-snap {
+      animation: none;
+    }
   }
 }

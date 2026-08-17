@@ -170,7 +170,7 @@ export function CaseCard({
      disturbing the 3D context inside. Heavier in dark: the concrete
      swallows timid shadows (the magnet-button lesson). */
   return (
-    <article className="v8-jewel-card reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10 [filter:drop-shadow(0_6px_7px_rgb(0_0_0/0.45))_drop-shadow(0_18px_26px_rgb(0_0_0/0.3))] dark:[filter:drop-shadow(0_6px_7px_rgb(0_0_0/0.75))_drop-shadow(0_20px_30px_rgb(0_0_0/0.55))]">
+    <article className="v8-jewel-card reveal group @container relative aspect-[142/125] perspective-distant hover:z-10 focus-within:z-10 [&.is-flipped]:z-10 [filter:drop-shadow(0_6px_7px_rgb(0_0_0/0.45))_drop-shadow(0_18px_26px_rgb(0_0_0/0.3))] dark:[filter:drop-shadow(0_6px_7px_rgb(0_0_0/0.75))_drop-shadow(0_20px_30px_rgb(0_0_0/0.55))]">
       <div
         aria-hidden="true"
         className={`pointer-events-none absolute inset-0 transform-3d transition-transform duration-[620ms] ease-[cubic-bezier(0.3,0.1,0.25,1)] [--case-depth:7cqw] [transform-origin:50%_50%_calc(var(--case-depth)/-2)] ${pose} motion-reduce:transition-none`}
@@ -430,9 +430,12 @@ export function CaseCard({
           stretched anchor relied on. Keyboard order still works: the anchor
           is always tabbable (pointer-events doesn't affect focus), and
           focusing it flips the case via group-focus-within, revealing the
-          row it points at. */}
+          row it points at. Its `v8-case-link` class is the no-JS touch
+          fallback hook (global.css): until the flip script stamps `v8-js`
+          on <html>, coarse-pointer visitors get the old stretched-anchor
+          behavior, so the cards are never dead ends without JavaScript. */}
       {linkHref ? (
-        <h3 className="pointer-events-none absolute inset-x-[15%] bottom-1.5 z-10 h-10 group-hover:pointer-events-auto group-focus-within:pointer-events-auto group-[.is-flipped]:pointer-events-auto">
+        <h3 className="v8-case-link pointer-events-none absolute inset-x-[15%] bottom-1.5 z-10 h-10 group-hover:pointer-events-auto group-focus-within:pointer-events-auto group-[.is-flipped]:pointer-events-auto">
           <a
             href={linkHref}
             {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}

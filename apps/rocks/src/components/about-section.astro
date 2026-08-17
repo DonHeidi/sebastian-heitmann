@@ -48,7 +48,7 @@ const [dw, dh] = crtMeta.aspect;
       >
         {/* Fills the screen so the collapse/boot scaleY line lands on the
             SCREEN's center, not the text block's. */}
-        <div data-crt-content class="v8-crt-content absolute inset-0 [text-shadow:0_0_6px_rgb(140_255_160/0.14)]">
+        <div data-crt-content class="v8-crt-content absolute inset-0 text-[0.8125rem] [text-shadow:0_0_6px_rgb(140_255_160/0.14)]">
           <TerminalContent about={about} />
         </div>
         <div
@@ -200,7 +200,14 @@ const [dw, dh] = crtMeta.aspect;
       const w = root.clientWidth;
       const h = root.clientHeight;
       if (w === 0) return;
-      seat(screen, quadNorm, w, h);
+      const sh = seat(screen, quadNorm, w, h);
+      // The terminal type scales with the glass (TerminalContent sizes
+      // everything in em): at the 680px design width the screen is ~325px
+      // tall and the type its designed 13px; on a phone the whole monitor
+      // shrinks and a fixed 13px overflowed the overflow-hidden screen,
+      // silently cutting the About body mid-sentence. Floor of 7px keeps
+      // the smallest screens legible — the body still fits at that size.
+      if (content) content.style.fontSize = `${Math.max(7, sh * 0.04).toFixed(2)}px`;
 
       // Seat the power button on the rendered cap (generous hit area: 1.6x
       // the visual radius — it is a small target).

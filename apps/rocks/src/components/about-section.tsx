@@ -28,13 +28,19 @@ export interface AboutSectionProps {
  * artifact, deliberately untranslated; the OUTPUT is the localized
  * `about.body`. */
 export function TerminalContent({ about }: { about: Strings['about'] }) {
+  /* Everything in em: the seating script (about-section.astro's place())
+   * sets the wrapper's font-size from the projected glass height, so the
+   * whole readout scales with the monitor instead of overflowing the
+   * overflow-hidden screen on small viewports. No fixed size here — the
+   * font-size is INHERITED from the [data-crt-content] wrapper, whose rem
+   * class is the scriptless fallback. */
   return (
-    <div className="px-5 py-4 font-mono text-[0.8125rem] leading-relaxed md:px-6 md:py-5">
+    <div className="px-[1.5em] py-[1.2em] font-mono leading-relaxed">
       <p className="text-white/90">
         <span className="text-primary">$</span> cat about.txt
       </p>
-      <p className="mt-3 max-w-[52ch] text-white/80">{about.body}</p>
-      <p className="mt-3 text-white/90">
+      <p className="mt-[0.9em] max-w-[52ch] text-white/80">{about.body}</p>
+      <p className="mt-[0.9em] text-white/90">
         <span className="text-primary">$</span>{' '}
         <span className="ml-0.5 inline-block h-[1.05em] w-[0.55em] translate-y-[0.18em] animate-pulse bg-white/80 motion-reduce:animate-none" />
       </p>

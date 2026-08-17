@@ -1,0 +1,157 @@
+---
+/**
+ * The ENTIRE home page, shared by both locales. src/pages/index.astro and
+ * src/pages/de-de/index.astro were byte-identical mirrors apart from the
+ * locale constant (the de-de copy even said so in a comment) — every grid
+ * or shelf change had to land twice and a missed edit would silently ship
+ * different geometry per locale. The pages are now three-line shells over
+ * this component; the cases and projects shelves, which were themselves
+ * near-identical copies, render from one `shelves` loop.
+ */
+import { getCollection } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Layout from '../layouts/Layout.astro';
+import { getStrings, getHreflangAlternates } from '../i18n/utils';
+import { Navigation } from './navigation';
+import { Footer } from './footer';
+import { ThemeToggle } from './theme-toggle';
+import HeroSection from './hero-section.astro';
+import AboutSection from './about-section.astro';
+import { CaseCard } from './case-card';
+import { TeaserCard } from './teaser-card';
+import { SectionHeader } from './section-header';
+import DuotonePanel from './duotone-panel.astro';
+import { blogTeasers } from '../data/blog-teasers';
+import { chunkRows } from '../lib/rows';
+
+interface Props {
+  locale: 'en-us' | 'de-de';
+}
+
+const { locale } = Astro.props;
+const t = getStrings(locale);
+
+const entries = (await getCollection('cases'))
+  .filter((e) => e.id.startsWith(`${locale}/`) && !e.data.draft)
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || b.data.startDate.valueOf() - a.data.startDate.valueOf());
+const caseStudies = entries.filter((e) => e.data.kind === 'case-study');
+const projects = entries.filter((e) => e.data.kind === 'project');
+const caseHref = (e: (typeof entries)[number]) =>
+  getRelativeLocaleUrl(locale, `/cases/${e.id.split('/').slice(1).join('/')}`);
+
+/* Balanced centered rows (see lib/rows.ts): tiles carry their ORIGINAL list
+   index through the chunking, so the printed `01 /` numbering and the resting
+   pose sequence are unaffected by how the rows break. */
+const shelves = [
+  { id: 'cases', title: t.cases.sectionTitle, rows: chunkRows(caseStudies.map((e, i) => ({ e, i }))), poseOffset: 0 },
+  ...(projects.length > 0
+    ? [
+        {
+          id: 'projects',
+          title: t.projects.sectionTitle,
+          rows: chunkRows(projects.map((e, i) => ({ e, i }))),
+          poseOffset: caseStudies.length,
+        },
+      ]
+    : []),
+];
+const teaserRows = chunkRows(blogTeasers[locale].map((teaser, i) => ({ teaser, i })));
+
+/* One tile-width vocabulary for every shelf: full width on mobile, a third
+   from md up — the tile is the same size in a 2-tile row as in a 3-tile row,
+   so partial rows read as centered shelves rather than stretched tiles. The
+   width holds ACROSS breakpoints too: chunkRows balances rows for 3-across,
+   so a 2-across md tier re-wrapped every 3-tile row as a pair plus a lone
+   centered orphan — exactly the hole the chunking exists to kill. The calc
+   subtracts each tile's share of the row's gap gutters. */
+const tileW = 'w-full md:w-[calc(33.333%-1.3334rem)]';
+const coverSizes = '(max-width: 768px) 100vw, 33vw';
+---
+
+<Layout
+  locale={locale}
+  title={t.meta.title}
+  description={t.meta.description}
+  alternates={getHreflangAlternates('/')}
+  includeRedirectScript={locale === 'en-us'}
+>
+  {/* `min-h-svh flex flex-col` (task 18): the nav's height is measured by
+      layout, not assumed — it can wrap to 2 or 3 rows on narrow widths (de-de's
+      longer CTA wraps to 3 at 375), so the hero (a `flex-1` child, see hero.tsx)
+      fills exactly the remaining first-viewport space below the nav at every
+      width instead of subtracting a fixed desktop-nav rem value. */}
+  <div class="flex min-h-svh flex-col">
+    <Navigation nav={t.nav} languagePicker={t.languagePicker} locale={locale} currentPath={Astro.url.pathname}>
+      <ThemeToggle client:load labels={t.themeToggle} />
+    </Navigation>
+    <HeroSection hero={t.hero} credits={t.credits} />
+  </div>
+  <main>
+    {shelves.map((shelf) => (
+      <section class="mx-auto max-w-[90rem] px-6 py-12 md:px-20" id={shelf.id}>
+        <SectionHeader title={shelf.title} />
+        <div class="mt-8 flex flex-col gap-8">
+          {shelf.rows.map((row) => (
+            <div class="flex flex-wrap justify-center gap-8">
+              {row.map(({ e, i }) => (
+                <div class={tileW}>
+                  <CaseCard
+                    data={e.data}
+                    href={caseHref(e)}
+                    strings={t.cases}
+                    backStrings={t.caseBack}
+                    index={i}
+                    poseOffset={shelf.poseOffset}
+                    hasCover={Boolean(e.data.cover)}
+                  >
+                    {e.data.cover && (
+                      <DuotonePanel
+                        slot="coverPanel"
+                        src={e.data.cover}
+                        alt=""
+                        widths={[480, 768, 960]}
+                        sizes={coverSizes}
+                        class="h-full w-full"
+                      />
+                    )}
+                    {e.data.cover && (
+                      <DuotonePanel
+                        slot="backPanel"
+                        duotone={false}
+                        src={e.data.cover}
+                        alt=""
+                        widths={[480, 768, 960]}
+                        sizes={coverSizes}
+                        class="h-full w-full"
+                      />
+                    )}
+                  </CaseCard>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+    <section class="mx-auto max-w-[90rem] px-6 py-12 md:px-20" id="writing">
+      <SectionHeader title={t.teasers.sectionTitle} />
+      <p class="reveal mt-3 max-w-[58ch] text-sm text-muted-foreground">{t.teasers.intro}</p>
+      <div class="mt-8 flex flex-col gap-6">
+        {teaserRows.map((row) => (
+          <div class="flex flex-wrap justify-center gap-6">
+            {row.map(({ teaser, i }) => (
+              <div class="w-full md:w-[calc(33.333%-1rem)]">
+                {/* The row's default align-stretch gives this wrapper the row's
+                    height, and the card's own h-full fills it — equal-height
+                    cards per row, same as the grid it replaces. */}
+                <TeaserCard teaser={teaser} readOn={t.teasers.readOn} index={i} />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+    <AboutSection about={t.about} />
+  </main>
+  <Footer footer={t.footer} />
+</Layout>

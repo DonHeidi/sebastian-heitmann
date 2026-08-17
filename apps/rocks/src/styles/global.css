@@ -309,6 +309,20 @@
     filter: none;
   }
 
+  /* No-JS touch fallback for the case tiles: the flip UX needs the touch
+     script in Layout.astro (hover flips exist only under (hover: hover)),
+     so without JavaScript a coarse-pointer visitor could never reach the
+     back-face link — the cards would be dead ends. Until the script runs
+     and stamps `v8-js` on <html>, the back link stretches to the whole
+     card and taps navigate directly, the pre-flip behavior. */
+  @media (hover: none) {
+    html:not(.v8-js) .v8-case-link {
+      pointer-events: auto;
+      inset: 0;
+      height: auto;
+    }
+  }
+
   /* CD jewel-case chrome for the case tiles (task 22). Front-on view: a flat
      plastic spine bar on the left with the front lid's two ribbed hinge
      teeth flush against its top and bottom edge, a directional gloss (one
@@ -1573,29 +1587,36 @@
   .v8-ticket {
     --ticket-perf-x: 24%;
     border-radius: 8px;
+    /* The three perforation layers are FULL-WIDTH tiles with the punch
+       circle drawn at --ticket-perf-x inside the gradient image itself. A
+       narrow tile positioned at calc(24% - 6px) misses the stub edge:
+       mask-position percentages resolve against (box − tile), so 24% of
+       that reduced span landed the punch line ~3px inside the stub. A
+       percentage inside the gradient resolves against the gradient box —
+       the full card width — which is the geometry the stub contract means. */
     mask-image:
       linear-gradient(#fff, #fff),
-      radial-gradient(circle 3px at 50% 50%, #000 98%, transparent 100%),
-      radial-gradient(circle 6px at 50% 50%, #000 98%, transparent 100%),
-      radial-gradient(circle 6px at 50% 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 3px at var(--ticket-perf-x) 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 6px at var(--ticket-perf-x) 50%, #000 98%, transparent 100%),
+      radial-gradient(circle 6px at var(--ticket-perf-x) 50%, #000 98%, transparent 100%),
       radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%),
       radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%),
       radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%),
       radial-gradient(circle 8px at 50% 50%, #000 98%, transparent 100%);
     mask-size:
       auto,
-      12px 16px,
-      12px 12px,
-      12px 12px,
+      100% 16px,
+      100% 12px,
+      100% 12px,
       16px 16px,
       16px 16px,
       16px 16px,
       16px 16px;
     mask-position:
       0 0,
-      calc(var(--ticket-perf-x) - 6px) 8px,
-      calc(var(--ticket-perf-x) - 6px) -6px,
-      calc(var(--ticket-perf-x) - 6px) calc(100% + 6px),
+      0 8px,
+      0 -6px,
+      0 calc(100% + 6px),
       -8px -8px,
       calc(100% + 8px) -8px,
       -8px calc(100% + 8px),
@@ -1749,20 +1770,6 @@
           1
         );
   }
-  @keyframes v8-magnet-snap {
-    /* `scale` is an independent transform property, so the spring rides on
-       top of the tilt/press transforms without fighting them. */
-    0% {
-      scale: 0.965;
-    }
-    55% {
-      scale: 1.02;
-    }
-    100% {
-      scale: 1;
-    }
-  }
-
   .v8-metal {
     display: block;
     /* Two anti-aliasing measures for the tilted state, on top of the
@@ -1963,10 +1970,15 @@
       rotateX(var(--v8-magnet-rx, 0deg)) rotateY(var(--v8-magnet-ry, 0deg));
   }
 
-  /* The ticket's cast shadow lives HERE (a filter, not Tailwind arbitrary
-     classes) so the pressed state can tighten it: filters run after the
-     die-cut mask, so the shadow traces the punched silhouette. */
-  .v8-ticket {
+  /* The ticket's cast shadow lives on the MOVER (.v8-magnet-sheet — the
+     tickets are its only users), NOT on .v8-ticket itself: per the filter
+     effects pipeline, a filter on the same element runs BEFORE that
+     element's mask, so the die-cut mask (whose base layer covers only the
+     border box) clipped the shadow away entirely. One level up, the filter
+     sees the finished masked-and-tilted composite and shadows the punched
+     silhouette — the same parent-shadows-child mechanism as the jewel
+     cases' article filter. */
+  .v8-magnet-sheet {
     /* Two layers, sized to actually register (owner: "the tickets are
        missing a shadow" — a single timid layer computed fine but visually
        drowned against the concrete): a close contact shadow plus a broad
@@ -1974,13 +1986,13 @@
     filter: drop-shadow(0 5px 6px rgb(0 0 0 / 0.42)) drop-shadow(0 16px 24px rgb(0 0 0 / 0.3));
     transition: filter 160ms ease-out;
   }
-  .dark .v8-ticket {
+  .dark .v8-magnet-sheet {
     filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.7)) drop-shadow(0 18px 28px rgb(0 0 0 / 0.5));
   }
-  .v8-magnet-pressed .v8-ticket {
+  .v8-magnet-sheet.v8-magnet-pressed {
     filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.45));
   }
-  .dark .v8-magnet-pressed .v8-ticket {
+  .dark .v8-magnet-sheet.v8-magnet-pressed {
     filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.7));
   }
 
@@ -2082,9 +2094,6 @@
       transition: none;
       transform: none;
       translate: none;
-    }
-    .v8-magnet-snap {
-      animation: none;
     }
   }
 }

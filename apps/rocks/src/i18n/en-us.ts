@@ -23,6 +23,7 @@ export const enUs: Strings = {
       after: ' below: built end to end, tuned in production.',
     },
     artAlt: 'Helmeted figure playing a keyboard like a guitar, engulfed in flames',
+    setlistCue: 'To the setlist',
   },
   credits: {
     label: 'Previously at',
@@ -47,6 +48,8 @@ export const enUs: Strings = {
     backToOverview: 'Back to overview',
   },
   caseBack: {
+    openCase: 'Open case study',
+    openProject: 'Visit project',
     tracksLabel: 'Stack',
     yearLabel: 'Year',
   },
@@ -65,6 +68,7 @@ export const enUs: Strings = {
     readOn: 'Read on sebastian-heitmann.dev',
   },
   about: {
+    powerLabel: 'Toggle the monitor',
     sectionTitle: 'About',
     body: 'Sebastian Heitmann. Technology consultant, end-to-end builder: product, code, infrastructure, delivery. The business side lives at sebastian-heitmann.dev.',
     avatarAlt: 'Portrait of Sebastian Heitmann',

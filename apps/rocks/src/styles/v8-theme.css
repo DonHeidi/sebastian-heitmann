@@ -18,9 +18,18 @@
 }
 
 .dark {
+  /* Neutral near-black. A navy variant (#081420, sampled from the
+     blue-menagerie cover art) was tried here and rejected by the owner —
+     the ground stays achromatic; colour belongs to the accent and artwork. */
   --v8-bg: #0C0C0C;
   --v8-bg-alt: #101010;
-  --v8-bg-surface: #141414;
+  /* Raised from #141414 so the concrete ground texture has somewhere to go.
+     Surfaces must stay above the page ground or cards read as holes rather
+     than raised panels, and at #141414 that left the ground only ±7 levels of
+     variation — below the perceptual threshold. Keep this in step with
+     SURFACE.dark in scripts/generate-concrete-bg.mjs, which clamps the
+     texture against it. */
+  --v8-bg-surface: #1e1e1e;
   --v8-text: #F2F0EB;
   --v8-text-secondary: rgba(242, 240, 235, 0.75);
   --v8-text-tertiary: rgba(242, 240, 235, 0.68);
@@ -52,8 +61,15 @@
   --v8-text: #141413;
   --v8-text-secondary: rgba(20, 20, 19, 0.75);
   --v8-text-tertiary: rgba(20, 20, 19, 0.65);
-  --v8-text-muted: rgba(20, 20, 19, 0.6);
-  --v8-text-dim: rgba(20, 20, 19, 0.6);
+  /* Raised from 0.6 so the concrete ground texture is visible in light mode.
+     At 0.6 these composite to ~(114,113,111) on the cream, which clears AA by
+     only 0.21 — so the generator had to clamp the texture gain to 0.017 and the
+     ground came out perfectly flat. 0.7 darkens the text (contrast goes UP, not
+     down) and gives the ground room to move. Keep in step with the light entry
+     in CONTRAST_GUARDS in scripts/generate-concrete-bg.mjs, which encodes the
+     composited value these produce. */
+  --v8-text-muted: rgba(20, 20, 19, 0.7);
+  --v8-text-dim: rgba(20, 20, 19, 0.7);
   --v8-text-faint: rgba(20, 20, 19, 0.4);
   --v8-accent: #B82A00;
   --v8-border: rgba(20, 20, 19, 0.16);
@@ -65,7 +81,7 @@
   --v8-destructive: #B3261E;
   --v8-destructive-soft: rgba(179, 38, 30, 0.08);
   --v8-metric-color: #B82A00;
-  --v8-metric-label-color: rgba(20, 20, 19, 0.6);
+  --v8-metric-label-color: rgba(20, 20, 19, 0.7);
   --v8-photo-filter: saturate(0.85) contrast(1.08);
   --v8-photo-filter-hover: saturate(1) contrast(1);
   --v8-glass-bg: rgba(255, 252, 245, 0.32);

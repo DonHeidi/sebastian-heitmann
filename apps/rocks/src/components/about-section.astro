@@ -1,12 +1,17 @@
 ---
-// Wires the avatar through the shared DuotonePanel (which uses astro:assets'
-// <Image> internally — never ImageMetadata.src, repo gotcha) and slots it into
-// the shared React AboutSection. Both index pages render this once, so the
-// image wiring lives in exactly one place. The duotone wrapper sits inside the
-// section's torn clip (see about-section.tsx's TornPrint).
-import portrait from '../assets/avatar.png';
-import DuotonePanel from './duotone-panel.astro';
-import { AboutSection } from './about-section';
+// The About section's CRT monitor: a RAYMARCHED body render (see
+// scripts/render-crt.mjs — real per-pixel normals, because every 2D-stacking
+// approach produced a flat or artifact-ridden shape) mounted as an
+// astro:assets image, with the LIVE terminal seated over the rendered glass
+// by a runtime homography. crt-meta.json is written by the render script and
+// carries the projected glass quad, so the screen lands exactly where the
+// camera put the glass — no hand-synced coordinates.
+import { Image } from 'astro:assets';
+import crtBody from '../assets/crt-body.png';
+import crtCapOn from '../assets/crt-cap-on.png';
+import crtCapOff from '../assets/crt-cap-off.png';
+import crtMeta from '../assets/crt-meta.json';
+import { AboutSection, TerminalContent } from './about-section';
 import type { Strings } from '../i18n/types';
 
 interface Props {
@@ -14,16 +19,237 @@ interface Props {
 }
 
 const { about } = Astro.props;
+const [dw, dh] = crtMeta.aspect;
 ---
 
 <AboutSection about={about}>
-  {/* Below the fold: lazy, no fetchpriority boost (contrast with the hero art). */}
-  <DuotonePanel
-    slot="avatar"
-    src={portrait}
-    alt={about.avatarAlt}
-    widths={[160, 320]}
-    sizes="160px"
-    class="aspect-square h-full w-full"
-  />
+  <Fragment slot="monitor">
+    <div
+      data-crt-root
+      data-crt-quad={JSON.stringify(crtMeta.quad)}
+      data-crt-power-meta={JSON.stringify(crtMeta.power)}
+      data-crt-cap-rect={JSON.stringify(crtMeta.capRect)}
+      class="relative w-full max-w-[680px] [filter:drop-shadow(0_10px_12px_rgb(0_0_0/0.45))_drop-shadow(0_30px_44px_rgb(0_0_0/0.28))] dark:[filter:drop-shadow(0_10px_12px_rgb(0_0_0/0.7))_drop-shadow(0_32px_48px_rgb(0_0_0/0.5))]"
+      style={`aspect-ratio: ${dw} / ${dh};`}
+    >
+      <Image
+        src={crtBody}
+        alt=""
+        widths={[680, 1360]}
+        sizes="(max-width: 768px) 100vw, 680px"
+        class="pointer-events-none absolute inset-0 h-full w-full"
+      />
+      {/* Live screen — seated in the rendered glass by the homography below;
+          the inline style is only the scriptless fallback. */}
+      <div
+        data-crt-screen
+        class="v8-crt-flicker absolute origin-top-left overflow-hidden rounded-[10px] bg-[#0a0c0a]"
+        style="left: 31%; top: 10%; width: 58%; height: 51%;"
+      >
+        {/* Fills the screen so the collapse/boot scaleY line lands on the
+            SCREEN's center, not the text block's. */}
+        <div data-crt-content class="v8-crt-content absolute inset-0 [text-shadow:0_0_6px_rgb(140_255_160/0.14)]">
+          <TerminalContent about={about} />
+        </div>
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 [background-image:repeating-linear-gradient(0deg,rgb(255_255_255/0.03)_0_1px,transparent_1px_3px)]"
+        >
+        </div>
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 [background-image:radial-gradient(120%_120%_at_50%_45%,transparent_52%,rgb(0_0_0/0.5))]"
+        >
+        </div>
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 [background-image:linear-gradient(180deg,rgb(255_255_255/0.05),transparent_33%),linear-gradient(115deg,transparent_42%,rgb(255_255_255/0.055)_47%,transparent_54%)]"
+        >
+        </div>
+      </div>
+      {/* Power button: a REAL control seated exactly on the rendered cap
+          (position from crt-meta.json, same camera as the render). Clicking
+          kills the tube — collapse to a line — and boots it back. The LED
+          is the state's honest witness. */}
+      {/* The cap: TWO renders of the same socket window — latched-in (on)
+          and proud (off) — swapped on toggle. Rendered by the body's own
+          camera and key light, so the states belong to the object (the CSS
+          cap read as "a 2d piece on a 3d piece"). Positioned from
+          crt-meta.json's capRect, pixel-aligned with the base image. */}
+      <div data-crt-cap class="pointer-events-none absolute z-10" style="left: 86%; top: 68%; width: 8%; aspect-ratio: 1;">
+        <Image
+          src={crtCapOn}
+          alt=""
+          data-cap-state="on"
+          widths={[120, 240]}
+          sizes="60px"
+          class="absolute inset-0 h-full w-full transition-opacity duration-100 motion-reduce:transition-none"
+        />
+        <Image
+          src={crtCapOff}
+          alt=""
+          data-cap-state="off"
+          widths={[120, 240]}
+          sizes="60px"
+          class="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-100 motion-reduce:transition-none"
+        />
+      </div>
+      {/* Invisible hit area over the cap; state lives in aria-pressed. */}
+      <button
+        type="button"
+        data-crt-power
+        aria-pressed="true"
+        aria-label={about.powerLabel}
+        class="absolute z-20 cursor-pointer rounded-full outline-offset-4"
+        style="left: 88%; top: 72%; width: 4%; aspect-ratio: 1;"
+      >
+      </button>
+      {/* LED: an independent sibling, positioned on its own — as a child of
+          the button it inherited the button's transforms (owner catch). */}
+      <span
+        data-crt-led
+        class="pointer-events-none absolute z-10 rounded-full bg-[#37e05d] shadow-[0_0_6px_rgb(55_224_93/0.9)]"
+        style="left: 92%; top: 76%; width: 1%; aspect-ratio: 1;"
+      >
+      </span>
+      {/* The V8-CRT badge is BAKED into crt-body.png (see render-crt.mjs):
+          as a DOM overlay it never shared the panel's perspective and
+          Gecko dropped it entirely once its homography applied. */}
+      <span
+        class="absolute right-[7%] top-[1.5%] flex rotate-3 items-center gap-1 rounded-[2px] bg-[#f2efe6] px-1.5 py-[2px] shadow-[0_1px_2px_rgb(0_0_0/0.35)]"
+      >
+        <span
+          class="h-[8px] w-[22px] [background-image:repeating-linear-gradient(90deg,#1a1a18_0_1px,transparent_1px_3px,#1a1a18_3px_4px,transparent_4px_6px)]"
+        >
+        </span>
+        <span class="font-mono text-[0.4375rem] tracking-[0.08em] text-[#1a1a18] uppercase">SH·ROCKS 094</span>
+      </span>
+    </div>
+  </Fragment>
 </AboutSection>
+
+<script>
+  // Seats the DOM terminal in the rendered glass: the quad comes from
+  // crt-meta.json (written by scripts/render-crt.mjs with the same camera
+  // that rendered the body), normalized 0..1; scale it to the current box
+  // and solve the unit-rect → quad homography as a CSS matrix3d.
+  document.addEventListener('DOMContentLoaded', () => {
+    const root = document.querySelector<HTMLElement>('[data-crt-root]');
+    const screen = root?.querySelector<HTMLElement>('[data-crt-screen]');
+    if (!root || !screen) return;
+    const quadNorm: number[][] = JSON.parse(root.dataset.crtQuad || '[]');
+    if (quadNorm.length !== 4) return;
+    const power = root.querySelector<HTMLElement>('[data-crt-power]');
+    const led = root.querySelector<HTMLElement>('[data-crt-led]');
+    const content = root.querySelector<HTMLElement>('[data-crt-content]');
+    const cap = root.querySelector<HTMLElement>('[data-crt-cap]');
+    const capOnImg = root.querySelector<HTMLElement>('[data-cap-state="on"]');
+    const capOffImg = root.querySelector<HTMLElement>('[data-cap-state="off"]');
+    const powerMeta: { c: number[]; r: number } | null = JSON.parse(root.dataset.crtPowerMeta || 'null');
+    const capRect: { x: number; y: number; w: number; h: number } | null = JSON.parse(root.dataset.crtCapRect || 'null');
+    // Size el as the quad's rect and warp it onto the quad via the
+    // unit-rect → quad homography (Gaussian elimination → matrix3d).
+    // Returns the rect's height for content that scales with the quad.
+    const seat = (el: HTMLElement, qn: number[][], w: number, h: number): number => {
+      const q = qn.map(([nx, ny]) => ({ x: nx * w, y: ny * h }));
+      const sw = Math.hypot(q[1].x - q[0].x, q[1].y - q[0].y);
+      const sh = Math.hypot(q[3].x - q[0].x, q[3].y - q[0].y);
+      el.style.left = '0px';
+      el.style.top = '0px';
+      el.style.width = `${sw.toFixed(1)}px`;
+      el.style.height = `${sh.toFixed(1)}px`;
+
+      const src = [
+        [0, 0],
+        [sw, 0],
+        [sw, sh],
+        [0, sh],
+      ];
+      const A: number[][] = [];
+      const b: number[] = [];
+      for (let i = 0; i < 4; i++) {
+        const [x, y] = src[i];
+        const { x: X, y: Y } = q[i];
+        A.push([x, y, 1, 0, 0, 0, -x * X, -y * X]);
+        b.push(X);
+        A.push([0, 0, 0, x, y, 1, -x * Y, -y * Y]);
+        b.push(Y);
+      }
+      for (let c = 0; c < 8; c++) {
+        let r2 = c;
+        for (let i = c + 1; i < 8; i++) if (Math.abs(A[i][c]) > Math.abs(A[r2][c])) r2 = i;
+        [A[c], A[r2]] = [A[r2], A[c]];
+        [b[c], b[r2]] = [b[r2], b[c]];
+        const d = A[c][c];
+        if (Math.abs(d) < 1e-9) return sh;
+        for (let j = c; j < 8; j++) A[c][j] /= d;
+        b[c] /= d;
+        for (let i = 0; i < 8; i++) {
+          if (i === c) continue;
+          const f = A[i][c];
+          for (let j = c; j < 8; j++) A[i][j] -= f * A[c][j];
+          b[i] -= f * b[c];
+        }
+      }
+      const [a, bb, cc, d2, e, f2, g, hh] = b;
+      el.style.transform = `matrix3d(${a},${d2},0,${g},${bb},${e},0,${hh},0,0,1,0,${cc},${f2},0,1)`;
+      return sh;
+    };
+
+    const place = () => {
+      const w = root.clientWidth;
+      const h = root.clientHeight;
+      if (w === 0) return;
+      seat(screen, quadNorm, w, h);
+
+      // Seat the power button on the rendered cap (generous hit area: 1.6x
+      // the visual radius — it is a small target).
+      if (power && powerMeta) {
+        const pr = powerMeta.r * w * 1.6;
+        power.style.left = `${(powerMeta.c[0] * w - pr).toFixed(1)}px`;
+        power.style.top = `${(powerMeta.c[1] * h - pr).toFixed(1)}px`;
+        power.style.width = `${(pr * 2).toFixed(1)}px`;
+        power.style.aspectRatio = '1';
+      }
+      // Sprite window, pixel-aligned with the base render.
+      if (cap && capRect) {
+        cap.style.left = `${(capRect.x * w).toFixed(1)}px`;
+        cap.style.top = `${(capRect.y * h).toFixed(1)}px`;
+        cap.style.width = `${(capRect.w * w).toFixed(1)}px`;
+        cap.style.height = `${(capRect.h * h).toFixed(1)}px`;
+      }
+      // LED sits beside the cap, sized from the ROOT (never the button — as
+      // a button child it scaled with the button's states).
+      if (led && powerMeta) {
+        const ls = Math.max(5, 0.011 * w);
+        led.style.left = `${(powerMeta.c[0] * w + powerMeta.r * w * 1.35).toFixed(1)}px`;
+        led.style.top = `${(powerMeta.c[1] * h + powerMeta.r * w * 1.35).toFixed(1)}px`;
+        led.style.width = `${ls.toFixed(1)}px`;
+        led.style.height = `${ls.toFixed(1)}px`;
+      }
+    };
+
+    new ResizeObserver(place).observe(root);
+    place();
+
+    // The tube toggle. State lives in aria-pressed; the animations hold the
+    // visual state (collapse uses fill: forwards), the LED reports it.
+    power?.addEventListener('click', () => {
+      const on = power.getAttribute('aria-pressed') === 'true';
+      power.setAttribute('aria-pressed', on ? 'false' : 'true');
+      if (content) {
+        content.classList.remove('v8-crt-content-off', 'v8-crt-content-on');
+        // Force a reflow so re-adding an animation class restarts it.
+        void content.offsetWidth;
+        content.classList.add(on ? 'v8-crt-content-off' : 'v8-crt-content-on');
+      }
+      // Latch the cap: swap the two rendered states.
+      capOnImg?.classList.toggle('opacity-0', on);
+      capOffImg?.classList.toggle('opacity-0', !on);
+      if (led) {
+        led.style.backgroundColor = on ? '#3a3f3a' : '#37e05d';
+        led.style.boxShadow = on ? 'none' : '0 0 6px rgb(55 224 93 / 0.9)';
+      }
+    });
+  });
+</script>

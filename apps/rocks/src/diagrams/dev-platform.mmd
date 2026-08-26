@@ -1,0 +1,14 @@
+flowchart LR
+  V((visitor)) -- apex --> APEX
+  F((contact<br/>form)) --> MAIL
+
+  subgraph TF["everything in this box: one Terraform graph · state in S3 · secrets from Proton Pass"]
+    direction LR
+    APEX["apex-redirect fn<br/>(kept warm)"] -- 301 to www --> CDN["Edge Services<br/>CDN + cache"]
+    CDN --> BUCKET["Object Storage<br/>static Astro build"]
+    MAIL["mail fn"] --> TEM["Transactional<br/>Email domain"]
+    IAM["IAM key<br/>(scoped, generated)"] -. auth .-> MAIL
+    DNS["DNS zone<br/>(live M365 records)"]
+  end
+
+  TEM --> INBOX((my inbox))

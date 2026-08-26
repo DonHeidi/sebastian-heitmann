@@ -6,7 +6,6 @@ import { getStrings, getHreflangAlternates } from '../../i18n/utils';
 import { Navigation } from '../../components/navigation';
 import { Footer } from '../../components/footer';
 import { ThemeToggle } from '../../components/theme-toggle';
-import DuotonePanel from '../../components/duotone-panel.astro';
 import DeviceShowcase from '../../components/device-showcase.astro';
 
 export async function getStaticPaths() {
@@ -71,15 +70,8 @@ const showcase =
         <dd class="mt-1 text-sm text-foreground">{entry.data.stack.join(' · ')}</dd>
       </div>
     </dl>
-    {entry.data.cover && (
-      <DuotonePanel
-        src={entry.data.cover}
-        alt=""
-        widths={[768, 1440]}
-        sizes="(max-width: 840px) 100vw, 840px"
-        class="mt-10 aspect-[16/9] w-full border border-border"
-      />
-    )}
+    {/* The cover art stays on the index tile (the jewel case). Repeating it
+        here added a screenful of decoration before the content (owner call). */}
     {showcase && (
       <section class="mt-12" aria-labelledby="showcase-heading">
         <h2

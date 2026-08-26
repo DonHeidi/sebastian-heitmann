@@ -1,0 +1,12 @@
+flowchart LR
+  subgraph authoring["authoring time"]
+    RM["render-crt.mjs<br/>SDF raymarcher<br/>(bun, offline)"]
+  end
+  subgraph build["astro build"]
+    ASSETS["crt-body.png<br/>cap sprites<br/>+ camera meta"]
+  end
+  subgraph runtime["browser"]
+    DOM["homography seats the<br/>live DOM terminal<br/>in the rendered glass"]
+  end
+
+  RM --> ASSETS --> DOM

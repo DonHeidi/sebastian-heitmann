@@ -35,6 +35,23 @@ resource "scaleway_domain_record" "rocks_scaleway_challenge" {
   ttl      = 600
 }
 
+# Null MX (RFC 7505): "this domain accepts no mail".
+#
+# GOTCHA — do not "fix" this by changing `data`. On CREATE, Scaleway qualifies
+# the "." target against the zone and stores `0 sebastian-heitmann.rocks.`,
+# which is the OPPOSITE of a null MX (it advertises the domain as its own mail
+# exchanger); the provider then fails its read-back with
+#   record with type MX and data .sebastian-heitmann.rocks. not found
+# and leaves the bad record behind, unmanaged. The API's PATCH path accepts "."
+# correctly and stores `0 .`, so the record was repaired out-of-band and then
+# imported into state — after which plan is clean and stays clean.
+#
+# If this resource is ever destroyed and recreated, expect the same broken
+# create. Repair with a PATCH to
+#   /domain/v2beta1/dns-zones/<zone>/records   (changes[].set, data ".")
+# then: terraform import scaleway_domain_record.rocks_null_mx <zone>/<record-id>
+# Verify on the wire, not via a public resolver (they cache aggressively):
+#   python3 scripts/dns-probe.py <ns-ip> sebastian-heitmann.rocks MX   -> "0 ."
 resource "scaleway_domain_record" "rocks_null_mx" {
   dns_zone = var.rocks_domain
   name     = ""

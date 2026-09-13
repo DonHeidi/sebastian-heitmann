@@ -62,7 +62,7 @@ cd <repo> && node_modules/.bin/varlock run --path infra -- bash -c \
 
 The response includes a `_scaleway-challenge` validation token. Record it here:
 
-> **Challenge token:** `<fill in at execution: value returned by the API call above>`
+> **Challenge token:** `c84cac57-e453-49bc-a0d1-5512f2406953` (issued 2026-09-13T11:44:48Z; TXT must be visible by **2026-09-15 11:44 UTC**, full onboarding by 2026-09-27)
 
 > **DEADLINE:** as with `.dev`, Scaleway deletes the pending external domain if
 > the challenge TXT record (step 2 below) is not visible within **48 hours** of

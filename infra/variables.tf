@@ -103,5 +103,5 @@ variable "bind_rocks_apex_domain" {
 variable "rocks_scaleway_challenge" {
   description = "TXT value of the _scaleway-challenge record for the .rocks external-domain onboarding. Empty until the domain is registered via POST /domain/v2beta1/external-domains (the API returns the token); then commit the value here (repo convention: committed defaults, no tfvars)."
   type        = string
-  default     = ""
+  default     = "c84cac57-e453-49bc-a0d1-5512f2406953"
 }

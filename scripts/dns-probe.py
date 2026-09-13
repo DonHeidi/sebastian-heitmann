@@ -61,11 +61,15 @@ def query(server, name, qtype):
     s.close()
     rcode = buf[3] & 0x0F
     ancount = struct.unpack('!H', buf[6:8])[0]
+    nscount = struct.unpack('!H', buf[8:10])[0]
     off = 12
     _, off = read_name(buf, off)
     off += 4
     answers = []
-    for _ in range(ancount):
+    # A registry/TLD server answers a delegated name with a REFERRAL: the NS
+    # records land in the AUTHORITY section, not ANSWER. Parsing only ANSWER
+    # would make a correct delegation look like an empty response.
+    for _ in range(ancount + nscount):
         _, off = read_name(buf, off)
         rtype, _cls, _ttl, rdlen = struct.unpack('!HHIH', buf[off:off + 10])
         off += 10

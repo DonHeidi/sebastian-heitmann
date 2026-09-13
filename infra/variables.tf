@@ -95,9 +95,9 @@ variable "rocks_domain" {
 }
 
 variable "bind_rocks_apex_domain" {
-  description = "Bind the .rocks apex hostname to its redirect function (provisions its managed cert). Keep false until the NS delegation for sebastian-heitmann.rocks is live at Scaleway — cert issuance needs the apex resolving to the function first. See the rocks DNS onboarding runbook."
+  description = "Bind the .rocks apex hostname to its redirect function (provisions its managed cert). Keep false until the NS delegation for sebastian-heitmann.rocks is live at Scaleway — cert issuance needs the apex resolving to the function first. See the rocks DNS onboarding runbook. Enabled 2026-09-13: delegation to ns0/ns1.dom.scw.cloud confirmed at the .rocks registry."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "rocks_scaleway_challenge" {

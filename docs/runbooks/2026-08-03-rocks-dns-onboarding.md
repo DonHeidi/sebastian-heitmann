@@ -1,5 +1,30 @@
 # Runbook: DNS onboarding for sebastian-heitmann.rocks
 
+> **STATUS: COMPLETED 2026-09-13.** The site is live at
+> <https://www.sebastian-heitmann.rocks>. Execution notes, in order:
+>
+> - External domain registered; validation token
+>   `c84cac57-e453-49bc-a0d1-5512f2406953` (step 1), challenge TXT added at
+>   GoDaddy (step 2), validated within the hour.
+> - Steps 3-4 had already been run ahead of time on 2026-08-26 with
+>   `-target` (storage, CDN pipeline, redirect function, first deploy), so
+>   only the DNS records remained for step 3's apply.
+> - **Null MX did not survive its create** — Scaleway stored
+>   `0 sebastian-heitmann.rocks.` instead of `0 .`. Repaired via API PATCH and
+>   imported; see the comment on `scaleway_domain_record.rocks_null_mx`.
+> - NS delegation reached the `.rocks` registry ~9 minutes after the GoDaddy
+>   change. `bind_rocks_apex_domain` then flipped to `true` (apex cert issued).
+> - The Edge Services pipeline held a stale `dns_cname_resolve` warning from
+>   before delegation and would not issue the `www` certificate. Re-submitting
+>   the DNS stage (PATCH `/edge-services/v1beta1/dns-stages/<id>` with the same
+>   `fqdns`) forced revalidation; the cert issued ~3 minutes later and the
+>   pipeline went to `ready`.
+> - **No `dig` on these machines.** Use `scripts/dns-probe.py` instead, and
+>   prefer it over public resolvers throughout: both Cloudflare and Google
+>   served a cached NXDOMAIN for a challenge TXT that was already live, and a
+>   stale local apex record made the live apex look like a GoDaddy parking
+>   page long after it was correct.
+
 **Goal:** bring `sebastian-heitmann.rocks` from "registered at GoDaddy on default
 parked DNS" to a live site: `https://www.sebastian-heitmann.rocks` served from
 Scaleway Object Storage behind Edge Services, and
@@ -62,7 +87,7 @@ cd <repo> && node_modules/.bin/varlock run --path infra -- bash -c \
 
 The response includes a `_scaleway-challenge` validation token. Record it here:
 
-> **Challenge token:** `<fill in at execution: value returned by the API call above>`
+> **Challenge token:** `c84cac57-e453-49bc-a0d1-5512f2406953` (issued 2026-09-13T11:44:48Z; TXT must be visible by **2026-09-15 11:44 UTC**, full onboarding by 2026-09-27)
 
 > **DEADLINE:** as with `.dev`, Scaleway deletes the pending external domain if
 > the challenge TXT record (step 2 below) is not visible within **48 hours** of

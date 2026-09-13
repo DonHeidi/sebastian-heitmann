@@ -95,13 +95,13 @@ variable "rocks_domain" {
 }
 
 variable "bind_rocks_apex_domain" {
-  description = "Bind the .rocks apex hostname to its redirect function (provisions its managed cert). Keep false until the NS delegation for sebastian-heitmann.rocks is live at Scaleway — cert issuance needs the apex resolving to the function first. See the rocks DNS onboarding runbook."
+  description = "Bind the .rocks apex hostname to its redirect function (provisions its managed cert). Keep false until the NS delegation for sebastian-heitmann.rocks is live at Scaleway — cert issuance needs the apex resolving to the function first. See the rocks DNS onboarding runbook. Enabled 2026-09-13: delegation to ns0/ns1.dom.scw.cloud confirmed at the .rocks registry."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "rocks_scaleway_challenge" {
   description = "TXT value of the _scaleway-challenge record for the .rocks external-domain onboarding. Empty until the domain is registered via POST /domain/v2beta1/external-domains (the API returns the token); then commit the value here (repo convention: committed defaults, no tfvars)."
   type        = string
-  default     = ""
+  default     = "c84cac57-e453-49bc-a0d1-5512f2406953"
 }

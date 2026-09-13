@@ -15,6 +15,18 @@ resource "scaleway_domain_record" "rocks_apex" {
   ttl      = 300
 }
 
+# GOTCHA — this record can be replaced OUT OF BAND by Edge Services. The
+# pipeline's DNS stage is `type = managed`, so when the zone is hosted at
+# Scaleway, re-submitting that stage (PATCH /edge-services/v1beta1/dns-stages/
+# <id>, which the go-live needed to clear a stale dns_cname_resolve warning)
+# makes Edge Services DELETE this CNAME and create its own — same value, new
+# record id, ttl 60. Terraform's state then points at a dead id and plans to
+# CREATE, which would leave two CNAMEs on one name.
+#
+# Recovery: `terraform state rm scaleway_domain_record.rocks_www` then
+# `terraform import scaleway_domain_record.rocks_www <zone>/<new-record-id>`,
+# then apply to restore the declared ttl. Verify no duplicate afterwards:
+#   ./scripts/scw dns record list sebastian-heitmann.rocks -o json | jq '.[] | select(.name=="www")'
 resource "scaleway_domain_record" "rocks_www" {
   dns_zone = var.rocks_domain
   name     = "www"
